@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stage 08 — Negotiation & Alignment</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Stage 08</span></div>
+<div class="shell">
+  <div style="max-width:900px;margin:18px auto">
+    <h1>Stage 08 — Negotiation & Alignment</h1>
+    <p>Finalize commercial terms, mitigate risks, and agree on contracting path.</p>
+    <div class="actions">
+      <button class="btn primary" onclick="applyStage()">Set Demo to Stage 08</button>
+      <a class="btn" href="10-Stage Sales Journey.html">Back to Journey</a>
+    </div>
+  </div>
+  <script>
+    function applyStage(){
+      if(window.RWD && typeof RWD.updateSalesFlow==='function'){
+        RWD.updateSalesFlow('opportunity','Negotiation','Stage 08: Negotiation & Alignment');
+        alert('Demo updated: Stage 08 set');
+      } else alert('Demo state not available');
+    }
+  </script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

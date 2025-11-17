@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>10-Stage Sales Journey</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    .journey { max-width:1200px; margin:18px auto; display:grid; grid-template-columns:repeat(2,1fr); gap:12px }
+    .stage { border:1px solid #ddd; padding:12px; border-radius:6px; background:#fff }
+    .stage .meta { color:#666; font-size:0.95em }
+    .stage .actions { margin-top:8px }
+  </style>
+</head>
+<body>
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ 10-Stage Sales Journey</span></div>
+<div class="shell">
+  <div style="max-width:980px;margin:18px auto"><h1>10-Stage Sales Journey</h1>
+    <p class="hint">Interactive stage cards. Use the buttons to open a stage page or to set the demo to that stage directly.</p></div>
+
+  <div class="journey">
+    <div class="stage" id="s1"><div class="step">01</div><h3>Relationship Development</h3><div class="meta">Capture history, stakeholders and trust-building.</div>
+      <div class="actions"><button class="btn" onclick="openStage(1)">Open Stage Page</button><button class="btn primary" onclick="setStage(1)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s2"><div class="step">02</div><h3>Qualification & Requirements Intake</h3><div class="meta">Confirm needs, budget and timeline.</div>
+      <div class="actions"><button class="btn" onclick="openStage(2)">Open Stage Page</button><button class="btn primary" onclick="setStage(2)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s3"><div class="step">03</div><h3>Concept & Feasibility Review</h3><div class="meta">Engage SMEs to vet designs and capacity.</div>
+      <div class="actions"><button class="btn" onclick="openStage(3)">Open Stage Page</button><button class="btn primary" onclick="setStage(3)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s4"><div class="step">04</div><h3>Scope Definition</h3><div class="meta">Define scope, WBS and delivery logistics.</div>
+      <div class="actions"><button class="btn" onclick="openStage(4)">Open Stage Page</button><button class="btn primary" onclick="setStage(4)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s5"><div class="step">05</div><h3>Internal Review & Pre-Bid Approval</h3><div class="meta">Cross-functional approval and risk mitigation.</div>
+      <div class="actions"><button class="btn" onclick="openStage(5)">Open Stage Page</button><button class="btn primary" onclick="setStage(5)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s6"><div class="step">06</div><h3>Proposal Development</h3><div class="meta">Create pricing, drawings and milestones.</div>
+      <div class="actions"><button class="btn" onclick="openStage(6)">Open Stage Page</button><button class="btn primary" onclick="setStage(6)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s7"><div class="step">07</div><h3>Client Review & Iterations</h3><div class="meta">Manage feedback and revisions.</div>
+      <div class="actions"><button class="btn" onclick="openStage(7)">Open Stage Page</button><button class="btn primary" onclick="setStage(7)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s8"><div class="step">08</div><h3>Negotiation & Alignment</h3><div class="meta">Commercial alignment and term agreement.</div>
+      <div class="actions"><button class="btn" onclick="openStage(8)">Open Stage Page</button><button class="btn primary" onclick="setStage(8)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s9"><div class="step">09</div><h3>Award & Execution</h3><div class="meta">Convert opportunity, sign contracts and hand off.</div>
+      <div class="actions"><button class="btn" onclick="openStage(9)">Open Stage Page</button><button class="btn primary" onclick="setStage(9)">Set as Current Stage</button></div>
+    </div>
+    <div class="stage" id="s10"><div class="step">10</div><h3>Final Disposition</h3><div class="meta">Record outcomes, win/loss and analytics.</div>
+      <div class="actions"><button class="btn" onclick="openStage(10)">Open Stage Page</button><button class="btn primary" onclick="setStage(10)">Set as Current Stage</button></div>
+    </div>
+  </div>
+
+  <div style="max-width:980px;margin:20px auto;text-align:center">
+    <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
+  </div>
+
+  <script>
+    const mapping = {
+      1: { key:'lead', status:'Working', note:'Stage 01: Relationship Development' },
+      2: { key:'lead', status:'Qualified', note:'Stage 02: Qualification' },
+      3: { key:'opportunity', status:'Qualification', note:'Stage 03: Feasibility' },
+      4: { key:'opportunity', status:'Evaluation', note:'Stage 04: Scope Definition' },
+      5: { key:'opportunity', status:'Proposal', note:'Stage 05: Pre-Bid Approval' },
+      6: { key:'quote', status:'Config', note:'Stage 06: Proposal Development' },
+      7: { key:'opportunity', status:'Proposal', note:'Stage 07: Client Review' },
+      8: { key:'opportunity', status:'Negotiation', note:'Stage 08: Negotiation' },
+      9: { key:'pursuit', status:'Submitted', note:'Stage 09: Award & Execution' },
+      10:{ key:'project', status:'Planning', note:'Stage 10: Final Disposition' }
+    };
+
+    function setStage(n){
+      const m = mapping[n];
+      if(window.RWD && typeof RWD.updateSalesFlow==='function'){
+        RWD.updateSalesFlow(m.key, m.status, m.note);
+        alert('Set stage: '+n+' → '+m.note);
+      } else {
+        alert('Demo state not available. Opening stage page instead.');
+        openStage(n);
+      }
+    }
+
+    function openStage(n){
+      const padded = String(n).padStart(2,'0');
+      location.href = '10-Stage Sales Journey - Stage '+padded+'.html';
+    }
+  </script>
+
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>
