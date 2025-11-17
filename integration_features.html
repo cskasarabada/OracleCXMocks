@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Integration Features</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Integration Features</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="sales_cloud.html">Sales Flow</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
+    <a class="tab" href="results_driven.html">Results Driven</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
+  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Integration Across the Enterprise</h2>
+  <div class="body">
+    <p>Centralize the end-to-end story about how Oracle CX Sales Cloud exchanges data with ERP, HCM, Projects, and Marketing.</p>
+    <div class="integration-grid">
+      <div class="integration-card">
+        <h3>ERP Synchronization</h3>
+        <p>Sync account hierarchies, billing contacts, and payment status with Finance.</p>
+      </div>
+      <div class="integration-card">
+        <h3>CPQ &amp; Projects Cloud</h3>
+        <p>Launch Configure, Price, Quote and automatically instantiate delivery projects from wins.</p>
+      </div>
+      <div class="integration-card">
+        <h3>HCM Integration</h3>
+        <p>Import talent profiles, certifications, and labor rates for resource planning.</p>
+      </div>
+      <div class="integration-card">
+        <h3>Marketing Feedback</h3>
+        <p>Return closed-loop attribution to Eloqua and third-party campaign tools.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Integration Blueprint</h2>
+  <div class="body">
+    <div class="content-grid">
+      <div class="panel">
+        <h3>OIC Automations</h3>
+        <p>Reusable integration recipes handle lead conversion, pursuit creation, and project activation.</p>
+      </div>
+      <div class="panel">
+        <h3>Event Streams</h3>
+        <p>Sales actions publish events that trigger provisioning, CPQ updates, and hand-offs.</p>
+      </div>
+      <div class="panel">
+        <h3>Security &amp; Governance</h3>
+        <p>Identity federation ensures the same personas work across CX, ERP, and PPM.</p>
+      </div>
+      <div class="panel">
+        <h3>Data Foundation</h3>
+        <p>Shared customer, product, and project catalogs keep every KPI aligned.</p>
+      </div>
+    </div>
+    <div class="output-note">Tie this story back to the Pursuit and Construction pages to reinforce downstream execution.</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Integration Talking Points</h2>
+  <div class="body">
+    <ul class="icon-list">
+      <li><span class="icon">🔌</span><div><strong>Prebuilt accelerators</strong> get you from sales to delivery without custom code.</div></li>
+      <li><span class="icon">🔄</span><div><strong>Bi-directional updates</strong> keep data clean when ERP or Projects own the system of record.</div></li>
+      <li><span class="icon">🧩</span><div><strong>Composable services</strong> let you mix CX, CPQ, and PPM capabilities based on customer maturity.</div></li>
+      <li><span class="icon">🛡️</span><div><strong>Controls-first mindset</strong> provides auditable logs for every integration touchpoint.</div></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   var sum=document.getElementById('sum');
+   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
+     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
+   var log=document.getElementById('log');
+   (d.logs||[]).forEach(function(m){
+     var p=document.createElement('div');
+     p.textContent=m;
+     log.appendChild(p);
+   });
+ });
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

@@ -19,6 +19,10 @@
     <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
     <a class="tab" href="ppm_construction.html">PPM Construction</a>
     <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
+    <a class="tab" href="results_driven.html">Results Driven</a>
   </div>
 
 <div class="grid">
@@ -67,7 +71,7 @@
   </div>
 </div>
 <script>
- (function(){
+ window.addEventListener('DOMContentLoaded', function(){
    var d=RWD.get();
    document.getElementById('opptyName').value=d.oppty.name||'';
    document.getElementById('opptyAmount').value=d.oppty.amount||0;
@@ -79,7 +83,7 @@
    var tl=document.getElementById('opptyTl');
    function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
    render(); setInterval(function(){ var nd=RWD.get(); if((nd.oppty.activities||[]).length !== (d.oppty.activities||[]).length){ d=nd; render(); } }, 800);
- })();
+ });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>

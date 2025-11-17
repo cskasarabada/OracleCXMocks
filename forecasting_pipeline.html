@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Forecasting & Pipeline Management</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Forecasting & Pipeline Management</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="sales_cloud.html">Sales Flow</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
+    <a class="tab" href="results_driven.html">Results Driven</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
+  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Forecasting &amp; Pipeline Management</h2>
+  <div class="body">
+    <p>Use this page to narrate how Oracle CX Sales Cloud delivers repeatable, inspection-ready forecasts without spreadsheets.</p>
+    <ul class="icon-list">
+      <li><span class="icon">⇄</span><div><strong>Territory &amp; quota alignment</strong> keeps coverage models in sync with planning assumptions.</div></li>
+      <li><span class="icon">📊</span><div><strong>Pipeline dashboards in OTBI</strong> expose pacing, aging, and upside signals for every theater.</div></li>
+      <li><span class="icon">🤖</span><div><strong>AI-assisted forecast generation</strong> honors the probability model from the Sales Flow blueprint.</div></li>
+      <li><span class="icon">📝</span><div><strong>Manager review cycles</strong> document adjustments with audit trails for quarter-close confidence.</div></li>
+    </ul>
+    <div class="output-note">Output: accurate pipeline and forecast visibility for strategic decision-making.</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Executive Forecast Cadence</h2>
+  <div class="body">
+    <div class="content-grid">
+      <div class="panel">
+        <h3>Week 1: Stage Weighting Review</h3>
+        <p>Overlay AI scores with stage probabilities to validate conversion expectations.</p>
+      </div>
+      <div class="panel">
+        <h3>Week 2: Territory Health</h3>
+        <p>Drill into attainment vs. quota using OTBI heatmaps and territory pivot tables.</p>
+      </div>
+      <div class="panel">
+        <h3>Week 3: Commit &amp; Upside Lock</h3>
+        <p>Managers capture commentary on each rep&rsquo;s commit list, automatically feeding the forecast snapshot.</p>
+      </div>
+      <div class="panel">
+        <h3>Week 4: Leadership Call</h3>
+        <p>Executives finalize revenue guidance with visibility into every adjustment and risk.</p>
+      </div>
+    </div>
+    <p style="margin-top:12px">The cadence lives inside CX Sales, so no tribal knowledge or offline trackers are required.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Tools &amp; Automation</h2>
+  <div class="body">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="value">+15%</div>
+        <div class="label">Commit Confidence</div>
+        <p>Consistent inspection and AI signals boost accuracy.</p>
+      </div>
+      <div class="stat-card">
+        <div class="value">45 min</div>
+        <div class="label">Saved Per Manager</div>
+        <p>Smart Actions push reminders, approvals, and nudges directly to the console.</p>
+      </div>
+      <div class="stat-card">
+        <div class="value">100%</div>
+        <div class="label">Audit Coverage</div>
+        <p>All adjustments are logged with before/after values.</p>
+      </div>
+    </div>
+    <div class="output-note">Need to show an AI+automation story? Reference these stats before returning to the Lead or Opportunity demos.</div>
+  </div>
+</div>
+
+<script>
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   var sum=document.getElementById('sum');
+   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
+     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
+   var log=document.getElementById('log');
+   (d.logs||[]).forEach(function(m){
+     var p=document.createElement('div');
+     p.textContent=m;
+     log.appendChild(p);
+   });
+ });
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

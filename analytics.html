@@ -19,14 +19,131 @@
     <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
     <a class="tab" href="ppm_construction.html">PPM Construction</a>
     <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
   </div>
 
 <div class="grid">
   <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
   <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
 </div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Measurable Business Outcomes</h2>
+  <div class="body">
+    <p>Use these quick stats to anchor the measurable impact of Oracle CX Sales Cloud before diving into dashboards.</p>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="value">35%</div>
+        <div class="label">Faster Onboarding</div>
+        <p>Guided workflows accelerate new rep productivity.</p>
+      </div>
+      <div class="stat-card">
+        <div class="value">28%</div>
+        <div class="label">Forecast Accuracy</div>
+        <p>Weighted stage methodology improves prediction precision.</p>
+      </div>
+      <div class="stat-card">
+        <div class="value">92%</div>
+        <div class="label">Process Compliance</div>
+        <p>Consistent methodology across the entire sales organization.</p>
+      </div>
+    </div>
+    <div class="content-grid" style="margin-top:12px">
+      <div class="panel">
+        <h3>Auditable Methodology</h3>
+        <p>Every stage transition, approval, and customer interaction is logged, making compliance and quality reviews effortless.</p>
+      </div>
+      <div class="panel">
+        <h3>Predictable Forecasting</h3>
+        <p>Probability-weighted stages eliminate guesswork and generate accurate revenue projections for leadership.</p>
+      </div>
+      <div class="panel">
+        <h3>Win/Loss Intelligence</h3>
+        <p>Structured capture of outcomes builds a knowledge base for future pursuits and qualification scoring.</p>
+      </div>
+      <div class="panel">
+        <h3>Enhanced Productivity</h3>
+        <p>Automation and embedded tools remove manual tasks so teams focus on relationship building.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Reporting &amp; Analytics</h2>
+  <div class="body">
+    <p>Transform sales data into actionable insights with comprehensive analytics capabilities.</p>
+    <div class="content-grid">
+      <div class="panel">
+        <h3>OTBI Dashboards</h3>
+        <ul>
+          <li>Real-time pipeline visibility.</li>
+          <li>Win/loss analysis.</li>
+          <li>Activity tracking for every pursuit.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>BIP Reports</h3>
+        <ul>
+          <li>Sales performance metrics.</li>
+          <li>Structured outputs for stakeholders.</li>
+          <li>Scheduled delivery to leadership.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>FAW Predictive Analytics</h3>
+        <ul>
+          <li>Forecast accuracy modeling.</li>
+          <li>Renewal propensity scoring.</li>
+          <li>Churn prediction for at-risk accounts.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="output-note">Output: real-time dashboards and predictive insights for executive decision-making.</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Deep-Dive Navigator</h2>
+  <div class="body">
+    <p>Use the new dedicated pages to keep presentations focused while still having the full story at your fingertips.</p>
+    <div class="content-grid">
+      <div class="panel">
+        <h3>Forecasting &amp; Pipeline Management</h3>
+        <p>Show how weighted stages, AI, and leadership reviews align. <a href="forecasting_pipeline.html">Open forecasting page →</a></p>
+      </div>
+      <div class="panel">
+        <h3>Integration Features</h3>
+        <p>Walk through ERP, HCM, CPQ, and marketing connectivity in one place. <a href="integration_features.html">Open integration page →</a></p>
+      </div>
+      <div class="panel">
+        <h3>Complete Sales Process Visualization</h3>
+        <p>Pair the seven-step rail with the ten-stage blueprint for storytelling. <a href="sales_process_visualization.html">Open visualization page →</a></p>
+      </div>
+      <div class="panel">
+        <h3>Results-Driven Story</h3>
+        <p>Keep proof points and win stories ready for exec briefings. <a href="results_driven.html">Open results-driven page →</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
- (function(){ var d=RWD.get(); var sum=document.getElementById('sum'); sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' + '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' + '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' + '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>'; var log=document.getElementById('log'); (d.logs||[]).forEach(function(m){ var p=document.createElement('div'); p.textContent=m; log.appendChild(p); }); })();
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   var sum=document.getElementById('sum');
+   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
+     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
+   var log=document.getElementById('log');
+   (d.logs||[]).forEach(function(m){
+     var p=document.createElement('div');
+     p.textContent=m;
+     log.appendChild(p);
+   });
+ });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
