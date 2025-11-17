@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PPM Pursuit (Redwood)</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>PPM Pursuit</h2><div class="body">
+    <form id="purForm">
+      <div class="row">
+        <div><label>Project Name<input name="name" id="purName"></label></div>
+        <div><label>Estimate (USD)<input name="estimate" id="purEstimate" type="number"></label></div>
+      </div>
+      <div class="actions">
+        <button class="btn ok" id="btnAward">Award / Create Construction (OIC)</button>
+        <a class="btn" href="cx_opportunity.html">Back</a>
+      </div>
+    </form>
+  </div></div>
+  <div class="card"><h2>Status</h2><div class="body">
+    <div class="kv"><div class="k">State</div><div class="v" id="purState">Draft</div></div>
+    <div class="progress"><div class="bar" id="purProg"></div></div>
+  </div></div>
+</div>
+<script>
+ (function(){ var d=RWD.get(); document.getElementById('purName').value=d.pursuit.name||''; document.getElementById('purEstimate').value=d.pursuit.estimate||0; document.getElementById('btnAward').addEventListener('click', function(e){ e.preventDefault(); RWD.savePursuit(document.getElementById('purForm')); document.getElementById('purState').textContent='Award in progress…'; document.getElementById('purProg').style.width='60%'; RWD.awardToConstruction(function(){ document.getElementById('purState').textContent='Awarded'; document.getElementById('purProg').style.width='100%'; setTimeout(function(){ window.location='ppm_construction.html'; }, 600); }); }); })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

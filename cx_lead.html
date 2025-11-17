@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Redwood Lead</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card" style="grid-column:1/2">
+    <div class="smartbar">
+      <div class="group">
+        <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
+        <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
+        <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
+        <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
+      </div>
+      <input type="search" placeholder="Smart Action… (e.g., Create Quote)"/>
+    </div>
+    <h2>Lead (Redwood)</h2>
+    <div class="body">
+      <form id="leadForm" onsubmit="event.preventDefault(); RWD.saveLead(this); RWD.convertToOpportunity(); window.location='cx_opportunity.html';">
+        <div class="row">
+          <div><label>Company<input name="company" placeholder="Acme Manufacturing" required></label></div>
+          <div><label>Primary Contact<input name="contact" placeholder="Jane Smith"></label></div>
+        </div>
+        <div class="row">
+          <div><label>Fit Score<input name="score" type="number" min="0" max="100" value="60"></label></div>
+          <div><label>Status<select name="status" disabled><option>Qualified</option></select></label></div>
+        </div>
+        <div class="actions"><button class="btn primary" type="submit">Qualify → Create Opportunity</button><a class="btn" href="index.html">Back</a></div>
+      </form>
+    </div>
+  </div>
+  <div class="card" style="grid-column:2/3">
+    <h2>Activity & Timeline</h2>
+    <div class="body timeline" id="leadTl"></div>
+  </div>
+</div>
+<script>
+ (function(){
+   var d=RWD.get();
+   var tl=document.getElementById('leadTl');
+   function render(){ tl.innerHTML=''; (d.lead.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
+   render();
+   // Re-render when actions happen (simple polling for demo)
+   setInterval(function(){ var nd=RWD.get(); if((nd.lead.activities||[]).length !== (d.lead.activities||[]).length){ d=nd; render(); } }, 800);
+ })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

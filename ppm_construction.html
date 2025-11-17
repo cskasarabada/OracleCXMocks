@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PPM Construction (Redwood)</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>Construction Project</h2><div class="body">
+    <div class="kv"><div class="k">Project</div><div class="v" id="cName">—</div></div>
+    <div class="kv"><div class="k">Budget</div><div class="v" id="cBudget">—</div></div>
+    <table class="table"><thead><tr><th>WBS Code</th><th>Work Package</th></tr></thead><tbody id="wbs"></tbody></table>
+    <div class="actions"><button class="btn warn" id="btnComplete">Mark Substantial Completion</button><a class="btn" href="ppm_pursuit.html">Back</a></div>
+  </div></div>
+  <div class="card"><h2>Warranty</h2><div class="body">
+    <div class="kv"><div class="k">Start</div><div class="v" id="wStart">—</div></div>
+    <div class="kv"><div class="k">End</div><div class="v" id="wEnd">—</div></div>
+  </div></div>
+</div>
+<script>
+ (function(){ var d=RWD.get(); document.getElementById('cName').textContent=d.const.name||'-'; document.getElementById('cBudget').textContent=(d.const.budget||0).toLocaleString(); var body=document.getElementById('wbs'); ['1.0 Mobilization','2.0 Site Work','3.0 Structure'].forEach(function(row){ var parts=row.split(' '); var tr=document.createElement('tr'); tr.innerHTML='<td>'+parts[0]+'</td><td>'+parts.slice(1).join(' ')+'</td>'; body.appendChild(tr); }); document.getElementById('btnComplete').addEventListener('click', function(){ RWD.completeSubstantial(function(){ var s=new Date(); var e=new Date(s.getFullYear()+1,s.getMonth(),s.getDate()); document.getElementById('wStart').textContent=s.toLocaleDateString(); document.getElementById('wEnd').textContent=e.toLocaleDateString(); }); }); })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

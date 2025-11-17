@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Redwood Opportunity</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card" style="grid-column:1/2">
+    <div class="smartbar">
+      <div class="group">
+        <button class="btn" onclick="RWD.actOppty('Log Call')">Log Call</button>
+        <button class="btn" onclick="RWD.actOppty('Send Email')">Send Email</button>
+        <button class="btn" onclick="RWD.actOppty('Schedule Meeting')">Schedule Meeting</button>
+        <button class="btn" onclick="RWD.actOppty('Create Quote')">Create Quote</button>
+        <button class="btn" onclick="RWD.actOppty('Add Product')">Add Product</button>
+      </div>
+      <input type="search" placeholder="Smart Action… (e.g., Create Task)"/>
+    </div>
+    <h2>Opportunity (Redwood)</h2>
+    <div class="body">
+      <form id="oppForm">
+        <div class="row">
+          <div><label>Name<input name="name" id="opptyName"></label></div>
+          <div><label>Amount (USD)<input type="number" name="amount" id="opptyAmount"></label></div>
+        </div>
+        <div class="stage" style="margin-top:6px">
+          <span class="s" data-v="Qualification">Qualification</span>
+          <span class="s" data-v="Evaluation">Evaluation</span>
+          <span class="s" data-v="Proposal">Proposal</span>
+          <span class="s" data-v="Negotiation">Negotiation</span>
+          <span class="s" data-v="Closed Won">Closed Won</span>
+        </div>
+        <input type="hidden" name="stage" id="stageVal" value="Qualification"/>
+        <div class="actions">
+          <button class="btn brand" id="btnCreatePursuit" type="button">Send to OIC → Create Pursuit</button>
+          <a class="btn" href="cx_lead.html">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card" style="grid-column:2/3">
+    <h2>Activity & Timeline</h2>
+    <div class="body timeline" id="opptyTl"></div>
+    <h2>Integration</h2>
+    <div class="body">
+      <div class="progress"><div class="bar" id="prog"></div></div>
+      <div class="pill" id="status">Idle</div>
+      <div class="kv"><div class="k">Next Step</div><div class="v">PPM Pursuit</div></div>
+    </div>
+  </div>
+</div>
+<script>
+ (function(){
+   var d=RWD.get();
+   document.getElementById('opptyName').value=d.oppty.name||'';
+   document.getElementById('opptyAmount').value=d.oppty.amount||0;
+   function setStage(v){ document.getElementById('stageVal').value=v; Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); }); }
+   setStage(d.oppty.stage||'Qualification');
+   Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
+   document.getElementById('btnCreatePursuit').addEventListener('click', function(){ var f=document.getElementById('oppForm'); RWD.saveOppty(f); document.getElementById('status').textContent='Running OIC job…'; document.getElementById('prog').style.width='60%'; RWD.createPursuitViaOIC(function(){ document.getElementById('status').textContent='Completed'; document.getElementById('prog').style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); }); });
+   // render timeline
+   var tl=document.getElementById('opptyTl');
+   function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
+   render(); setInterval(function(){ var nd=RWD.get(); if((nd.oppty.activities||[]).length !== (d.oppty.activities||[]).length){ d=nd; render(); } }, 800);
+ })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

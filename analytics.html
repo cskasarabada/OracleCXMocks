@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Analytics (Redwood)</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
+  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
+</div>
+<script>
+ (function(){ var d=RWD.get(); var sum=document.getElementById('sum'); sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' + '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' + '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' + '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>'; var log=document.getElementById('log'); (d.logs||[]).forEach(function(m){ var p=document.createElement('div'); p.textContent=m; log.appendChild(p); }); })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>
