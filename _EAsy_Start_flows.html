@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>_ EAsy Start flows</title>
+  <title>Easy Start Flows</title>
   <link rel="stylesheet" href="assets/redwood.css"/>
   <script defer src="assets/app.js"></script>
   <style>
@@ -20,14 +20,14 @@
 <div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Easy Start Flows</span></div>
 <div class="shell">
   <div style="max-width:980px;margin:18px auto">
-    <h1>_ EAsy Start flows</h1>
-    <p class="hint">Quick starter actions to guide the demo: click a flow to navigate and perform a simple demo step. Each action will also append an entry to the Activity Log if the demo state (`RWD`) is available.</p>
+    <h1>Easy Start Flows</h1>
+    <p class="hint">Quick starter actions to guide the demo: click a flow to navigate and perform a simple demo step. Each action will also add an entry to the Activity Log if the demo state (`RWD`) is available.</p>
   </div>
 
   <div class="flows">
     <div class="flow">
       <h3>Start with the Seven Steps</h3>
-      <p>Begin the conversation at a high level using the seven step slide, then pivot lower if requested.</p>
+      <p>Begin the conversation at a high level using the seven-step slide, then pivot to detailed stages if requested.</p>
       <div class="actions">
         <button class="btn primary" onclick="startSeven()">Open Seven Steps</button>
         <button class="btn" onclick="previewNote('Seven Steps opened')">Log Only</button>
@@ -80,7 +80,7 @@
       try{
         if(window.RWD && typeof RWD.get==='function'){
           var d = RWD.get(); d.logs = d.logs || [];
-          d.logs.unshift('['+new Date().toLocaleString()+'] EasyStart: '+name);
+          d.logs.unshift('['+new Date().toLocaleString()+'] Easy Start: '+name);
           try{ if(typeof RWD.set==='function') RWD.set(d); }catch(e){}
         }
       }catch(e){ console.warn('doAction log failed', e); }
@@ -96,7 +96,7 @@
     function presetStage(){
       doAction('Preset stage → Qualification', null, function(){
         if(window.RWD && typeof RWD.updateSalesFlow==='function'){
-          RWD.updateSalesFlow('lead','Qualified','EasyStart: preset to Qualified');
+          RWD.updateSalesFlow('lead','Qualified','Easy Start: preset to Qualified');
           alert('Stage preset: lead → Qualified');
         } else alert('Demo state not available (open a demo page that loads assets/app.js).');
       });
@@ -105,7 +105,7 @@
     function highlightSmartActions(){
       doAction('Highlight Smart Actions', 'sales_cloud.html', function(){
         if(window.RWD && typeof RWD.updateSalesFlow==='function'){
-          RWD.updateSalesFlow('opportunity','Evaluation','EasyStart: Smart Action example');
+          RWD.updateSalesFlow('opportunity','Evaluation','Easy Start: Smart Action example');
         }
       });
     }
@@ -113,7 +113,7 @@
     function integrationHandoffs(){
       doAction('Integration Handoffs', 'integration_features.html', function(){
         if(window.RWD && typeof RWD.runOICJob==='function'){
-          RWD.runOICJob('EasyStart Integration Sync');
+          RWD.runOICJob('Easy Start Integration Sync');
         }
       });
     }
