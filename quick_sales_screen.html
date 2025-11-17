@@ -102,13 +102,29 @@
     // Preview modal management
     function openPreview(){
       try{
+        populatePreviewModal();
+        if(typeof showToast==='function') showToast('Opening preview...');
         if(window.ModalManager && typeof ModalManager.showModal === 'function'){
-          populatePreviewModal();
-          ModalManager.showModal('qs-modal-preview');
-          return;
+          try{ ModalManager.showModal('qs-modal-preview'); return; }catch(e){ console.warn('openPreview modalManager.showModal failed', e); }
         }
       }catch(e){ console.warn('openPreview', e); }
-      // fallback: if modal manager not ready, create small centered dialog
+      // fallback: show the preview overlay directly
+      try{
+        var ov = document.getElementById('qs-modal-preview');
+        if(ov){
+          ov.style.display = 'flex';
+          ov.setAttribute('aria-hidden','false');
+          // focus first control
+          setTimeout(function(){ var f = ov.querySelector('select,textarea,input,button'); if(f) f.focus(); }, 50);
+          // add ESC handler
+          if(!ov._escHandler){
+            ov._escHandler = function(e){ if(e.key==='Escape' || e.key==='Esc'){ ov.style.display='none'; ov.setAttribute('aria-hidden','true'); document.removeEventListener('keydown', ov._escHandler); } };
+            document.addEventListener('keydown', ov._escHandler);
+          }
+          return;
+        }
+      }catch(err){ console.warn('preview fallback failed', err); }
+      // last resort, create the small fallback flow
       createFallbackFlow();
     }
 
