@@ -9,6 +9,20 @@ html,body{margin:0;padding:0;font-family:Segoe UI,Roboto,Arial,sans-serif;backgr
 .header{background:linear-gradient(90deg,var(--rw-brand),#9c2b20);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
 .header .product{font-weight:700}
 .header .trail{opacity:0.85}
+
+/* Page hero / lead header (sample style similar to screenshot) */
+.page-hero{background:linear-gradient(90deg, #f3efe9, #ffffff);border-bottom:1px solid var(--rw-border);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.page-hero .hero-left{display:flex;align-items:center;gap:12px}
+.page-hero .hero-icon{width:56px;height:56px;border-radius:6px;background:linear-gradient(180deg,var(--rw-accent),#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
+.page-hero .hero-title{font-size:18px;font-weight:700;color:var(--rw-ink)}
+.page-hero .hero-sub{color:var(--rw-muted);font-size:13px}
+.page-hero .hero-actions{display:flex;gap:8px;align-items:center}
+
+/* Lead modal tweaks (re-usable) */
+.lead-modal .field{display:grid;grid-template-columns:120px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.lead-modal label{font-size:13px;color:var(--rw-muted)}
+.lead-modal input, .lead-modal select, .lead-modal textarea{width:100%;padding:8px;border:1px solid var(--rw-border);border-radius:8px}
+.lead-modal .two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .shell{max-width:1200px;margin:0 auto;padding:18px}
 .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .tab{padding:8px 12px;border:1px solid var(--rw-border);border-radius:8px;background:var(--rw-surface);cursor:pointer;text-decoration:none;color:inherit}

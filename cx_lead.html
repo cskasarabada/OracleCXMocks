@@ -10,6 +10,23 @@
 <body>
 
 <div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+
+<!-- Page hero with lead title and actions -->
+<div class="page-hero">
+  <div class="hero-left">
+    <div class="hero-icon">SL</div>
+    <div>
+      <div class="hero-title">Sample Test Lead - 20250910</div>
+      <div class="hero-sub">Primary Contact · Related Contacts</div>
+    </div>
+  </div>
+  <div class="hero-actions">
+    <button class="btn" onclick="removeDraft()">Cancel</button>
+    <button class="btn" onclick="saveDraft()">Save</button>
+    <button class="btn primary" id="add-new-lead-btn">Add New Lead</button>
+  </div>
+</div>
+
 <div class="shell">
   <div class="tabs">
     <a class="tab" href="index.html">Overview</a>
@@ -27,7 +44,7 @@
 
 <div class="grid">
   <div class="card" style="grid-column:1/2">
-    <div class="smartbar">
+  <div class="smartbar">
       <div class="group">
         <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
         <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
@@ -53,6 +70,35 @@
       <div style="position:relative;min-width:260px">
         <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action… (click to see actions)" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--rw-border);background:#fff"/>
         <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
+      </div>
+    </div>
+    
+    <!-- Add New Lead modal -->
+    <div id="add-lead-modal" class="qs-overlay" style="display:none" aria-hidden="true">
+      <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" tabindex="-1">
+        <h2 id="addLeadTitle">Add New Lead</h2>
+        <form id="addLeadForm">
+          <div class="field"><label>Company</label><input name="company" required></div>
+          <div class="field"><label>Lead Name</label><input name="name"></div>
+          <div class="field"><label>Primary Contact</label><input name="contact"></div>
+          <div class="field"><label>Job Title</label><input name="title"></div>
+          <div class="two-col">
+            <div class="field" style="grid-template-columns:1fr"><label>Phone</label><input name="phone"></div>
+            <div class="field" style="grid-template-columns:1fr"><label>Email</label><input name="email" type="email"></div>
+          </div>
+          <div class="field"><label>Description</label><textarea name="description" rows="3"></textarea></div>
+          <div class="two-col">
+            <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
+            <div class="field" style="grid-template-columns:1fr"><label>Fit Score</label><input name="score" type="number" min="0" max="100" value="50"></div>
+          </div>
+          <div class="field"><label>Status</label><select name="status"><option>Qualified</option><option>New</option><option>Working</option></select></div>
+          <div class="field"><label>Country</label><input name="country"></div>
+          <div class="field"><label>Address</label><input name="address"></div>
+          <div class="qs-actions" style="margin-top:12px">
+            <button type="button" class="btn" onclick="closeAddLead()">Cancel</button>
+            <button type="submit" class="btn primary">Save Lead</button>
+          </div>
+        </form>
       </div>
     </div>
     <h2>Lead (Redwood)</h2>
@@ -121,6 +167,42 @@ document.addEventListener('DOMContentLoaded', function(){
   function onDocClick(e){ if(!pop) return; if(e.target === input) return; if(pop.contains(e.target)) return; hidePop(); }
   if(input){ input.addEventListener('focus', showPop); input.addEventListener('click', function(e){ e.stopPropagation(); showPop(); }); input.addEventListener('input', function(){ renderPop(input.value); }); input.addEventListener('keydown', function(e){ if(e.key==='ArrowDown'){ var first = pop && pop.querySelector('.item'); if(first) { first.focus(); e.preventDefault(); } } if(e.key==='Escape'){ hidePop(); } }); }
 });
+
+// Add New Lead modal handlers
+function openAddLead(){
+  var m = document.getElementById('add-lead-modal');
+  if(window.ModalManager && typeof ModalManager.showModal==='function'){ try{ ModalManager.showModal('add-lead-modal'); return; }catch(e){ /* fallthrough */ } }
+  if(m){ m.style.display='flex'; m.setAttribute('aria-hidden','false'); var f = m.querySelector('input[name="company"]'); if(f) f.focus(); }
+}
+function closeAddLead(){
+  var m = document.getElementById('add-lead-modal');
+  if(window.ModalManager && typeof ModalManager.closeModal==='function'){ try{ ModalManager.closeModal('add-lead-modal'); return; }catch(e){} }
+  if(m){ m.style.display='none'; m.setAttribute('aria-hidden','true'); }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('add-new-lead-btn'); if(btn) btn.addEventListener('click', openAddLead);
+  var form = document.getElementById('addLeadForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var fd = new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; }); // try to use RWD.saveLead if available
+        if(window.RWD && typeof RWD.saveLead==='function'){
+          RWD.saveLead(obj);
+        } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+          var s = RWD.get();
+          // ensure leads array exists and push the new lead
+          s.leads = s.leads || [];
+          s.leads.unshift(obj);
+          // also keep a quick activity log under s.lead.activities for timeline compatibility
+          s.lead = s.lead || {};
+          s.lead.activities = s.lead.activities || [];
+          s.lead.activities.unshift({ ts: new Date().toLocaleString(), type: 'Create', text: 'Lead created: ' + (obj.name || obj.company || '') });
+          try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); }
+        }
+        if(typeof showToast==='function') showToast('Lead saved'); else alert('Lead saved');
+      }catch(e){ console.error('save lead failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+      closeAddLead(); }); }
+});
+
+function saveDraft(){ if(typeof showToast==='function') showToast('Draft saved (demo)'); }
+function removeDraft(){ if(typeof showToast==='function') showToast('Draft canceled'); }
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
