@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Complete Sales Process Visualization</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Complete Sales Process Visualization</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="sales_cloud.html">Sales Flow</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
+  </div>
+
+<div class="grid">
+  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
+  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Complete Sales Process Visualization</h2>
+  <div class="body">
+    <p>Use this single slide-style page to align stakeholders on how the seven high-level motions map to the detailed ten-stage blueprint on the Sales Flow tab.</p>
+    <div class="process-rail">
+      <div class="process-step"><div class="bubble">1</div><div><strong>Lead Capture</strong><p>Marketing-qualified interest arrives with AI scores.</p></div></div>
+      <div class="process-step"><div class="bubble">2</div><div><strong>Lead Qualification</strong><p>Smart Actions accelerate conversion to Opportunity.</p></div></div>
+      <div class="process-step"><div class="bubble">3</div><div><strong>Opportunity Management</strong><p>Guided selling and collaboration accelerate value discovery.</p></div></div>
+      <div class="process-step"><div class="bubble">4</div><div><strong>Sales Collaboration</strong><p>Embedded productivity surfaces Microsoft 365, Teams, and playbooks.</p></div></div>
+      <div class="process-step"><div class="bubble">5</div><div><strong>Forecasting</strong><p>Probability-weighted signals roll into leadership reviews.</p></div></div>
+      <div class="process-step"><div class="bubble">6</div><div><strong>Enterprise Integration</strong><p>Handoffs to CPQ, ERP, and PPM happen with OIC.</p></div></div>
+      <div class="process-step"><div class="bubble">7</div><div><strong>Analytics &amp; Insights</strong><p>Executives monitor KPIs and refine strategy.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Ten-Stage Blueprint Overlay</h2>
+  <div class="body">
+    <div class="content-grid">
+      <div class="panel">
+        <h3>Stages 1-3</h3>
+        <p>Lead origination, qualification, and early discovery align with Steps 1-3 above.</p>
+      </div>
+      <div class="panel">
+        <h3>Stages 4-6</h3>
+        <p>Solutioning, proposal, and pursuit launch connect Opportunity work with PPM.</p>
+      </div>
+      <div class="panel">
+        <h3>Stages 7-8</h3>
+        <p>Commercial approval and contract execution finalize the quote-to-order motion.</p>
+      </div>
+      <div class="panel">
+        <h3>Stages 9-10</h3>
+        <p>Handoff to construction and project kickoff close the loop for revenue recognition.</p>
+      </div>
+    </div>
+    <div class="output-note">Position this blueprint as the &ldquo;single slide&rdquo; reference for executive briefings.</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h2>Presenter Prompts</h2>
+  <div class="body">
+    <ul class="icon-list">
+      <li><span class="icon">🧭</span><div>Start with the seven steps, then pivot to detailed stages if the audience asks.</div></li>
+      <li><span class="icon">🎯</span><div>Highlight how Smart Actions trigger next best steps at each transition.</div></li>
+      <li><span class="icon">🔗</span><div>Reference the Integration Features page when talking about handoffs.</div></li>
+      <li><span class="icon">📈</span><div>Close by reinforcing the measurable outcomes on the Analytics page.</div></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   var sum=document.getElementById('sum');
+   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
+     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
+     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
+   var log=document.getElementById('log');
+   (d.logs||[]).forEach(function(m){
+     var p=document.createElement('div');
+     p.textContent=m;
+     log.appendChild(p);
+   });
+ });
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

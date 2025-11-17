@@ -19,23 +19,35 @@
     <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
     <a class="tab" href="ppm_construction.html">PPM Construction</a>
     <a class="tab" href="analytics.html">Analytics</a>
+    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="tab" href="integration_features.html">Integration</a>
+    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
   </div>
 
 <div class="grid">
   <div class="card"><h2>Flow Overview</h2><div class="body">
     <ol>
       <li><strong>Lead (CX Sales – Redwood)</strong>: qualify a lead and convert to Opportunity.</li>
-      <li><strong>Opportunity (CX Sales – Redwood)</strong>: stage rails + Smart Actions; send to OIC to <em>create Pursuit in Oracle PPM</em>.</li>
-      <li><strong>PPM Pursuit</strong>: review estimate; award to <em>Construction</em> via OIC.</li>
-      <li><strong>PPM Construction</strong>: mark Substantial Completion – starts Warranty.</li>
+      <li><strong>Opportunity (CX Sales – Redwood)</strong>: manage discovery, value engineering and next actions.</li>
+      <li><strong>Quote</strong>: configure + price the solution, then deliver a customer-ready proposal.</li>
+      <li><strong>PPM Pursuit</strong>: use OIC to open a pursuit record in PPM and refine estimates.</li>
+      <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off warranty at substantial completion.</li>
     </ol>
-    <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead, opportunity, quote, contract and handoff.</p>
+    <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead, opportunity, quote, pursuit and project delivery.</p>
     <div class="actions"><a class="btn brand" href="cx_lead.html">Start with Lead</a><a class="btn" href="#" onclick="RWD.reset(); alert('Demo state cleared'); return false;">Reset State</a></div>
   </div></div>
   <div class="card"><h2>Activity Log</h2><div class="body" id="log"></div></div>
 </div>
 <script>
- (function(){ var d=RWD.get(); var log=document.getElementById('log'); (d.logs||[]).forEach(function(m){ var p=document.createElement('div'); p.textContent=m; log.appendChild(p); }); })();
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   var log=document.getElementById('log');
+   (d.logs||[]).forEach(function(m){
+     var p=document.createElement('div');
+     p.textContent=m;
+     log.appendChild(p);
+   });
+ });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
