@@ -4,8 +4,8 @@
     {key:'lead',label:'Lead',owner:'Sales Development',statuses:['New','Working','Qualified','Nurture'],description:'SDR captures interest and qualifies the inbound record.'},
     {key:'opportunity',label:'Opportunity',owner:'Account Executive',statuses:['Qualification','Evaluation','Proposal','Negotiation','Closed Won'],description:'AE manages discovery, solutioning and negotiations.'},
     {key:'quote',label:'Quote',owner:'Sales Operations',statuses:['Config','Pricing','Released to Customer','Accepted'],description:'Sales Ops configures price list items and publishes quote to customer.'},
-    {key:'contract',label:'Contract',owner:'Legal',statuses:['Drafting','Internal Review','Sent for Signature','Signed'],description:'Legal finalizes terms, redlines and executes agreements.'},
-    {key:'handoff',label:'Order / Handoff',owner:'Delivery',statuses:['Pending','Order Booked','Provisioning','Live'],description:'Closed deal is submitted to downstream fulfillment.'}
+    {key:'pursuit',label:'Pursuit (PPM)',owner:'Pursuit Manager',statuses:['Draft','Costing','Submitted','Awarded'],description:'OIC pushes qualified deals to PPM where Pursuit Managers refine estimates.'},
+    {key:'project',label:'Project Delivery',owner:'Project Manager',statuses:['Planning','Execution','Substantial Completion','Warranty'],description:'Awarded pursuits become delivery projects that track execution milestones.'}
   ];
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}};
   const write=(d)=>localStorage.setItem(KEY, JSON.stringify(d));
