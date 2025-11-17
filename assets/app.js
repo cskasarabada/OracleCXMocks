@@ -1,4 +1,19 @@
 (function(){
+  const NAV_LINKS=[
+    {href:'index.html',label:'Overview'},
+    {href:'Easy_Start_Flows.html',label:'Easy Start'},
+    {href:'sales_cloud.html',label:'Sales Flow'},
+    {href:'cx_lead.html',label:'Lead'},
+    {href:'cx_opportunity.html',label:'Opportunity'},
+    {href:'ppm_pursuit.html',label:'PPM Pursuit'},
+    {href:'ppm_construction.html',label:'PPM Construction'},
+    {href:'analytics.html',label:'Analytics'},
+    {href:'forecasting_pipeline.html',label:'Forecasting'},
+    {href:'integration_features.html',label:'Integration'},
+    {href:'sales_process_visualization.html',label:'Process Visualization'},
+    {href:'results_driven.html',label:'Results Driven'},
+    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true}
+  ];
   const KEY='rw_demo_v2';
   const FLOW_STAGES=[
     {key:'lead',label:'Lead',owner:'Sales Development',statuses:['New','Working','Qualified','Nurture'],description:'SDR captures interest and qualifies the inbound record.'},
@@ -157,4 +172,41 @@
     getAgentStates(){ return Object.assign({}, this._agentState); },
     flowStages: FLOW_STAGES
   };
+  function renderNavLinks(current){
+    return NAV_LINKS.map(function(link){
+      var cls=[];
+      if(link.accent) cls.push('accent');
+      if(current===link.href.toLowerCase()) cls.push('active');
+      var classAttr=cls.length?(' class="'+cls.join(' ')+'"'):'';
+      return '<a'+classAttr+' href="'+link.href+'">'+link.label+'</a>';
+    }).join('');
+  }
+  function ensureGlobalChrome(){
+    var body=document.body;
+    if(!body || body.dataset.chromeReady==='1') return;
+    body.dataset.chromeReady='1';
+    body.classList.add('miconnex-theme');
+    var header=document.querySelector('.miconnex-bar');
+    if(!header){
+      header=document.createElement('header');
+      header.className='miconnex-bar';
+      header.innerHTML='<div class="logo-mark"><span class="logo-strong">Mi</span>CONNEX</div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      body.insertBefore(header, body.firstChild);
+    }
+    var nav=document.querySelector('nav.quick-nav');
+    var current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    if(!nav){
+      nav=document.createElement('nav');
+      nav.className='quick-nav auto-nav';
+      nav.innerHTML=renderNavLinks(current);
+      if(header && header.nextSibling){
+        body.insertBefore(nav, header.nextSibling);
+      }else{
+        body.appendChild(nav);
+      }
+    }else{
+      nav.innerHTML=renderNavLinks(current);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function(){ try{ ensureGlobalChrome(); }catch(e){ console.warn('chrome init failed', e); }});
 })();
