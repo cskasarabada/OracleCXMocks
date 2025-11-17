@@ -34,6 +34,22 @@
         <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
         <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
       </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label for="smart-action-select" class="visually-hidden">Smart Action</label>
+        <select id="smart-action-select" style="padding:8px;border-radius:8px;border:1px solid var(--rw-border);background:#fff">
+          <option value="">— Smart actions —</option>
+          <option>Log Call</option>
+          <option>Send Email</option>
+          <option>Schedule Meeting</option>
+          <option>Create Task</option>
+          <option>Create Quote</option>
+          <option>Assign Owner</option>
+          <option>Add Note</option>
+          <option>Create Pursuit</option>
+          <option>Push to CPQ</option>
+        </select>
+        <button type="button" class="btn" id="apply-smart-action">Apply</button>
+      </div>
       <input type="search" placeholder="Smart Action… (e.g., Create Quote)"/>
     </div>
     <h2>Lead (Redwood)</h2>
@@ -65,6 +81,25 @@
    // Re-render when actions happen (simple polling for demo)
    setInterval(function(){ var nd=RWD.get(); if((nd.lead.activities||[]).length !== (d.lead.activities||[]).length){ d=nd; render(); } }, 800);
  });
+// Smart Action dropdown handler
+document.addEventListener('DOMContentLoaded', function(){
+  var sel = document.getElementById('smart-action-select');
+  var btn = document.getElementById('apply-smart-action');
+  function applySelected(){
+    if(!sel) return;
+    var action = sel.value || '';
+    if(!action) return;
+    try{
+      if(window.RWD && typeof RWD.actLead==='function') RWD.actLead(action);
+      if(typeof showToast==='function') showToast('Smart action: '+action+' applied'); else console.log('Smart action:', action);
+    }catch(e){ console.warn('applySelected', e); }
+    // reset select
+    sel.selectedIndex = 0;
+  }
+  if(btn) btn.addEventListener('click', applySelected);
+  // allow Enter to trigger when select has focus
+  if(sel) sel.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
+});
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
