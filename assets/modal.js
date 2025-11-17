@@ -35,6 +35,11 @@
       const overlay = this.overlays[id] || document.getElementById(id);
       if(!overlay) return;
       this.lastFocused = document.activeElement;
+      // ensure the wrapper that contains overlays is visible
+      try{
+        var wrapper = document.getElementById('qs-modals');
+        if(wrapper && (wrapper.style.display==='none' || !wrapper.style.display)) wrapper.style.display='block';
+      }catch(e){}
       overlay.style.display='flex';
       overlay.setAttribute('aria-hidden','false');
       overlay.classList.remove('qs-closing');
@@ -61,6 +66,16 @@
         overlay.style.display='none';
         overlay.classList.remove('qs-closing');
         overlay.removeEventListener('animationend', onAnimEnd);
+        // if no other overlays are visible, hide the wrapper
+        try{
+          var wrapper = document.getElementById('qs-modals');
+          if(wrapper){
+            var any = wrapper.querySelectorAll('.qs-overlay');
+            var visible=false;
+            for(var i=0;i<any.length;i++){ var s = any[i].style.display; if(s && s.indexOf('flex')!==-1) { visible=true; break; } }
+            if(!visible) wrapper.style.display='none';
+          }
+        }catch(e){}
       };
       overlay.addEventListener('animationend', onAnimEnd);
       document.removeEventListener('keydown', this._keydownHandler);
