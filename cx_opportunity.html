@@ -10,6 +10,23 @@
 <body>
 
 <div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+
+<!-- Page hero with opportunity title and actions -->
+<div class="page-hero">
+  <div class="hero-left">
+    <div class="hero-icon">OP</div>
+    <div>
+      <div class="hero-title" id="opptyHeroTitle">Sample Opportunity</div>
+      <div class="hero-sub" id="opptyHeroSub">Account · Primary Contact</div>
+    </div>
+  </div>
+  <div class="hero-actions">
+    <button class="btn" onclick="saveOppDraft()">Save</button>
+    <button class="btn" onclick="cancelOppDraft()">Cancel</button>
+    <button class="btn primary" id="add-new-oppty-btn">Add New Opportunity</button>
+  </div>
+</div>
+
 <div class="shell">
   <div class="tabs">
     <a class="tab" href="index.html">Overview</a>
@@ -26,6 +43,18 @@
   </div>
 
 <div class="grid">
+  <!-- Recent opportunities preview -->
+  <div style="max-width:980px;margin:6px auto 12px;grid-column:1/3">
+    <div class="card">
+      <div class="body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <h3 style="margin:0">Recent Opportunities</h3>
+          <div style="font-size:13px;color:var(--rw-muted)">Click Import to load into the Opportunity form</div>
+        </div>
+        <div id="opps-preview" style="overflow:auto;max-height:180px"></div>
+      </div>
+    </div>
+  </div>
   <div class="card" style="grid-column:1/2">
     <div class="smartbar">
       <div class="group">
@@ -59,6 +88,28 @@
       </form>
     </div>
   </div>
+  
+  <!-- Add New Opportunity modal -->
+  <div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:120" aria-hidden="true">
+    <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
+      <h2 id="addOpptyTitle">Create Opportunity</h2>
+      <form id="addOpptyForm">
+        <div class="field"><label>Name</label><input name="name" required></div>
+        <div class="field"><label>Account</label><input name="account"></div>
+        <div class="two-col">
+          <div class="field" style="grid-template-columns:1fr"><label>Amount</label><input name="amount" type="number"></div>
+          <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
+        </div>
+        <div class="field"><label>Stage</label><select name="stage"><option>Qualification</option><option>Evaluation</option><option>Proposal</option><option>Negotiation</option><option>Closed Won</option></select></div>
+        <div class="field"><label>Probability (%)</label><input name="probability" type="number" min="0" max="100" value="20"></div>
+        <div class="field"><label>Description</label><textarea name="description" rows="3"></textarea></div>
+        <div class="qs-actions" style="margin-top:12px">
+          <button type="button" class="btn" onclick="closeAddOppty()">Cancel</button>
+          <button type="submit" class="btn primary">Save Opportunity</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="card" style="grid-column:2/3">
     <h2>Activity & Timeline</h2>
     <div class="body timeline" id="opptyTl"></div>
@@ -75,6 +126,8 @@
    var d=RWD.get();
    document.getElementById('opptyName').value=d.oppty.name||'';
    document.getElementById('opptyAmount').value=d.oppty.amount||0;
+  // set hero title from demo state if available
+  try{ var hero = document.getElementById('opptyHeroTitle'); if(hero) hero.textContent = (d.oppty && (d.oppty.name || d.oppty.title)) || 'Sample Opportunity'; var sub = document.getElementById('opptyHeroSub'); if(sub) sub.textContent = (d.oppty && d.oppty.account) || 'Account · Primary Contact'; }catch(e){}
    function setStage(v){ document.getElementById('stageVal').value=v; Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); }); }
    setStage(d.oppty.stage||'Qualification');
    Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
@@ -83,7 +136,38 @@
    var tl=document.getElementById('opptyTl');
    function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
    render(); setInterval(function(){ var nd=RWD.get(); if((nd.oppty.activities||[]).length !== (d.oppty.activities||[]).length){ d=nd; render(); } }, 800);
+  // render opportunities preview initially
+  try{ renderOppsPreview(); }catch(e){}
  });
+
+// Add New Opportunity modal handlers
+function openAddOppty(){
+  var m = document.getElementById('add-oppty-modal');
+  if(window.ModalManager && typeof ModalManager.showModal==='function'){ try{ ModalManager.showModal('add-oppty-modal'); return; }catch(e){} }
+  if(m){ m.style.display='flex'; m.setAttribute('aria-hidden','false'); var f = m.querySelector('input[name="name"]'); if(f) f.focus(); }
+}
+function closeAddOppty(){ var m=document.getElementById('add-oppty-modal'); if(window.ModalManager && typeof ModalManager.closeModal==='function'){ try{ ModalManager.closeModal('add-oppty-modal'); return; }catch(e){} } if(m){ m.style.display='none'; m.setAttribute('aria-hidden','true'); } }
+
+document.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('add-new-oppty-btn'); if(btn) btn.addEventListener('click', openAddOppty);
+  var form = document.getElementById('addOpptyForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var fd=new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; }); if(window.RWD && typeof RWD.saveOppty==='function'){ RWD.saveOppty(obj); } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){ var s = RWD.get(); s.opportunities = s.opportunities || []; s.opportunities.unshift(obj); s.oppty = s.oppty || {}; s.oppty.activities = s.oppty.activities || []; s.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text: 'Opportunity created: ' + (obj.name || obj.account || '') }); try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); } }
+        if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
+      }catch(e){ console.error('save oppty failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+      closeAddOppty(); try{ renderOppsPreview(); }catch(e){}
+  }); }
+  // initial preview render
+  try{ renderOppsPreview(); }catch(e){}
+});
+
+// Render recent opportunities preview
+function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Add New Opportunity" to create one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
+
+function prefillAddOppty(index){ var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities)?s.opportunities:[]; if(!opps || opps.length===0) return; var opp = opps[index] || opps[0]; var form = document.getElementById('addOpptyForm'); if(!form) return; Object.keys(opp).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value = opp[k]; }catch(e){} }); openAddOppty(); }
+
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
+
+function saveOppDraft(){ if(typeof showToast==='function') showToast('Draft saved (demo)'); }
+function cancelOppDraft(){ if(typeof showToast==='function') showToast('Draft canceled'); }
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
