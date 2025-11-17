@@ -3,137 +3,17 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Easy Start Flows</title>
+  <title>Easy Start Flows — Redirect</title>
+  <meta http-equiv="refresh" content="0; url=Easy_Start_Flows.html" />
   <link rel="stylesheet" href="assets/redwood.css"/>
   <script defer src="assets/app.js"></script>
-  <style>
-    .flows { max-width:980px; margin:20px auto; display:grid; grid-template-columns:1fr; gap:12px; }
-    .flow { border:1px solid #ddd; padding:14px; border-radius:6px; background:#fff; }
-    .flow h3{ margin:0 0 6px 0 }
-    .flow p{ margin:0 0 10px 0 }
-    .flow .actions{ display:flex; gap:8px; align-items:center }
-    .hint{ color:#666; font-size:0.95em }
-  </style>
 </head>
 <body>
-
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Easy Start Flows</span></div>
-<div class="shell">
-  <div style="max-width:980px;margin:18px auto">
-    <h1>Easy Start Flows</h1>
-    <p class="hint">Quick starter actions to guide the demo: click a flow to navigate and perform a simple demo step. Each action will also add an entry to the Activity Log if the demo state (`RWD`) is available.</p>
+  <div style="max-width:720px;margin:48px auto;padding:18px;text-align:center">
+    <h2>Easy Start Flows</h2>
+    <p>This page was renamed to <strong>Easy_Start_Flows.html</strong>. You are being redirected — click the link if your browser does not redirect automatically.</p>
+    <p><a class="btn" href="Easy_Start_Flows.html">Open Easy Start Flows</a></p>
   </div>
-
-  <div class="flows">
-    <div class="flow">
-      <h3>Start with the Seven Steps</h3>
-      <p>Begin the conversation at a high level using the seven-step slide, then pivot to detailed stages if requested.</p>
-      <div class="actions">
-        <button class="btn primary" onclick="startSeven()">Open Seven Steps</button>
-        <button class="btn" onclick="previewNote('Seven Steps opened')">Log Only</button>
-      </div>
-    </div>
-
-    <div class="flow">
-      <h3>Pivot to Detailed Stages if Asked</h3>
-      <p>Move from the top-level view to the ten-stage blueprint and stage console for live narration.</p>
-      <div class="actions">
-        <button class="btn primary" onclick="pivotDetailed()">Open Detailed Stages</button>
-        <button class="btn" onclick="presetStage()">Set Example Stage → Qualification</button>
-      </div>
-    </div>
-
-    <div class="flow">
-      <h3>Highlight Smart Actions</h3>
-      <p>Show how Smart Actions trigger the next best steps and help reps progress the deal.</p>
-      <div class="actions">
-        <button class="btn primary" onclick="highlightSmartActions()">Trigger Smart Action Demo</button>
-        <button class="btn" onclick="previewNote('Smart Actions highlighted')">Log Only</button>
-      </div>
-    </div>
-
-    <div class="flow">
-      <h3>Integration Handoffs</h3>
-      <p>Demonstrate how OIC-driven handoffs move opportunities into PPM and downstream systems.</p>
-      <div class="actions">
-        <button class="btn primary" onclick="integrationHandoffs()">Run Integration Demo</button>
-        <button class="btn" onclick="openPage('integration_features.html')">Open Integration Page</button>
-      </div>
-    </div>
-
-    <div class="flow">
-      <h3>Close with Analytics Outcomes</h3>
-      <p>Reinforce measurable outcomes by surfacing forecast and analytics data.</p>
-      <div class="actions">
-        <button class="btn primary" onclick="analyticsOutcomes()">Show Analytics</button>
-        <button class="btn" onclick="previewNote('Analytics called out')">Log Only</button>
-      </div>
-    </div>
-  </div>
-
-  <div style="max-width:980px;margin:20px auto;text-align:center">
-    <a class="btn" href="index.html">Back to Overview</a>
-  </div>
-
-  <script>
-    function doAction(name, href, fn){
-      try{
-        if(window.RWD && typeof RWD.get==='function'){
-          var d = RWD.get(); d.logs = d.logs || [];
-          d.logs.unshift('['+new Date().toLocaleString()+'] Easy Start: '+name);
-          try{ if(typeof RWD.set==='function') RWD.set(d); }catch(e){}
-        }
-      }catch(e){ console.warn('doAction log failed', e); }
-      if(typeof fn==='function') try{ fn(); }catch(e){ console.warn(e); }
-      if(href) location.href = href;
-    }
-
-    function openPage(href){ doAction('Open page: '+href, href); }
-
-    function startSeven(){ doAction('Start Seven Steps', 'sales_process_visualization.html'); }
-    function pivotDetailed(){ doAction('Pivot to Detailed Stages', 'sales_cloud.html'); }
-
-    function presetStage(){
-      doAction('Preset stage → Qualification', null, function(){
-        if(window.RWD && typeof RWD.updateSalesFlow==='function'){
-          RWD.updateSalesFlow('lead','Qualified','Easy Start: preset to Qualified');
-          alert('Stage preset: lead → Qualified');
-        } else alert('Demo state not available (open a demo page that loads assets/app.js).');
-      });
-    }
-
-    function highlightSmartActions(){
-      doAction('Highlight Smart Actions', 'sales_cloud.html', function(){
-        if(window.RWD && typeof RWD.updateSalesFlow==='function'){
-          RWD.updateSalesFlow('opportunity','Evaluation','Easy Start: Smart Action example');
-        }
-      });
-    }
-
-    function integrationHandoffs(){
-      doAction('Integration Handoffs', 'integration_features.html', function(){
-        if(window.RWD && typeof RWD.runOICJob==='function'){
-          RWD.runOICJob('Easy Start Integration Sync');
-        }
-      });
-    }
-
-    function analyticsOutcomes(){
-      doAction('Analytics Outcomes', 'analytics.html', function(){
-        if(window.RWD && typeof RWD.get==='function'){
-          var s = RWD.get();
-          if(s.forecast) alert('Forecast: $'+s.forecast.suggested+' ('+s.forecast.confidence+'%)');
-        }
-      });
-    }
-
-    function previewNote(msg){
-      doAction(msg, null);
-      alert(msg);
-    }
-  </script>
-
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
 </html>
 <!DOCTYPE html>
