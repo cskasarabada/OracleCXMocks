@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Argano Pursuit Project</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+<style>
+.pursuit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px;}
+.pursuit-card{border:1px solid var(--rw-border);border-radius:16px;padding:18px;background:#fff;box-shadow:0 12px 20px rgba(15,23,42,.08);}
+.pursuit-card h3{margin:0 0 8px;font-size:18px;}
+.pursuit-card ul{margin:0;padding-left:18px;color:var(--rw-ink);}
+.benefit-boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:26px;}
+.benefit-box{border:1px solid var(--rw-border);border-radius:14px;padding:14px;background:#fff;}
+.benefit-box strong{display:block;margin-bottom:6px;}
+.why-table{margin-top:28px;border:1px solid var(--rw-border);border-radius:16px;overflow:hidden;}
+.why-table table{width:100%;border-collapse:collapse;}
+.why-table th,.why-table td{padding:12px;border-bottom:1px solid var(--rw-border);text-align:left;}
+.why-table th{background:#f8fafc;font-size:13px;text-transform:uppercase;letter-spacing:.04em;}
+.why-table tr:last-child td{border-bottom:none;}
+</style>
+</head>
+<body class="lead-landing">
+<main class="lead-shell">
+  <section class="card">
+    <p class="eyebrow">Pursuit Project</p>
+    <h1 style="margin:6px 0 10px">The connected preconstruction workspace</h1>
+    <p style="color:var(--rw-muted);max-width:720px">In Oracle PPM, Pursuit Projects capture preconstruction effort, resource scheduling, and decision data before work is awarded. Paired with CX Sales, they allow Argano clients like Miron to pass intelligence cleanly into construction delivery.</p>
+  </section>
+
+  <div class="pursuit-grid">
+    <div class="pursuit-card">
+      <h3>What it is</h3>
+      <ul>
+        <li>Overhead PPM project linked to an Opportunity</li>
+        <li>Tracks internal labor, tasks, and cost-only effort</li>
+        <li>Temporary record that transitions to construction</li>
+      </ul>
+    </div>
+    <div class="pursuit-card">
+      <h3>Preconstruction Workspace</h3>
+      <ul>
+        <li>Conceptual estimating & value engineering</li>
+        <li>Engineering reviews, site investigations</li>
+        <li>Design alternatives and early schedules</li>
+      </ul>
+    </div>
+    <div class="pursuit-card">
+      <h3>Resource Management</h3>
+      <ul>
+        <li>Request estimators, engineers, PMs</li>
+        <li>View availability (6 booked, 2 open, 1 with right skill)</li>
+        <li>Balance workloads before award</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="benefit-boxes">
+    <div class="benefit-box">
+      <strong>Cost Insight</strong>
+      Capture internal spend per pursuit to analyze win/loss ratio, cost per pursuit, and estimating productivity.
+    </div>
+    <div class="benefit-box">
+      <strong>Decision Engine</strong>
+      Opportunity stages trigger Pursuit creation, feeding a “thinking → doing” handoff with structured WBS tasks.
+    </div>
+    <div class="benefit-box">
+      <strong>Lifecycle Link</strong>
+      When awarded, the Pursuit becomes the front half of the project. Construction project inherits the same Program for full reporting.
+    </div>
+  </div>
+
+  <div class="why-table">
+    <table>
+      <thead><tr><th>Need (Miron)</th><th>How Pursuit Project Helps</th></tr></thead>
+      <tbody>
+        <tr><td>Non-sales teams pulled into deals</td><td>PPM project provides scheduling, assignment, and cost tracking for estimators/engineers.</td></tr>
+        <tr><td>“Thinking → Doing” stage</td><td>Opportunity stage change auto-creates Pursuit Project with tasks, templates, and approvals.</td></tr>
+        <tr><td>Capacity management (8 people, 6 booked…)</td><td>PPM resource management exposes role-based availability and skill matching.</td></tr>
+        <tr><td>Connect pursuit & construction</td><td>PPM Program ties Pursuit and Construction projects under one umbrella.</td></tr>
+        <tr><td>Structured preconstruction tasks</td><td>WBS enforces standard steps: estimating, engineering review, schedule analysis, etc.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+</body>
+</html>

@@ -19,7 +19,8 @@
     {href:'revenue_intelligence.html',label:'Revenue Intelligence'},
     {href:'field_mobile_snapshot.html',label:'Field Mobile'},
     {href:'sales_ppm_sync.html',label:'Sales↔PPM'},
-    {href:'quote_to_docusign.html',label:'Quote → DocuSign'}
+    {href:'quote_to_docusign.html',label:'Quote → DocuSign'},
+    {href:'pursuit_project.html',label:'Pursuit Project'}
   ];
   const KEY='rw_demo_v2';
   const FLOW_STAGES=[
