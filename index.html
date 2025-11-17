@@ -38,6 +38,25 @@
     <div class="actions"><a class="btn brand" href="cx_lead.html">Start with Lead</a><a class="btn" href="#" onclick="RWD.reset(); alert('Demo state cleared'); return false;">Reset State</a></div>
   </div></div>
   <div class="card"><h2>Activity Log</h2><div class="body" id="log"></div></div>
+  <div class="card"><h2>Agents</h2><div class="body">
+    <div class="agents">
+      <div class="agent">
+        <h3>Sales Agent</h3>
+        <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
+        <div class="actions"><a class="btn" href="#" onclick="startAgent('Sales Agent'); return false;">Start</a></div>
+      </div>
+      <div class="agent">
+        <h3>Forecasting Agent</h3>
+        <p>Analyze pipeline data and suggest forecast adjustments.</p>
+        <div class="actions"><a class="btn" href="#" onclick="startAgent('Forecasting Agent'); return false;">Start</a></div>
+      </div>
+      <div class="agent">
+        <h3>Integration Agent</h3>
+        <p>Simulate integrations between CX and PPM for demo scenarios.</p>
+        <div class="actions"><a class="btn" href="#" onclick="startAgent('Integration Agent'); return false;">Start</a></div>
+      </div>
+    </div>
+  </div></div>
 </div>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
@@ -48,6 +67,21 @@
      p.textContent=m;
      log.appendChild(p);
    });
+   
+    // Expose a simple agent starter for demo purposes
+    window.startAgent = function(name){
+      try{
+        alert('Starting ' + name);
+        // append to persistent demo logs if RWD supports it
+        var state = RWD.get();
+        state.logs = state.logs || [];
+        state.logs.push('Agent started: ' + name);
+        if(typeof RWD.set === 'function') RWD.set(state);
+        if(log){ var p=document.createElement('div'); p.textContent='Agent started: ' + name; log.appendChild(p); }
+      }catch(e){
+        console.log('startAgent:', e);
+      }
+    };
  });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
