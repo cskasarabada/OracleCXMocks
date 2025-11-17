@@ -122,4 +122,21 @@
     }
   };
 
+  // Apply a stage without alerts or closing the UI (used for 'Next' progression)
+  window.applyQuickStageSilent = function(n){
+    if(n===1){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed'); } }
+    else if(n===2){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched'); } }
+    else if(n===3){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted & handed off'); } }
+  };
+
+  // Advance from stage n to n+1: silently apply current stage, close current modal, then open next
+  window.nextQuickStep = function(n){
+    var currentId = 'qs-modal-'+n;
+    var nextId = 'qs-modal-'+(n+1);
+    try{ window.applyQuickStageSilent(n); }catch(e){}
+    // close current then open next after a short delay so animations look natural
+    try{ ModalManager.closeModal(currentId); }catch(e){}
+    setTimeout(function(){ try{ ModalManager.showModal(nextId); }catch(e){} }, 220);
+  };
+
 })();
