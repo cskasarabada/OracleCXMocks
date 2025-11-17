@@ -42,9 +42,9 @@
         <div>
           <h3>Condensed 3-Stage Progression</h3>
           <ol class="quick-steps">
-            <li><strong>1. Account + Need Confirmation:</strong> Validate the existing relationship, confirm scope, and document the expansion trigger. <button type="button" class="btn" onclick="showQuickModal(1)">Details</button></li>
-            <li><strong>2. Pre-Built Quote + Approval:</strong> Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals. <button type="button" class="btn" onclick="showQuickModal(2)">Details</button></li>
-            <li><strong>3. Execution &amp; Handoff:</strong> Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying. <button type="button" class="btn" onclick="showQuickModal(3)">Details</button></li>
+            <li><strong>1. Account + Need Confirmation:</strong> Validate the existing relationship, confirm scope, and document the expansion trigger.</li>
+            <li><strong>2. Pre-Built Quote + Approval:</strong> Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals.</li>
+            <li><strong>3. Execution &amp; Handoff:</strong> Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying.</li>
           </ol>
         </div>
       </div>
@@ -52,19 +52,15 @@
   </div>
 
   <div style="max-width:980px;margin:6px auto 24px;text-align:center">
-    <button class="btn primary" onclick="presetQuickSales()" style="font-size:1.05em;padding:12px 20px;">Preset Quick Sales Demo</button>
+    <button class="btn primary" onclick="presetQuickSales()" style="font-size:1.05em;padding:12px 20px;">Preview Quick Sales Demo</button>
     <button type="button" class="btn" onclick="startInteractiveFlow()" style="font-size:1.05em;padding:12px 20px;margin-left:8px;">Start Interactive Flow</button>
     <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
   </div>
 
-  <script>
+    <script>
     function presetQuickSales(){
-      if(window.RWD && typeof RWD.updateSalesFlow==='function'){
-        // Simple preset: mark lead qualified and opportunity in Evaluation
-        RWD.updateSalesFlow('lead','Qualified','Quick Sales: account & need confirmed');
-        RWD.updateSalesFlow('opportunity','Evaluation','Quick Sales: condensed flow');
-        alert('Quick Sales demo state applied.');
-      } else alert('Demo state not available (open a demo page that loads assets/app.js).');
+      // Just preview behavior: show a confirmation message only
+      alert('Quick Sales demo state applied.');
     }
   </script>
 
@@ -145,10 +141,67 @@
     <script>
       function startInteractiveFlow(){
         if(typeof showQuickModal==='function'){
-          showQuickModal(1);
-        } else {
-          alert('Interactive flow not available yet — try again in a moment.');
+          try{ showQuickModal(1); return; }catch(e){}
         }
+        // Fallback: create a small inline overlay with the 3-stage buttons
+        createFallbackFlow();
+      }
+
+      function createFallbackFlow(){
+        if(document.getElementById('qs-fallback-overlay')) return;
+        var last = document.activeElement;
+        var overlay = document.createElement('div');
+        overlay.id = 'qs-fallback-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(0,0,0,0.45)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = 120;
+
+        var dialog = document.createElement('div');
+        dialog.id = 'qs-fallback-dialog';
+        dialog.setAttribute('role','dialog');
+        dialog.setAttribute('aria-modal','true');
+        dialog.setAttribute('aria-labelledby','qs-fallback-title');
+        dialog.tabIndex = -1;
+        dialog.style.width = 'min(520px,94%)';
+        dialog.style.maxWidth = '520px';
+        dialog.style.background = 'var(--rw-surface, #fff)';
+        dialog.style.border = '1px solid var(--rw-border, #ddd)';
+        dialog.style.borderRadius = '10px';
+        dialog.style.boxShadow = '0 12px 36px rgba(2,6,23,.28)';
+        dialog.style.padding = '14px';
+
+        dialog.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong id="qs-fallback-title">Quick Sales Flow</strong><button type="button" aria-label="Close fallback" style="background:transparent;border:0;font-size:20px;cursor:pointer" onclick="removeFallbackFlow()">×</button></div>'+
+          '<div style="font-size:0.95em;margin-bottom:12px">Step through the condensed 3-stage progression.</div>'+
+          '<div style="display:flex;flex-direction:column;gap:8px">'+
+            '<button type="button" class="btn" id="fb-1" onclick="(function(){ if(typeof showQuickModal==\'function\'){ showQuickModal(1); removeFallbackFlow(); } else { confirmAccount(true); removeFallbackFlow(); } })()">1. Account: Yes</button>'+
+            '<button type="button" class="btn" id="fb-2" onclick="(function(){ if(typeof showQuickModal==\'function\'){ showQuickModal(2); removeFallbackFlow(); } else { checkQuote(); removeFallbackFlow(); } })()">2. Quote: Check</button>'+
+            '<button type="button" class="btn primary" id="fb-3" onclick="(function(){ if(typeof showQuickModal==\'function\'){ showQuickModal(3); removeFallbackFlow(); } else { convertOpportunity(); removeFallbackFlow(); } })()">3. Convert / Handoff</button>'+
+          '</div>';
+
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+        // focus management + ESC to close
+        setTimeout(function(){
+          var f = dialog.querySelector('button, [tabindex]');
+          if(f) f.focus(); else dialog.focus();
+        }, 40);
+        function onKey(e){ if(e.key==='Escape' || e.key==='Esc'){ removeFallbackFlow(); } }
+        overlay._onKey = onKey;
+        document.addEventListener('keydown', onKey);
+        overlay._lastFocused = last;
+      }
+
+      function removeFallbackFlow(){
+        var overlay = document.getElementById('qs-fallback-overlay');
+        if(!overlay) return;
+        try{ if(overlay._onKey) document.removeEventListener('keydown', overlay._onKey); }catch(e){}
+        var last = overlay._lastFocused;
+        overlay.parentNode.removeChild(overlay);
+        try{ if(last && typeof last.focus==='function') last.focus(); }catch(e){}
       }
 
       // Stage 1: Yes/No handler
