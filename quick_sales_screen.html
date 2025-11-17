@@ -88,7 +88,12 @@
           <li>Primary contact verification</li>
           <li>Expansion trigger (capex, maintenance, regulation)</li>
         </ul>
-        <div class="qs-actions"><button type="button" class="btn" onclick="closeQuickModal(1)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(1)">Apply: Confirm Account & Need</button><button type="button" class="btn" onclick="nextQuickStep(1)">Next</button></div>
+        <div class="qs-actions">
+          <button type="button" class="btn" onclick="closeQuickModal(1)">Close</button>
+          <button type="button" class="btn primary" id="qs1-yes" onclick="confirmAccount(true)">Yes</button>
+          <button type="button" class="btn" id="qs1-no" onclick="confirmAccount(false)">No</button>
+          <button type="button" class="btn" onclick="nextQuickStep(1)">Next</button>
+        </div>
       </div>
     </div>
 
@@ -103,7 +108,14 @@
           <li>Approval routing (fast lanes)</li>
           <li>Review & submit button</li>
         </ul>
-        <div class="qs-actions"><button type="button" class="btn" onclick="showQuickModal(1)">Back</button><button type="button" class="btn" onclick="closeQuickModal(2)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(2)">Apply: Launch Quick Quote</button><button type="button" class="btn" onclick="nextQuickStep(2)">Next</button></div>
+        <div class="qs-actions">
+          <button type="button" class="btn" onclick="showQuickModal(1)">Back</button>
+          <button type="button" class="btn" onclick="closeQuickModal(2)">Close</button>
+          <button type="button" class="btn" id="qs2-check" onclick="checkQuote()">Check Quote</button>
+          <button type="button" class="btn" id="qs2-approve-yes" onclick="approveQuote(true)" disabled>Approve: Yes</button>
+          <button type="button" class="btn" id="qs2-approve-no" onclick="approveQuote(false)" disabled>Approve: No</button>
+          <button type="button" class="btn" onclick="nextQuickStep(2)">Next</button>
+        </div>
       </div>
     </div>
 
@@ -118,7 +130,13 @@
           <li>Run integration to PPM (OIC job)</li>
           <li>Notify delivery and create pursuit record</li>
         </ul>
-        <div class="qs-actions"><button type="button" class="btn" onclick="showQuickModal(2)">Back</button><button type="button" class="btn" onclick="closeQuickModal(3)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(3)">Apply: Convert & Handoff</button></div>
+        <div class="qs-actions">
+          <button type="button" class="btn" onclick="showQuickModal(2)">Back</button>
+          <button type="button" class="btn" onclick="closeQuickModal(3)">Close</button>
+          <button type="button" class="btn" onclick="convertOpportunity()">Convert Opportunity</button>
+          <button type="button" class="btn" onclick="pushToCPQ()">Push to CPQ</button>
+          <button type="button" class="btn primary" onclick="pushToPursuit()">Push to Pursuit</button>
+        </div>
       </div>
     </div>
   </div>
@@ -129,9 +147,76 @@
         if(typeof showQuickModal==='function'){
           showQuickModal(1);
         } else {
-          // modal manager not loaded yet
           alert('Interactive flow not available yet — try again in a moment.');
         }
+      }
+
+      // Stage 1: Yes/No handler
+      function confirmAccount(choice){
+        try{
+          var msg = choice ? 'Account & Need CONFIRMED' : 'Account & Need NOT confirmed';
+          if(window.RWD && typeof RWD.get==='function'){
+            var s = RWD.get(); s.logs = s.logs || [];
+            s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage1: '+msg);
+            if(typeof RWD.set==='function') RWD.set(s);
+          }
+        }catch(e){console.warn(e)}
+        alert(msg);
+        // optionally mark lead qualified on Yes
+        if(choice && window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed');
+        }
+      }
+
+      // Stage 2: Check quote then enable approve
+      function checkQuote(){
+        var btnCheck = document.getElementById('qs2-check');
+        var yes = document.getElementById('qs2-approve-yes');
+        var no = document.getElementById('qs2-approve-no');
+        if(btnCheck) btnCheck.textContent = 'Checking...';
+        setTimeout(function(){
+          if(btnCheck) btnCheck.textContent = 'Check Quote';
+          if(yes) yes.disabled = false; if(no) no.disabled = false;
+          try{ var s = RWD.get(); s.logs = s.logs || []; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage2: Quote checked'); if(typeof RWD.set==='function') RWD.set(s); }catch(e){}
+          alert('Quote check completed — you can Approve Yes/No');
+        }, 700);
+      }
+
+      function approveQuote(approved){
+        try{
+          var msg = approved ? 'Quote APPROVED' : 'Quote NOT approved';
+          if(window.RWD && typeof RWD.get==='function'){
+            var s = RWD.get(); s.logs = s.logs || [];
+            s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage2: '+msg);
+            if(typeof RWD.set==='function') RWD.set(s);
+          }
+        }catch(e){}
+        alert(msg);
+        if(approved && window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('quote','Approved','Quick Sales Stage 2: Quote approved');
+        }
+      }
+
+      // Stage 3 actions
+      function convertOpportunity(){
+        try{ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted via Quick Sales'); } }catch(e){}
+        alert('Opportunity converted (demo state updated)');
+      }
+
+      function pushToCPQ(){
+        try{ if(window.RWD && typeof RWD.runOICJob==='function'){ RWD.runOICJob('Push to CPQ'); } else { var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage3: Push to CPQ simulated'); if(typeof RWD.set==='function') RWD.set(s);} }catch(e){}
+        alert('Push to CPQ simulated');
+      }
+
+      function pushToPursuit(){
+        try{
+          if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+            RWD.createPursuitViaOIC(function(){ alert('Pursuit created via OIC (demo state updated)'); });
+          } else {
+            if(window.RWD && typeof RWD.get==='function'){ var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage3: Push to Pursuit simulated'); if(typeof RWD.set==='function') RWD.set(s); }
+            alert('Push to Pursuit simulated');
+          }
+        }catch(e){}
       }
     </script>
 
