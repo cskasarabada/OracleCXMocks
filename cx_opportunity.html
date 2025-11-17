@@ -3,135 +3,174 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Redwood Opportunity</title>
+<title>MiConnex Opportunity</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 </head>
-<body>
+<body class="oppty-landing">
 
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<div class="env-banner">
+  <span>DEVS - ERP/PA/TA Pod T2T from DEV6 - 8/16/2025</span>
+  <span class="env-meta">Demo Sandbox</span>
+</div>
 
-<!-- Page hero with opportunity title and actions -->
-<div class="page-hero">
-  <div class="hero-left">
-    <div class="hero-icon">OP</div>
-    <div>
-      <div class="hero-title" id="opptyHeroTitle">Sample Opportunity</div>
-      <div class="hero-sub" id="opptyHeroSub">Account · Primary Contact</div>
+<header class="miconnex-bar">
+  <div class="logo-mark"><span class="logo-strong">Mi</span>CONNEX</div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">GS</div>
+  </div>
+</header>
+
+<main class="oppty-shell">
+  <div class="crumbs">
+    <div class="crumb-label">My Open Opportunities</div>
+    <div class="crumb-actions">
+      <button class="ghost-icon" aria-label="Previous opportunity">&larr;</button>
+      <button class="ghost-icon" aria-label="Next opportunity">&rarr;</button>
+      <button class="btn outline">Details</button>
     </div>
   </div>
-  <div class="hero-actions">
-    <button class="btn" onclick="saveOppDraft()">Save</button>
-    <button class="btn" onclick="cancelOppDraft()">Cancel</button>
-    <button class="btn primary" id="add-new-oppty-btn">Add New Opportunity</button>
+
+  <section class="oppty-hero-card">
+    <div class="hero-content">
+      <div class="hero-heading">
+        <div class="hero-title-line">
+          <h1 class="hero-title" id="opptyHeroTitle">TT1 eea</h1>
+          <button class="favorite-btn" aria-label="Favorite">&#9825;</button>
+        </div>
+        <div class="hero-sub" id="opptyHeroSub">Account &bull; Primary Contact</div>
+      </div>
+      <div class="stage hero-stage">
+        <span class="s cur" data-v="Qualification">Statement of Qualification</span>
+        <span class="s" data-v="Evaluation">Evaluation</span>
+        <span class="s" data-v="Proposal">Proposal</span>
+        <span class="s" data-v="Negotiation">Negotiation</span>
+        <span class="s" data-v="Closed Won">Closed Won</span>
+      </div>
+      <div class="info-pills">
+        <div class="info-pill">Status Open</div>
+        <div class="info-pill">Win Probability 40</div>
+        <div class="info-pill pill-long">Account Warner Design Associates Inc.</div>
+        <div class="info-pill pill-long">Owner Rachesh Nambiar</div>
+        <div class="info-pill">Opportunity Number 42048</div>
+      </div>
+      <div class="hero-cta">
+        <button class="ghost-btn" id="add-new-oppty-btn">Try Add Team Member</button>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="ghost-icon">Share</button>
+      <button class="ghost-icon">Sync</button>
+      <button class="ghost-icon">Email</button>
+      <button class="btn primary">Details</button>
+    </div>
+  </section>
+
+  <section class="panel-grid">
+    <article class="panel-card">
+      <header>Contacts</header>
+      <p>There are no contacts added for this opportunity yet.</p>
+      <p class="muted">As contacts are added, you can view them here.</p>
+    </article>
+    <article class="panel-card">
+      <header>Team</header>
+      <div class="team-card">
+        <div class="avatar">RN</div>
+        <div>
+          <div class="team-name">Rachesh Nambiar</div>
+          <div class="team-email">rachesh.nambiar@argano.com</div>
+          <span class="team-chip">Owner</span>
+        </div>
+      </div>
+      <a class="panel-link" href="#">View All Team Members (1)</a>
+    </article>
+    <article class="panel-card project-card">
+      <header>Project</header>
+      <p>Keep the commercial team aligned with project delivery.</p>
+      <button class="btn brand" id="btnCreatePursuit" type="button">Navigate to PPM</button>
+      <div class="project-progress">
+        <div class="status-pill" id="status">Idle</div>
+        <div class="progress"><div class="bar" id="prog"></div></div>
+      </div>
+    </article>
+    <article class="panel-card">
+      <header>Partners</header>
+      <p>There are no partners assigned for this opportunity yet.</p>
+      <p class="muted">As partners are assigned, you can view them here.</p>
+    </article>
+    <article class="panel-card">
+      <header>Competitors</header>
+      <p>There are no competitors identified yet.</p>
+      <p class="muted">As competitors are identified, you can view them here and track their relevant threat levels here.</p>
+    </article>
+  </section>
+
+  <div class="carousel-dots" role="presentation">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <div class="sr-only">
+    <div class="timeline" id="opptyTl"></div>
+    <div id="opps-preview"></div>
+  </div>
+
+  <form id="oppForm" class="sr-only">
+    <input name="name" id="opptyName"/>
+    <input name="amount" id="opptyAmount" type="number"/>
+    <input type="hidden" name="stage" id="stageVal" value="Qualification"/>
+  </form>
+
+</main>
+
+<nav class="app-nav-rail">
+  <a href="#">Accounts</a>
+  <a href="#">Activities</a>
+  <a href="#">Contacts</a>
+  <a class="active" href="#">Opportunities</a>
+  <a href="#">Leads</a>
+  <a href="#">Partners</a>
+  <a href="#">Partner Contacts</a>
+  <a href="#">Express Reports</a>
+  <a href="#">Sales Performance</a>
+</nav>
+
+<div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:120" aria-hidden="true">
+  <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
+    <h2 id="addOpptyTitle">Create Opportunity</h2>
+    <form id="addOpptyForm">
+      <div class="field"><label>Name</label><input name="name" required></div>
+      <div class="field"><label>Account</label><input name="account"></div>
+      <div class="two-col">
+        <div class="field" style="grid-template-columns:1fr"><label>Amount</label><input name="amount" type="number"></div>
+        <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
+      </div>
+      <div class="field"><label>Stage</label><select name="stage"><option>Qualification</option><option>Evaluation</option><option>Proposal</option><option>Negotiation</option><option>Closed Won</option></select></div>
+      <div class="field"><label>Notes</label><textarea name="notes" rows="3"></textarea></div>
+      <div class="actions">
+        <button type="button" class="btn" onclick="closeAddOppty()">Cancel</button>
+        <button type="submit" class="btn primary">Save Opportunity</button>
+      </div>
+    </form>
   </div>
 </div>
 
-<div class="shell">
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-    <a class="tab" href="results_driven.html">Results Driven</a>
-  </div>
-
-<div class="grid">
-  <!-- Recent opportunities preview -->
-  <div style="max-width:980px;margin:6px auto 12px;grid-column:1/3">
-    <div class="card">
-      <div class="body">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <h3 style="margin:0">Recent Opportunities</h3>
-          <div style="font-size:13px;color:var(--rw-muted)">Click Import to load into the Opportunity form</div>
-        </div>
-        <div id="opps-preview" style="overflow:auto;max-height:180px"></div>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="grid-column:1/2">
-    <div class="smartbar">
-      <div class="group">
-        <button class="btn" onclick="RWD.actOppty('Log Call')">Log Call</button>
-        <button class="btn" onclick="RWD.actOppty('Send Email')">Send Email</button>
-        <button class="btn" onclick="RWD.actOppty('Schedule Meeting')">Schedule Meeting</button>
-        <button class="btn" onclick="RWD.actOppty('Create Quote')">Create Quote</button>
-        <button class="btn" onclick="RWD.actOppty('Add Product')">Add Product</button>
-      </div>
-      <input type="search" placeholder="Smart Action… (e.g., Create Task)"/>
-    </div>
-    <h2>Opportunity (Redwood)</h2>
-    <div class="body">
-      <form id="oppForm">
-        <div class="row">
-          <div><label>Name<input name="name" id="opptyName"></label></div>
-          <div><label>Amount (USD)<input type="number" name="amount" id="opptyAmount"></label></div>
-        </div>
-        <div class="stage" style="margin-top:6px">
-          <span class="s" data-v="Qualification">Qualification</span>
-          <span class="s" data-v="Evaluation">Evaluation</span>
-          <span class="s" data-v="Proposal">Proposal</span>
-          <span class="s" data-v="Negotiation">Negotiation</span>
-          <span class="s" data-v="Closed Won">Closed Won</span>
-        </div>
-        <input type="hidden" name="stage" id="stageVal" value="Qualification"/>
-        <div class="actions">
-          <button class="btn brand" id="btnCreatePursuit" type="button">Send to OIC → Create Pursuit</button>
-          <a class="btn" href="cx_lead.html">Back</a>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Add New Opportunity modal -->
-  <div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:120" aria-hidden="true">
-    <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
-      <h2 id="addOpptyTitle">Create Opportunity</h2>
-      <form id="addOpptyForm">
-        <div class="field"><label>Name</label><input name="name" required></div>
-        <div class="field"><label>Account</label><input name="account"></div>
-        <div class="two-col">
-          <div class="field" style="grid-template-columns:1fr"><label>Amount</label><input name="amount" type="number"></div>
-          <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
-        </div>
-        <div class="field"><label>Stage</label><select name="stage"><option>Qualification</option><option>Evaluation</option><option>Proposal</option><option>Negotiation</option><option>Closed Won</option></select></div>
-        <div class="field"><label>Probability (%)</label><input name="probability" type="number" min="0" max="100" value="20"></div>
-        <div class="field"><label>Description</label><textarea name="description" rows="3"></textarea></div>
-        <div class="qs-actions" style="margin-top:12px">
-          <button type="button" class="btn" onclick="closeAddOppty()">Cancel</button>
-          <button type="submit" class="btn primary">Save Opportunity</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="card" style="grid-column:2/3">
-    <h2>Activity & Timeline</h2>
-    <div class="body timeline" id="opptyTl"></div>
-    <h2>Integration</h2>
-    <div class="body">
-      <div class="progress"><div class="bar" id="prog"></div></div>
-      <div class="pill" id="status">Idle</div>
-      <div class="kv"><div class="k">Next Step</div><div class="v">PPM Pursuit</div></div>
-    </div>
-  </div>
-</div>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var d=RWD.get();
    document.getElementById('opptyName').value=d.oppty.name||'';
    document.getElementById('opptyAmount').value=d.oppty.amount||0;
   // set hero title from demo state if available
-  try{ var hero = document.getElementById('opptyHeroTitle'); if(hero) hero.textContent = (d.oppty && (d.oppty.name || d.oppty.title)) || 'Sample Opportunity'; var sub = document.getElementById('opptyHeroSub'); if(sub) sub.textContent = (d.oppty && d.oppty.account) || 'Account · Primary Contact'; }catch(e){}
+  try{ var hero = document.getElementById('opptyHeroTitle'); if(hero) hero.textContent = (d.oppty && (d.oppty.name || d.oppty.title)) || 'Sample Opportunity'; var sub = document.getElementById('opptyHeroSub'); if(sub) sub.textContent = (d.oppty && d.oppty.account) || 'Account - Primary Contact'; }catch(e){}
    function setStage(v){ document.getElementById('stageVal').value=v; Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); }); }
    setStage(d.oppty.stage||'Qualification');
    Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
-   document.getElementById('btnCreatePursuit').addEventListener('click', function(){ var f=document.getElementById('oppForm'); RWD.saveOppty(f); document.getElementById('status').textContent='Running OIC job…'; document.getElementById('prog').style.width='60%'; RWD.createPursuitViaOIC(function(){ document.getElementById('status').textContent='Completed'; document.getElementById('prog').style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); }); });
+   document.getElementById('btnCreatePursuit').addEventListener('click', function(){ var f=document.getElementById('oppForm'); RWD.saveOppty(f); document.getElementById('status').textContent='Running OIC job...'; document.getElementById('prog').style.width='60%'; RWD.createPursuitViaOIC(function(){ document.getElementById('status').textContent='Completed'; document.getElementById('prog').style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); }); });
    // render timeline
    var tl=document.getElementById('opptyTl');
    function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
@@ -160,15 +199,15 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 // Render recent opportunities preview
-function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Add New Opportunity" to create one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
+function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Try Add Team Member" to create one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
 
 function prefillAddOppty(index){ var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities)?s.opportunities:[]; if(!opps || opps.length===0) return; var opp = opps[index] || opps[0]; var form = document.getElementById('addOpptyForm'); if(!form) return; Object.keys(opp).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value = opp[k]; }catch(e){} }); openAddOppty(); }
 
-function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 function saveOppDraft(){ if(typeof showToast==='function') showToast('Draft saved (demo)'); }
 function cancelOppDraft(){ if(typeof showToast==='function') showToast('Draft canceled'); }
 </script>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+<div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 </html>
