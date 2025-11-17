@@ -97,6 +97,11 @@ input,select,textarea{width:100%;padding:10px;border:1px solid var(--rw-border);
 .quick-steps li{line-height:1.4}
 .quick-steps strong{color:var(--rw-brand)}
 
+/* Make ordered list markers visible and styled (avoid duplicating numbers in markup) */
+.quick-steps{padding-left:28px}
+.quick-steps li::marker{color:var(--rw-brand);font-weight:700}
+.quick-steps li strong{font-weight:600;color:var(--rw-brand)}
+
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
 .stat-card{border:1px solid var(--rw-border);border-radius:12px;padding:14px;background:#fff;text-align:left;box-shadow:0 1px 2px rgba(16,24,40,.04)}
 .stat-card .value{font-size:32px;font-weight:700;color:var(--rw-brand)}
