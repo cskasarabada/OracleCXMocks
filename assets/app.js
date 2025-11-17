@@ -209,6 +209,12 @@
     }else{
       nav.innerHTML=renderNavLinks(current);
     }
+    var footerNav=document.querySelector('.app-nav-rail');
+    if(footerNav){
+      var inner=footerNav.querySelector('.app-nav-items');
+      if(!inner){ inner=document.createElement('div'); inner.className='app-nav-items'; inner.innerHTML=renderNavLinks(current); footerNav.innerHTML=''; footerNav.appendChild(inner); }
+      else inner.innerHTML=renderNavLinks(current);
+    }
   }
   document.addEventListener('DOMContentLoaded', function(){ try{ ensureGlobalChrome(); }catch(e){ console.warn('chrome init failed', e); }});
 })();
