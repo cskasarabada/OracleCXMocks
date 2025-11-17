@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Quick Sales — Pre-Built Quote & Approval</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Quick Sales — Stage 2</span></div>
+<div class="shell">
+  <div style="max-width:900px;margin:18px auto">
+    <h1>Pre-Built Quote & Approval</h1>
+    <p>Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals. Use this screen to pick a price template and submit for approval.</p>
+    <div class="actions">
+      <button class="btn primary" onclick="applyStage()">Apply: Launch Quick Quote</button>
+      <a class="btn" href="quick_sales_screen.html">Back</a>
+    </div>
+    <hr style="margin:18px 0"/>
+    <h3>Example Controls</h3>
+    <ul>
+      <li>Price template selector</li>
+      <li>Auto-attach supporting documents</li>
+      <li>Approval routing (fast lanes)</li>
+      <li>Review & submit button</li>
+    </ul>
+  </div>
+  <script>
+    function applyStage(){
+      if(window.RWD && typeof RWD.updateSalesFlow==='function'){
+        RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched');
+        alert('Quick Sales: Quick Quote launched (demo state updated)');
+      } else alert('Demo state not available');
+    }
+  </script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

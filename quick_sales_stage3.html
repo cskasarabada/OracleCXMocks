@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Quick Sales — Execution & Handoff</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Quick Sales — Stage 3</span></div>
+<div class="shell">
+  <div style="max-width:900px;margin:18px auto">
+    <h1>Execution & Handoff</h1>
+    <p>Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying. This screen simulates conversion and PPM handoff.</p>
+    <div class="actions">
+      <button class="btn primary" onclick="applyStage()">Apply: Convert & Handoff</button>
+      <a class="btn" href="quick_sales_screen.html">Back</a>
+    </div>
+    <hr style="margin:18px 0"/>
+    <h3>Example Actions</h3>
+    <ul>
+      <li>Convert quick quote into opportunity</li>
+      <li>Attach proposal and project artifacts</li>
+      <li>Run integration to PPM (OIC job)</li>
+      <li>Notify delivery and create pursuit record</li>
+    </ul>
+  </div>
+  <script>
+    function applyStage(){
+      if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+        // convert and create pursuit via OIC simulation
+        if(window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted & handed off');
+        }
+        RWD.createPursuitViaOIC(function(){ alert('Quick Sales: Converted and pursuit created via OIC (demo state updated)'); });
+      } else if(window.RWD && typeof RWD.updateSalesFlow==='function'){
+        RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted (local)');
+        alert('Quick Sales: Converted (demo state updated)');
+      } else alert('Demo state not available');
+    }
+  </script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>

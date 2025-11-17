@@ -40,9 +40,9 @@
         <div>
           <h3>Condensed 3-Stage Progression</h3>
           <ol class="quick-steps">
-            <li><strong>1. Account + Need Confirmation:</strong> Validate the existing relationship, confirm scope, and document the expansion trigger.</li>
-            <li><strong>2. Pre-Built Quote + Approval:</strong> Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals.</li>
-            <li><strong>3. Execution &amp; Handoff:</strong> Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying.</li>
+            <li><strong>1. Account + Need Confirmation:</strong> Validate the existing relationship, confirm scope, and document the expansion trigger. <a class="btn" href="#" onclick="showQuickModal(1); return false;">Details</a></li>
+            <li><strong>2. Pre-Built Quote + Approval:</strong> Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals. <a class="btn" href="#" onclick="showQuickModal(2); return false;">Details</a></li>
+            <li><strong>3. Execution &amp; Handoff:</strong> Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying. <a class="btn" href="#" onclick="showQuickModal(3); return false;">Details</a></li>
           </ol>
         </div>
       </div>
@@ -64,6 +64,71 @@
       } else alert('Demo state not available (open a demo page that loads assets/app.js).');
     }
   </script>
+
+  <!-- Quick Sales detail modals (in-page) -->
+  <div id="qs-modals" style="display:none">
+    <style>
+      .qs-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:60}
+      .qs-modal{width:min(760px,94%);background:var(--rw-surface);border-radius:12px;padding:18px;border:1px solid var(--rw-border);box-shadow:0 8px 24px rgba(2,6,23,.3)}
+      .qs-modal h2{margin-top:0}
+      .qs-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    </style>
+
+    <div id="qs-modal-1" class="qs-overlay" style="display:none">
+      <div class="qs-modal">
+        <h2>Account + Need Confirmation</h2>
+        <p>Validate the existing relationship, confirm scope, and document the expansion trigger. Pick an account, review recent projects, and capture the expansion reason.</p>
+        <h4>Example Fields</h4>
+        <ul>
+          <li>Account selector (search + favorites)</li>
+          <li>Recent project history summary</li>
+          <li>Primary contact verification</li>
+          <li>Expansion trigger (capex, maintenance, regulation)</li>
+        </ul>
+        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(1)">Close</button><button class="btn primary" onclick="applyQuickStage(1)">Apply: Confirm Account & Need</button></div>
+      </div>
+    </div>
+
+    <div id="qs-modal-2" class="qs-overlay" style="display:none">
+      <div class="qs-modal">
+        <h2>Pre-Built Quote & Approval</h2>
+        <p>Launch the Quick Quote path with embedded controls, auto-attach documentation, and route fast approvals. Use this screen to pick a price template and submit for approval.</p>
+        <h4>Example Controls</h4>
+        <ul>
+          <li>Price template selector</li>
+          <li>Auto-attach supporting documents</li>
+          <li>Approval routing (fast lanes)</li>
+          <li>Review & submit button</li>
+        </ul>
+        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(2)">Close</button><button class="btn primary" onclick="applyQuickStage(2)">Apply: Launch Quick Quote</button></div>
+      </div>
+    </div>
+
+    <div id="qs-modal-3" class="qs-overlay" style="display:none">
+      <div class="qs-modal">
+        <h2>Execution & Handoff</h2>
+        <p>Convert to an opportunity with the required artifacts attached, then hand off to delivery without re-keying. This simulates conversion and PPM handoff.</p>
+        <h4>Example Actions</h4>
+        <ul>
+          <li>Convert quick quote into opportunity</li>
+          <li>Attach proposal and project artifacts</li>
+          <li>Run integration to PPM (OIC job)</li>
+          <li>Notify delivery and create pursuit record</li>
+        </ul>
+        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(3)">Close</button><button class="btn primary" onclick="applyQuickStage(3)">Apply: Convert & Handoff</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showQuickModal(n){ document.getElementById('qs-modals').style.display='block'; document.getElementById('qs-modal-'+n).style.display='flex'; }
+    function closeQuickModal(n){ document.getElementById('qs-modal-'+n).style.display='none'; if(!document.querySelector('#qs-modals .qs-overlay[style*="display:flex"]')) document.getElementById('qs-modals').style.display='none'; }
+    function applyQuickStage(n){
+      if(n===1){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed'); } alert('Quick Sales: Account & Need confirmed (demo state updated)'); closeQuickModal(1); }
+      else if(n===2){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched'); } alert('Quick Sales: Quick Quote launched (demo state updated)'); closeQuickModal(2); }
+      else if(n===3){ if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted & handed off'); } RWD.createPursuitViaOIC(function(){ alert('Quick Sales: Converted and pursuit created via OIC (demo state updated)'); closeQuickModal(3); }); } else if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted (local)'); alert('Quick Sales: Converted (demo state updated)'); closeQuickModal(3); } else { alert('Demo state not available'); closeQuickModal(3); } }
+  </script>
+
 
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
