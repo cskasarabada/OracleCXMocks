@@ -43,17 +43,29 @@
       <div class="agent">
         <h3>Sales Agent</h3>
         <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
-        <div class="actions"><a class="btn" href="#" onclick="startAgent('Sales Agent'); return false;">Start</a></div>
+        <div class="actions">
+          <a class="btn" href="#" onclick="RWD.startAgent('sales'); return false;">Start</a>
+          <a class="btn" href="#" onclick="RWD.stopAgent('sales'); return false;">Stop</a>
+          <span class="agent-status" id="agent-sales-status">idle</span>
+        </div>
       </div>
       <div class="agent">
         <h3>Forecasting Agent</h3>
         <p>Analyze pipeline data and suggest forecast adjustments.</p>
-        <div class="actions"><a class="btn" href="#" onclick="startAgent('Forecasting Agent'); return false;">Start</a></div>
+        <div class="actions">
+          <a class="btn" href="#" onclick="RWD.startAgent('forecast'); return false;">Start</a>
+          <a class="btn" href="#" onclick="RWD.stopAgent('forecast'); return false;">Stop</a>
+          <span class="agent-status" id="agent-forecast-status">idle</span>
+        </div>
       </div>
       <div class="agent">
         <h3>Integration Agent</h3>
         <p>Simulate integrations between CX and PPM for demo scenarios.</p>
-        <div class="actions"><a class="btn" href="#" onclick="startAgent('Integration Agent'); return false;">Start</a></div>
+        <div class="actions">
+          <a class="btn" href="#" onclick="RWD.startAgent('integration'); return false;">Start</a>
+          <a class="btn" href="#" onclick="RWD.stopAgent('integration'); return false;">Stop</a>
+          <span class="agent-status" id="agent-integration-status">idle</span>
+        </div>
       </div>
     </div>
   </div></div>
@@ -67,21 +79,23 @@
      p.textContent=m;
      log.appendChild(p);
    });
-   
-    // Expose a simple agent starter for demo purposes
-    window.startAgent = function(name){
+    // Periodically refresh agent status display
+    function refreshAgentStatus(){
       try{
-        alert('Starting ' + name);
-        // append to persistent demo logs if RWD supports it
-        var state = RWD.get();
-        state.logs = state.logs || [];
-        state.logs.push('Agent started: ' + name);
-        if(typeof RWD.set === 'function') RWD.set(state);
-        if(log){ var p=document.createElement('div'); p.textContent='Agent started: ' + name; log.appendChild(p); }
-      }catch(e){
-        console.log('startAgent:', e);
-      }
-    };
+        var s = RWD.getAgentStates ? RWD.getAgentStates() : {};
+        var sales = s.sales || s['sales agent'] || {};
+        var fc = s.forecast || s['forecasting agent'] || {};
+        var integ = s.integration || s['integration agent'] || {};
+        var elSales = document.getElementById('agent-sales-status');
+        var elFc = document.getElementById('agent-forecast-status');
+        var elInt = document.getElementById('agent-integration-status');
+        if(elSales) elSales.textContent = (sales.running ? 'running' : 'stopped') + (sales.lastAction ? ' — '+sales.lastAction : '');
+        if(elFc) elFc.textContent = (fc.running ? 'running' : 'stopped') + (fc.lastAction ? ' — '+fc.lastAction : '');
+        if(elInt) elInt.textContent = (integ.running ? 'running' : 'stopped') + (integ.lastAction ? ' — '+integ.lastAction : '');
+      }catch(e){ console.log('refreshAgentStatus', e); }
+    }
+    refreshAgentStatus();
+    setInterval(refreshAgentStatus, 2000);
  });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>

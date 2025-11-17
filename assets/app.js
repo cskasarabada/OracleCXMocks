@@ -69,6 +69,92 @@
       write(d);
       log('Sales flow updated: '+stageKey+' → '+status);
     },
+    // Agent simulation: run demo agents that perform periodic actions
+    _agentHandles: {},
+    _agentState: {},
+    startAgent(type){
+      const key = String(type||'').toLowerCase();
+      if(this._agentHandles[key]) return; // already running
+      this._agentState[key] = this._agentState[key] || {running:true, lastAction:''};
+      this._agentState[key].running = true;
+
+      if(key==='sales' || key==='sales agent'){
+        // Sales Agent: qualify leads, convert to opportunity, advance stages
+        const iv = setInterval(()=>{
+          try{
+            const d = ensure();
+            if(!d.lead || d.lead.status!=='Qualified'){
+              d.lead.company = d.lead.company || ('Acme Co ' + Math.floor(Math.random()*900+100));
+              d.lead.contact = d.lead.contact || 'rep@'+d.lead.company.replace(/\s+/g,'').toLowerCase()+'.com';
+              d.lead.score = d.lead.score || (50 + Math.floor(Math.random()*40));
+              d.lead.status = 'Qualified';
+              addAct(d.lead.activities,'Agent','Sales Agent qualified lead');
+              write(d); log('Sales Agent qualified lead for '+d.lead.company);
+              this._agentState[key].lastAction = 'Qualified lead: '+d.lead.company;
+              return;
+            }
+            if(!d.oppty || !d.oppty.name){
+              this.convertToOpportunity();
+              this._agentState[key].lastAction = 'Converted lead to Opportunity';
+              return;
+            }
+            // advance opportunity stage if possible
+            const stages = ['Qualification','Evaluation','Proposal','Negotiation','Closed Won'];
+            const idx = stages.indexOf(d.oppty.stage || 'Qualification');
+            if(idx < stages.length-1 && Math.random()>0.4){
+              d.oppty.stage = stages[idx+1];
+              addAct(d.oppty.activities,'Agent','Sales Agent advanced opportunity to '+d.oppty.stage);
+              write(d); log('Sales Agent advanced opportunity to '+d.oppty.stage);
+              this._agentState[key].lastAction = 'Advanced opportunity to '+d.oppty.stage;
+            }
+          }catch(e){ console.error('sales agent', e); }
+        }, 5000 + Math.floor(Math.random()*3000));
+        this._agentHandles[key]=iv;
+      } else if(key==='forecast' || key==='forecasting agent'){
+        // Forecasting Agent: read pipeline and produce forecast suggestions
+        const iv = setInterval(()=>{
+          try{
+            const d = ensure();
+            const amt = (d.oppty && d.oppty.amount) ? d.oppty.amount : (100000 + Math.floor(Math.random()*900000));
+            const suggested = Math.round(amt * (0.9 + Math.random()*0.2));
+            const confidence = 60 + Math.floor(Math.random()*35);
+            d.forecast = { suggested, confidence, ts: now() };
+            addAct(d.oppty.activities || [], 'Agent', 'Forecasting Agent suggested $'+suggested+' ('+confidence+'%)');
+            write(d); log('Forecasting Agent suggested $'+suggested+' ('+confidence+'%)');
+            this._agentState[key].lastAction = 'Suggested $'+suggested+' ('+confidence+'%)';
+          }catch(e){ console.error('forecast agent', e); }
+        }, 8000 + Math.floor(Math.random()*4000));
+        this._agentHandles[key]=iv;
+      } else if(key==='integration' || key==='integration agent'){
+        // Integration Agent: run OIC job simulations regularly
+        const iv = setInterval(()=>{
+          try{
+            const kinds = ['Sync CX→PPM','Sync PPM→CX','Push Pursuit','Update Estimates'];
+            const kind = kinds[Math.floor(Math.random()*kinds.length)];
+            this.runOICJob(kind, (id)=>{
+              const d = ensure();
+              addAct(d.oppty.activities || [], 'Agent', 'Integration Agent ran '+kind+' (id:'+id+')');
+              write(d); log('Integration Agent completed job '+id+' ('+kind+')');
+              this._agentState[key].lastAction = kind+' → '+id;
+            });
+          }catch(e){ console.error('integration agent', e); }
+        }, 10000 + Math.floor(Math.random()*6000));
+        this._agentHandles[key]=iv;
+      } else {
+        // unknown type: create a simple heartbeat
+        const iv = setInterval(()=>{
+          try{ log('Agent ['+type+'] heartbeat'); this._agentState[key].lastAction='heartbeat '+now(); }catch(e){}
+        }, 7000);
+        this._agentHandles[key]=iv;
+      }
+    },
+    stopAgent(type){
+      const key = String(type||'').toLowerCase();
+      const h = this._agentHandles[key];
+      if(h){ clearInterval(h); delete this._agentHandles[key]; }
+      this._agentState[key]=this._agentState[key]||{}; this._agentState[key].running=false; this._agentState[key].lastAction='stopped';
+    },
+    getAgentStates(){ return Object.assign({}, this._agentState); },
     flowStages: FLOW_STAGES
   };
 })();
