@@ -41,78 +41,13 @@
       <div id="leads-preview" class="table-shell"></div>
     </article>
 
-    <article id="lead-form-card" class="lead-create-card">
+    <article class="lead-activity-card">
       <div class="lead-form-header">
-        <h2>Create Lead</h2>
-        <p class="muted">Primary Contact - Related Contacts</p>
+        <h2>Activity</h2>
+        <p class="muted">Recent updates for your active lead.</p>
       </div>
-      <div class="smartbar lead-smart">
-        <div class="group">
-          <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
-          <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
-          <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
-          <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
-        </div>
-        <div class="smart-select">
-          <label for="smart-action-select" class="visually-hidden">Smart Action</label>
-          <select id="smart-action-select">
-            <option value="">- Smart actions -</option>
-            <option>Log Call</option>
-            <option>Send Email</option>
-            <option>Schedule Meeting</option>
-            <option>Create Task</option>
-            <option>Create Quote</option>
-            <option>Assign Owner</option>
-            <option>Add Note</option>
-            <option>Create Pursuit</option>
-            <option>Push to CPQ</option>
-          </select>
-          <button type="button" class="btn" id="apply-smart-action">Apply</button>
-        </div>
-        <div class="smart-input">
-          <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action (click to browse)"/>
-          <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
-        </div>
-      </div>
-
-      <form id="addLeadForm" class="lead-form">
-        <div class="row">
-          <label>Company<input name="company" required></label>
-          <label>Lead Name<input name="name"></label>
-        </div>
-        <div class="row">
-          <label>Primary Contact<input name="contact"></label>
-          <label>Job Title<input name="title"></label>
-        </div>
-        <div class="row">
-          <label>Contact Phone<input name="phone"></label>
-          <label>Contact Email<input name="email" type="email"></label>
-        </div>
-        <div class="row">
-          <label>Source<input name="source"></label>
-          <label>Owner<input name="owner" value="Chandra Kasarabada"></label>
-        </div>
-        <div class="row">
-          <label>Fit Score<input name="score" type="number" min="0" max="100" value="60"></label>
-          <label>Status<select name="status"><option>Qualified</option><option>Unqualified</option><option>Working</option></select></label>
-        </div>
-        <div class="row">
-          <label>Country<input name="country"></label>
-          <label>Rank<input name="rank"></label>
-        </div>
-        <div class="row">
-          <label>Address Line 1<input name="address1"></label>
-          <label>Address Line 2<input name="address2"></label>
-        </div>
-        <div class="row">
-          <label>City<input name="city"></label>
-          <label>State<input name="state"></label>
-        </div>
-        <div class="actions">
-          <button class="btn primary" type="submit">Save Lead</button>
-          <button class="btn" type="button" onclick="closeAddLead()">Cancel</button>
-        </div>
-      </form>
+      <div class="timeline compact tall" id="leadTlMain"></div>
+      <a class="panel-link" href="#">View Activity Log</a>
     </article>
   </section>
 
@@ -168,12 +103,91 @@
       </article>
       <article class="lead-panel activities">
         <header>Activities</header>
-        <div class="timeline compact" id="leadTl"></div>
+        <div class="timeline compact" id="leadTlPanel"></div>
         <a class="panel-link" href="#">View All Activities</a>
       </article>
     </div>
   </section>
 </main>
+
+<div id="lead-modal" class="lead-overlay" aria-hidden="true">
+  <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle" tabindex="-1">
+    <div class="lead-modal-header">
+      <div>
+        <p class="eyebrow">Create Lead</p>
+        <h2 id="leadModalTitle">Primary Contact - Related Contacts</h2>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeAddLead()">Close ✕</button>
+    </div>
+    <div class="smartbar lead-smart">
+      <div class="group">
+        <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
+        <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
+        <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
+        <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
+      </div>
+      <div class="smart-select">
+        <label for="smart-action-select" class="visually-hidden">Smart Action</label>
+        <select id="smart-action-select">
+          <option value="">- Smart actions -</option>
+          <option>Log Call</option>
+          <option>Send Email</option>
+          <option>Schedule Meeting</option>
+          <option>Create Task</option>
+          <option>Create Quote</option>
+          <option>Assign Owner</option>
+          <option>Add Note</option>
+          <option>Create Pursuit</option>
+          <option>Push to CPQ</option>
+        </select>
+        <button type="button" class="btn" id="apply-smart-action">Apply</button>
+      </div>
+      <div class="smart-input">
+        <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action (click to browse)"/>
+        <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
+      </div>
+    </div>
+
+    <form id="addLeadForm" class="lead-form">
+      <div class="row">
+        <label>Company<input name="company" required></label>
+        <label>Lead Name<input name="name"></label>
+      </div>
+      <div class="row">
+        <label>Primary Contact<input name="contact"></label>
+        <label>Job Title<input name="title"></label>
+      </div>
+      <div class="row">
+        <label>Contact Phone<input name="phone"></label>
+        <label>Contact Email<input name="email" type="email"></label>
+      </div>
+      <div class="row">
+        <label>Source<input name="source"></label>
+        <label>Owner<input name="owner" value="Chandra Kasarabada"></label>
+      </div>
+      <div class="row">
+        <label>Fit Score<input name="score" type="number" min="0" max="100" value="60"></label>
+        <label>Status<select name="status"><option>Qualified</option><option>Unqualified</option><option>Working</option></select></label>
+      </div>
+      <div class="row">
+        <label>Country<input name="country"></label>
+        <label>Rank<input name="rank"></label>
+      </div>
+      <div class="row">
+        <label>Address Line 1<input name="address1"></label>
+        <label>Address Line 2<input name="address2"></label>
+      </div>
+      <div class="row">
+        <label>City<input name="city"></label>
+        <label>State<input name="state"></label>
+      </div>
+      <div class="actions">
+        <button class="btn primary" type="submit">Save Lead</button>
+        <button class="btn" type="button" onclick="closeAddLead()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <nav class="app-nav-rail">
   <a href="#">Accounts</a>
@@ -190,15 +204,17 @@
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var d = RWD.get();
-   var tl = document.getElementById('leadTl');
+   var timelineTargets=[document.getElementById('leadTlMain'), document.getElementById('leadTlPanel')];
    function renderTimeline(){
-     if(!tl) return;
-     tl.innerHTML = '';
-     (d.lead.activities||[]).forEach(function(a){
-       var div=document.createElement('div');
-       div.className='item';
-       div.innerHTML='<div class="who">'+a.type+'</div><div class="what">'+a.text+'</div><div class="t">'+a.ts+'</div>';
-       tl.appendChild(div);
+     timelineTargets.forEach(function(tl){
+       if(!tl) return;
+       tl.innerHTML = '';
+       (d.lead.activities||[]).forEach(function(a){
+         var div=document.createElement('div');
+         div.className='item';
+         div.innerHTML='<div class="who">'+a.type+'</div><div class="what">'+a.text+'</div><div class="t">'+a.ts+'</div>';
+         tl.appendChild(div);
+       });
      });
    }
    renderTimeline();
