@@ -148,8 +148,6 @@ input,select,textarea{width:100%;padding:10px;border:1px solid var(--rw-border);
 
 /* Opportunity landing visuals */
 body.oppty-landing{background:#f5efe7;}
-.env-banner{background:#f7e0c0;color:#4c3a2c;padding:6px 20px;display:flex;justify-content:space-between;font-size:13px;border-bottom:1px solid rgba(0,0,0,.05);}
-.env-banner .env-meta{text-transform:uppercase;font-size:12px;letter-spacing:.08em;}
 .miconnex-bar{background:#201b2f;color:#fff;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;border-bottom:4px solid #f8d5a5;}
 .logo-mark{font-size:24px;font-weight:700;letter-spacing:.08em;}
 .logo-mark .logo-strong{font-weight:900;color:#f8d5a5;}
