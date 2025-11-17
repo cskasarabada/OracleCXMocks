@@ -102,6 +102,16 @@ input,select,textarea{width:100%;padding:10px;border:1px solid var(--rw-border);
 .quick-steps li::marker{color:var(--rw-brand);font-weight:700}
 .quick-steps li strong{font-weight:600;color:var(--rw-brand)}
 
+/* Smart Action popover (custom dropdown for cross-browser support) */
+.smartbar { position: relative; }
+.smartbar .action-pop{position:absolute;left:0;right:0;top:100%;background:var(--rw-surface);border:1px solid var(--rw-border);box-shadow:0 8px 24px rgba(2,6,23,.12);z-index:120;border-radius:8px;margin-top:8px;max-height:220px;overflow:auto}
+.smartbar .action-pop .item{padding:8px 10px;cursor:pointer;font-size:13px}
+.smartbar .action-pop .item:hover,.smartbar .action-pop .item[aria-selected="true"]{background:#f3f4f6}
+.smartbar .action-pop .no-results{padding:10px;color:var(--rw-muted);font-size:13px}
+
+/* Highlight for matched substring inside the action popover */
+.smartbar .action-pop .item mark{background:var(--rw-accent);color:#fff;padding:0 4px;border-radius:3px}
+
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}
 .stat-card{border:1px solid var(--rw-border);border-radius:12px;padding:14px;background:#fff;text-align:left;box-shadow:0 1px 2px rgba(16,24,40,.04)}
 .stat-card .value{font-size:32px;font-weight:700;color:var(--rw-brand)}

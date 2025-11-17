@@ -50,18 +50,10 @@
         </select>
         <button type="button" class="btn" id="apply-smart-action">Apply</button>
       </div>
-      <input id="smart-action-input" type="search" list="smart-actions-list" placeholder="Smart Action… (click to see actions)"/>
-      <datalist id="smart-actions-list">
-        <option value="Log Call"></option>
-        <option value="Send Email"></option>
-        <option value="Schedule Meeting"></option>
-        <option value="Create Task"></option>
-        <option value="Create Quote"></option>
-        <option value="Assign Owner"></option>
-        <option value="Add Note"></option>
-        <option value="Create Pursuit"></option>
-        <option value="Push to CPQ"></option>
-      </datalist>
+      <div style="position:relative;min-width:260px">
+        <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action… (click to see actions)" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--rw-border);background:#fff"/>
+        <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
+      </div>
     </div>
     <h2>Lead (Redwood)</h2>
     <div class="body">
@@ -116,7 +108,18 @@ document.addEventListener('DOMContentLoaded', function(){
   // allow Enter to trigger when typing in the input
   if(input) input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
   // sync input -> select when choosing from datalist
-  if(input && sel){ input.addEventListener('input', function(){ var v = input.value || ''; if(!v) return; var found = Array.from(sel.options).find(function(o){ return o.value===v || o.text===v; }); if(found){ sel.value = found.value; } }); }
+  // Custom popover logic (shows full list on focus/click)
+  var pop = document.getElementById('smart-action-pop');
+  var actions = [];
+  if(sel){ actions = Array.from(sel.options).filter(function(o){ return o.value && o.value.trim(); }).map(function(o){ return o.value; }); }
+  function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
+  function renderPop(filter){ if(!pop) return; pop.innerHTML=''; var f = (filter||'').toLowerCase().trim(); var shown=0; actions.forEach(function(a,i){ var low = a.toLowerCase(); if(f && low.indexOf(f)===-1) return; var it = document.createElement('div'); it.className='item'; it.setAttribute('role','option'); it.setAttribute('data-value',a); it.tabIndex = 0; if(f && low.indexOf(f)!==-1){ var idx = low.indexOf(f); var before = a.slice(0,idx); var match = a.slice(idx, idx+f.length); var after = a.slice(idx+f.length); it.innerHTML = escapeHTML(before) + '<mark>' + escapeHTML(match) + '</mark>' + escapeHTML(after); } else { it.textContent = a; }
+      it.addEventListener('click', function(){ input.value = a; if(sel) sel.value = a; applySelected(); hidePop(); }); it.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); input.value=a; if(sel) sel.value=a; applySelected(); hidePop(); } if(e.key==='ArrowDown'){ var nx = it.nextElementSibling; if(nx) nx.focus(); } if(e.key==='ArrowUp'){ var px = it.previousElementSibling; if(px) px.focus(); } }); pop.appendChild(it); shown++; }); if(shown===0){ var none = document.createElement('div'); none.className='no-results'; none.textContent='No matching actions'; pop.appendChild(none); }
+    }
+  function showPop(){ if(!pop) return; renderPop(input.value); pop.style.display='block'; input.setAttribute('aria-expanded','true'); document.addEventListener('click', onDocClick); }
+  function hidePop(){ if(!pop) return; pop.style.display='none'; input.setAttribute('aria-expanded','false'); document.removeEventListener('click', onDocClick); }
+  function onDocClick(e){ if(!pop) return; if(e.target === input) return; if(pop.contains(e.target)) return; hidePop(); }
+  if(input){ input.addEventListener('focus', showPop); input.addEventListener('click', function(e){ e.stopPropagation(); showPop(); }); input.addEventListener('input', function(){ renderPop(input.value); }); input.addEventListener('keydown', function(e){ if(e.key==='ArrowDown'){ var first = pop && pop.querySelector('.item'); if(first) { first.focus(); e.preventDefault(); } } if(e.key==='Escape'){ hidePop(); } }); }
 });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
