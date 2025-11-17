@@ -50,7 +50,18 @@
         </select>
         <button type="button" class="btn" id="apply-smart-action">Apply</button>
       </div>
-      <input type="search" placeholder="Smart Action… (e.g., Create Quote)"/>
+      <input id="smart-action-input" type="search" list="smart-actions-list" placeholder="Smart Action… (click to see actions)"/>
+      <datalist id="smart-actions-list">
+        <option value="Log Call"></option>
+        <option value="Send Email"></option>
+        <option value="Schedule Meeting"></option>
+        <option value="Create Task"></option>
+        <option value="Create Quote"></option>
+        <option value="Assign Owner"></option>
+        <option value="Add Note"></option>
+        <option value="Create Pursuit"></option>
+        <option value="Push to CPQ"></option>
+      </datalist>
     </div>
     <h2>Lead (Redwood)</h2>
     <div class="body">
@@ -85,20 +96,27 @@
 document.addEventListener('DOMContentLoaded', function(){
   var sel = document.getElementById('smart-action-select');
   var btn = document.getElementById('apply-smart-action');
+  var input = document.getElementById('smart-action-input');
   function applySelected(){
-    if(!sel) return;
-    var action = sel.value || '';
+    var action = '';
+    if(sel && sel.value) action = sel.value;
+    if(!action && input && input.value) action = input.value;
     if(!action) return;
     try{
       if(window.RWD && typeof RWD.actLead==='function') RWD.actLead(action);
       if(typeof showToast==='function') showToast('Smart action: '+action+' applied'); else console.log('Smart action:', action);
     }catch(e){ console.warn('applySelected', e); }
     // reset select
-    sel.selectedIndex = 0;
+    if(sel) sel.selectedIndex = 0;
+    if(input) input.value = '';
   }
   if(btn) btn.addEventListener('click', applySelected);
   // allow Enter to trigger when select has focus
   if(sel) sel.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
+  // allow Enter to trigger when typing in the input
+  if(input) input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
+  // sync input -> select when choosing from datalist
+  if(input && sel){ input.addEventListener('input', function(){ var v = input.value || ''; if(!v) return; var found = Array.from(sel.options).find(function(o){ return o.value===v || o.text===v; }); if(found){ sel.value = found.value; } }); }
 });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
