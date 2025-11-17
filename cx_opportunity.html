@@ -19,6 +19,21 @@
 </header>
 
 <main class="oppty-shell">
+  <nav class="quick-nav" aria-label="Experience navigation">
+    <a href="index.html">Overview</a>
+    <a href="Easy_Start_Flows.html">Easy Start</a>
+    <a href="sales_cloud.html">Sales Flow</a>
+    <a href="cx_lead.html">Lead</a>
+    <a class="active" href="cx_opportunity.html">Opportunity</a>
+    <a href="ppm_pursuit.html">PPM Pursuit</a>
+    <a href="ppm_construction.html">PPM Construction</a>
+    <a href="analytics.html">Analytics</a>
+    <a href="forecasting_pipeline.html">Forecasting</a>
+    <a href="integration_features.html">Integration</a>
+    <a href="sales_process_visualization.html">Process Visualization</a>
+    <a href="results_driven.html">Results Driven</a>
+    <a href="quick_sales_screen.html" class="accent">Quick Sales Screen</a>
+  </nav>
   <div class="crumbs">
     <div class="crumb-label">My Open Opportunities</div>
     <div class="crumb-actions">
@@ -27,6 +42,17 @@
       <button class="btn outline">Details</button>
     </div>
   </div>
+
+  <section class="opps-preview-card">
+    <div class="card-header">
+      <div>
+        <h3>My Open Opportunities</h3>
+        <div class="card-sub">Try searching by keyword or add a filter</div>
+      </div>
+      <span class="results-count" id="opps-count-label">Results</span>
+    </div>
+    <div id="opps-preview" class="table-shell"></div>
+  </section>
 
   <section class="oppty-hero-card">
     <div class="hero-content">
@@ -52,7 +78,7 @@
         <div class="info-pill">Opportunity Number 42048</div>
       </div>
       <div class="hero-cta">
-        <button class="ghost-btn" id="add-new-oppty-btn">Try Add Team Member</button>
+        <button class="btn brand" id="add-new-oppty-btn">Create Opportunity</button>
       </div>
     </div>
     <div class="hero-actions">
@@ -112,7 +138,6 @@
 
   <div class="sr-only">
     <div class="timeline" id="opptyTl"></div>
-    <div id="opps-preview"></div>
   </div>
 
   <form id="oppForm" class="sr-only">
@@ -194,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 // Render recent opportunities preview
-function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Try Add Team Member" to create one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
+function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Create Opportunity" to add one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
 
 function prefillAddOppty(index){ var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities)?s.opportunities:[]; if(!opps || opps.length===0) return; var opp = opps[index] || opps[0]; var form = document.getElementById('addOpptyForm'); if(!form) return; Object.keys(opp).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value = opp[k]; }catch(e){} }); openAddOppty(); }
 
