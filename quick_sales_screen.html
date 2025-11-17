@@ -9,6 +9,8 @@
 </head>
 <body>
 
+<div id="aria-live" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
+
 <div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Quick Sales Screen</span></div>
 <div class="shell">
   <div style="max-width:980px;margin:18px auto">
@@ -120,74 +122,7 @@
     </div>
   </div>
 
-    <script>
-    (function(){
-      var activeModal = null;
-      var lastFocused = null;
-      function getFocusable(container){
-        return container.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
-      }
-      function showQuickModal(n){
-        var wrapper = document.getElementById('qs-modals');
-        var modalWrap = document.getElementById('qs-modal-'+n);
-        if(!wrapper || !modalWrap) return;
-        lastFocused = document.activeElement;
-        wrapper.style.display='block';
-        modalWrap.style.display='flex';
-        modalWrap.setAttribute('aria-hidden','false');
-        var dialog = modalWrap.querySelector('.qs-modal');
-        if(dialog){
-          activeModal = modalWrap;
-          // focus inside dialog
-          var focusables = getFocusable(dialog);
-          if(focusables.length) focusables[0].focus(); else dialog.focus();
-          // keydown handler for ESC and Tab trapping
-          document.addEventListener('keydown', trapKeys);
-        }
-      }
-      function closeQuickModal(n){
-        var modalWrap = document.getElementById('qs-modal-'+n);
-        if(!modalWrap) return;
-        modalWrap.style.display='none';
-        modalWrap.setAttribute('aria-hidden','true');
-        // if no other modals open, hide wrapper
-        if(!document.querySelector('#qs-modals .qs-overlay[style*="display:flex"]')){
-          var wrapper = document.getElementById('qs-modals'); if(wrapper) wrapper.style.display='none';
-        }
-        document.removeEventListener('keydown', trapKeys);
-        if(lastFocused && typeof lastFocused.focus==='function') lastFocused.focus();
-        activeModal = null;
-      }
-      function trapKeys(e){
-        if(!activeModal) return;
-        if(e.key==='Escape' || e.key==='Esc'){
-          e.preventDefault();
-          var id = activeModal.id.replace('qs-modal-','');
-          closeQuickModal(id);
-          return;
-        }
-        if(e.key==='Tab'){
-          var dialog = activeModal.querySelector('.qs-modal');
-          var focusables = Array.prototype.slice.call(getFocusable(dialog));
-          if(!focusables.length) return;
-          var idx = focusables.indexOf(document.activeElement);
-          if(e.shiftKey){
-            if(idx===0){ e.preventDefault(); focusables[focusables.length-1].focus(); }
-          } else {
-            if(idx===focusables.length-1){ e.preventDefault(); focusables[0].focus(); }
-          }
-        }
-      }
-      // expose to global scope for inline handlers
-      window.showQuickModal = showQuickModal;
-      window.closeQuickModal = closeQuickModal;
-      window.applyQuickStage = function(n){
-        if(n===1){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed'); } alert('Quick Sales: Account & Need confirmed (demo state updated)'); closeQuickModal(1); }
-        else if(n===2){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched'); } alert('Quick Sales: Quick Quote launched (demo state updated)'); closeQuickModal(2); }
-        else if(n===3){ if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted & handed off'); } RWD.createPursuitViaOIC(function(){ alert('Quick Sales: Converted and pursuit created via OIC (demo state updated)'); closeQuickModal(3); }); } else if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted (local)'); alert('Quick Sales: Converted (demo state updated)'); closeQuickModal(3); } else { alert('Demo state not available'); closeQuickModal(3); } }
-      };
-    })();
-  </script>
+    <script defer src="assets/modal.js"></script>
 
 
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
