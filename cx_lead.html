@@ -3,240 +3,255 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Redwood Lead</title>
+<title>MiConnex Lead Workspace</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 </head>
-<body>
+<body class="lead-landing">
 
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
-
-<!-- Page hero with lead title and actions -->
-<div class="page-hero">
-  <div class="hero-left">
-    <div class="hero-icon">SL</div>
-    <div>
-      <div class="hero-title">Sample Test Lead - 20250910</div>
-      <div class="hero-sub">Primary Contact · Related Contacts</div>
-    </div>
+<header class="miconnex-bar">
+  <div class="logo-mark"><span class="logo-strong">Mi</span>CONNEX</div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
   </div>
-  <div class="hero-actions">
-    <button class="btn" onclick="removeDraft()">Cancel</button>
-    <button class="btn" onclick="saveDraft()">Save</button>
-    <button class="btn primary" id="add-new-lead-btn">Add New Lead</button>
-  </div>
-</div>
+</header>
 
-<div class="shell">
-  <!-- Recent leads preview -->
-  <div style="max-width:980px;margin:6px auto 12px">
-    <div class="card">
-      <div class="body">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <h3 style="margin:0">Recent Leads</h3>
-          <div style="font-size:13px;color:var(--rw-muted)">Click Import to load into the Add Lead form</div>
+<main class="lead-shell">
+  <section class="lead-create-row">
+    <article class="lead-list-card">
+      <div class="list-header">
+        <div>
+          <p class="eyebrow">My Open Leads</p>
+          <h1>Lead Workspace</h1>
+          <p class="muted">Try searching by keyword or add a filter</p>
         </div>
-        <div id="leads-preview" style="overflow:auto;max-height:220px"></div>
+        <div class="list-actions">
+          <span class="filter-chip">Status (3)</span>
+          <span class="filter-chip">Record Set (Own)</span>
+          <button class="ghost-btn" id="add-new-lead-btn">Create Lead</button>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-    <a class="tab" href="results_driven.html">Results Driven</a>
-  </div>
+      <div class="filter-bar">
+        <input type="search" placeholder="Search leads"/>
+        <button class="ghost-btn">Add Filter</button>
+      </div>
+      <div class="results-meta" id="lead-results-count">0 Results</div>
+      <div id="leads-preview" class="table-shell"></div>
+    </article>
 
-<div class="grid">
-  <div class="card" style="grid-column:1/2">
-  <div class="smartbar">
-      <div class="group">
-        <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
-        <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
-        <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
-        <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
+    <article id="lead-form-card" class="lead-create-card">
+      <div class="lead-form-header">
+        <h2>Create Lead</h2>
+        <p class="muted">Primary Contact - Related Contacts</p>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <label for="smart-action-select" class="visually-hidden">Smart Action</label>
-        <select id="smart-action-select" style="padding:8px;border-radius:8px;border:1px solid var(--rw-border);background:#fff">
-          <option value="">— Smart actions —</option>
-          <option>Log Call</option>
-          <option>Send Email</option>
-          <option>Schedule Meeting</option>
-          <option>Create Task</option>
-          <option>Create Quote</option>
-          <option>Assign Owner</option>
-          <option>Add Note</option>
-          <option>Create Pursuit</option>
-          <option>Push to CPQ</option>
-        </select>
-        <button type="button" class="btn" id="apply-smart-action">Apply</button>
+      <div class="smartbar lead-smart">
+        <div class="group">
+          <button class="btn" onclick="RWD.actLead('Log Call')">Log Call</button>
+          <button class="btn" onclick="RWD.actLead('Send Email')">Send Email</button>
+          <button class="btn" onclick="RWD.actLead('Schedule Meeting')">Schedule Meeting</button>
+          <button class="btn" onclick="RWD.actLead('Create Task')">Create Task</button>
+        </div>
+        <div class="smart-select">
+          <label for="smart-action-select" class="visually-hidden">Smart Action</label>
+          <select id="smart-action-select">
+            <option value="">- Smart actions -</option>
+            <option>Log Call</option>
+            <option>Send Email</option>
+            <option>Schedule Meeting</option>
+            <option>Create Task</option>
+            <option>Create Quote</option>
+            <option>Assign Owner</option>
+            <option>Add Note</option>
+            <option>Create Pursuit</option>
+            <option>Push to CPQ</option>
+          </select>
+          <button type="button" class="btn" id="apply-smart-action">Apply</button>
+        </div>
+        <div class="smart-input">
+          <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action (click to browse)"/>
+          <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
+        </div>
       </div>
-      <div style="position:relative;min-width:260px">
-        <input id="smart-action-input" type="search" aria-haspopup="listbox" aria-expanded="false" placeholder="Smart Action… (click to see actions)" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--rw-border);background:#fff"/>
-        <div id="smart-action-pop" class="action-pop" role="listbox" aria-labelledby="smart-action-input" style="display:none"></div>
-      </div>
-    </div>
-    
-    <!-- Add New Lead modal -->
-    <div id="add-lead-modal" class="qs-overlay" style="display:none" aria-hidden="true">
-      <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" tabindex="-1">
-        <h2 id="addLeadTitle">Add New Lead</h2>
-        <form id="addLeadForm">
-          <div class="field"><label>Company</label><input name="company" required></div>
-          <div class="field"><label>Lead Name</label><input name="name"></div>
-          <div class="field"><label>Primary Contact</label><input name="contact"></div>
-          <div class="field"><label>Job Title</label><input name="title"></div>
-          <div class="two-col">
-            <div class="field" style="grid-template-columns:1fr"><label>Phone</label><input name="phone"></div>
-            <div class="field" style="grid-template-columns:1fr"><label>Email</label><input name="email" type="email"></div>
-          </div>
-          <div class="field"><label>Description</label><textarea name="description" rows="3"></textarea></div>
-          <div class="two-col">
-            <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
-            <div class="field" style="grid-template-columns:1fr"><label>Fit Score</label><input name="score" type="number" min="0" max="100" value="50"></div>
-          </div>
-          <div class="field"><label>Status</label><select name="status"><option>Qualified</option><option>New</option><option>Working</option></select></div>
-          <div class="field"><label>Country</label><input name="country"></div>
-          <div class="field"><label>Address</label><input name="address"></div>
-          <div class="qs-actions" style="margin-top:12px">
-            <button type="button" class="btn" onclick="closeAddLead()">Cancel</button>
-            <button type="submit" class="btn primary">Save Lead</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <h2>Lead (Redwood)</h2>
-    <div class="body">
-      <form id="leadForm" onsubmit="event.preventDefault(); RWD.saveLead(this); RWD.convertToOpportunity(); window.location='cx_opportunity.html';">
+
+      <form id="addLeadForm" class="lead-form">
         <div class="row">
-          <div><label>Company<input name="company" placeholder="Acme Manufacturing" required></label></div>
-          <div><label>Primary Contact<input name="contact" placeholder="Jane Smith"></label></div>
+          <label>Company<input name="company" required></label>
+          <label>Lead Name<input name="name"></label>
         </div>
         <div class="row">
-          <div><label>Fit Score<input name="score" type="number" min="0" max="100" value="60"></label></div>
-          <div><label>Status<select name="status" disabled><option>Qualified</option></select></label></div>
+          <label>Primary Contact<input name="contact"></label>
+          <label>Job Title<input name="title"></label>
         </div>
-        <div class="actions"><button class="btn primary" type="submit">Qualify → Create Opportunity</button><a class="btn" href="index.html">Back</a></div>
+        <div class="row">
+          <label>Contact Phone<input name="phone"></label>
+          <label>Contact Email<input name="email" type="email"></label>
+        </div>
+        <div class="row">
+          <label>Source<input name="source"></label>
+          <label>Owner<input name="owner" value="Chandra Kasarabada"></label>
+        </div>
+        <div class="row">
+          <label>Fit Score<input name="score" type="number" min="0" max="100" value="60"></label>
+          <label>Status<select name="status"><option>Qualified</option><option>Unqualified</option><option>Working</option></select></label>
+        </div>
+        <div class="row">
+          <label>Country<input name="country"></label>
+          <label>Rank<input name="rank"></label>
+        </div>
+        <div class="row">
+          <label>Address Line 1<input name="address1"></label>
+          <label>Address Line 2<input name="address2"></label>
+        </div>
+        <div class="row">
+          <label>City<input name="city"></label>
+          <label>State<input name="state"></label>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="submit">Save Lead</button>
+          <button class="btn" type="button" onclick="closeAddLead()">Cancel</button>
+        </div>
       </form>
+    </article>
+  </section>
+
+  <section class="lead-overview">
+    <div class="lead-hero-card">
+      <div>
+        <p class="eyebrow">My Open Leads</p>
+        <h2 id="leadHeroTitle">Sample Test Lead - 20250910</h2>
+        <div class="hero-meta">
+          <span class="pill dark">Qualified</span>
+          <span class="pill" id="leadHeroAccount">Account 1818 Investments</span>
+        </div>
+      </div>
+      <div class="convert-box">
+        <input type="text" placeholder="Try Convert"/>
+        <button class="btn outline">Details</button>
+      </div>
     </div>
-  </div>
-  <div class="card" style="grid-column:2/3">
-    <h2>Activity & Timeline</h2>
-    <div class="body timeline" id="leadTl"></div>
-  </div>
-</div>
+    <div class="lead-panels">
+      <article class="lead-panel">
+        <header>Contacts</header>
+        <p>There are no contacts added so far.</p>
+        <p class="muted">Identify and add contacts along with their roles to better qualify this lead.</p>
+      </article>
+      <article class="lead-panel">
+        <header>Products</header>
+        <p>There are no products added to this lead yet.</p>
+        <p class="muted">Add relevant products to tie this lead based on the prospect's requirements.</p>
+      </article>
+      <article class="lead-panel team">
+        <header>Team</header>
+        <div class="team-line">
+          <div class="avatar">CK</div>
+          <div>
+            <div class="team-name">Chandra Kasarabada</div>
+            <div class="team-email">chandra.kasarabada@argano.com</div>
+            <span class="team-chip">Owner</span>
+          </div>
+        </div>
+        <div class="team-line">
+          <div class="avatar light">SN</div>
+          <div>
+            <div class="team-name">Subash Nagarajan</div>
+            <div class="team-email">subash.nagarajan@argano.com</div>
+          </div>
+        </div>
+        <a class="panel-link" href="#">View All Team Members</a>
+      </article>
+      <article class="lead-panel">
+        <header>Opportunities</header>
+        <p>There are no opportunities generated from this lead yet.</p>
+        <p class="muted">Qualify and convert this lead to view associated opportunities.</p>
+      </article>
+      <article class="lead-panel activities">
+        <header>Activities</header>
+        <div class="timeline compact" id="leadTl"></div>
+        <a class="panel-link" href="#">View All Activities</a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<nav class="app-nav-rail">
+  <a href="#">Accounts</a>
+  <a href="#">Activities</a>
+  <a href="#">Contacts</a>
+  <a href="cx_opportunity.html">Opportunities</a>
+  <a class="active" href="cx_lead.html">Leads</a>
+  <a href="#">Partners</a>
+  <a href="#">Partner Contacts</a>
+  <a href="#">Express Reports</a>
+  <a href="#">Sales Performance</a>
+</nav>
+
 <script>
  window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
-   var tl=document.getElementById('leadTl');
-   function render(){ tl.innerHTML=''; (d.lead.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
-   render();
-   // Re-render when actions happen (simple polling for demo)
-   setInterval(function(){ var nd=RWD.get(); if((nd.lead.activities||[]).length !== (d.lead.activities||[]).length){ d=nd; render(); } }, 800);
+   var d = RWD.get();
+   var tl = document.getElementById('leadTl');
+   function renderTimeline(){
+     if(!tl) return;
+     tl.innerHTML = '';
+     (d.lead.activities||[]).forEach(function(a){
+       var div=document.createElement('div');
+       div.className='item';
+       div.innerHTML='<div class="who">'+a.type+'</div><div class="what">'+a.text+'</div><div class="t">'+a.ts+'</div>';
+       tl.appendChild(div);
+     });
+   }
+   renderTimeline();
+   setInterval(function(){ var nd=RWD.get(); if((nd.lead.activities||[]).length !== (d.lead.activities||[]).length){ d=nd; renderTimeline(); } }, 800);
+   try{
+     var hero = document.getElementById('leadHeroTitle');
+     if(hero) hero.textContent = (d.lead && (d.lead.name || d.lead.company)) || hero.textContent;
+     var acct = document.getElementById('leadHeroAccount');
+     if(acct) acct.textContent = (d.lead && d.lead.company) ? 'Account '+d.lead.company : acct.textContent;
+   }catch(e){}
+   try{ renderLeadsPreview(); }catch(e){}
  });
-// Smart Action dropdown handler
-document.addEventListener('DOMContentLoaded', function(){
-  var sel = document.getElementById('smart-action-select');
-  var btn = document.getElementById('apply-smart-action');
-  var input = document.getElementById('smart-action-input');
-  function applySelected(){
-    var action = '';
-    if(sel && sel.value) action = sel.value;
-    if(!action && input && input.value) action = input.value;
-    if(!action) return;
-    try{
-      if(window.RWD && typeof RWD.actLead==='function') RWD.actLead(action);
-      if(typeof showToast==='function') showToast('Smart action: '+action+' applied'); else console.log('Smart action:', action);
-    }catch(e){ console.warn('applySelected', e); }
-    // reset select
-    if(sel) sel.selectedIndex = 0;
-    if(input) input.value = '';
-  }
-  if(btn) btn.addEventListener('click', applySelected);
-  // allow Enter to trigger when select has focus
-  if(sel) sel.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
-  // allow Enter to trigger when typing in the input
-  if(input) input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); applySelected(); } });
-  // sync input -> select when choosing from datalist
-  // Custom popover logic (shows full list on focus/click)
-  var pop = document.getElementById('smart-action-pop');
-  var actions = [];
-  if(sel){ actions = Array.from(sel.options).filter(function(o){ return o.value && o.value.trim(); }).map(function(o){ return o.value; }); }
-  function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
-  function renderPop(filter){ if(!pop) return; pop.innerHTML=''; var f = (filter||'').toLowerCase().trim(); var shown=0; actions.forEach(function(a,i){ var low = a.toLowerCase(); if(f && low.indexOf(f)===-1) return; var it = document.createElement('div'); it.className='item'; it.setAttribute('role','option'); it.setAttribute('data-value',a); it.tabIndex = 0; if(f && low.indexOf(f)!==-1){ var idx = low.indexOf(f); var before = a.slice(0,idx); var match = a.slice(idx, idx+f.length); var after = a.slice(idx+f.length); it.innerHTML = escapeHTML(before) + '<mark>' + escapeHTML(match) + '</mark>' + escapeHTML(after); } else { it.textContent = a; }
-      it.addEventListener('click', function(){ input.value = a; if(sel) sel.value = a; applySelected(); hidePop(); }); it.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); input.value=a; if(sel) sel.value=a; applySelected(); hidePop(); } if(e.key==='ArrowDown'){ var nx = it.nextElementSibling; if(nx) nx.focus(); } if(e.key==='ArrowUp'){ var px = it.previousElementSibling; if(px) px.focus(); } }); pop.appendChild(it); shown++; }); if(shown===0){ var none = document.createElement('div'); none.className='no-results'; none.textContent='No matching actions'; pop.appendChild(none); }
-    }
-  function showPop(){ if(!pop) return; renderPop(input.value); pop.style.display='block'; input.setAttribute('aria-expanded','true'); document.addEventListener('click', onDocClick); }
-  function hidePop(){ if(!pop) return; pop.style.display='none'; input.setAttribute('aria-expanded','false'); document.removeEventListener('click', onDocClick); }
-  function onDocClick(e){ if(!pop) return; if(e.target === input) return; if(pop.contains(e.target)) return; hidePop(); }
-  if(input){ input.addEventListener('focus', showPop); input.addEventListener('click', function(e){ e.stopPropagation(); showPop(); }); input.addEventListener('input', function(){ renderPop(input.value); }); input.addEventListener('keydown', function(e){ if(e.key==='ArrowDown'){ var first = pop && pop.querySelector('.item'); if(first) { first.focus(); e.preventDefault(); } } if(e.key==='Escape'){ hidePop(); } }); }
-});
-
-// Add New Lead modal handlers
-function openAddLead(){
-  var m = document.getElementById('add-lead-modal');
-  if(window.ModalManager && typeof ModalManager.showModal==='function'){ try{ ModalManager.showModal('add-lead-modal'); return; }catch(e){ /* fallthrough */ } }
-  if(m){ m.style.display='flex'; m.setAttribute('aria-hidden','false'); var f = m.querySelector('input[name="company"]'); if(f) f.focus(); }
-}
-function closeAddLead(){
-  var m = document.getElementById('add-lead-modal');
-  if(window.ModalManager && typeof ModalManager.closeModal==='function'){ try{ ModalManager.closeModal('add-lead-modal'); return; }catch(e){} }
-  if(m){ m.style.display='none'; m.setAttribute('aria-hidden','true'); }
-}
 
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('add-new-lead-btn'); if(btn) btn.addEventListener('click', openAddLead);
-  var form = document.getElementById('addLeadForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var fd = new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; }); // try to use RWD.saveLead if available
-        if(window.RWD && typeof RWD.saveLead==='function'){
-          RWD.saveLead(obj);
-        } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
-          var s = RWD.get();
-          // ensure leads array exists and push the new lead
-          s.leads = s.leads || [];
-          s.leads.unshift(obj);
-          // also keep a quick activity log under s.lead.activities for timeline compatibility
-          s.lead = s.lead || {};
-          s.lead.activities = s.lead.activities || [];
-          s.lead.activities.unshift({ ts: new Date().toLocaleString(), type: 'Create', text: 'Lead created: ' + (obj.name || obj.company || '') });
-          try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); }
-        }
-        if(typeof showToast==='function') showToast('Lead saved'); else alert('Lead saved');
-      }catch(e){ console.error('save lead failed', e); if(typeof showToast==='function') showToast('Save failed'); }
-      closeAddLead(); }); }
-  // render preview initially
-  setTimeout(function(){ try{ renderLeadsPreview(); }catch(e){} }, 120);
+  var form = document.getElementById('addLeadForm');
+  if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault();
+    try{
+      var fd=new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; });
+      if(window.RWD && typeof RWD.saveLead==='function'){
+        RWD.saveLead(obj);
+      } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+        var s=RWD.get(); s.leads=s.leads||[]; s.leads.unshift(obj); s.lead=s.lead||{}; s.lead.activities=s.lead.activities||[];
+        s.lead.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text:'Lead created: '+(obj.name||obj.company||'') });
+        try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); }
+      }
+      if(typeof showToast==='function') showToast('Lead saved'); else alert('Lead saved');
+    }catch(e){ console.error('save lead failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+  }); }
 });
 
-// Render recent leads preview and provide import buttons
+function openAddLead(){
+  var card=document.getElementById('lead-form-card');
+  if(card){ card.scrollIntoView({behavior:'smooth',block:'start'}); card.classList.add('pulse'); setTimeout(function(){ card.classList.remove('pulse'); }, 900); }
+  var first=document.querySelector('#addLeadForm input[name="company"]'); if(first) first.focus();
+}
+function closeAddLead(){ var card=document.getElementById('lead-form-card'); if(card) card.classList.remove('pulse'); }
+
 function renderLeadsPreview(){
-  var container = document.getElementById('leads-preview'); if(!container) return;
-  var s = (window.RWD && typeof RWD.get==='function') ? RWD.get() : null;
-  var leads = (s && s.leads) ? s.leads : [];
-  if(!leads || leads.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No leads yet. Use "Add New Lead" to create one.</div>'; return; }
-  var html = '<table class="table" style="width:100%"><thead><tr><th>Company</th><th>Lead</th><th>Contact</th><th>Owner</th><th style="width:110px">Actions</th></tr></thead><tbody>';
-  leads.slice(0,20).forEach(function(l,idx){ html += '<tr><td>'+escapeHtml(l.company||'')+'</td><td>'+escapeHtml(l.name||'')+'</td><td>'+escapeHtml(l.contact||'')+'</td><td>'+escapeHtml(l.owner||'')+'</td><td><button class="btn" onclick="prefillAddLead('+idx+')">Import</button></td></tr>'; });
-  html += '</tbody></table>';
-  container.innerHTML = html;
+  var container=document.getElementById('leads-preview'); if(!container) return;
+  var s=(window.RWD && typeof RWD.get==='function')?RWD.get():null; var leads=(s && s.leads)?s.leads:[];
+  var count=document.getElementById('lead-results-count'); if(count) count.textContent=(leads?leads.length:0)+' Results';
+  if(!leads || leads.length===0){ container.innerHTML='<div style="color:var(--rw-muted)">No leads yet. Use "Create Lead" to get started.</div>'; return; }
+  var html='<table class="table" style="width:100%"><thead><tr><th>Company</th><th>Lead</th><th>Contact</th><th>Owner</th><th style="width:110px">Actions</th></tr></thead><tbody>';
+  leads.slice(0,20).forEach(function(l,idx){ html+='<tr><td>'+escapeHtml(l.company||'')+'</td><td>'+escapeHtml(l.name||'')+'</td><td>'+escapeHtml(l.contact||'')+'</td><td>'+escapeHtml(l.owner||'')+'</td><td><button class="btn" onclick="prefillAddLead('+idx+')">Import</button></td></tr>'; });
+  html+='</tbody></table>';
+  container.innerHTML=html;
 }
 
-// Prefill the Add Lead form from a lead in s.leads (index refers to slice order used above)
 function prefillAddLead(index){
-  var s = (window.RWD && typeof RWD.get==='function') ? RWD.get() : null;
-  var leads = (s && s.leads) ? s.leads : [];
-  if(!leads || leads.length===0) return;
-  // index corresponds to the slice(0,20) so use that mapping
-  var lead = leads[index] || leads[0];
-  var form = document.getElementById('addLeadForm'); if(!form) return;
-  Object.keys(lead).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value = lead[k]; }catch(e){} });
-  // open modal after prefill
+  var s=(window.RWD && typeof RWD.get==='function')?RWD.get():null; var leads=(s && s.leads)?s.leads:[]; if(!leads || leads.length===0) return;
+  var lead=leads[index] || leads[0]; var form=document.getElementById('addLeadForm'); if(!form) return;
+  Object.keys(lead).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value=lead[k]; }catch(e){} });
   openAddLead();
 }
 
@@ -245,6 +260,6 @@ function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,
 function saveDraft(){ if(typeof showToast==='function') showToast('Draft saved (demo)'); }
 function removeDraft(){ if(typeof showToast==='function') showToast('Draft canceled'); }
 </script>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+<div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 </html>
