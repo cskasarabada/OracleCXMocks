@@ -40,7 +40,22 @@
   </div></div>
 </div>
 <script>
- (function(){ var d=RWD.get(); document.getElementById('purName').value=d.pursuit.name||''; document.getElementById('purEstimate').value=d.pursuit.estimate||0; document.getElementById('btnAward').addEventListener('click', function(e){ e.preventDefault(); RWD.savePursuit(document.getElementById('purForm')); document.getElementById('purState').textContent='Award in progress…'; document.getElementById('purProg').style.width='60%'; RWD.awardToConstruction(function(){ document.getElementById('purState').textContent='Awarded'; document.getElementById('purProg').style.width='100%'; setTimeout(function(){ window.location='ppm_construction.html'; }, 600); }); }); })();
+ window.addEventListener('DOMContentLoaded', function(){
+   var d=RWD.get();
+   document.getElementById('purName').value=d.pursuit.name||'';
+   document.getElementById('purEstimate').value=d.pursuit.estimate||0;
+   document.getElementById('btnAward').addEventListener('click', function(e){
+     e.preventDefault();
+     RWD.savePursuit(document.getElementById('purForm'));
+     document.getElementById('purState').textContent='Award in progress…';
+     document.getElementById('purProg').style.width='60%';
+     RWD.awardToConstruction(function(){
+       document.getElementById('purState').textContent='Awarded';
+       document.getElementById('purProg').style.width='100%';
+       setTimeout(function(){ window.location='ppm_construction.html'; }, 600);
+     });
+   });
+ });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
