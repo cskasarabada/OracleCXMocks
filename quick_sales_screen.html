@@ -53,6 +53,7 @@
 
   <div style="max-width:980px;margin:6px auto 24px;text-align:center">
     <button class="btn primary" onclick="presetQuickSales()" style="font-size:1.05em;padding:12px 20px;">Preset Quick Sales Demo</button>
+    <button type="button" class="btn" onclick="startInteractiveFlow()" style="font-size:1.05em;padding:12px 20px;margin-left:8px;">Start Interactive Flow</button>
     <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
   </div>
 
@@ -87,7 +88,7 @@
           <li>Primary contact verification</li>
           <li>Expansion trigger (capex, maintenance, regulation)</li>
         </ul>
-        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(1)">Close</button><button class="btn primary" onclick="applyQuickStage(1)">Apply: Confirm Account & Need</button></div>
+        <div class="qs-actions"><button type="button" class="btn" onclick="closeQuickModal(1)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(1)">Apply: Confirm Account & Need</button><button type="button" class="btn" onclick="showQuickModal(2)">Next</button></div>
       </div>
     </div>
 
@@ -102,7 +103,7 @@
           <li>Approval routing (fast lanes)</li>
           <li>Review & submit button</li>
         </ul>
-        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(2)">Close</button><button class="btn primary" onclick="applyQuickStage(2)">Apply: Launch Quick Quote</button></div>
+        <div class="qs-actions"><button type="button" class="btn" onclick="showQuickModal(1)">Back</button><button type="button" class="btn" onclick="closeQuickModal(2)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(2)">Apply: Launch Quick Quote</button><button type="button" class="btn" onclick="showQuickModal(3)">Next</button></div>
       </div>
     </div>
 
@@ -117,12 +118,22 @@
           <li>Run integration to PPM (OIC job)</li>
           <li>Notify delivery and create pursuit record</li>
         </ul>
-        <div class="qs-actions"><button class="btn" onclick="closeQuickModal(3)">Close</button><button class="btn primary" onclick="applyQuickStage(3)">Apply: Convert & Handoff</button></div>
+        <div class="qs-actions"><button type="button" class="btn" onclick="showQuickModal(2)">Back</button><button type="button" class="btn" onclick="closeQuickModal(3)">Close</button><button type="button" class="btn primary" onclick="applyQuickStage(3)">Apply: Convert & Handoff</button></div>
       </div>
     </div>
   </div>
 
     <script defer src="assets/modal.js"></script>
+    <script>
+      function startInteractiveFlow(){
+        if(typeof showQuickModal==='function'){
+          showQuickModal(1);
+        } else {
+          // modal manager not loaded yet
+          alert('Interactive flow not available yet — try again in a moment.');
+        }
+      }
+    </script>
 
 
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
