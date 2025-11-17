@@ -188,9 +188,33 @@ body.oppty-landing{background:#f5efe7;}
 .carousel-dots{display:flex;justify-content:center;gap:8px;margin-top:18px;}
 .carousel-dots .dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;}
 .carousel-dots .dot.active{background:#4c1d95;}
-.app-nav-rail{background:#3a254f;color:#fff;padding:14px 24px;display:flex;gap:18px;flex-wrap:wrap;justify-content:center;}
-.app-nav-rail a{color:#fff;text-decoration:none;font-size:13px;font-weight:600;opacity:.75;}
-.app-nav-rail a.active{opacity:1;border-bottom:2px solid #f8d5a5;padding-bottom:2px;}
+.app-nav-rail{
+  background:transparent;
+  padding:18px 20px 28px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-start;
+}
+.app-nav-rail a{
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid var(--rw-border);
+  background:#fff;
+  color:#0f172a;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
+  box-shadow:0 1px 2px rgba(15,23,42,.08);
+  transition:all .15s ease;
+}
+.app-nav-rail a:hover{border-color:#93c5fd;box-shadow:0 4px 8px rgba(15,23,42,.12);}
+.app-nav-rail a.active{
+  background:#2563eb;
+  border-color:#2563eb;
+  color:#fff;
+  box-shadow:0 6px 16px rgba(37,99,235,.32);
+}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
 .btn.outline{background:transparent;}
 .quick-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
