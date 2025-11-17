@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Argano Sales ↔ PPM Sync Map</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+<style>
+.sync-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px;}
+.sync-step{border:1px solid var(--rw-border);border-radius:16px;padding:16px;background:#fff;box-shadow:0 8px 20px rgba(15,23,42,.07);position:relative;}
+.sync-step::before{content:attr(data-step);position:absolute;top:-12px;left:16px;background:#111827;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;}
+.sync-connector{display:flex;align-items:center;justify-content:center;color:#2563eb;font-weight:600;font-size:13px;}
+</style>
+</head>
+<body class="lead-landing">
+<main class="lead-shell">
+  <section class="card">
+    <p class="eyebrow">Sales ↔ PPM Integration</p>
+    <h1 style="margin:4px 0 8px">Connected delivery from lead to warranty</h1>
+    <p style="color:var(--rw-muted)">Visualize OIC orchestrations that push Oracle CX Sales opportunities into PPM pursuits, projects, and DocuSign packages while feeding status back to sellers.</p>
+  </section>
+
+  <div class="sync-flow">
+    <div class="sync-step" data-step="1">
+      <h3>Opportunity Qualified</h3>
+      <p>Argano Quick Sales + CX Sales capture estimate, key contacts, and risk flags.</p>
+      <span class="pill">Trigger: Create Pursuit</span>
+    </div>
+    <div class="sync-connector">OIC Flow</div>
+    <div class="sync-step" data-step="2">
+      <h3>PPM Pursuit Draft</h3>
+      <p>Pursuit manager receives auto-built shell with WBS, budget, and attachments.</p>
+      <span class="pill">Status mirrored to sellers</span>
+    </div>
+    <div class="sync-connector">CPQ + DocuSign</div>
+    <div class="sync-step" data-step="3">
+      <h3>Quote + Contract</h3>
+      <p>CPQ pushes pricing to DocuSign; once executed, OIC updates PPM cost sheets.</p>
+    </div>
+    <div class="sync-connector">Auto Convert</div>
+    <div class="sync-step" data-step="4">
+      <h3>Project Kickoff</h3>
+      <p>Approved pursuit converts to active PPM project with Argano pods assigned.</p>
+      <span class="pill dark">Status: Execution</span>
+    </div>
+  </div>
+
+  <div class="integration-grid" style="margin-top:24px">
+    <div class="integration-card">
+      <h3>Bidirectional Updates</h3>
+      <p>Milestones, budgets, and staffing levels sync back to CX Sales so reps see delivery reality.</p>
+    </div>
+    <div class="integration-card">
+      <h3>Exception Handling</h3>
+      <p>Any errors from PPM or DocuSign appear in the executive command center for rapid triage.</p>
+    </div>
+    <div class="integration-card">
+      <h3>KPIs</h3>
+      <ul style="margin:0;padding-left:18px;color:var(--rw-ink)">
+        <li>Average handoff time: 3.5 days</li>
+        <li>Automation coverage: 92%</li>
+        <li>Revenue leakage prevented: $1.1M</li>
+      </ul>
+    </div>
+  </div>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+</body>
+</html>

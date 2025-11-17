@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Argano Revenue Intelligence</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body class="lead-landing">
+<main class="lead-shell">
+  <section class="card" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
+    <div>
+      <p class="eyebrow">Revenue Intelligence</p>
+      <h1 style="margin:4px 0 8px">AI Forecast + Scenario Board</h1>
+      <p style="max-width:560px;color:var(--rw-muted)">Blend human judgment with Oracle AI forecasts, pipeline quality, and scenario sliders to coach teams and commit the number with confidence.</p>
+    </div>
+    <div class="stat-card" style="min-width:220px">
+      <div class="label">Committed vs Target</div>
+      <div class="value">$52.1M / $50M</div>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--rw-muted)">+4% upside possible</p>
+    </div>
+  </section>
+
+  <div class="grid" style="margin-top:24px;grid-template-columns:1fr 0.9fr;gap:18px">
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Scenario Slider</h2>
+      <div style="padding-top:12px">
+        <label style="font-size:12px;color:var(--rw-muted)">Renewal Confidence</label>
+        <input type="range" min="60" max="100" value="85" style="width:100%;margin:4px 0 12px" oninput="document.getElementById('renewalVal').textContent=this.value+'%'">
+        <div id="renewalVal" style="font-weight:600;margin-bottom:12px">85%</div>
+        <label style="font-size:12px;color:var(--rw-muted)">Expansion Win Rate</label>
+        <input type="range" min="20" max="80" value="48" style="width:100%;margin:4px 0 12px" oninput="document.getElementById('expansionVal').textContent=this.value+'%'">
+        <div id="expansionVal" style="font-weight:600;margin-bottom:16px">48%</div>
+        <div class="stat-grid" style="margin-top:0">
+          <div class="stat-card">
+            <div class="label">Upside</div>
+            <div class="value" id="upsideVal">$4.0M</div>
+            <p style="margin:4px 0 0;font-size:12px;color:var(--rw-muted)">AI + scenario overlay</p>
+          </div>
+          <div class="stat-card">
+            <div class="label">Risk</div>
+            <div class="value" id="riskVal">$1.8M</div>
+            <p style="margin:4px 0 0;font-size:12px;color:var(--rw-muted)">Deals flagged by coaching agent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">AI Forecast Signal</h2>
+      <div class="timeline" style="padding-top:12px">
+        <div class="item"><div><div class="who">Coaching Agent</div><div class="what">Jessica Brooks has 3 stalled expansions · suggest Quick Sales screen.</div></div><div class="t">8:44 AM</div></div>
+        <div class="item"><div><div class="who">Forecast Agent</div><div class="what">Model variance +$2.6M vs manager call – highlight two pursuits.</div></div><div class="t">8:10 AM</div></div>
+        <div class="item"><div><div class="who">Integration Agent</div><div class="what">CPQ backlog cleared; 4 quotes ready for DocuSign.</div></div><div class="t">Yesterday</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="integration-grid" style="margin-top:24px">
+    <div class="integration-card">
+      <h3>Pipeline Quality</h3>
+      <p>82% of commit stage opps have meeting within 14 days · 64% have attached DocuSign artifacts.</p>
+    </div>
+    <div class="integration-card">
+      <h3>Enablement Focus</h3>
+      <p>7 sellers flagged for “low coverage” – auto assign Quick Sales walkthrough.</p>
+    </div>
+    <div class="integration-card">
+      <h3>Forecast Notes</h3>
+      <p>APAC trending -6% due to project delays. Activate partner hub coverage.</p>
+    </div>
+  </div>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var ren=document.getElementById('renewalVal');
+  var exp=document.getElementById('expansionVal');
+  var up=document.getElementById('upsideVal');
+  var risk=document.getElementById('riskVal');
+  function recalc(){
+    var renVal=parseInt(ren.textContent,10)||85;
+    var expVal=parseInt(exp.textContent,10)||48;
+    var upside=(renVal*0.03 + expVal*0.04).toFixed(1);
+    var riskVal=(120-renVal-expVal*0.4).toFixed(1);
+    up.textContent='$'+upside+'M';
+    risk.textContent='$'+Math.max(riskVal,0)+'M';
+  }
+  setInterval(recalc,600);
+});
+</script>
+</body>
+</html>

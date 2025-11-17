@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Argano Account 360</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body class="lead-landing">
+<main class="lead-shell">
+  <section class="card" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
+    <div>
+      <p class="eyebrow">Account 360</p>
+      <h1 style="margin:4px 0 8px">Warner Design Associates Inc.</h1>
+      <p style="max-width:560px;color:var(--rw-muted)">Unified customer profile blending CX Sales Cloud, Subscription Management, Service incidents, and CPQ usage. Enable sellers and partners to act with full context.</p>
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+        <span class="pill dark">Strategic</span>
+        <span class="pill">Industry · Architecture & Engineering</span>
+        <span class="pill">ARR $42.8M</span>
+      </div>
+    </div>
+    <div class="stat-card" style="min-width:220px">
+      <div class="label">Health Score</div>
+      <div class="value" style="color:#0ea5e9">86</div>
+      <p style="margin:4px 0 0;font-size:13px;color:var(--rw-muted)">Stable with positive intent signals</p>
+    </div>
+  </section>
+
+  <div class="grid" style="margin-top:24px;grid-template-columns:1.15fr .85fr;gap:18px">
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Relationship Timeline</h2>
+      <div class="timeline" id="acctTimeline" style="max-height:360px;overflow:auto;padding-top:12px"></div>
+    </div>
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Household</h2>
+      <div style="display:flex;flex-direction:column;gap:12px;padding-top:12px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="avatar" style="background:#0ea5e9;color:#fff">GS</div>
+          <div>
+            <div style="font-weight:600">Gurmeet Singh</div>
+            <div style="font-size:13px;color:var(--rw-muted)">Executive Sponsor</div>
+            <a href="mailto:gurmeet.singh@argano.com" class="panel-link">gurmeet.singh@argano.com</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="avatar" style="background:#f97316;color:#fff">CK</div>
+          <div>
+            <div style="font-weight:600">Chandra Kasarabada</div>
+            <div style="font-size:13px;color:var(--rw-muted)">Customer Success Lead</div>
+            <a href="mailto:chandra.kasarabada@argano.com" class="panel-link">chandra.kasarabada@argano.com</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="avatar" style="background:#7c3aed;color:#fff">SN</div>
+          <div>
+            <div style="font-weight:600">Subash Nagarajan</div>
+            <div style="font-size:13px;color:var(--rw-muted)">Solution Architect</div>
+            <a href="mailto:subash.nagarajan@argano.com" class="panel-link">subash.nagarajan@argano.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:24px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Open Opportunities</h2>
+      <ul class="results-list" style="padding-top:12px">
+        <li>$8.4M · Warner Mixed-Use – Negotiation</li>
+        <li>$3.1M · Digital Twin Program – Proposal</li>
+        <li>$1.2M · Service Renewal – Ready for DocuSign</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Product Footprint</h2>
+      <div class="stat-grid" style="margin-top:12px">
+        <div class="stat-card">
+          <div class="label">CX Sales</div>
+          <div class="value">4 yrs</div>
+          <p style="margin:4px 0 0;font-size:12px;color:var(--rw-muted)">97% adoption</p>
+        </div>
+        <div class="stat-card">
+          <div class="label">CPQ</div>
+          <div class="value">2 yrs</div>
+          <p style="margin:4px 0 0;font-size:12px;color:var(--rw-muted)">+28 rate cards</p>
+        </div>
+        <div class="stat-card">
+          <div class="label">Service</div>
+          <div class="value">5 yrs</div>
+          <p style="margin:4px 0 0;font-size:12px;color:var(--rw-muted)">CSAT 4.7</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Intent & Signals</h2>
+      <div class="icon-list">
+        <li><div class="icon">AI</div><div><strong>AI Blueprint</strong><div>RFP downloaded · 2 days ago</div></div></li>
+        <li><div class="icon">IoT</div><div><strong>Service Alert</strong><div>3 HVAC sensors offline</div></div></li>
+        <li><div class="icon">Web</div><div><strong>Pricing Page</strong><div>6 visits this week</div></div></li>
+      </div>
+    </div>
+  </div>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var timeline=document.getElementById('acctTimeline');
+  if(!timeline) return;
+  var events=[
+    {who:'DocuSign',what:'Renewal paperwork executed in 7 minutes',ts:'Today · 10:14 AM'},
+    {who:'CPQ Quote',what:'Quick Sales expansion approved for $1.2M',ts:'Yesterday · 4:08 PM'},
+    {who:'Service Cloud',what:'Major incident resolved in 38 mins',ts:'Nov 14 · 3:55 PM'},
+    {who:'PPM Handoff',what:'Pursuit Warner Mixed-Use converted to delivery project',ts:'Nov 11 · 9:12 AM'}
+  ];
+  events.forEach(function(ev){
+    var div=document.createElement('div');
+    div.className='item';
+    div.innerHTML='<div><div class="who">'+ev.who+'</div><div class="what">'+ev.what+'</div></div><div class="t">'+ev.ts+'</div>';
+    timeline.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>

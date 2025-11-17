@@ -12,7 +12,14 @@
     {href:'integration_features.html',label:'Integration'},
     {href:'sales_process_visualization.html',label:'Process Visualization'},
     {href:'results_driven.html',label:'Results Driven'},
-    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true}
+    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true},
+    {href:'executive_command_center.html',label:'Exec Command'},
+    {href:'account_360.html',label:'Account 360'},
+    {href:'partner_hub.html',label:'Partner Hub'},
+    {href:'revenue_intelligence.html',label:'Revenue Intelligence'},
+    {href:'field_mobile_snapshot.html',label:'Field Mobile'},
+    {href:'sales_ppm_sync.html',label:'Sales↔PPM'},
+    {href:'quote_to_docusign.html',label:'Quote → DocuSign'}
   ];
   const KEY='rw_demo_v2';
   const FLOW_STAGES=[
