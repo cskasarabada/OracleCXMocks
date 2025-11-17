@@ -6,6 +6,7 @@
 <title>Quick Sales Screen for Existing Customers</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<script defer src="assets/quick_sales_data.js"></script>
 </head>
 <body>
 
@@ -57,7 +58,43 @@
     <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
   </div>
 
+  <div style="max-width:980px;margin:6px auto 24px;">
+    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-bottom:8px">
+      <button type="button" class="btn" id="show-sample-data" onclick="toggleSampleData()">Show Sample Leads & Quotes</button>
+    </div>
+    <div id="sample-data-panel" style="display:none;border:1px solid var(--rw-border);padding:12px;border-radius:8px;background:var(--rw-surface)">
+      <h3>Sample Leads</h3>
+      <div style="overflow:auto;max-height:200px;margin-bottom:12px" id="sample-leads"></div>
+      <h3>Sample Quotes</h3>
+      <div style="overflow:auto;max-height:240px" id="sample-quotes"></div>
+    </div>
+  </div>
+
     <script>
+    function toggleSampleData(){
+      var panel = document.getElementById('sample-data-panel');
+      if(!panel) return;
+      if(panel.style.display==='none' || !panel.style.display){
+        renderSampleData(); panel.style.display='block'; document.getElementById('show-sample-data').textContent='Hide Sample Data';
+      } else { panel.style.display='none'; document.getElementById('show-sample-data').textContent='Show Sample Leads & Quotes'; }
+    }
+
+    function renderSampleData(){
+      var leadsEl = document.getElementById('sample-leads');
+      var quotesEl = document.getElementById('sample-quotes');
+      if(!leadsEl || !quotesEl) return;
+      var data = window.QUICK_SALES_DATA || {leads:[],quotes:[]};
+      // render leads table
+      var html = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Contact</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
+      data.leads.forEach(function(l){ html += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+l.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.account+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.contact+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.status+'</td></tr>'; });
+      html += '</tbody></table>';
+      leadsEl.innerHTML = html;
+      // render quotes table
+      var qhtml = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Ref</th><th style="text-align:right;padding:6px;border-bottom:1px solid var(--rw-border)">Amount</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
+      data.quotes.forEach(function(q){ qhtml += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+q.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.account+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.ref+'</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">$'+(q.amount||0).toLocaleString()+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.status+'</td></tr>'; });
+      qhtml += '</tbody></table>';
+      quotesEl.innerHTML = qhtml;
+    }
     function presetQuickSales(){
       // Just preview behavior: show a confirmation message only
       alert('Quick Sales demo state applied.');
@@ -214,7 +251,7 @@
             if(typeof RWD.set==='function') RWD.set(s);
           }
         }catch(e){console.warn(e)}
-        alert(msg);
+        if(typeof showToast==='function') showToast(msg); else alert(msg);
         // optionally mark lead qualified on Yes
         if(choice && window.RWD && typeof RWD.updateSalesFlow==='function'){
           RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed');
@@ -231,7 +268,7 @@
           if(btnCheck) btnCheck.textContent = 'Check Quote';
           if(yes) yes.disabled = false; if(no) no.disabled = false;
           try{ var s = RWD.get(); s.logs = s.logs || []; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage2: Quote checked'); if(typeof RWD.set==='function') RWD.set(s); }catch(e){}
-          alert('Quote check completed — you can Approve Yes/No');
+          if(typeof showToast==='function') showToast('Quote check completed — you can Approve Yes/No'); else alert('Quote check completed — you can Approve Yes/No');
         }, 700);
       }
 
@@ -244,7 +281,7 @@
             if(typeof RWD.set==='function') RWD.set(s);
           }
         }catch(e){}
-        alert(msg);
+        if(typeof showToast==='function') showToast(msg); else alert(msg);
         if(approved && window.RWD && typeof RWD.updateSalesFlow==='function'){
           RWD.updateSalesFlow('quote','Approved','Quick Sales Stage 2: Quote approved');
         }
@@ -253,21 +290,21 @@
       // Stage 3 actions
       function convertOpportunity(){
         try{ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted via Quick Sales'); } }catch(e){}
-        alert('Opportunity converted (demo state updated)');
+        if(typeof showToast==='function') showToast('Opportunity converted (demo state updated)'); else alert('Opportunity converted (demo state updated)');
       }
 
       function pushToCPQ(){
         try{ if(window.RWD && typeof RWD.runOICJob==='function'){ RWD.runOICJob('Push to CPQ'); } else { var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage3: Push to CPQ simulated'); if(typeof RWD.set==='function') RWD.set(s);} }catch(e){}
-        alert('Push to CPQ simulated');
+        if(typeof showToast==='function') showToast('Push to CPQ simulated'); else alert('Push to CPQ simulated');
       }
 
       function pushToPursuit(){
         try{
           if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
-            RWD.createPursuitViaOIC(function(){ alert('Pursuit created via OIC (demo state updated)'); });
+            RWD.createPursuitViaOIC(function(){ if(typeof showToast==='function') showToast('Pursuit created via OIC (demo state updated)'); else alert('Pursuit created via OIC (demo state updated)'); });
           } else {
             if(window.RWD && typeof RWD.get==='function'){ var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] Quick Sales Stage3: Push to Pursuit simulated'); if(typeof RWD.set==='function') RWD.set(s); }
-            alert('Push to Pursuit simulated');
+            if(typeof showToast==='function') showToast('Push to Pursuit simulated'); else alert('Push to Pursuit simulated');
           }
         }catch(e){}
       }

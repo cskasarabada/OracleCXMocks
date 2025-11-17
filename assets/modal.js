@@ -100,25 +100,46 @@
   .qs-closing .qs-modal{animation:qs-close .16s ease-in forwards}
   @keyframes qs-open{from{opacity:0;transform:translateY(-6px) scale(.997)}to{opacity:1;transform:none}}
   @keyframes qs-close{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-6px) scale(.997)}}
+  /* toast styles */
+  .rw-toast-root{position:fixed;right:18px;bottom:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .rw-toast{background:var(--rw-surface,#fff);border:1px solid var(--rw-border,#ddd);padding:8px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,.18);max-width:320px;font-size:0.95em;opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}
+  .rw-toast.show{opacity:1;transform:none}
   `;
   document.head.appendChild(style);
+
+  // Toast manager
+  function ensureToastRoot(){
+    var r = document.getElementById('rw-toast-root');
+    if(!r){ r = document.createElement('div'); r.id='rw-toast-root'; r.className='rw-toast-root'; document.body.appendChild(r); }
+    return r;
+  }
+  window.showToast = function(msg, timeout){
+    try{
+      var root = ensureToastRoot();
+      var t = document.createElement('div'); t.className='rw-toast'; t.textContent = msg || '';
+      root.appendChild(t);
+      // allow CSS transition
+      setTimeout(function(){ t.classList.add('show'); }, 20);
+      setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ try{ t.parentNode.removeChild(t); }catch(e){} }, 220); }, (typeof timeout==='number'?timeout:3000));
+    }catch(e){ try{ alert(msg); }catch(e){} }
+  };
 
   ModalManager.init();
   window.ModalManager = ModalManager;
   window.showQuickModal = function(n){ ModalManager.showModal('qs-modal-'+n); };
   window.closeQuickModal = function(n){ ModalManager.closeModal('qs-modal-'+n); };
   window.applyQuickStage = function(n){
-    if(n===1){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed'); } alert('Quick Sales: Account & Need confirmed (demo state updated)'); ModalManager.closeModal('qs-modal-1'); }
-    else if(n===2){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched'); } alert('Quick Sales: Quick Quote launched (demo state updated)'); ModalManager.closeModal('qs-modal-2'); }
+    if(n===1){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('lead','Qualified','Quick Sales Stage 1: Account confirmed'); } showToast('Quick Sales: Account & Need confirmed (demo state updated)'); ModalManager.closeModal('qs-modal-1'); }
+    else if(n===2){ if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('quote','Config','Quick Sales Stage 2: Quick Quote launched'); } showToast('Quick Sales: Quick Quote launched (demo state updated)'); ModalManager.closeModal('qs-modal-2'); }
     else if(n===3){
       if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
         if(window.RWD && typeof RWD.updateSalesFlow==='function'){ RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted & handed off'); }
-        RWD.createPursuitViaOIC(function(){ alert('Quick Sales: Converted and pursuit created via OIC (demo state updated)'); ModalManager.closeModal('qs-modal-3'); });
+        RWD.createPursuitViaOIC(function(){ showToast('Quick Sales: Converted and pursuit created via OIC (demo state updated)'); ModalManager.closeModal('qs-modal-3'); });
       } else if(window.RWD && typeof RWD.updateSalesFlow==='function'){
         RWD.updateSalesFlow('opportunity','Closed Won','Quick Sales Stage 3: Converted (local)');
-        alert('Quick Sales: Converted (demo state updated)');
+        showToast('Quick Sales: Converted (demo state updated)');
         ModalManager.closeModal('qs-modal-3');
-      } else { alert('Demo state not available'); ModalManager.closeModal('qs-modal-3'); }
+      } else { showToast('Demo state not available'); ModalManager.closeModal('qs-modal-3'); }
     }
   };
 
