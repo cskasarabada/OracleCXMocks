@@ -56,4 +56,17 @@ input,select,textarea{width:100%;padding:10px;border:1px solid var(--rw-border);
 .timeline .who{font-weight:600}
 .timeline .what{color:#111827}
 
+/* Sales flow board */
+.flow-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.flow-grid .stagecard{background:var(--rw-ghost);border:1px solid var(--rw-border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.stagecard .label{font-size:12px;color:var(--rw-muted)}
+.stagecard .value{font-size:20px;font-weight:600}
+.stagecard .owner{font-size:12px;color:var(--rw-muted)}
+.stagecard .status{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid var(--rw-border);width:max-content}
+.flow-timeline{display:flex;flex-direction:column;gap:10px}
+.flow-timeline .entry{border:1px solid var(--rw-border);border-radius:12px;padding:10px 12px;background:#fff}
+.flow-timeline .entry .title{font-weight:600}
+.flow-timeline .entry .meta{font-size:12px;color:var(--rw-muted);display:flex;justify-content:space-between;gap:12px;margin-top:4px;flex-wrap:wrap}
+.flow-timeline .entry .note{font-size:12px;color:var(--rw-muted);margin-top:6px}
+
 @media (max-width:1024px){.grid{grid-template-columns:1fr}}
