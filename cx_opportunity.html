@@ -54,15 +54,20 @@
     <div id="opps-preview" class="table-shell"></div>
   </section>
 
-  <section class="oppty-hero-card">
-    <div class="hero-content">
-      <div class="hero-heading">
-        <div class="hero-title-line">
-          <h1 class="hero-title" id="opptyHeroTitle">TT1 eea</h1>
-          <button class="favorite-btn" aria-label="Favorite">&#9825;</button>
-        </div>
+  <section class="oppty-hero-slim">
+    <div class="oppty-header-row">
+      <div>
+        <h1 id="opptyHeroTitle">TT1 eea</h1>
         <div class="hero-sub" id="opptyHeroSub">Account &bull; Primary Contact</div>
       </div>
+      <div class="hero-actions">
+        <button class="ghost-icon">Share</button>
+        <button class="ghost-icon">Sync</button>
+        <button class="ghost-icon">Email</button>
+        <button class="btn primary">Details</button>
+      </div>
+    </div>
+    <div class="oppty-stage-buttons">
       <div class="stage hero-stage">
         <span class="s cur" data-v="Qualification">Statement of Qualification</span>
         <span class="s" data-v="Evaluation">Evaluation</span>
@@ -70,62 +75,58 @@
         <span class="s" data-v="Negotiation">Negotiation</span>
         <span class="s" data-v="Closed Won">Closed Won</span>
       </div>
-      <div class="info-pills">
-        <div class="info-pill">Status Open</div>
-        <div class="info-pill">Win Probability 40</div>
-        <div class="info-pill pill-long">Account Warner Design Associates Inc.</div>
-        <div class="info-pill pill-long">Owner Chandra Kasarabada</div>
-        <div class="info-pill">Opportunity Number 42048</div>
-      </div>
-      <div class="hero-cta">
-        <button class="btn brand" id="add-new-oppty-btn">Create Opportunity</button>
-      </div>
     </div>
-    <div class="hero-actions">
-      <button class="ghost-icon">Share</button>
-      <button class="ghost-icon">Sync</button>
-      <button class="ghost-icon">Email</button>
-      <button class="btn primary">Details</button>
+    <div class="oppty-info-strip">
+      <span>Status Open</span>
+      <span>Win Probability 40%</span>
+      <span>Account Warner Design Associates Inc.</span>
+      <span>Owner Chandra Kasarabada</span>
+      <span>Opportunity #42048</span>
+    </div>
+    <div class="hero-cta" style="margin-top:14px">
+      <button class="btn brand" id="add-new-oppty-btn">Create Opportunity</button>
     </div>
   </section>
 
-  <section class="panel-grid">
-    <article class="panel-card">
-      <header>Contacts</header>
-      <p>There are no contacts added for this opportunity yet.</p>
-      <p class="muted">As contacts are added, you can view them here.</p>
-    </article>
-    <article class="panel-card">
-      <header>Team</header>
+  <section class="oppty-board">
+    <div class="oppty-board-grid">
+      <article class="oppty-board-card">
+        <h3>Contacts</h3>
+        <p>There are no contacts added for this opportunity yet.</p>
+        <p class="muted">As contacts are added, you can view them here.</p>
+      </article>
+      <article class="oppty-board-card">
+        <h3>Team</h3>
         <div class="team-card">
-        <div class="avatar">CK</div>
-        <div>
-          <div class="team-name">Chandra Kasarabada</div>
-          <div class="team-email">chandra.Kasarabada@argano.com</div>
-          <span class="team-chip">Owner</span>
+          <div class="avatar">CK</div>
+          <div>
+            <div class="team-name">Chandra Kasarabada</div>
+            <div class="team-email">chandra.Kasarabada@argano.com</div>
+            <span class="team-chip">Owner</span>
+          </div>
         </div>
-      </div>
-      <a class="panel-link" href="#">View All Team Members (1)</a>
-    </article>
-    <article class="panel-card project-card">
-      <header>Project</header>
-      <p>Keep the commercial team aligned with project delivery.</p>
-      <button class="btn brand" id="btnCreatePursuit" type="button">Navigate to PPM</button>
-      <div class="project-progress">
-        <div class="status-pill" id="status">Idle</div>
-        <div class="progress"><div class="bar" id="prog"></div></div>
-      </div>
-    </article>
-    <article class="panel-card">
-      <header>Partners</header>
-      <p>There are no partners assigned for this opportunity yet.</p>
-      <p class="muted">As partners are assigned, you can view them here.</p>
-    </article>
-    <article class="panel-card">
-      <header>Competitors</header>
-      <p>There are no competitors identified yet.</p>
-      <p class="muted">As competitors are identified, you can view them here and track their relevant threat levels here.</p>
-    </article>
+        <a class="panel-link" href="#">View All Team Members (1)</a>
+      </article>
+      <article class="oppty-board-card">
+        <h3>Project</h3>
+        <p>Keep the commercial team aligned with project delivery.</p>
+        <button class="btn brand" id="btnCreatePursuit" type="button">Navigate to PPM</button>
+        <div class="project-progress">
+          <div class="status-pill" id="status">Idle</div>
+          <div class="progress"><div class="bar" id="prog"></div></div>
+        </div>
+      </article>
+      <article class="oppty-board-card">
+        <h3>Partners</h3>
+        <p>There are no partners assigned for this opportunity yet.</p>
+        <p class="muted">As partners are assigned, you can view them here.</p>
+      </article>
+      <article class="oppty-board-card">
+        <h3>Competitors</h3>
+        <p>There are no competitors identified yet.</p>
+        <p class="muted">As competitors are identified, you can view them here and track their threat levels.</p>
+      </article>
+    </div>
   </section>
 
   <div class="carousel-dots" role="presentation">
