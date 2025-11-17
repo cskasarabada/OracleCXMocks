@@ -19,6 +19,10 @@
 .why-table th,.why-table td{padding:12px;border-bottom:1px solid var(--rw-border);text-align:left;}
 .why-table th{background:#f8fafc;font-size:13px;text-transform:uppercase;letter-spacing:.04em;}
 .why-table tr:last-child td{border-bottom:none;}
+.ppm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
+.ppm-card{border:1px dashed #cbd5f5;border-radius:16px;padding:16px;background:rgba(203,213,245,.25);box-shadow:0 10px 18px rgba(15,23,42,.08);}
+.ppm-card h4{margin:0 0 6px;font-size:16px;}
+.ppm-visual{height:160px;border-radius:12px;background:linear-gradient(135deg,#f1f5ff,#e0e7ff);border:1px solid #c7d2fe;display:flex;align-items:center;justify-content:center;color:#475569;font-weight:600;font-size:13px;margin-top:8px;}
 </style>
 </head>
 <body class="lead-landing">
@@ -68,6 +72,34 @@
     <div class="benefit-box">
       <strong>Lifecycle Link</strong>
       When awarded, the Pursuit becomes the front half of the project. Construction project inherits the same Program for full reporting.
+    </div>
+  </div>
+
+  <div class="ppm-grid">
+    <div class="ppm-card">
+      <h4>PPM Project Overview</h4>
+      <p style="font-size:13px;color:var(--rw-muted)">Shows overhead project header, budgets, and linked opportunity metadata.</p>
+      <div class="ppm-visual">PPM Overview Snapshot</div>
+    </div>
+    <div class="ppm-card">
+      <h4>WBS & Preconstruction Tasks</h4>
+      <p style="font-size:13px;color:var(--rw-muted)">Illustrates conceptual estimating, engineering review, and value engineering tasks with owners.</p>
+      <div class="ppm-visual">PPM Task Board</div>
+    </div>
+    <div class="ppm-card">
+      <h4>Resource Requests</h4>
+      <p style="font-size:13px;color:var(--rw-muted)">Role-based capacity grid (6 booked, 2 open, 1 ideal skill) from PPM Resource Management.</p>
+      <div class="ppm-visual">Capacity Matrix</div>
+    </div>
+    <div class="ppm-card">
+      <h4>Cost & Decision Insights</h4>
+      <p style="font-size:13px;color:var(--rw-muted)">Cost-per-pursuit tiles plus win/loss analytics from PPM dashboards.</p>
+      <div class="ppm-visual">Cost Dashboard</div>
+    </div>
+    <div class="ppm-card">
+      <h4>Program Link</h4>
+      <p style="font-size:13px;color:var(--rw-muted)">Program hierarchy view showing Pursuit + Construction projects under one umbrella.</p>
+      <div class="ppm-visual">Program Tree</div>
     </div>
   </div>
 
