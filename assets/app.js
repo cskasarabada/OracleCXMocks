@@ -190,8 +190,10 @@
     if(!header){
       header=document.createElement('header');
       header.className='miconnex-bar';
-      header.innerHTML='<div class="logo-mark"><span class="logo-strong">Mi</span>CONNEX</div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
       body.insertBefore(header, body.firstChild);
+    } else {
+      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     }
     var nav=document.querySelector('nav.quick-nav');
     var current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
