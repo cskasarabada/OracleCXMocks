@@ -96,8 +96,67 @@
       quotesEl.innerHTML = qhtml;
     }
     function presetQuickSales(){
-      // Just preview behavior: show a confirmation message only
-      alert('Quick Sales demo state applied.');
+      openPreview();
+    }
+
+    // Preview modal management
+    function openPreview(){
+      try{
+        if(window.ModalManager && typeof ModalManager.showModal === 'function'){
+          populatePreviewModal();
+          ModalManager.showModal('qs-modal-preview');
+          return;
+        }
+      }catch(e){ console.warn('openPreview', e); }
+      // fallback: if modal manager not ready, create small centered dialog
+      createFallbackFlow();
+    }
+
+    function populatePreviewModal(){
+      var leads = (window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.leads) || [];
+      var quotes = (window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.quotes) || [];
+      var leadSel = document.getElementById('preview-lead');
+      var quoteSel = document.getElementById('preview-quote');
+      if(leadSel && leadSel.options.length<=1){
+        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ return '<option value="'+l.id+'">'+l.id+' — '+l.account+' ('+l.contact+')</option>'; }).join('');
+      }
+      if(quoteSel && quoteSel.options.length<=1){
+        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ return '<option value="'+q.id+'">'+q.id+' — '+q.account+' — $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+      }
+    }
+
+    function applyPreviewAll(){
+      try{
+        var leadId = document.getElementById('preview-lead').value;
+        var leadNotes = document.getElementById('preview-lead-notes').value;
+        var leadConfirm = document.getElementById('preview-lead-confirm').checked;
+        var quoteId = document.getElementById('preview-quote').value;
+        var quoteApprove = document.querySelector('input[name="preview-quote-approve"]:checked');
+        var conv = document.getElementById('preview-convert').checked;
+        var toCPQ = document.getElementById('preview-cpq').checked;
+        var toPursuit = document.getElementById('preview-pursuit').checked;
+
+        if(leadConfirm && window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('lead','Qualified','Preview: '+(leadNotes||'Account confirmed'));
+        }
+        if(quoteApprove && quoteApprove.value==='yes' && window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('quote','Approved','Preview: quote approved');
+        }
+        if(conv && window.RWD && typeof RWD.updateSalesFlow==='function'){
+          RWD.updateSalesFlow('opportunity','Closed Won','Preview: converted via preview');
+        }
+        if(toCPQ && window.RWD && typeof RWD.runOICJob==='function'){
+          RWD.runOICJob('Preview: Push to CPQ');
+        }
+        if(toPursuit){
+          if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+            RWD.createPursuitViaOIC(function(){ if(typeof showToast==='function') showToast('Pursuit created via OIC'); });
+          } else if(window.RWD && typeof RWD.get==='function'){ var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] Preview: Push to Pursuit simulated'); if(typeof RWD.set==='function') RWD.set(s); }
+        }
+        if(typeof showToast==='function') showToast('Quick Sales demo state applied (preview)'); else alert('Quick Sales demo state applied (preview)');
+        // close modal
+        if(window.ModalManager && typeof ModalManager.closeModal === 'function') ModalManager.closeModal('qs-modal-preview');
+      }catch(e){ console.error('applyPreviewAll', e); if(typeof showToast==='function') showToast('Preview apply failed: '+(e && e.message)); }
     }
   </script>
 
@@ -172,16 +231,49 @@
         </div>
       </div>
     </div>
+    
+    <div id="qs-modal-preview" class="qs-overlay" style="display:none" aria-hidden="true">
+      <div class="qs-modal" role="dialog" aria-modal="true" aria-labelledby="qs-preview-title" tabindex="-1">
+        <h2 id="qs-preview-title">Preview Quick Sales Demo</h2>
+        <div>
+          <h4>1. Account + Need Confirmation</h4>
+          <label for="preview-lead">Pick a lead</label>
+          <select id="preview-lead" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a lead --</option></select>
+          <label for="preview-lead-notes">Notes</label>
+          <textarea id="preview-lead-notes" rows="2" style="width:100%;margin:6px 0;padding:6px"></textarea>
+          <div style="margin-bottom:8px"><label><input type="checkbox" id="preview-lead-confirm"> Confirm account & need</label></div>
+
+          <h4>2. Pre-Built Quote + Approval</h4>
+          <label for="preview-quote">Pick a quote</label>
+          <select id="preview-quote" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a quote --</option></select>
+          <div style="margin:6px 0">Approval: <label><input type="radio" name="preview-quote-approve" value="yes"> Yes</label> <label style="margin-left:8px"><input type="radio" name="preview-quote-approve" value="no"> No</label></div>
+
+          <h4>3. Execution & Handoff</h4>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label><input type="checkbox" id="preview-convert"> Convert to Opportunity</label>
+            <label><input type="checkbox" id="preview-cpq"> Push to CPQ</label>
+            <label><input type="checkbox" id="preview-pursuit"> Push to Pursuit</label>
+          </div>
+        </div>
+        <div class="qs-actions" style="margin-top:12px">
+          <button class="btn" onclick="ModalManager.closeModal('qs-modal-preview')">Close</button>
+          <button class="btn primary" onclick="applyPreviewAll()">Apply Preview</button>
+        </div>
+      </div>
+    </div>
   </div>
 
     <script defer src="assets/modal.js"></script>
     <script>
       function startInteractiveFlow(){
-        if(typeof showQuickModal==='function'){
-          try{ showQuickModal(1); return; }catch(e){}
-        }
+        try{
+          if(typeof showToast==='function') showToast('Starting interactive flow...');
+          if(typeof showQuickModal==='function'){
+            try{ showQuickModal(1); return; }catch(e){ if(typeof showToast==='function') showToast('Error opening modal: '+(e && e.message)); }
+          }
+        }catch(e){ /* swallow */ }
         // Fallback: create a small inline overlay with the 3-stage buttons
-        createFallbackFlow();
+        try{ createFallbackFlow(); }catch(err){ if(typeof showToast==='function') showToast('Interactive demo failed: '+(err && err.message)); else console.error('Interactive demo failed', err); }
       }
 
       function createFallbackFlow(){
