@@ -351,6 +351,7 @@
         overlay._onKey = onKey;
         document.addEventListener('keydown', onKey);
         overlay._lastFocused = last;
+        document.body.classList.add('modal-visible');
       }
 
       function removeFallbackFlow(){
@@ -359,6 +360,7 @@
         try{ if(overlay._onKey) document.removeEventListener('keydown', overlay._onKey); }catch(e){}
         var last = overlay._lastFocused;
         overlay.parentNode.removeChild(overlay);
+        document.body.classList.remove('modal-visible');
         try{ if(last && typeof last.focus==='function') last.focus(); }catch(e){}
       }
 
