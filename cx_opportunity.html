@@ -202,10 +202,24 @@
 // Add New Opportunity modal handlers
 function openAddOppty(){
   var m = document.getElementById('add-oppty-modal');
-  if(window.ModalManager && typeof ModalManager.showModal==='function'){ try{ ModalManager.showModal('add-oppty-modal'); return; }catch(e){} }
-  if(m){ m.style.display='flex'; m.setAttribute('aria-hidden','false'); var f = m.querySelector('input[name="name"]'); if(f) f.focus(); }
+  if(window.ModalManager && typeof ModalManager.showModal==='function'){
+    try{ ModalManager.showModal('add-oppty-modal'); document.body.classList.add('modal-visible'); return; }catch(e){}
+  }
+  if(m){
+    m.style.display='flex';
+    m.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-visible');
+    var f = m.querySelector('input[name="name"]'); if(f) f.focus();
+  }
 }
-function closeAddOppty(){ var m=document.getElementById('add-oppty-modal'); if(window.ModalManager && typeof ModalManager.closeModal==='function'){ try{ ModalManager.closeModal('add-oppty-modal'); return; }catch(e){} } if(m){ m.style.display='none'; m.setAttribute('aria-hidden','true'); } }
+function closeAddOppty(){
+  var m=document.getElementById('add-oppty-modal');
+  if(window.ModalManager && typeof ModalManager.closeModal==='function'){
+    try{ ModalManager.closeModal('add-oppty-modal'); }catch(e){}
+  }
+  if(m){ m.style.display='none'; m.setAttribute('aria-hidden','true'); }
+  document.body.classList.remove('modal-visible');
+}
 
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('add-new-oppty-btn'); if(btn) btn.addEventListener('click', openAddOppty);
@@ -219,7 +233,19 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 
 // Render recent opportunities preview
-function renderOppsPreview(){ var container = document.getElementById('opps-preview'); if(!container) return; var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities) ? s.opportunities : []; if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Create Opportunity" to add one.</div>'; return; } var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>'; opps.slice(0,20).forEach(function(o,idx){ html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>'; }); html += '</tbody></table>'; container.innerHTML = html; }
+function renderOppsPreview(){
+  var container = document.getElementById('opps-preview'); if(!container) return;
+  var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null;
+  var opps = (s && s.opportunities) ? s.opportunities : [];
+  var total = opps ? opps.length : 0;
+  var countLabel = document.getElementById('opps-count-label'); if(countLabel) countLabel.textContent = total + ' Results';
+  if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Create Opportunity" to add one.</div>'; return; }
+  var html='<table class="table" style="width:100%"><thead><tr><th>Name</th><th>Account</th><th>Amount</th><th>Stage</th><th style="width:110px">Actions</th></tr></thead><tbody>';
+  opps.slice(0,20).forEach(function(o,idx){
+    html += '<tr><td>'+escapeHtml(o.name||'')+'</td><td>'+escapeHtml(o.account||'')+'</td><td>'+(o.amount?('$'+Number(o.amount).toLocaleString()):'')+'</td><td>'+escapeHtml(o.stage||'')+'</td><td><button class="btn" onclick="prefillAddOppty('+idx+')">Import</button></td></tr>';
+  });
+  html += '</tbody></table>'; container.innerHTML = html;
+}
 
 function prefillAddOppty(index){ var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null; var opps = (s && s.opportunities)?s.opportunities:[]; if(!opps || opps.length===0) return; var opp = opps[index] || opps[0]; var form = document.getElementById('addOpptyForm'); if(!form) return; Object.keys(opp).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value = opp[k]; }catch(e){} }); openAddOppty(); }
 
