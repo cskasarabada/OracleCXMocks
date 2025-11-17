@@ -85,13 +85,13 @@
       if(!leadsEl || !quotesEl) return;
       var data = window.QUICK_SALES_DATA || {leads:[],quotes:[]};
       // render leads table
-      var html = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Contact</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
-      data.leads.forEach(function(l){ html += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+l.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.account+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.contact+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+l.status+'</td></tr>'; });
+      var html = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Customer</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account Name</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Contact</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Title</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
+      data.leads.forEach(function(l){ html += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+l.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(l.customer||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(l.accountName||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(l.contact||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(l.title||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(l.status||'')+'</td></tr>'; });
       html += '</tbody></table>';
       leadsEl.innerHTML = html;
       // render quotes table
-      var qhtml = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Ref</th><th style="text-align:right;padding:6px;border-bottom:1px solid var(--rw-border)">Amount</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
-      data.quotes.forEach(function(q){ qhtml += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+q.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.account+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.ref+'</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">$'+(q.amount||0).toLocaleString()+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+q.status+'</td></tr>'; });
+      var qhtml = '<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">ID</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Customer</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Account Name</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Ref</th><th style="text-align:right;padding:6px;border-bottom:1px solid var(--rw-border)">Amount</th><th style="text-align:left;padding:6px;border-bottom:1px solid var(--rw-border)">Status</th></tr></thead><tbody>';
+      data.quotes.forEach(function(q){ qhtml += '<tr><td style="padding:6px;border-bottom:1px solid #eee">'+q.id+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(q.customer||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(q.accountName||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(q.ref||'')+'</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">$'+(q.amount||0).toLocaleString()+'</td><td style="padding:6px;border-bottom:1px solid #eee">'+(q.status||'')+'</td></tr>'; });
       qhtml += '</tbody></table>';
       quotesEl.innerHTML = qhtml;
     }
@@ -134,10 +134,10 @@
       var leadSel = document.getElementById('preview-lead');
       var quoteSel = document.getElementById('preview-quote');
       if(leadSel && leadSel.options.length<=1){
-        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ return '<option value="'+l.id+'">'+l.id+' — '+l.account+' ('+l.contact+')</option>'; }).join('');
+        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ var acct = l.accountName || l.account || l.customer || ''; return '<option value="'+l.id+'">'+l.id+' — '+acct+' ('+(l.contact||'')+')'+'</option>'; }).join('');
       }
       if(quoteSel && quoteSel.options.length<=1){
-        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ return '<option value="'+q.id+'">'+q.id+' — '+q.account+' — $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ var acct = q.accountName || q.account || q.customer || ''; return '<option value="'+q.id+'">'+q.id+' — '+acct+' — $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
       }
     }
 
