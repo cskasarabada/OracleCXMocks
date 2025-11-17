@@ -25,7 +25,14 @@
   <div class="card" style="grid-column:1/-1">
     <h2>Oracle Sales Cloud Process</h2>
     <div class="body">
-      <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through deal handoff. Each stage pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
+      <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through downstream PPM project delivery. Each stage pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
+      <div class="flow-steps">
+        <div><strong>Lead</strong> → capture interest, qualify, and convert.</div>
+        <div><strong>Opportunity</strong> → orchestrate discovery and value engineering.</div>
+        <div><strong>Quote</strong> → configure, price, and publish proposals.</div>
+        <div><strong>Pursuit</strong> → leverage OIC to stand up a PPM pursuit for cost modeling.</div>
+        <div><strong>Project</strong> → award the pursuit, execute delivery, and mark substantial completion.</div>
+      </div>
       <div class="flow-grid" id="flowSummary"></div>
     </div>
   </div>
@@ -53,7 +60,7 @@
   </div>
 </div>
 <script>
- (function(){
+ window.addEventListener('DOMContentLoaded', function(){
    var stageDefs=RWD.flowStages;
    var d=RWD.get();
    var summary=document.getElementById('flowSummary');
@@ -114,7 +121,7 @@
    stageSelect.value=stageDefs[0].key;
    populateStatus(stageSelect.value);
    render();
- })();
+ });
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
