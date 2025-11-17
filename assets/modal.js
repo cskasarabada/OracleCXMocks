@@ -61,11 +61,12 @@
       overlay.classList.add('qs-closing');
       overlay.setAttribute('aria-hidden','true');
       this.announce('Dialog closed');
-      const onAnimEnd = (e) => {
-        if(e.target !== overlay) return;
+      const dialog = overlay.querySelector('.qs-modal');
+      let handlerAttached = false;
+      function finalize(){
         overlay.style.display='none';
         overlay.classList.remove('qs-closing');
-        overlay.removeEventListener('animationend', onAnimEnd);
+        if(dialog && handlerAttached) dialog.removeEventListener('animationend', onAnimEnd);
         // if no other overlays are visible, hide the wrapper
         try{
           var wrapper = document.getElementById('qs-modals');
@@ -76,8 +77,17 @@
             if(!visible) wrapper.style.display='none';
           }
         }catch(e){}
+      }
+      const onAnimEnd = (e) => {
+        if(dialog && e.target !== dialog) return;
+        finalize();
       };
-      overlay.addEventListener('animationend', onAnimEnd);
+      if(dialog){
+        dialog.addEventListener('animationend', onAnimEnd);
+        handlerAttached = true;
+      }else{
+        setTimeout(finalize, 160);
+      }
       document.removeEventListener('keydown', this._keydownHandler);
       if(this.lastFocused && typeof this.lastFocused.focus==='function') this.lastFocused.focus();
       this.activeOverlay = null;
