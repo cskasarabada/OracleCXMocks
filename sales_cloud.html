@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Oracle Sales Cloud Flow</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+</head>
+<body>
+
+<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Oracle Sales Cloud Flow</span></div>
+<div class="shell">
+  <div class="tabs">
+    <a class="tab" href="index.html">Overview</a>
+    <a class="tab" href="sales_cloud.html">Sales Flow</a>
+    <a class="tab" href="cx_lead.html">Lead</a>
+    <a class="tab" href="cx_opportunity.html">Opportunity</a>
+    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
+    <a class="tab" href="ppm_construction.html">PPM Construction</a>
+    <a class="tab" href="analytics.html">Analytics</a>
+  </div>
+
+<div class="grid">
+  <div class="card" style="grid-column:1/-1">
+    <h2>Oracle Sales Cloud Process</h2>
+    <div class="body">
+      <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through deal handoff. Each stage pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
+      <div class="flow-grid" id="flowSummary"></div>
+    </div>
+  </div>
+
+  <div class="card" style="grid-column:1/2">
+    <h2>Stage Console</h2>
+    <div class="body">
+      <form id="flowForm">
+        <div class="row">
+          <div><label>Stage<select id="flowStage"></select></label></div>
+          <div><label>Status<select id="flowStatus"></select></label></div>
+        </div>
+        <label>Notes / Callouts<textarea id="flowNote" rows="4" placeholder="Highlight customer intent, blockers, or next steps"></textarea></label>
+        <div class="actions">
+          <button class="btn primary" type="submit">Update Stage</button>
+          <button class="btn" type="button" onclick="RWD.reset(); window.location.reload();">Reset Flow</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card" style="grid-column:2/3">
+    <h2>Latest Updates</h2>
+    <div class="body flow-timeline" id="flowTimeline"></div>
+  </div>
+</div>
+<script>
+ (function(){
+   var stageDefs=RWD.flowStages;
+   var d=RWD.get();
+   var summary=document.getElementById('flowSummary');
+   var timeline=document.getElementById('flowTimeline');
+   var stageSelect=document.getElementById('flowStage');
+   var statusSelect=document.getElementById('flowStatus');
+   var noteInput=document.getElementById('flowNote');
+
+   stageDefs.forEach(function(def){ var opt=document.createElement('option'); opt.value=def.key; opt.textContent=def.label; stageSelect.appendChild(opt); });
+
+   function render(){
+     d=RWD.get();
+     summary.innerHTML='';
+     stageDefs.forEach(function(def){
+       var state=d.salesFlow[def.key]||{};
+       var card=document.createElement('div');
+       card.className='stagecard';
+       var meta=state.updated ? 'Updated '+state.updated : 'Awaiting update';
+       card.innerHTML='<div class="label">'+def.label+'</div>'+
+         '<div class="value">'+(state.status||def.statuses[0])+'</div>'+
+         '<div class="status">'+meta+'</div>'+
+         '<div class="owner">Owner: '+(state.owner||def.owner)+'</div>'+
+         '<div class="label">'+def.description+'</div>';
+       summary.appendChild(card);
+     });
+
+     timeline.innerHTML='';
+      stageDefs.forEach(function(def){
+        var state=d.salesFlow[def.key]||{};
+        var row=document.createElement('div');
+        row.className='entry';
+       row.innerHTML='<div class="title">'+def.label+' → '+(state.status||def.statuses[0])+'</div>'+
+         '<div class="meta"><span>Owner: '+(state.owner||def.owner)+'</span><span>'+(state.updated ? 'Updated '+state.updated : 'No updates yet')+'</span></div>';
+       if(state.note){ var note=document.createElement('div'); note.className='note'; note.textContent=state.note; row.appendChild(note); }
+       timeline.appendChild(row);
+     });
+   }
+
+   function populateStatus(stageKey){
+     var def=stageDefs.find(function(item){ return item.key===stageKey; })||stageDefs[0];
+     var state=d.salesFlow[stageKey]||{};
+     statusSelect.innerHTML='';
+     (def.statuses||['New']).forEach(function(s){ var opt=document.createElement('option'); opt.value=s; opt.textContent=s; statusSelect.appendChild(opt); });
+     if(state.status && !(def.statuses||[]).includes(state.status)){ var extra=document.createElement('option'); extra.value=state.status; extra.textContent=state.status; statusSelect.appendChild(extra); }
+     statusSelect.value=state.status||def.statuses[0];
+     noteInput.value=state.note||'';
+   }
+
+   document.getElementById('flowForm').addEventListener('submit', function(e){
+     e.preventDefault();
+     RWD.updateSalesFlow(stageSelect.value,statusSelect.value,noteInput.value);
+     render();
+     populateStatus(stageSelect.value);
+   });
+
+   stageSelect.addEventListener('change', function(){ populateStatus(this.value); });
+
+   stageSelect.value=stageDefs[0].key;
+   populateStatus(stageSelect.value);
+   render();
+ })();
+</script>
+<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+</body>
+</html>
