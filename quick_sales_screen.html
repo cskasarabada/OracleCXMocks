@@ -272,7 +272,7 @@
           </div>
         </div>
         <div class="qs-actions" style="margin-top:12px">
-          <button class="btn" onclick="ModalManager.closeModal('qs-modal-preview')">Close</button>
+          <button class="btn" onclick="closePreviewModal()">Close</button>
           <button class="btn primary" onclick="applyPreviewAll()">Apply Preview</button>
         </div>
       </div>
@@ -281,6 +281,19 @@
 
     <script defer src="assets/modal.js"></script>
     <script>
+      function closePreviewModal(){
+        var handled=false;
+        if(window.ModalManager && typeof ModalManager.closeModal==='function'){
+          try{ ModalManager.closeModal('qs-modal-preview'); handled=true; }catch(e){ console.warn('close preview modalManager', e); }
+        }
+        if(!handled){
+          var ov=document.getElementById('qs-modal-preview');
+          if(ov){
+            ov.style.display='none';
+            ov.setAttribute('aria-hidden','true');
+          }
+        }
+      }
       function startInteractiveFlow(){
         try{
           if(typeof showToast==='function') showToast('Starting interactive flow...');
