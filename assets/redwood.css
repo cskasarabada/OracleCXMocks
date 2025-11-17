@@ -190,11 +190,32 @@ body.oppty-landing{background:#f5efe7;}
 .carousel-dots .dot.active{background:#4c1d95;}
 .app-nav-rail{
   background:transparent;
-  padding:18px 20px 28px;
+  padding:18px 20px 40px;
   display:flex;
-  gap:10px;
+  grid-gap:0;
+  gap:0;
   flex-wrap:wrap;
-  justify-content:flex-start;
+  justify-content:center;
+  align-items:center;
+  max-width:var(--nav-max-width,1200px);
+  margin:30px auto 0;
+  position:relative;
+}
+.app-nav-rail::before,
+.app-nav-rail::after{
+  content:"";
+  flex:1 1 60px;
+  height:1px;
+  margin:0 12px;
+  background:linear-gradient(90deg,transparent,rgba(15,23,42,.15),transparent);
+}
+.app-nav-rail::before{margin-right:18px;}
+.app-nav-rail::after{margin-left:18px;}
+.app-nav-rail .app-nav-items{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
 }
 .app-nav-rail a{
   padding:8px 16px;
