@@ -22,7 +22,9 @@
 .ppm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
 .ppm-card{border:1px dashed #cbd5f5;border-radius:16px;padding:16px;background:rgba(203,213,245,.25);box-shadow:0 10px 18px rgba(15,23,42,.08);}
 .ppm-card h4{margin:0 0 6px;font-size:16px;}
-.ppm-visual{height:160px;border-radius:12px;background:linear-gradient(135deg,#f1f5ff,#e0e7ff);border:1px solid #c7d2fe;display:flex;align-items:center;justify-content:center;color:#475569;font-weight:600;font-size:13px;margin-top:8px;}
+.ppm-visual{height:160px;border-radius:12px;background:#fff;border:1px solid #c7d2fe;padding:12px;margin-top:8px;display:flex;flex-direction:column;gap:6px;}
+.ppm-row{display:flex;justify-content:space-between;font-size:12px;color:#475569;}
+.ppm-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:#eef2ff;font-size:11px;border:1px solid #c7d2fe;}
 </style>
 </head>
 <body class="lead-landing">
@@ -79,27 +81,52 @@
     <div class="ppm-card">
       <h4>PPM Project Overview</h4>
       <p style="font-size:13px;color:var(--rw-muted)">Shows overhead project header, budgets, and linked opportunity metadata.</p>
-      <div class="ppm-visual">PPM Overview Snapshot</div>
+      <div class="ppm-visual">
+        <div class="ppm-row"><span>Project:</span><strong>Pursuit · Warner Mixed Use</strong></div>
+        <div class="ppm-row"><span>Type:</span><span class="ppm-pill">Overhead</span></div>
+        <div class="ppm-row"><span>Budget:</span><strong>$420k</strong></div>
+        <div class="ppm-row"><span>Linked Opportunity:</span><span>TT1 eea</span></div>
+      </div>
     </div>
     <div class="ppm-card">
       <h4>WBS & Preconstruction Tasks</h4>
       <p style="font-size:13px;color:var(--rw-muted)">Illustrates conceptual estimating, engineering review, and value engineering tasks with owners.</p>
-      <div class="ppm-visual">PPM Task Board</div>
+      <div class="ppm-visual">
+        <div class="ppm-row"><span>1. Conceptual Estimate</span><span>Jessica · Due 11/30</span></div>
+        <div class="ppm-row"><span>2. Engineering Review</span><span>Ravi · Due 12/04</span></div>
+        <div class="ppm-row"><span>3. Value Engineering</span><span>Subash · Due 12/12</span></div>
+        <div class="ppm-row"><span>4. Schedule Analysis</span><span>PMO · Due 12/18</span></div>
+      </div>
     </div>
     <div class="ppm-card">
       <h4>Resource Requests</h4>
       <p style="font-size:13px;color:var(--rw-muted)">Role-based capacity grid (6 booked, 2 open, 1 ideal skill) from PPM Resource Management.</p>
-      <div class="ppm-visual">Capacity Matrix</div>
+      <div class="ppm-visual">
+        <div class="ppm-row"><span>Estimators</span><span>Booked 6 / Open 2</span></div>
+        <div class="ppm-row"><span>Engineers</span><span>Booked 5 / Open 1</span></div>
+        <div class="ppm-row"><span>PMs</span><span>Booked 3 / Open 1</span></div>
+        <div class="ppm-row"><span>Ideal Skill</span><span class="ppm-pill">MEP Specialist</span></div>
+      </div>
     </div>
     <div class="ppm-card">
       <h4>Cost & Decision Insights</h4>
       <p style="font-size:13px;color:var(--rw-muted)">Cost-per-pursuit tiles plus win/loss analytics from PPM dashboards.</p>
-      <div class="ppm-visual">Cost Dashboard</div>
+      <div class="ppm-visual">
+        <div class="ppm-row"><span>Spend to Date</span><strong>$96,200</strong></div>
+        <div class="ppm-row"><span>Cost / Pursuit Avg</span><strong>$112k</strong></div>
+        <div class="ppm-row"><span>Win Rate Rolling</span><strong>58%</strong></div>
+        <div class="ppm-row"><span>Variance</span><span class="ppm-pill">+3%</span></div>
+      </div>
     </div>
     <div class="ppm-card">
       <h4>Program Link</h4>
       <p style="font-size:13px;color:var(--rw-muted)">Program hierarchy view showing Pursuit + Construction projects under one umbrella.</p>
-      <div class="ppm-visual">Program Tree</div>
+      <div class="ppm-visual">
+        <div class="ppm-row"><span>Program:</span><strong>Warner Campus Build</strong></div>
+        <div class="ppm-row"><span>Pursuit Project</span><span class="ppm-pill">Active</span></div>
+        <div class="ppm-row"><span>Construction Project</span><span class="ppm-pill">Pending Award</span></div>
+        <div class="ppm-row"><span>Rollup Budget</span><strong>$62M</strong></div>
+      </div>
     </div>
   </div>
 

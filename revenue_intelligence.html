@@ -6,6 +6,12 @@
 <title>Argano Revenue Intelligence</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<style>
+.revenue-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px;align-items:start;}
+.scenario-card{background:#fff;border-radius:20px;border:1px solid var(--rw-border);box-shadow:0 12px 24px rgba(15,23,42,.08);padding:18px;}
+.scenario-card input[type=range]{accent-color:#2563eb;}
+.scenario-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px;}
+</style>
 </head>
 <body class="lead-landing">
 <main class="lead-shell">
@@ -22,9 +28,9 @@
     </div>
   </section>
 
-  <div class="grid" style="margin-top:24px;grid-template-columns:1fr 0.9fr;gap:18px">
-    <div class="card">
-      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Scenario Slider</h2>
+  <div class="revenue-grid">
+    <div class="scenario-card">
+      <h2 style="margin:0;padding-bottom:12px;border-bottom:1px solid var(--rw-border)">Scenario Slider</h2>
       <div style="padding-top:12px">
         <label style="font-size:12px;color:var(--rw-muted)">Renewal Confidence</label>
         <input type="range" min="60" max="100" value="85" style="width:100%;margin:4px 0 12px" oninput="document.getElementById('renewalVal').textContent=this.value+'%'">
@@ -32,7 +38,7 @@
         <label style="font-size:12px;color:var(--rw-muted)">Expansion Win Rate</label>
         <input type="range" min="20" max="80" value="48" style="width:100%;margin:4px 0 12px" oninput="document.getElementById('expansionVal').textContent=this.value+'%'">
         <div id="expansionVal" style="font-weight:600;margin-bottom:16px">48%</div>
-        <div class="stat-grid" style="margin-top:0">
+        <div class="scenario-metrics">
           <div class="stat-card">
             <div class="label">Upside</div>
             <div class="value" id="upsideVal">$4.0M</div>
@@ -46,8 +52,8 @@
         </div>
       </div>
     </div>
-    <div class="card">
-      <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">AI Forecast Signal</h2>
+    <div class="scenario-card">
+      <h2 style="margin:0;padding-bottom:12px;border-bottom:1px solid var(--rw-border)">AI Forecast Signal</h2>
       <div class="timeline" style="padding-top:12px">
         <div class="item"><div><div class="who">Coaching Agent</div><div class="what">Jessica Brooks has 3 stalled expansions · suggest Quick Sales screen.</div></div><div class="t">8:44 AM</div></div>
         <div class="item"><div><div class="who">Forecast Agent</div><div class="what">Model variance +$2.6M vs manager call – highlight two pursuits.</div></div><div class="t">8:10 AM</div></div>

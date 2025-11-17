@@ -6,6 +6,11 @@
 <title>Argano Account 360</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<style>
+.account-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;margin-top:24px;align-items:start;}
+.account-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
+.account-grid .card,.account-panels .card{height:100%;}
+</style>
 </head>
 <body class="lead-landing">
 <main class="lead-shell">
@@ -27,7 +32,7 @@
     </div>
   </section>
 
-  <div class="grid" style="margin-top:24px;grid-template-columns:1.15fr .85fr;gap:18px">
+  <div class="account-grid">
     <div class="card">
       <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Relationship Timeline</h2>
       <div class="timeline" id="acctTimeline" style="max-height:360px;overflow:auto;padding-top:12px"></div>
@@ -63,7 +68,7 @@
     </div>
   </div>
 
-  <div class="grid" style="margin-top:24px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+  <div class="account-panels">
     <div class="card">
       <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Open Opportunities</h2>
       <ul class="results-list" style="padding-top:12px">
