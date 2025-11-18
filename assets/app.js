@@ -134,6 +134,17 @@
     if(name && SCENARIOS[name]) return name;
     return Object.keys(SCENARIOS)[0];
   }
+  function parseAmount(val){
+    if(typeof val==='number') return val;
+    if(typeof val!=='string') return 0;
+    var cleaned=val.replace(/[$,\s]/g,'').toLowerCase();
+    var mult=1;
+    if(cleaned.endsWith('m')){ mult=1e6; cleaned=cleaned.slice(0,-1); }
+    else if(cleaned.endsWith('k')){ mult=1e3; cleaned=cleaned.slice(0,-1); }
+    var num=parseFloat(cleaned);
+    return isNaN(num)?0:Math.round(num*mult);
+  }
+  function currency(num){ return '$'+Number(num||0).toLocaleString(); }
 
   window.RWD={
     reset(){localStorage.removeItem(KEY); broadcast();},
@@ -440,6 +451,45 @@
         ()=>new Promise((resolve)=>{ this.awardToConstruction(()=>{ this.completeSubstantial(()=>{ setTimeout(resolve,700); }); }); })
       ];
       return steps.reduce(function(promise,step){ return promise.then(step); }, Promise.resolve()).then(()=>scenarioKey);
+    },
+    adoptLeadStory(lead){
+      const info=lead||{};
+      const d=ensure();
+      const amount=parseAmount(info.amount || d.oppty.amount || (d.lead.score||70)*10000);
+      d.lead.company=info.company||d.lead.company||'Demo Customer';
+      d.lead.contact=info.contact||d.lead.contact||'contact@'+d.lead.company.replace(/\s+/g,'').toLowerCase()+'.com';
+      d.lead.score= info.score || d.lead.score || 75;
+      d.lead.status=info.leadStatus||'Working';
+      d.oppty.name=info.opportunity || (d.lead.company+' Opportunity');
+      d.oppty.amount=amount;
+      d.oppty.stage=info.opportunityStage || d.oppty.stage || 'Qualification';
+      d.pursuit.name=info.pursuit || (d.oppty.name+' - Pursuit');
+      d.pursuit.estimate=amount;
+      d.pursuit.status=info.pursuitStatus || d.pursuit.status || 'Draft';
+      d.const.name=info.project || (d.oppty.name+' Delivery');
+      d.const.budget=Math.round(amount*1.03);
+      d.const.status=info.projectStatus || d.const.status || 'Planning';
+      d.selectedCustomer=d.lead.company;
+      d.leads=d.leads||[];
+      upsert(d.leads,function(row){ return row && row.company===info.company && row.name===info.name; }, Object.assign({}, info));
+      d.opportunities=d.opportunities||[];
+      upsert(d.opportunities,function(row){ return row && row.name===d.oppty.name; },{
+        name:d.oppty.name,
+        company:d.lead.company,
+        stage:d.oppty.stage,
+        amount:currency(d.oppty.amount),
+        owner:info.owner || 'Jessica Brooks'
+      });
+      if(d.salesFlow.lead){ d.salesFlow.lead.status=d.lead.status; d.salesFlow.lead.updated=now(); }
+      if(d.salesFlow.opportunity){ d.salesFlow.opportunity.status=d.oppty.stage; d.salesFlow.opportunity.updated=now(); }
+      if(d.salesFlow.pursuit){ d.salesFlow.pursuit.status=d.pursuit.status; d.salesFlow.pursuit.updated=now(); }
+      if(d.salesFlow.project){ d.salesFlow.project.status=d.const.status; d.salesFlow.project.updated=now(); }
+      addTimeline(d,'Lead','Story Selected',d.lead.company);
+      addTimeline(d,'Opportunity','Aligned to '+d.oppty.stage,d.oppty.name);
+      addTimeline(d,'Pursuit',d.pursuit.status,d.pursuit.name);
+      addTimeline(d,'Project',d.const.status,d.const.name);
+      commit(d);
+      log('Story activated for '+d.lead.company);
     },
     flowStages: FLOW_STAGES
   };

@@ -273,29 +273,47 @@ function renderLeadsPreview(){
   var sampleFallback=sampleLeadData();
   var useSample=!leads || leads.length===0;
   var rows = useSample ? sampleFallback : leads.slice(0);
+  window._leadPreviewRows = rows.slice(0);
   var count=document.getElementById('lead-results-count'); if(count) count.textContent=rows.length+' Results'+(useSample?' · Sample Data':'');
   if(rows.length===0){ container.innerHTML='<div style="color:var(--rw-muted)">No leads yet. Use "Create Lead" to get started.</div>'; return; }
-  var html='<table class="table" style="width:100%"><thead><tr><th>Company</th><th>Lead</th><th>Contact</th><th>Owner</th><th style="width:110px">Actions</th></tr></thead><tbody>';
-  rows.slice(0,20).forEach(function(l,idx){ html+='<tr><td>'+escapeHtml(l.company||'')+'</td><td>'+escapeHtml(l.name||'')+'</td><td>'+escapeHtml(l.contact||'')+'</td><td>'+escapeHtml(l.owner||'')+'</td><td><button class="btn" onclick="prefillAddLead('+idx+')">Import</button></td></tr>'; });
+  var html='<table class="table" style="width:100%"><thead><tr><th>Company</th><th>Lead</th><th>Contact</th><th>Owner</th><th style="width:160px">Actions</th></tr></thead><tbody>';
+  rows.slice(0,20).forEach(function(l,idx){ html+='<tr><td>'+escapeHtml(l.company||'')+'</td><td>'+escapeHtml(l.name||'')+'</td><td>'+escapeHtml(l.contact||'')+'</td><td>'+escapeHtml(l.owner||'')+'</td><td><button class="btn" onclick="prefillAddLead('+idx+')">Import</button><button class="ghost-btn" style="margin-left:6px" onclick="useLeadStory('+idx+')">Use Story</button></td></tr>'; });
   html+='</tbody></table>';
   container.innerHTML=html;
 }
 
 function prefillAddLead(index){
-  var s=(window.RWD && typeof RWD.get==='function')?RWD.get():null; var leads=(s && s.leads)?s.leads:[]; 
-  if(!leads || leads.length===0) leads=sampleLeadData();
-  if(!leads || leads.length===0) return;
-  var lead=leads[index] || leads[0]; var form=document.getElementById('addLeadForm'); if(!form) return;
+  var rows=getLeadRows();
+  if(!rows || !rows.length) return;
+  var lead=rows[index] || rows[0]; var form=document.getElementById('addLeadForm'); if(!form) return;
   Object.keys(lead).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value=lead[k]; }catch(e){} });
   openAddLead();
 }
 
+function useLeadStory(index){
+  var rows=getLeadRows();
+  if(!rows || !rows.length) return;
+  var lead=rows[index] || rows[0];
+  if(window.RWD && typeof RWD.adoptLeadStory==='function'){
+    RWD.adoptLeadStory(lead);
+    renderLeadsPreview();
+    if(typeof showToast==='function') showToast('Story activated for '+(lead.company||''));
+  }
+}
+
+function getLeadRows(){
+  if(Array.isArray(window._leadPreviewRows) && window._leadPreviewRows.length){ return window._leadPreviewRows.slice(0); }
+  var s=(window.RWD && typeof RWD.get==='function')?RWD.get():null; var leads=(s && s.leads)?s.leads:[]; 
+  if(leads && leads.length) return leads.slice(0);
+  return sampleLeadData();
+}
+
 function sampleLeadData(){
   return [
-    {company:'1818 Investments', name:'Sample Test Lead - 20250910', contact:'Ravi Patel', owner:'Chandra Kasarabada'},
-    {company:'Village of Fox Crossing', name:'Fox Crossing Expansion', contact:'Maria Davis', owner:'Subash Nagarajan'},
-    {company:'Warner Design Associates Inc.', name:'Warner Mixed Use', contact:'Priya Shah', owner:'Chandra Kasarabada'},
-    {company:'Excel Engineering Inc.', name:'Excel Modernization', contact:'Derrick Owens', owner:'Subash Nagarajan'}
+    {company:'1818 Investments', name:'South Campus Refresh', contact:'Ravi Patel', owner:'Chandra Kasarabada', leadStatus:'Working', opportunity:'1818 Campus Refresh', opportunityStage:'Qualification', amount:985000, pursuitStatus:'Draft', project:'1818 Campus Delivery', projectStatus:'Planning'},
+    {company:'Village of Fox Crossing', name:'Fox Crossing Expansion', contact:'Maria Davis', owner:'Subash Nagarajan', leadStatus:'Qualified', opportunity:'Fox Crossing Utility Upgrade', opportunityStage:'Evaluation', amount:1340000, pursuitStatus:'Costing', project:'Fox Crossing Delivery', projectStatus:'Planning'},
+    {company:'Warner Design Associates Inc.', name:'Warner Mixed Use', contact:'Priya Shah', owner:'Chandra Kasarabada', leadStatus:'Qualified', opportunity:'Warner Mixed Use Redevelopment', opportunityStage:'Proposal', amount:980000, pursuitStatus:'Submitted', project:'Warner Redevelopment Build', projectStatus:'Planning'},
+    {company:'Excel Engineering Inc.', name:'Excel Modernization', contact:'Derrick Owens', owner:'Subash Nagarajan', leadStatus:'New', opportunity:'Excel Modernization CX', opportunityStage:'Qualification', amount:720000, pursuitStatus:'Draft', project:'Excel CX Delivery', projectStatus:'Planning'}
   ];
 }
 
