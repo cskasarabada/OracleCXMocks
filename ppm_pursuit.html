@@ -107,8 +107,15 @@
   </div>
 </section>
 <script>
+ function getPursuitState(){
+   var fallback={pursuit:{name:'Demo Pursuit', estimate:0, status:'Draft'}};
+   if(window.RWD && typeof RWD.get==='function'){
+     try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('pursuit state fetch failed', e); }
+   }
+   return fallback;
+ }
  window.addEventListener('DOMContentLoaded', function(){
-  var d=RWD.get();
+  var d=getPursuitState();
   document.getElementById('purName').value=d.pursuit.name||'';
   document.getElementById('purEstimate').value=d.pursuit.estimate||0;
   var smartLabel=document.getElementById('pursuit-smart-name'); if(smartLabel) smartLabel.textContent=d.pursuit.name||'this pursuit';

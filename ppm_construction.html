@@ -181,8 +181,15 @@
 </style>
 
 <script>
+ function getProjectState(){
+   var fallback={const:{name:'Demo Project', budget:0}};
+   if(window.RWD && typeof RWD.get==='function'){
+     try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('project state fetch failed', e); }
+   }
+   return fallback;
+ }
  window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
+   var d=getProjectState();
    document.getElementById('cName').textContent=d.const.name||'-';
    document.getElementById('cBudget').textContent='$'+Number(d.const.budget||0).toLocaleString();
    var smartLabel=document.getElementById('project-smart-name'); if(smartLabel) smartLabel.textContent=d.const.name||'this project';
@@ -195,12 +202,14 @@
      body.appendChild(tr);
    });
    document.getElementById('btnComplete').addEventListener('click', function(){
-     RWD.completeSubstantial(function(){
+     var finish=function(){
        var s=new Date();
        var e=new Date(s.getFullYear()+1,s.getMonth(),s.getDate());
        document.getElementById('wStart').textContent=s.toLocaleDateString();
        document.getElementById('wEnd').textContent=e.toLocaleDateString();
-     });
+     };
+     if(window.RWD && typeof RWD.completeSubstantial==='function'){ RWD.completeSubstantial(finish); }
+     else{ finish(); }
    });
  });
 function initProjectSmartBanner(){
