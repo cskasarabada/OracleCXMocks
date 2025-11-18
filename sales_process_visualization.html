@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Complete Sales Process Visualization</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <script defer src="assets/app.js"></script>
 <style>
 .human-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0;}
@@ -12,7 +13,8 @@
 .human-card .persona{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .human-card .avatar{width:44px;height:44px;border-radius:50%;background:#111827;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
 .human-card .persona strong{display:block;}
-.human-card .persona span{font-weight:700;color:#ff7a18;text-transform:uppercase;font-size:12px;letter-spacing:.08em;}
+.human-card .persona span{font-weight:700;color:#ff7a18;text-transform:uppercase;font-size:12px;letter-spacing:.08em;display:flex;gap:6px;align-items:center;}
+.human-card .persona span i{font-size:12px;}
 .human-card .handoff{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:#fff1e6;border:1px solid #ff7a18;font-size:12px;margin-top:10px;font-weight:600;color:#b45309;text-decoration:underline;}
 .journey-line{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
 .journey-node{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--rw-border);border-radius:16px;padding:12px;background:#fff;}
@@ -51,44 +53,86 @@
     <p>Bring the process to life with the humans who touch it. Each tile highlights the persona, motion, and handoff.</p>
     <div class="human-flow">
       <div class="human-card">
-        <div class="persona"><div class="avatar">SD</div><div><strong>Sarah · SDR</strong><div style="font-size:13px;color:var(--rw-muted)">Lead Capture</div></div></div>
+        <div class="persona">
+          <div class="avatar">SD</div>
+          <div>
+            <strong>Sarah &middot; SDR</strong>
+            <span><i class="fa-solid fa-user-plus"></i> Lead Capture</span>
+          </div>
+        </div>
         <p>Marketing-qualified interest arrives with AI scores. Sarah enriches contacts and tags the opportunity record.</p>
-        <span class="handoff">Handoff → Account Executive</span>
+        <span class="handoff">Handoff &rarr; Account Executive</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">AE</div><div><strong>Marcus · AE</strong><div style="font-size:13px;color:var(--rw-muted)">Lead Qualification</div></div></div>
+        <div class="persona">
+          <div class="avatar">AE</div>
+          <div>
+            <strong>Marcus &middot; AE</strong>
+            <span><i class="fa-solid fa-clipboard-check"></i> Lead Qualification</span>
+          </div>
+        </div>
         <p>Smart Actions accelerate conversion to Opportunity while Marcus logs discovery notes.</p>
-        <span class="handoff">Handoff → Solution Team</span>
+        <span class="handoff">Handoff &rarr; Solution Team</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">ST</div><div><strong>Priya · Solution</strong><div style="font-size:13px;color:var(--rw-muted)">Opportunity Management</div></div></div>
+        <div class="persona">
+          <div class="avatar">ST</div>
+          <div>
+            <strong>Priya &middot; Solution</strong>
+            <span><i class="fa-solid fa-people-arrows"></i> Opportunity Management</span>
+          </div>
+        </div>
         <p>Guided selling, collaboration, and shared workspaces accelerate value discovery.</p>
-        <span class="handoff">Handoff → Sales Ops</span>
+        <span class="handoff">Handoff &rarr; Sales Ops</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">SO</div><div><strong>Leo · Sales Ops</strong><div style="font-size:13px;color:var(--rw-muted)">Sales Collaboration</div></div></div>
+        <div class="persona">
+          <div class="avatar">SO</div>
+          <div>
+            <strong>Leo &middot; Sales Ops</strong>
+            <span><i class="fa-solid fa-handshake-simple"></i> Sales Collaboration</span>
+          </div>
+        </div>
         <p>Embedded productivity surfaces Microsoft 365, Teams, CPQ, and playbooks in one rail.</p>
-        <span class="handoff">Handoff → Finance</span>
+        <span class="handoff">Handoff &rarr; Finance</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">FC</div><div><strong>Danielle · Finance</strong><div style="font-size:13px;color:var(--rw-muted)">Forecasting</div></div></div>
+        <div class="persona">
+          <div class="avatar">FC</div>
+          <div>
+            <strong>Danielle &middot; Finance</strong>
+            <span><i class="fa-solid fa-chart-line"></i> Forecasting</span>
+          </div>
+        </div>
         <p>Probability-weighted signals roll into leadership reviews and scenario planning.</p>
-        <span class="handoff">Handoff → Integration</span>
+        <span class="handoff">Handoff &rarr; Integration</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">IT</div><div><strong>Omar · Integration</strong><div style="font-size:13px;color:var(--rw-muted)">Enterprise Integration</div></div></div>
+        <div class="persona">
+          <div class="avatar">IT</div>
+          <div>
+            <strong>Omar &middot; Integration</strong>
+            <span><i class="fa-solid fa-diagram-project"></i> Enterprise Integration</span>
+          </div>
+        </div>
         <p>Handoffs to CPQ, ERP, and PPM happen with OIC, ensuring downstream accuracy.</p>
-        <span class="handoff">Handoff → Delivery</span>
+        <span class="handoff">Handoff &rarr; Delivery</span>
       </div>
       <div class="human-card">
-        <div class="persona"><div class="avatar">EX</div><div><strong>Renee · Exec</strong><div style="font-size:13px;color:var(--rw-muted)">Analytics &amp; Insights</div></div></div>
+        <div class="persona">
+          <div class="avatar">EX</div>
+          <div>
+            <strong>Renee &middot; Exec</strong>
+            <span><i class="fa-solid fa-chart-pie"></i> Analytics &amp; Insights</span>
+          </div>
+        </div>
         <p>Executives monitor KPIs, CSAT, and preconstruction costs to refine strategy.</p>
-        <span class="handoff">Feedback → Go-to-Market</span>
+        <span class="handoff">Feedback &rarr; Go-to-Market</span>
       </div>
     </div>
     <div class="journey-line">
-      <div class="journey-node"><div class="icon">🤝</div><div><h4>Human-centered handoff</h4><p>Each persona receives context (AI scores, notes, approvals) before acting.</p></div></div>
-      <div class="journey-node"><div class="icon">🔁</div><div><h4>Closed-loop feedback</h4><p>Insights from execution flow back into capture + qualification stages via analytics.</p></div></div>
+      <div class="journey-node"><div class="icon"><i class="fa-solid fa-people-carry-box"></i></div><div><h4>Human-centered handoff</h4><p>Each persona receives context (AI scores, notes, approvals) before acting.</p></div></div>
+      <div class="journey-node"><div class="icon"><i class="fa-solid fa-arrows-rotate"></i></div><div><h4>Closed-loop feedback</h4><p>Insights from execution flow back into capture + qualification stages via analytics.</p></div></div>
     </div>
   </div>
 </div>
