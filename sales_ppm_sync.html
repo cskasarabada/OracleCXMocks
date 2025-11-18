@@ -27,18 +27,33 @@
       <p>Argano Quick Sales + CX Sales capture estimate, key contacts, and risk flags.</p>
       <span class="pill">Trigger: Create Pursuit</span>
     </div>
-    <div class="sync-connector">OIC Flow</div>
+    <div class="sync-connector">
+      <div>
+        <div style="font-weight:600">OIC Flow</div>
+        <div style="font-size:12px;color:#475569">Validates data, maps opportunity fields, and posts payload to PPM.</div>
+      </div>
+    </div>
     <div class="sync-step" data-step="2">
       <h3>PPM Pursuit Draft</h3>
       <p>Pursuit manager receives auto-built shell with WBS, budget, and attachments.</p>
       <span class="pill">Status mirrored to sellers</span>
     </div>
-    <div class="sync-connector">CPQ + DocuSign</div>
+    <div class="sync-connector">
+      <div>
+        <div style="font-weight:600">CPQ + DocuSign</div>
+        <div style="font-size:12px;color:#475569">Attaches pricing bundle, routes signature packet, and updates PPM on completion.</div>
+      </div>
+    </div>
     <div class="sync-step" data-step="3">
       <h3>Quote + Contract</h3>
       <p>CPQ pushes pricing to DocuSign; once executed, OIC updates PPM cost sheets.</p>
     </div>
-    <div class="sync-connector">Auto Convert</div>
+    <div class="sync-connector">
+      <div>
+        <div style="font-weight:600">Auto Convert</div>
+        <div style="font-size:12px;color:#475569">Approved pursuit automatically creates the Construction project with inherited WBS.</div>
+      </div>
+    </div>
     <div class="sync-step" data-step="4">
       <h3>Project Kickoff</h3>
       <p>Approved pursuit converts to active PPM project with Argano pods assigned.</p>
