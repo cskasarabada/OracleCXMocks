@@ -262,6 +262,83 @@
 
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 
+<div id="lead-action-modal" class="lead-overlay" aria-hidden="true">
+  <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="leadActionTitle" tabindex="-1">
+    <div class="lead-modal-header">
+      <div>
+        <p class="eyebrow">Smart Action</p>
+        <h2 id="leadActionTitle">Lead Engagement</h2>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeLeadAction()">Close &times;</button>
+    </div>
+    <div class="lead-action-panels">
+      <form class="lead-action-form" data-action-form="Log Call" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Capture call summary and next step guidance.</p>
+        <label>Call Type
+          <select name="callType" required>
+            <option value="Discovery">Discovery</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Executive">Executive</option>
+          </select>
+        </label>
+        <label>Duration (minutes)<input type="number" name="duration" min="1" placeholder="15"></label>
+        <label>Call Notes<textarea name="notes" rows="3" placeholder="Discussed scope, blockers, decision makers..."></textarea></label>
+        <label>Next Step<textarea name="nextStep" rows="2" placeholder="Email recap and schedule onsite session"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Log Call</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Send Email" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Draft a quick coaching email from this workspace.</p>
+        <label>To<input name="to" type="email" placeholder="contact@customer.com" required></label>
+        <label>Subject<input name="subject" placeholder="Follow-up from today's discussion" required></label>
+        <label>Message<textarea name="body" rows="5" placeholder="Hi team — thanks for the time earlier..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Send Email</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Schedule Meeting" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Align calendars with the buying committee.</p>
+        <label>Meeting Title<input name="title" placeholder="Discovery Workshop" required></label>
+        <label>Date &amp; Time<input type="datetime-local" name="datetime" required></label>
+        <label>Location / Link<input name="location" placeholder="Teams / Customer HQ"></label>
+        <label>Agenda<textarea name="agenda" rows="3" placeholder="Intros, success criteria, next steps"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Schedule Meeting</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Create Task" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Assign a follow-up task to sales or delivery.</p>
+        <label>Task Name<input name="task" placeholder="Prepare value engineering brief" required></label>
+        <label>Owner<input name="owner" placeholder="Chandra Kasarabada"></label>
+        <label>Due Date<input type="date" name="dueDate"></label>
+        <label>Notes<textarea name="taskNotes" rows="3" placeholder="Include sustainability benchmarks"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Create Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.lead-action-panels{display:flex;flex-direction:column;gap:16px;}
+.lead-action-form{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--rw-border);border-radius:16px;padding:16px;}
+.lead-action-form p{margin:0;color:var(--rw-muted);}
+.lead-action-form label{display:flex;flex-direction:column;font-size:14px;font-weight:600;color:#0f172a;}
+.lead-action-form input,
+.lead-action-form select,
+.lead-action-form textarea{margin-top:4px;border:1px solid var(--rw-border);border-radius:10px;padding:8px;font:inherit;}
+.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+</style>
+
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var state = RWD.get();
@@ -469,10 +546,68 @@ function initLeadSmartBanner(){
 
 function fireLeadSmartAction(action){
   if(!action) return;
+  var handled = openLeadActionModal(action);
   if(window.RWD && typeof RWD.actLead==='function'){
     RWD.actLead(action);
   }
-  if(typeof showToast==='function') showToast(action+' triggered');
+  if(!handled && typeof showToast==='function') showToast(action+' triggered');
+}
+
+function openLeadActionModal(action){
+  var modal=document.getElementById('lead-action-modal');
+  if(!modal) return false;
+  var forms=modal.querySelectorAll('[data-action-form]');
+  var matched=false;
+  forms.forEach(function(form){
+    var show=form.dataset.actionForm===action;
+    form.style.display=show?'flex':'none';
+    if(show){
+      matched=true;
+      prefillLeadAction(form);
+      setTimeout(function(){ var first=form.querySelector('input,textarea,select'); if(first) first.focus(); }, 40);
+    }
+  });
+  if(!matched) return false;
+  var title=document.getElementById('leadActionTitle');
+  if(title) title.textContent=action;
+  modal.style.display='flex';
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-visible');
+  return true;
+}
+
+function closeLeadAction(){
+  var modal=document.getElementById('lead-action-modal');
+  if(!modal) return;
+  modal.style.display='none';
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-visible');
+}
+
+function prefillLeadAction(form){
+  var state = (window.RWD && typeof RWD.get==='function') ? (function(){ try{return RWD.get();}catch(e){ return {}; } })() : {};
+  var lead = (state && state.lead) || {};
+  if(form.dataset.actionForm==='Send Email'){
+    if(form.elements.to && !form.elements.to.value){ form.elements.to.value = lead.contactEmail || lead.contact || ''; }
+    if(form.elements.subject && !form.elements.subject.value){ form.elements.subject.value = 'Follow-up: '+(lead.company||'Lead'); }
+  }
+  if(form.dataset.actionForm==='Schedule Meeting'){
+    if(form.elements.title && !form.elements.title.value){ form.elements.title.value = (lead.company || 'Lead') + ' Strategy Session'; }
+  }
+  if(form.dataset.actionForm==='Create Task'){
+    if(form.elements.owner && !form.elements.owner.value){ form.elements.owner.value = lead.owner || 'Chandra Kasarabada'; }
+  }
+}
+
+function submitLeadAction(ev){
+  if(ev) ev.preventDefault();
+  var form = ev ? ev.target : null;
+  if(!form) return false;
+  var action=form.dataset.actionForm || 'Smart Action';
+  if(typeof showToast==='function') showToast(action+' completed');
+  form.reset();
+  closeLeadAction();
+  return false;
 }
 
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
