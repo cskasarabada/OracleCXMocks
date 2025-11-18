@@ -43,8 +43,8 @@
         {company:'BrightGrid Solar',name:'Battery Storage Upgrade',contact:'Daniel Reese',owner:'Subash Nagarajan'}
       ],
       opptyList:[
-        {name:'Skyline Microgrid Modernization',company:'Skyline Renewables',stage:'Qualification',amount:'$1.25M',owner:'Jessica Brooks'},
-        {name:'BrightGrid Battery Upgrade',company:'BrightGrid Solar',stage:'Evaluation',amount:'$620K',owner:'Subash Nagarajan'}
+        {name:'Skyline Microgrid Modernization',company:'Skyline Renewables',stage:'Qualification',amount:1250000,owner:'Jessica Brooks'},
+        {name:'BrightGrid Battery Upgrade',company:'BrightGrid Solar',stage:'Evaluation',amount:620000,owner:'Subash Nagarajan'}
       ],
       storyline:[
         {stage:'Lead',event:'Inbound Signal',detail:'Captured during Sustainability Summit registration.'},
@@ -63,8 +63,8 @@
         {company:'Trinity Medical',name:'Clinic Expansion',contact:'Sarah Cole',owner:'Subash Nagarajan'}
       ],
       opptyList:[
-        {name:'Apex Tower CX/PPM Rollout',company:'Apex Healthcare',stage:'Evaluation',amount:'$1.86M',owner:'Jessica Brooks'},
-        {name:'Trinity Clinic Expansion',company:'Trinity Medical',stage:'Proposal',amount:'$920K',owner:'Subash Nagarajan'}
+        {name:'Apex Tower CX/PPM Rollout',company:'Apex Healthcare',stage:'Evaluation',amount:1860000,owner:'Jessica Brooks'},
+        {name:'Trinity Clinic Expansion',company:'Trinity Medical',stage:'Proposal',amount:920000,owner:'Subash Nagarajan'}
       ],
       storyline:[
         {stage:'Lead',event:'Referral',detail:'Partner referred Apex expansion to Argano.'},
@@ -78,6 +78,23 @@
   const subscribers=new Set();
   const now=()=>new Date().toLocaleString();
   const clone=(data)=>data ? JSON.parse(JSON.stringify(data)) : data;
+  function upsert(list,predicate,data){
+    if(!Array.isArray(list)) return;
+    const idx=list.findIndex(predicate);
+    if(idx>-1){ list[idx]=Object.assign({}, list[idx], data); }
+    else{ list.unshift(Object.assign({}, data)); }
+  }
+  function parseAmount(val){
+    if(typeof val==='number') return val;
+    if(typeof val!=='string') return 0;
+    var cleaned=val.replace(/[$,\s]/g,'').toLowerCase();
+    var mult=1;
+    if(cleaned.endsWith('m')){ mult=1e6; cleaned=cleaned.slice(0,-1); }
+    else if(cleaned.endsWith('k')){ mult=1e3; cleaned=cleaned.slice(0,-1); }
+    var num=parseFloat(cleaned);
+    return isNaN(num)?0:Math.round(num*mult);
+  }
+  function currency(num){ return '$'+Number(num||0).toLocaleString(); }
   function upsert(list,predicate,data){
     if(!Array.isArray(list)) return;
     const idx=list.findIndex(predicate);
@@ -191,21 +208,53 @@
     saveLead(f){
       const d=ensure();
       d.lead.company=f.company.value;
+      d.lead.name=f.name.value || (d.lead.company+' Lead');
       d.lead.contact=f.contact.value;
       d.lead.score=Number(f.score.value||60);
-      d.lead.status='Qualified';
+      d.lead.status=f.status.value || 'Working';
+      d.lead.owner=f.owner.value || 'Chandra Kasarabada';
       addAct(d.lead.activities,'Update','Lead qualified');
       addTimeline(d,'Lead','Qualified','Score '+d.lead.score);
       d.leads=d.leads||[];
-      d.leads.unshift({
+      const entry={
         company:d.lead.company,
-        name:f.name && f.name.value ? f.name.value : (d.lead.company+' Lead'),
+        name:d.lead.name,
         contact:d.lead.contact,
-        owner:f.owner && f.owner.value ? f.owner.value : 'Chandra Kasarabada'
-      });
+        owner:d.lead.owner,
+        leadStatus:d.lead.status,
+        opportunity:(f.opportunity && f.opportunity.value) || (d.lead.company+' Opportunity'),
+        opportunityStage:(f.opportunityStage && f.opportunityStage.value) || 'Qualification',
+        amount:parseAmount(f.estAmount && f.estAmount.value ? f.estAmount.value : (d.lead.score*10000)),
+        pursuitStatus:(f.pursuitStatus && f.pursuitStatus.value) || 'Draft',
+        project:(f.project && f.project.value) || (d.lead.company+' Delivery'),
+        projectStatus:(f.projectStatus && f.projectStatus.value) || 'Planning'
+      };
+      upsert(d.leads,function(row){ return row && row.company===entry.company && row.name===entry.name; }, entry);
       d.leads=d.leads.slice(0,10);
       commit(d);
       log('Lead qualified for '+d.lead.company);
+    },
+    updateLead(fields){
+      const d=ensure();
+      const payload=Object.assign({}, fields);
+      if(payload.company) d.lead.company=payload.company;
+      if(payload.name) d.lead.name=payload.name;
+      if(payload.contact) d.lead.contact=payload.contact;
+      if(payload.score) d.lead.score=Number(payload.score);
+      if(payload.status) d.lead.status=payload.status;
+      if(payload.owner) d.lead.owner=payload.owner;
+      addAct(d.lead.activities,'Update','Lead updated');
+      addTimeline(d,'Lead','Details Updated',d.lead.company);
+      d.leads=d.leads||[];
+      upsert(d.leads,function(row){ return row && row.company===d.lead.company && row.name===d.lead.name; },{
+        company:d.lead.company,
+        name=d.lead.name,
+        contact:d.lead.contact,
+        owner:d.lead.owner,
+        leadStatus:d.lead.status
+      });
+      commit(d);
+      log('Lead updated for '+d.lead.company);
     },
     convertToOpportunity(){
       const d=ensure();
@@ -215,11 +264,11 @@
       addAct(d.oppty.activities,'Convert','Lead converted to Opportunity');
       addTimeline(d,'Opportunity','Converted','Created from '+(d.lead.company||'lead'));
       d.opportunities=d.opportunities||[];
-      d.opportunities.unshift({
+      upsert(d.opportunities,function(row){ return row && row.name===d.oppty.name; },{
         name:d.oppty.name,
         company:d.lead.company,
         stage:d.oppty.stage,
-        amount:'$'+d.oppty.amount.toLocaleString(),
+        amount:d.oppty.amount,
         owner:'Jessica Brooks'
       });
       d.opportunities=d.opportunities.slice(0,10);
@@ -236,14 +285,15 @@
       d.oppty.name=f.name.value;
       d.oppty.amount=Number(f.amount.value||0);
       d.oppty.stage=f.stage.value;
+      d.oppty.account=(f.company && f.company.value) || d.oppty.account || d.lead.company;
       addAct(d.oppty.activities,'Update','Opportunity updated');
       addTimeline(d,'Opportunity','Updated',d.oppty.stage+' stage');
       d.opportunities=d.opportunities||[];
       upsert(d.opportunities, function(item){ return item && item.name===d.oppty.name; }, {
         name:d.oppty.name,
-        company:f.company && f.company.value ? f.company.value : d.lead.company,
+        company=d.oppty.account,
         stage:d.oppty.stage,
-        amount:'$'+d.oppty.amount.toLocaleString(),
+        amount=d.oppty.amount,
         owner:f.owner && f.owner.value ? f.owner.value : 'Jessica Brooks'
       });
       d.opportunities=d.opportunities.slice(0,10);
@@ -315,6 +365,18 @@
       addTimeline(d,'Opportunity','Action: '+type,'Smart Action rail');
       commit(d);
       log('Opportunity action: '+type);
+    },
+    actPursuit(type){
+      const d=ensure();
+      addTimeline(d,'Pursuit','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Pursuit action: '+type);
+    },
+    actProject(type){
+      const d=ensure();
+      addTimeline(d,'Project','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Project action: '+type);
     },
 
     // Sales Cloud flow helpers
@@ -461,6 +523,7 @@
       d.lead.score= info.score || d.lead.score || 75;
       d.lead.status=info.leadStatus||'Working';
       d.oppty.name=info.opportunity || (d.lead.company+' Opportunity');
+      d.oppty.account=info.company || d.oppty.account || d.lead.company;
       d.oppty.amount=amount;
       d.oppty.stage=info.opportunityStage || d.oppty.stage || 'Qualification';
       d.pursuit.name=info.pursuit || (d.oppty.name+' - Pursuit');

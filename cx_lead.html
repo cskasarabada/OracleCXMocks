@@ -34,6 +34,36 @@
     <a href="results_driven.html">Results Driven</a>
     <a href="quick_sales_screen.html" class="accent">Quick Sales Screen</a>
   </nav>
+  <section class="smart-banner" id="lead-smart-banner">
+    <div>
+      <p class="eyebrow">Smart Actions</p>
+      <h3>Guide the lead workflow without leaving the page</h3>
+      <p>Launch coaching steps, capture notes, and push integrations for <strong id="lead-smart-company">your lead</strong>.</p>
+    </div>
+    <div class="actions">
+      <div class="pill-row">
+        <button type="button" class="btn" data-lead-action="Log Call">Log Call</button>
+        <button type="button" class="btn" data-lead-action="Send Email">Send Email</button>
+        <button type="button" class="btn" data-lead-action="Schedule Meeting">Schedule Meeting</button>
+        <button type="button" class="btn" data-lead-action="Create Task">Create Task</button>
+      </div>
+      <div class="action-block">
+        <label class="visually-hidden" for="lead-smart-select">Smart Actions</label>
+        <select id="lead-smart-select">
+          <option value="">- Select Smart Action -</option>
+          <option value="Log Call">Log Call</option>
+          <option value="Send Email">Send Email</option>
+          <option value="Schedule Meeting">Schedule Meeting</option>
+          <option value="Create Task">Create Task</option>
+          <option value="Create Quote">Create Quote</option>
+          <option value="Assign Owner">Assign Owner</option>
+          <option value="Add Note">Add Note</option>
+          <option value="Create Pursuit">Create Pursuit</option>
+        </select>
+        <button type="button" class="btn" id="lead-smart-apply">Apply</button>
+      </div>
+    </div>
+  </section>
 
   <section class="lead-create-row">
     <article class="lead-list-card">
@@ -79,7 +109,10 @@
       </div>
       <div class="convert-box">
         <input type="text" placeholder="Try Convert"/>
-        <button class="btn outline">Details</button>
+        <div class="convert-actions">
+          <button class="ghost-btn" type="button" id="edit-lead-btn">Edit Lead</button>
+          <button class="btn outline">Details</button>
+        </div>
       </div>
     </div>
     <div class="lead-panels">
@@ -181,6 +214,10 @@
         <label>Status<select name="status"><option>Qualified</option><option>Unqualified</option><option>Working</option></select></label>
       </div>
       <div class="row">
+        <label>Estimated Amount (USD)<input name="estAmount" type="number" min="0" step="1000"></label>
+        <label>Opportunity Name<input name="opportunity" placeholder="Optional opportunity name"></label>
+      </div>
+      <div class="row">
         <label>Country<input name="country"></label>
         <label>Rank<input name="rank"></label>
       </div>
@@ -204,13 +241,14 @@
 
 <script>
  window.addEventListener('DOMContentLoaded', function(){
-   var d = RWD.get();
+   var state = RWD.get();
    var timelineTargets=[document.getElementById('leadTlMain')];
-   function renderTimeline(){
+   function renderTimeline(snapshot){
+     var data=snapshot||state;
      timelineTargets.forEach(function(tl){
        if(!tl) return;
        tl.innerHTML = '';
-       (d.lead.activities||[]).forEach(function(a){
+       (data.lead.activities||[]).forEach(function(a){
          var div=document.createElement('div');
          div.className='item';
          div.innerHTML='<div class="who">'+a.type+'</div><div class="what">'+a.text+'</div><div class="t">'+a.ts+'</div>';
@@ -218,39 +256,88 @@
        });
      });
    }
-   renderTimeline();
-   setInterval(function(){ var nd=RWD.get(); if((nd.lead.activities||[]).length !== (d.lead.activities||[]).length){ d=nd; renderTimeline(); } }, 800);
-   try{
-     var hero = document.getElementById('leadHeroTitle');
-     if(hero) hero.textContent = (d.lead && (d.lead.name || d.lead.company)) || hero.textContent;
-     var acct = document.getElementById('leadHeroAccount');
-     if(acct) acct.textContent = (d.lead && d.lead.company) ? 'Account '+d.lead.company : acct.textContent;
-   }catch(e){}
+   function updateHero(snapshot){
+     var data=snapshot||state;
+     try{
+       var hero = document.getElementById('leadHeroTitle');
+       if(hero) hero.textContent = (data.lead && (data.lead.name || data.lead.company)) || hero.textContent;
+       var acct = document.getElementById('leadHeroAccount');
+       if(acct) acct.textContent = (data.lead && data.lead.company) ? 'Account '+data.lead.company : acct.textContent;
+       var smartLabel=document.getElementById('lead-smart-company');
+       if(smartLabel) smartLabel.textContent = data.lead.company || 'your lead';
+     }catch(e){}
+   }
+  function handleSnapshot(snap){
+    state=snap;
+    renderTimeline(snap);
+    updateHero(snap);
+    try{ renderLeadsPreview(); }catch(e){}
+  }
+   handleSnapshot(state);
+   initLeadSmartBanner();
    try{ renderLeadsPreview(); }catch(e){}
+   if(RWD.subscribe){
+     RWD.subscribe(handleSnapshot);
+   }
  });
 
 document.addEventListener('DOMContentLoaded', function(){
-  var btn = document.getElementById('add-new-lead-btn'); if(btn) btn.addEventListener('click', openAddLead);
+  var btn = document.getElementById('add-new-lead-btn');
+  if(btn) btn.addEventListener('click', function(){ prepareLeadForm(); openAddLead('create'); });
+  var editBtn=document.getElementById('edit-lead-btn');
+  if(editBtn) editBtn.addEventListener('click', function(){
+    var snapshot = RWD.get();
+    openAddLead('edit', snapshot.lead);
+  });
   var form = document.getElementById('addLeadForm');
-  if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault();
-    try{
+  if(form){
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
       var fd=new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; });
-      if(window.RWD && typeof RWD.saveLead==='function'){
-        RWD.saveLead(obj);
-      } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
-        var s=RWD.get(); s.leads=s.leads||[]; s.leads.unshift(obj); s.lead=s.lead||{}; s.lead.activities=s.lead.activities||[];
-        s.lead.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text:'Lead created: '+(obj.name||obj.company||'') });
-        try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); }
-      }
-      if(typeof showToast==='function') showToast('Lead saved'); else alert('Lead saved');
-    }catch(e){ console.error('save lead failed', e); if(typeof showToast==='function') showToast('Save failed'); }
-  }); }
+      obj.company=obj.company||'Customer';
+      obj.name=obj.name|| (obj.company+' Lead');
+      obj.owner=obj.owner||'Chandra Kasarabada';
+      var mode=form.dataset.mode||'create';
+      try{
+        if(mode==='edit' && window.RWD && typeof RWD.updateLead==='function'){
+          RWD.updateLead(obj);
+        }else if(window.RWD && typeof RWD.saveLead==='function'){
+          RWD.saveLead(obj);
+          if(typeof RWD.adoptLeadStory==='function'){
+            RWD.adoptLeadStory({
+              company:obj.company,
+              name:obj.name,
+              contact:obj.contact,
+              owner:obj.owner,
+              leadStatus:obj.status||'Qualified',
+              opportunity:obj.opportunity|| (obj.company+' Opportunity'),
+              opportunityStage:'Qualification',
+              amount:deriveAmount(obj.estAmount,obj.score)
+            });
+          }
+        }
+        if(typeof showToast==='function') showToast(mode==='edit'?'Lead updated':'Lead saved');
+      }catch(e){ console.error('save lead failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+      renderLeadsPreview();
+      closeAddLead();
+      form.reset();
+      form.dataset.mode='create';
+    });
+  }
   var overlay=document.getElementById('lead-modal');
   if(overlay){ overlay.addEventListener('click', function(ev){ if(ev.target===overlay) closeAddLead(); }); }
 });
 
-function openAddLead(){
+function openAddLead(mode,data){
   var modal=document.getElementById('lead-modal');
+  var form=document.getElementById('addLeadForm');
+  var title=document.getElementById('leadModalTitle');
+  if(form){ form.dataset.mode = mode || 'create'; }
+  if(title){ title.textContent = (mode==='edit'?'Edit Lead':'Create Lead'); }
+  if(form){
+    if(mode==='create'){ form.reset(); }
+    populateLeadForm(data);
+  }
   if(modal){
     modal.style.display='flex';
     modal.setAttribute('aria-hidden','false');
@@ -264,6 +351,8 @@ function closeAddLead(){
     modal.style.display='none';
     modal.setAttribute('aria-hidden','true');
     document.body.classList.remove('modal-visible');
+    var form=document.getElementById('addLeadForm');
+    if(form){ form.dataset.mode='create'; }
   }
 }
 
@@ -285,9 +374,8 @@ function renderLeadsPreview(){
 function prefillAddLead(index){
   var rows=getLeadRows();
   if(!rows || !rows.length) return;
-  var lead=rows[index] || rows[0]; var form=document.getElementById('addLeadForm'); if(!form) return;
-  Object.keys(lead).forEach(function(k){ try{ if(form.elements[k]) form.elements[k].value=lead[k]; }catch(e){} });
-  openAddLead();
+  var lead=rows[index] || rows[0];
+  openAddLead('create', lead);
 }
 
 function useLeadStory(index){
@@ -317,6 +405,53 @@ function sampleLeadData(){
   ];
 }
 
+function populateLeadForm(data){
+  var form=document.getElementById('addLeadForm');
+  if(!form || !data) return;
+  Object.keys(data).forEach(function(k){
+    try{
+      if(form.elements[k]){
+        form.elements[k].value=data[k];
+      }
+    }catch(e){}
+  });
+}
+
+function prepareLeadForm(data){
+  var form=document.getElementById('addLeadForm');
+  if(!form) return;
+  form.reset();
+  if(data) populateLeadForm(data);
+}
+
+function deriveAmount(val, score){
+  var num=parseFloat(val);
+  if(!isNaN(num) && num>0) return num;
+  var sc=parseFloat(score||70);
+  if(isNaN(sc)) sc=70;
+  return Math.max(250000, sc*10000);
+}
+
+function initLeadSmartBanner(){
+  var buttons=document.querySelectorAll('[data-lead-action]');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){ fireLeadSmartAction(btn.dataset.leadAction); });
+  });
+  var select=document.getElementById('lead-smart-select');
+  var apply=document.getElementById('lead-smart-apply');
+  if(apply){
+    apply.addEventListener('click', function(){ if(select) fireLeadSmartAction(select.value); });
+  }
+}
+
+function fireLeadSmartAction(action){
+  if(!action) return;
+  if(window.RWD && typeof RWD.actLead==='function'){
+    RWD.actLead(action);
+  }
+  if(typeof showToast==='function') showToast(action+' triggered');
+}
+
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
 
 function saveDraft(){ if(typeof showToast==='function') showToast('Draft saved (demo)'); }
@@ -325,3 +460,4 @@ function removeDraft(){ if(typeof showToast==='function') showToast('Draft cance
 <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 </html>
+
