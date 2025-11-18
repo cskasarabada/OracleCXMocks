@@ -70,42 +70,43 @@
         </div>
       </div>
     </div>
-  </div></div>
-  <div class="card" id="stage-agent-card">
-    <h2>Agent Stage Intelligence</h2>
-    <div class="body stage-boards">
-      <div class="stage-panel" data-stage="lead">
-        <div class="stage-header">
-          <div>
-            <p class="eyebrow">Lead Journey</p>
-            <h3>Qualify &amp; Route</h3>
+    <div class="stage-intel-inline">
+      <h3>Agent Stage Intelligence</h3>
+      <p>Use this quick board to show how Sales and Opportunity agents walk through every workflow step with integrated approvals.</p>
+      <div class="stage-boards">
+        <div class="stage-panel" data-stage="lead">
+          <div class="stage-header">
+            <div>
+              <p class="eyebrow">Lead Journey</p>
+              <h3>Qualify &amp; Route</h3>
+            </div>
+            <span class="stage-chip" id="stage-lead-current">--</span>
           </div>
-          <span class="stage-chip" id="stage-lead-current">--</span>
-        </div>
-        <p class="stage-desc">Sales Agent watches every lead step, ties Smart Actions to approvals, and alerts you when it&rsquo;s time to convert.</p>
-        <ul class="stage-steps" id="stage-lead-steps"></ul>
-        <div class="workflow-callouts">
-          <span>Workflow: SDR capture &rarr; Marketing verify &rarr; AE acceptance</span>
-          <span>Approvals: Lead source validation, data quality review</span>
-        </div>
-      </div>
-      <div class="stage-panel" data-stage="opportunity">
-        <div class="stage-header">
-          <div>
-            <p class="eyebrow">Opportunity Journey</p>
-            <h3>Value Engineering &amp; Controls</h3>
+          <p class="stage-desc">Sales Agent watches every lead step, ties Smart Actions to approvals, and alerts you when it&rsquo;s time to convert.</p>
+          <ul class="stage-steps" id="stage-lead-steps"></ul>
+          <div class="workflow-callouts">
+            <span>Workflow: SDR capture &rarr; Marketing verify &rarr; AE acceptance</span>
+            <span>Approvals: Lead source validation, data quality review</span>
           </div>
-          <span class="stage-chip" id="stage-opportunity-current">--</span>
         </div>
-        <p class="stage-desc">Opportunity Agent keeps the step-by-step workflow visible, including approvals for pricing, partners, and DocuSign.</p>
-        <ul class="stage-steps" id="stage-opportunity-steps"></ul>
-        <div class="workflow-callouts">
-          <span>Workflow: Discovery &rarr; Solutioning &rarr; Proposal &rarr; Negotiation</span>
-          <span>Approvals: Discount guardrails, partner onboarding, DocuSign legal pass</span>
+        <div class="stage-panel" data-stage="opportunity">
+          <div class="stage-header">
+            <div>
+              <p class="eyebrow">Opportunity Journey</p>
+              <h3>Value Engineering &amp; Controls</h3>
+            </div>
+            <span class="stage-chip" id="stage-opportunity-current">--</span>
+          </div>
+          <p class="stage-desc">Opportunity Agent keeps the step-by-step workflow visible, including approvals for pricing, partners, and DocuSign.</p>
+          <ul class="stage-steps" id="stage-opportunity-steps"></ul>
+          <div class="workflow-callouts">
+            <span>Workflow: Discovery &rarr; Solutioning &rarr; Proposal &rarr; Negotiation</span>
+            <span>Approvals: Discount guardrails, partner onboarding, DocuSign legal pass</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </div></div>
   <div class="card" id="agent-sim-card"><h2>AI Agent Simulation</h2>
     <div class="body agent-sim">
       <p>Use this board to narrate how Argano&rsquo;s CX Sales Cloud agents collaborate in real time. Start an agent to watch live intents, automations, and insights stream across each lane.</p>
@@ -175,6 +176,7 @@
 .stage-steps li strong{color:#0f172a;display:block;}
 .workflow-callouts{margin-top:12px;font-size:12px;color:#0f172a;display:flex;flex-direction:column;gap:6px;}
 .workflow-callouts span{padding:6px 10px;border-radius:10px;background:#fff;border:1px solid rgba(255,122,24,.3);}
+.stage-intel-inline{margin-top:18px;padding-top:18px;border-top:1px solid var(--rw-border);display:flex;flex-direction:column;gap:12px;}
 @media(max-width:640px){
   .agent-sim-controls{flex-direction:column;}
 }
