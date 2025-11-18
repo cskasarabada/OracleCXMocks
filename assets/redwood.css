@@ -403,3 +403,32 @@ body.miconnex-theme > *{position:relative;z-index:1;}
 }
 .logo-mark .logo-text{font-size:20px;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.1em;}
 .logo-mark .logo-sub{font-size:12px;color:#ffd7bd;text-transform:uppercase;letter-spacing:.25em;}
+
+/* Fusion-inspired adjustments */
+.miconnex-theme.miconnex-theme-placeholder{}
+.miconnex-theme{
+  font-family:'Oracle Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  background:#f5f6fb;
+  color:#1b2533;
+}
+.miconnex-theme .shell{max-width:1280px;margin:0 auto;padding:24px;}
+.miconnex-theme .miconnex-bar{background:#08143c;border-bottom:4px solid #f35f41;}
+.miconnex-theme .quick-nav{background:#fff;border-bottom:1px solid rgba(15,23,42,.12);box-shadow:0 10px 24px rgba(15,23,42,.08);}
+.miconnex-theme .quick-nav .nav-items a{border-radius:6px;border:1px solid rgba(32,41,58,.12);padding:6px 14px;font-weight:600;color:#2c3a4f;}
+.miconnex-theme .quick-nav .nav-items a:hover{border-color:#0f62fe;color:#0f62fe;}
+.miconnex-theme .quick-nav .nav-items a.active{background:#0f62fe;color:#fff;border-color:#0f62fe;box-shadow:0 10px 18px rgba(15,98,254,.28);}
+.miconnex-theme .quick-nav .nav-items a.accent{background:#f35f41;border-color:#f35f41;color:#fff;}
+.miconnex-theme .btn{border-radius:6px;font-weight:600;background:#edf1fb;color:#1f2a3d;border:1px solid rgba(32,41,58,.18);}
+.miconnex-theme .btn:hover{background:#fff;}
+.miconnex-theme .btn.brand,.miconnex-theme .btn.primary{background:#cf2a10;border-color:#cf2a10;color:#fff;box-shadow:0 8px 20px rgba(207,42,16,.35);}
+.miconnex-theme .btn.ok{background:#0f62fe;border-color:#0f62fe;color:#fff;box-shadow:0 8px 18px rgba(15,98,254,.35);}
+.miconnex-theme .card,.miconnex-theme .smart-banner,.miconnex-theme .stage-panel,.miconnex-theme .lead-modal-card,.miconnex-theme .lead-action-form,.miconnex-theme .oppty-board-card{border-radius:18px;border:1px solid rgba(20,30,45,.08);box-shadow:0 20px 30px rgba(15,23,42,.08);background:#fff;}
+.miconnex-theme .smart-banner{background:linear-gradient(135deg,#fef5f2 0%,#fdf9f5 100%);}
+.miconnex-theme .smart-banner h3,.miconnex-theme h1,.miconnex-theme h2,.miconnex-theme h3{color:#1f2b3d;}
+.miconnex-theme .smart-banner p,.miconnex-theme .stage-desc{color:#4c566d;}
+.miconnex-theme .miconnex-bar .logo-text{letter-spacing:.05em;font-weight:700;text-transform:uppercase;color:#fff;}
+.miconnex-theme .miconnex-bar .bar-actions .ghost-btn{border-radius:6px;border:1px solid rgba(255,255,255,.45);color:#fff;padding:4px 12px;}
+.miconnex-theme .smart-banner .pill-row .btn{background:#fff;border-color:rgba(32,41,58,.12);}
+.miconnex-theme .app-nav-rail a{border-radius:8px;border-color:rgba(36,51,72,.15);color:#2c3a4f;box-shadow:0 4px 12px rgba(20,30,45,.12);}
+.miconnex-theme .app-nav-rail a:hover{border-color:#0f62fe;color:#0f62fe;box-shadow:0 6px 18px rgba(15,98,254,.18);}
+.miconnex-theme .app-nav-rail a.active{background:#0f62fe;border-color:#0f62fe;color:#fff;box-shadow:0 10px 20px rgba(15,98,254,.35);}
