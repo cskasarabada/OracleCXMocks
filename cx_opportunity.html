@@ -176,51 +176,106 @@
 </div>
 
 <script>
- window.addEventListener('DOMContentLoaded', function(){
-   var state=RWD.get();
-   var tl=document.getElementById('opptyTl');
-   function setStage(v){ document.getElementById('stageVal').value=v; Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); }); }
-   function updateHero(snapshot){
-     var data=snapshot||state;
-     document.getElementById('opptyName').value=data.oppty.name||'';
-     document.getElementById('opptyAmount').value=data.oppty.amount||0;
-     try{
-       var hero = document.getElementById('opptyHeroTitle');
-       if(hero) hero.textContent = data.oppty.name || 'Sample Opportunity';
-       var sub = document.getElementById('opptyHeroSub');
-       if(sub) sub.textContent = (data.oppty.account || data.oppty.company || data.lead.company || 'Account') + ' • ' + (data.lead.contact || 'Primary Contact');
-       var smart=document.getElementById('oppty-smart-name');
-       if(smart) smart.textContent = data.oppty.name || 'this opportunity';
-     }catch(e){}
-     setStage(data.oppty.stage||'Qualification');
-   }
-   function renderTimeline(snapshot){
-     var data=snapshot||state;
-     if(!tl) return;
-     tl.innerHTML='';
-     (data.oppty.activities||[]).forEach(function(a){
-       var div=document.createElement('div');
-       div.className='item';
-       div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>';
-       tl.appendChild(div);
-     });
-   }
-   Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
-   document.getElementById('btnCreatePursuit').addEventListener('click', function(){ var f=document.getElementById('oppForm'); RWD.saveOppty(f); document.getElementById('status').textContent='Running OIC job...'; document.getElementById('prog').style.width='60%'; RWD.createPursuitViaOIC(function(){ document.getElementById('status').textContent='Completed'; document.getElementById('prog').style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); }); });
-   updateHero(state);
-   renderTimeline(state);
-   initOpptySmartBanner();
-   if(RWD.subscribe){
-     RWD.subscribe(function(snapshot){
-       state=snapshot;
-       updateHero(snapshot);
-       renderTimeline(snapshot);
-       try{ renderOppsPreview(); }catch(e){}
-     });
-   }
-   try{ renderOppsPreview(); }catch(e){}
- });
-
+window.addEventListener('DOMContentLoaded', function(){
+  var fallbackState = { oppty:{ activities:[] }, lead:{}, opportunities:[] };
+  var hasRWD = !!(window.RWD && typeof window.RWD.get==='function');
+  function safeSnapshot(){
+    if(!hasRWD) return JSON.parse(JSON.stringify(fallbackState));
+    try{
+      var snap = RWD.get() || fallbackState;
+      snap.oppty = snap.oppty || { activities:[] };
+      snap.oppty.activities = snap.oppty.activities || [];
+      snap.lead = snap.lead || {};
+      snap.opportunities = snap.opportunities || [];
+      return snap;
+    }catch(err){
+      console.warn('RWD.get failed', err);
+      return JSON.parse(JSON.stringify(fallbackState));
+    }
+  }
+  var state=safeSnapshot();
+  var tl=document.getElementById('opptyTl');
+  var stageField=document.getElementById('stageVal');
+  function setStage(v){
+    if(stageField) stageField.value=v;
+    Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); });
+  }
+  function updateHero(snapshot){
+    var data=snapshot||state||fallbackState;
+    data.oppty = data.oppty || {};
+    data.lead = data.lead || {};
+    var nameField=document.getElementById('opptyName');
+    if(nameField) nameField.value=data.oppty.name||'';
+    var amtField=document.getElementById('opptyAmount');
+    if(amtField) amtField.value=data.oppty.amount||0;
+    try{
+      var hero = document.getElementById('opptyHeroTitle');
+      if(hero) hero.textContent = data.oppty.name || 'Sample Opportunity';
+      var sub = document.getElementById('opptyHeroSub');
+      if(sub) sub.textContent = (data.oppty.account || data.oppty.company || data.lead.company || 'Account') + ' \u2022 ' + (data.lead.contact || 'Primary Contact');
+      var smart=document.getElementById('oppty-smart-name');
+      if(smart) smart.textContent = data.oppty.name || 'this opportunity';
+    }catch(e){}
+    setStage(data.oppty.stage||'Qualification');
+  }
+  function renderTimeline(snapshot){
+    var data=snapshot||state||fallbackState;
+    if(!tl) return;
+    tl.innerHTML='';
+    (data.oppty && data.oppty.activities || []).forEach(function(a){
+      var div=document.createElement('div');
+      div.className='item';
+      div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>';
+      tl.appendChild(div);
+    });
+  }
+  Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
+  var pursuitBtn=document.getElementById('btnCreatePursuit');
+  if(pursuitBtn){
+    pursuitBtn.addEventListener('click', function(){
+      var payload=formToObject(document.getElementById('oppForm'));
+      persistOpportunity(payload);
+      var statusEl=document.getElementById('status');
+      var progEl=document.getElementById('prog');
+      if(statusEl) statusEl.textContent='Running OIC job...';
+      if(progEl) progEl.style.width='60%';
+      var finish=function(){
+        if(statusEl) statusEl.textContent='Completed';
+        if(progEl) progEl.style.width='100%';
+        setTimeout(function(){ try{ window.location='ppm_pursuit.html'; }catch(e){} }, 600);
+      };
+      if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+        try{ RWD.createPursuitViaOIC(finish); }catch(err){ console.error('createPursuitViaOIC failed', err); finish(); }
+      }else{
+        setTimeout(finish, 400);
+      }
+    });
+  }
+  updateHero(state);
+  renderTimeline(state);
+  initOpptySmartBanner();
+  if(window.RWD && typeof RWD.subscribe==='function'){
+    try{
+      RWD.subscribe(function(snapshot){
+        state=snapshot||safeSnapshot();
+        updateHero(state);
+        renderTimeline(state);
+        try{ renderOppsPreview(); }catch(e){}
+      });
+    }catch(err){
+      console.warn('RWD.subscribe failed', err);
+    }
+  }else if(hasRWD){
+    setInterval(function(){
+      var fresh=safeSnapshot();
+      if((fresh.oppty.activities||[]).length !== (state.oppty.activities||[]).length){
+        state=fresh;
+        renderTimeline(state);
+      }
+    }, 800);
+  }
+  try{ renderOppsPreview(); }catch(e){}
+});
 // Add New Opportunity modal handlers
 function openAddOppty(){
   var m = document.getElementById('add-oppty-modal');
@@ -267,6 +322,10 @@ function persistOpportunity(obj){
       RWD.set(s);
       saved=true;
     }catch(err){ console.warn('Fallback RWD.set failed', err); }
+  } else {
+    window.__demoFallbackOpps = window.__demoFallbackOpps || [];
+    window.__demoFallbackOpps.unshift(obj);
+    saved=true;
   }
   if(saved){
     if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
@@ -293,7 +352,7 @@ function formToObject(form){
 function renderOppsPreview(){
   var container = document.getElementById('opps-preview'); if(!container) return;
   var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null;
-  var opps = (s && s.opportunities) ? s.opportunities : [];
+  var opps = (s && s.opportunities) ? s.opportunities : (window.__demoFallbackOpps || []);
   var total = opps ? opps.length : 0;
   var countLabel = document.getElementById('opps-count-label'); if(countLabel) countLabel.textContent = total + ' Results';
   if(!opps || opps.length===0){ container.innerHTML = '<div style="color:var(--rw-muted)">No opportunities yet. Click "Create Opportunity" to add one.</div>'; return; }
@@ -307,7 +366,7 @@ function renderOppsPreview(){
 
 function prefillAddOppty(index){
   var s = (window.RWD && typeof RWD.get==='function')?RWD.get():null;
-  var opps = (s && s.opportunities)?s.opportunities:[];
+  var opps = (s && s.opportunities)?s.opportunities:(window.__demoFallbackOpps || []);
   if(!opps || opps.length===0) return;
   var opp = opps[index] || opps[0];
   var form = document.getElementById('addOpptyForm'); if(!form) return;
