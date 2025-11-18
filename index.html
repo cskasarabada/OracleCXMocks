@@ -71,7 +71,69 @@
       </div>
     </div>
   </div></div>
+  <div class="card" id="agent-sim-card"><h2>AI Agent Simulation</h2>
+    <div class="body agent-sim">
+      <p>Use this board to narrate how Argano&rsquo;s CX Sales Cloud agents collaborate in real time. Start an agent to watch live intents, automations, and insights stream across each lane.</p>
+      <div class="agent-sim-controls">
+        <a class="btn brand" href="#" onclick="window.RWD && RWD.startAgent('sales'); window.RWD && RWD.startAgent('forecast'); window.RWD && RWD.startAgent('integration'); return false;">Start All Agents</a>
+        <a class="btn" href="#" onclick="window.RWD && RWD.stopAgent('sales'); window.RWD && RWD.stopAgent('forecast'); window.RWD && RWD.stopAgent('integration'); return false;">Stop All</a>
+      </div>
+      <div class="agent-sim-grid">
+        <div class="sim-panel" data-agent="sales">
+          <div class="sim-head">
+            <div>
+              <p class="eyebrow">Sales CoPilot</p>
+              <h3>Lead &amp; Opportunity Agent</h3>
+            </div>
+            <span class="chip" id="sim-sales-state">Idle</span>
+          </div>
+          <p class="sim-desc">Qualifies leads, logs follow-ups, and posts Smart Action nudges as tasks evolve.</p>
+          <ul class="sim-feed" id="sim-sales-feed"></ul>
+        </div>
+        <div class="sim-panel" data-agent="forecast">
+          <div class="sim-head">
+            <div>
+              <p class="eyebrow">Forecasting Analyst</p>
+              <h3>Pipeline &amp; AI Insights</h3>
+            </div>
+            <span class="chip" id="sim-forecast-state">Idle</span>
+          </div>
+          <p class="sim-desc">Reads pipeline telemetry, posts acceleration ideas, and keeps leadership informed.</p>
+          <ul class="sim-feed" id="sim-forecast-feed"></ul>
+        </div>
+        <div class="sim-panel" data-agent="integration">
+          <div class="sim-head">
+            <div>
+              <p class="eyebrow">Integration Orchestrator</p>
+              <h3>CPQ / DocuSign / PPM</h3>
+            </div>
+            <span class="chip" id="sim-integration-state">Idle</span>
+          </div>
+          <p class="sim-desc">Launches OIC flows, syncs pursuit cost sheets, and writes back doc statuses.</p>
+          <ul class="sim-feed" id="sim-integration-feed"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<style>
+#agent-sim-card .agent-sim{display:flex;flex-direction:column;gap:18px;}
+.agent-sim-controls{display:flex;gap:10px;flex-wrap:wrap;}
+.agent-sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+.sim-panel{border:1px solid var(--rw-border);border-radius:18px;padding:16px;background:#fff6f0;}
+.sim-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.sim-head h3{margin:0;font-size:1.1rem;}
+.sim-desc{margin:8px 0 12px;color:#475569;font-size:13px;}
+.chip{border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;background:#fef3c7;color:#b45309;}
+.chip.running{background:#dcfce7;color:#15803d;}
+.chip.stopped{background:#fee2e2;color:#991b1b;}
+.sim-feed{list-style:none;margin:0;padding:0;min-height:96px;}
+.sim-feed li{font-size:12px;padding:6px 8px;margin-bottom:6px;border-radius:8px;background:#fff;border:1px dashed rgba(255,122,24,.4);color:#7c2d12;}
+.sim-feed li strong{display:block;color:#0f172a;}
+@media(max-width:640px){
+  .agent-sim-controls{flex-direction:column;}
+}
+</style>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var d=RWD.get();
@@ -82,6 +144,26 @@
      log.appendChild(p);
    });
     // Periodically refresh agent status display
+    const lastActionCache={};
+    function pushFeed(agent,action){
+      if(!action || action==='stopped') return;
+      if(lastActionCache[agent]===action) return;
+      lastActionCache[agent]=action;
+      const list=document.getElementById('sim-'+agent+'-feed');
+      if(!list) return;
+      const li=document.createElement('li');
+      li.innerHTML='<strong>'+new Date().toLocaleTimeString()+'</strong>'+action;
+      list.insertBefore(li,list.firstChild);
+      while(list.children.length>4){ list.removeChild(list.lastChild); }
+    }
+    function updateChip(agent,state){
+      const chip=document.getElementById('sim-'+agent+'-state');
+      if(!chip) return;
+      const status = state.running ? 'running' : 'stopped';
+      chip.textContent = status.charAt(0).toUpperCase()+status.slice(1);
+      chip.classList.remove('running','stopped');
+      chip.classList.add(status);
+    }
     function refreshAgentStatus(){
       try{
         var s = RWD.getAgentStates ? RWD.getAgentStates() : {};
@@ -94,6 +176,12 @@
         if(elSales) elSales.textContent = (sales.running ? 'running' : 'stopped') + (sales.lastAction ? ' — '+sales.lastAction : '');
         if(elFc) elFc.textContent = (fc.running ? 'running' : 'stopped') + (fc.lastAction ? ' — '+fc.lastAction : '');
         if(elInt) elInt.textContent = (integ.running ? 'running' : 'stopped') + (integ.lastAction ? ' — '+integ.lastAction : '');
+        updateChip('sales', sales);
+        updateChip('forecast', fc);
+        updateChip('integration', integ);
+        pushFeed('sales', sales.lastAction);
+        pushFeed('forecast', fc.lastAction);
+        pushFeed('integration', integ.lastAction);
       }catch(e){ console.log('refreshAgentStatus', e); }
     }
     refreshAgentStatus();
