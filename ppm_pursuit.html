@@ -9,21 +9,8 @@
 </head>
 <body>
 
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<nav class="quick-nav auto-nav"></nav>
 <div class="shell">
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-    <a class="tab" href="results_driven.html">Results Driven</a>
-  </div>
 
 <div class="grid">
   <div class="card"><h2>PPM Pursuit</h2><div class="body">
@@ -43,12 +30,43 @@
     <div class="progress"><div class="bar" id="purProg"></div></div>
   </div></div>
 </div>
+<section class="smart-banner" id="pursuit-smart-banner">
+  <div>
+    <p class="eyebrow">Smart Actions</p>
+    <h3>Keep pursuit tasks moving</h3>
+    <p>Trigger estimating, resource requests, and integration syncs for <strong id="pursuit-smart-name">this pursuit</strong>.</p>
+  </div>
+  <div class="actions">
+    <div class="pill-row">
+      <button type="button" class="btn" data-pursuit-action="Request Estimate">Request Estimate</button>
+      <button type="button" class="btn" data-pursuit-action="Assign Resources">Assign Resources</button>
+      <button type="button" class="btn" data-pursuit-action="Sync to CX">Sync to CX</button>
+      <button type="button" class="btn" data-pursuit-action="Share Status">Share Status</button>
+    </div>
+    <div class="action-block">
+      <label class="visually-hidden" for="pursuit-smart-select">Smart Actions</label>
+      <select id="pursuit-smart-select">
+        <option value="">- Select Smart Action -</option>
+        <option value="Request Estimate">Request Estimate</option>
+        <option value="Assign Resources">Assign Resources</option>
+        <option value="Sync to CX">Sync to CX</option>
+        <option value="Share Status">Share Status</option>
+        <option value="Trigger Doc Review">Trigger Doc Review</option>
+      </select>
+      <button type="button" class="btn" id="pursuit-smart-apply">Apply</button>
+    </div>
+  </div>
+</section>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
-   document.getElementById('purName').value=d.pursuit.name||'';
-   document.getElementById('purEstimate').value=d.pursuit.estimate||0;
-   document.getElementById('btnAward').addEventListener('click', function(e){
+  var d=RWD.get();
+  document.getElementById('purName').value=d.pursuit.name||'';
+  document.getElementById('purEstimate').value=d.pursuit.estimate||0;
+  var smartLabel=document.getElementById('pursuit-smart-name'); if(smartLabel) smartLabel.textContent=d.pursuit.name||'this pursuit';
+  document.getElementById('purState').textContent=d.pursuit.status || 'Draft';
+  document.getElementById('purProg').style.width=(d.pursuit.status==='Awarded'? '100%' : '40%');
+  initPursuitSmartBanner();
+  document.getElementById('btnAward').addEventListener('click', function(e){
      e.preventDefault();
      RWD.savePursuit(document.getElementById('purForm'));
      document.getElementById('purState').textContent='Award in progress…';
@@ -58,8 +76,22 @@
        document.getElementById('purProg').style.width='100%';
        setTimeout(function(){ window.location='ppm_construction.html'; }, 600);
      });
-   });
  });
+});
+function initPursuitSmartBanner(){
+  var buttons=document.querySelectorAll('[data-pursuit-action]');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){ firePursuitAction(btn.dataset.pursuitAction || btn.textContent); });
+  });
+  var select=document.getElementById('pursuit-smart-select');
+  var apply=document.getElementById('pursuit-smart-apply');
+  if(apply){ apply.addEventListener('click', function(){ if(select) firePursuitAction(select.value); }); }
+}
+function firePursuitAction(action){
+  if(!action) return;
+  if(window.RWD && typeof RWD.actPursuit==='function'){ RWD.actPursuit(action); }
+  if(typeof showToast==='function') showToast(action+' triggered');
+}
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>

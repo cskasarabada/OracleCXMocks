@@ -9,21 +9,8 @@
 </head>
 <body>
 
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
+<nav class="quick-nav auto-nav"></nav>
 <div class="shell">
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-    <a class="tab" href="results_driven.html">Results Driven</a>
-  </div>
 
 <div class="grid">
   <div class="card"><h2>Construction Project</h2><div class="body">
@@ -37,11 +24,40 @@
     <div class="kv"><div class="k">End</div><div class="v" id="wEnd">—</div></div>
   </div></div>
 </div>
+<section class="smart-banner" id="project-smart-banner">
+  <div>
+    <p class="eyebrow">Smart Actions</p>
+    <h3>Field + back-office collaboration</h3>
+    <p>Coordinate updates, punch lists, and warranty prep for <strong id="project-smart-name">this project</strong>.</p>
+  </div>
+  <div class="actions">
+    <div class="pill-row">
+      <button type="button" class="btn" data-project-action="Send Progress Update">Send Progress Update</button>
+      <button type="button" class="btn" data-project-action="Request Change Order">Request Change Order</button>
+      <button type="button" class="btn" data-project-action="Notify Warranty Team">Notify Warranty Team</button>
+      <button type="button" class="btn" data-project-action="Sync Actuals">Sync Actuals</button>
+    </div>
+    <div class="action-block">
+      <label class="visually-hidden" for="project-smart-select">Smart Actions</label>
+      <select id="project-smart-select">
+        <option value="">- Select Smart Action -</option>
+        <option>Send Progress Update</option>
+        <option>Request Change Order</option>
+        <option>Notify Warranty Team</option>
+        <option>Sync Actuals</option>
+        <option>Share Lessons Learned</option>
+      </select>
+      <button type="button" class="btn" id="project-smart-apply">Apply</button>
+    </div>
+  </div>
+</section>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var d=RWD.get();
    document.getElementById('cName').textContent=d.const.name||'-';
-   document.getElementById('cBudget').textContent=(d.const.budget||0).toLocaleString();
+   document.getElementById('cBudget').textContent='$'+Number(d.const.budget||0).toLocaleString();
+   var smartLabel=document.getElementById('project-smart-name'); if(smartLabel) smartLabel.textContent=d.const.name||'this project';
+   initProjectSmartBanner();
    var body=document.getElementById('wbs');
    ['1.0 Mobilization','2.0 Site Work','3.0 Structure'].forEach(function(row){
      var parts=row.split(' ');
@@ -58,6 +74,20 @@
      });
    });
  });
+function initProjectSmartBanner(){
+  var buttons=document.querySelectorAll('[data-project-action]');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){ fireProjectAction(btn.dataset.projectAction || btn.textContent); });
+  });
+  var select=document.getElementById('project-smart-select');
+  var apply=document.getElementById('project-smart-apply');
+  if(apply){ apply.addEventListener('click', function(){ if(select) fireProjectAction(select.value); }); }
+}
+function fireProjectAction(action){
+  if(!action) return;
+  if(window.RWD && typeof RWD.actProject==='function'){ RWD.actProject(action); }
+  if(typeof showToast==='function') showToast(action+' triggered');
+}
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>

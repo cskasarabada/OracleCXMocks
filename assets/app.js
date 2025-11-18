@@ -1,28 +1,30 @@
 (function(){
   const NAV_LINKS=[
-    {href:'index.html',label:'Overview'},
-    {href:'Easy_Start_Flows.html',label:'Easy Start'},
-    {href:'sales_cloud.html',label:'Sales Flow'},
-    {href:'sales_tools.html',label:'Sales Tools'},
-    {href:'cx_lead.html',label:'Lead'},
-    {href:'cx_opportunity.html',label:'Opportunity'},
-    {href:'ppm_pursuit.html',label:'PPM Pursuit'},
-    {href:'ppm_construction.html',label:'PPM Construction'},
-    {href:'analytics.html',label:'Analytics'},
-    {href:'forecasting_pipeline.html',label:'Forecasting'},
-    {href:'integration_features.html',label:'Integration'},
-    {href:'sales_process_visualization.html',label:'Process Visualization'},
-    {href:'results_driven.html',label:'Results Driven'},
-    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true},
-    {href:'executive_command_center.html',label:'Exec Command'},
-    {href:'account_360.html',label:'Account 360'},
-    {href:'partner_hub.html',label:'Partner Hub'},
-    {href:'revenue_intelligence.html',label:'Revenue Intelligence'},
-    {href:'field_mobile_snapshot.html',label:'Field Mobile'},
-    {href:'sales_ppm_sync.html',label:'Sales↔PPM'},
-    {href:'quote_to_docusign.html',label:'Quote → DocuSign'},
-    {href:'pursuit_project.html',label:'Pursuit Project'}
+    {href:'index.html',label:'Overview',group:'journey'},
+    {href:'Easy_Start_Flows.html',label:'Easy Start',group:'journey'},
+    {href:'sales_cloud.html',label:'Sales Flow',group:'journey'},
+    {href:'sales_tools.html',label:'Sales Tools',group:'journey'},
+    {href:'cx_lead.html',label:'Lead',group:'journey'},
+    {href:'cx_opportunity.html',label:'Opportunity',group:'journey'},
+    {href:'ppm_pursuit.html',label:'PPM Pursuit',group:'journey'},
+    {href:'ppm_construction.html',label:'PPM Construction',group:'journey'},
+    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true,group:'journey'},
+    {href:'analytics.html',label:'Analytics',group:'toolkit'},
+    {href:'forecasting_pipeline.html',label:'Forecasting',group:'toolkit'},
+    {href:'integration_features.html',label:'Integration',group:'toolkit'},
+    {href:'sales_process_visualization.html',label:'Process Visualization',group:'toolkit'},
+    {href:'results_driven.html',label:'Results Driven',group:'toolkit'},
+    {href:'executive_command_center.html',label:'Exec Command',group:'toolkit'},
+    {href:'account_360.html',label:'Account 360',group:'toolkit'},
+    {href:'partner_hub.html',label:'Partner Hub',group:'toolkit'},
+    {href:'revenue_intelligence.html',label:'Revenue Intelligence',group:'toolkit'},
+    {href:'field_mobile_snapshot.html',label:'Field Mobile',group:'toolkit'},
+    {href:'sales_ppm_sync.html',label:'Sales↔PPM',group:'toolkit'},
+    {href:'quote_to_docusign.html',label:'Quote → DocuSign',group:'toolkit'},
+    {href:'pursuit_project.html',label:'Pursuit Project',group:'toolkit'}
   ];
+  const NAV_GROUP_LABELS={journey:'Sales & Delivery Journey',toolkit:'Insights & Toolkit'};
+
   const KEY='rw_demo_v2';
   const FLOW_STAGES=[
     {key:'lead',label:'Lead',owner:'Sales Development',statuses:['New','Working','Qualified','Nurture'],description:'SDR captures interest and qualifies the inbound record.'},
@@ -43,8 +45,8 @@
         {company:'BrightGrid Solar',name:'Battery Storage Upgrade',contact:'Daniel Reese',owner:'Subash Nagarajan'}
       ],
       opptyList:[
-        {name:'Skyline Microgrid Modernization',company:'Skyline Renewables',stage:'Qualification',amount:'$1.25M',owner:'Jessica Brooks'},
-        {name:'BrightGrid Battery Upgrade',company:'BrightGrid Solar',stage:'Evaluation',amount:'$620K',owner:'Subash Nagarajan'}
+        {name:'Skyline Microgrid Modernization',company:'Skyline Renewables',stage:'Qualification',amount:1250000,owner:'Jessica Brooks'},
+        {name:'BrightGrid Battery Upgrade',company:'BrightGrid Solar',stage:'Evaluation',amount:620000,owner:'Subash Nagarajan'}
       ],
       storyline:[
         {stage:'Lead',event:'Inbound Signal',detail:'Captured during Sustainability Summit registration.'},
@@ -63,8 +65,8 @@
         {company:'Trinity Medical',name:'Clinic Expansion',contact:'Sarah Cole',owner:'Subash Nagarajan'}
       ],
       opptyList:[
-        {name:'Apex Tower CX/PPM Rollout',company:'Apex Healthcare',stage:'Evaluation',amount:'$1.86M',owner:'Jessica Brooks'},
-        {name:'Trinity Clinic Expansion',company:'Trinity Medical',stage:'Proposal',amount:'$920K',owner:'Subash Nagarajan'}
+        {name:'Apex Tower CX/PPM Rollout',company:'Apex Healthcare',stage:'Evaluation',amount:1860000,owner:'Jessica Brooks'},
+        {name:'Trinity Clinic Expansion',company:'Trinity Medical',stage:'Proposal',amount:920000,owner:'Subash Nagarajan'}
       ],
       storyline:[
         {stage:'Lead',event:'Referral',detail:'Partner referred Apex expansion to Argano.'},
@@ -78,6 +80,23 @@
   const subscribers=new Set();
   const now=()=>new Date().toLocaleString();
   const clone=(data)=>data ? JSON.parse(JSON.stringify(data)) : data;
+  function upsert(list,predicate,data){
+    if(!Array.isArray(list)) return;
+    const idx=list.findIndex(predicate);
+    if(idx>-1){ list[idx]=Object.assign({}, list[idx], data); }
+    else{ list.unshift(Object.assign({}, data)); }
+  }
+  function parseAmount(val){
+    if(typeof val==='number') return val;
+    if(typeof val!=='string') return 0;
+    var cleaned=val.replace(/[$,\s]/g,'').toLowerCase();
+    var mult=1;
+    if(cleaned.endsWith('m')){ mult=1e6; cleaned=cleaned.slice(0,-1); }
+    else if(cleaned.endsWith('k')){ mult=1e3; cleaned=cleaned.slice(0,-1); }
+    var num=parseFloat(cleaned);
+    return isNaN(num)?0:Math.round(num*mult);
+  }
+  function currency(num){ return '$'+Number(num||0).toLocaleString(); }
   function upsert(list,predicate,data){
     if(!Array.isArray(list)) return;
     const idx=list.findIndex(predicate);
@@ -191,21 +210,53 @@
     saveLead(f){
       const d=ensure();
       d.lead.company=f.company.value;
+      d.lead.name=f.name.value || (d.lead.company+' Lead');
       d.lead.contact=f.contact.value;
       d.lead.score=Number(f.score.value||60);
-      d.lead.status='Qualified';
+      d.lead.status=f.status.value || 'Working';
+      d.lead.owner=f.owner.value || 'Chandra Kasarabada';
       addAct(d.lead.activities,'Update','Lead qualified');
       addTimeline(d,'Lead','Qualified','Score '+d.lead.score);
       d.leads=d.leads||[];
-      d.leads.unshift({
+      const entry={
         company:d.lead.company,
-        name:f.name && f.name.value ? f.name.value : (d.lead.company+' Lead'),
+        name:d.lead.name,
         contact:d.lead.contact,
-        owner:f.owner && f.owner.value ? f.owner.value : 'Chandra Kasarabada'
-      });
+        owner:d.lead.owner,
+        leadStatus:d.lead.status,
+        opportunity:(f.opportunity && f.opportunity.value) || (d.lead.company+' Opportunity'),
+        opportunityStage:(f.opportunityStage && f.opportunityStage.value) || 'Qualification',
+        amount:parseAmount(f.estAmount && f.estAmount.value ? f.estAmount.value : (d.lead.score*10000)),
+        pursuitStatus:(f.pursuitStatus && f.pursuitStatus.value) || 'Draft',
+        project:(f.project && f.project.value) || (d.lead.company+' Delivery'),
+        projectStatus:(f.projectStatus && f.projectStatus.value) || 'Planning'
+      };
+      upsert(d.leads,function(row){ return row && row.company===entry.company && row.name===entry.name; }, entry);
       d.leads=d.leads.slice(0,10);
       commit(d);
       log('Lead qualified for '+d.lead.company);
+    },
+    updateLead(fields){
+      const d=ensure();
+      const payload=Object.assign({}, fields);
+      if(payload.company) d.lead.company=payload.company;
+      if(payload.name) d.lead.name=payload.name;
+      if(payload.contact) d.lead.contact=payload.contact;
+      if(payload.score) d.lead.score=Number(payload.score);
+      if(payload.status) d.lead.status=payload.status;
+      if(payload.owner) d.lead.owner=payload.owner;
+      addAct(d.lead.activities,'Update','Lead updated');
+      addTimeline(d,'Lead','Details Updated',d.lead.company);
+      d.leads=d.leads||[];
+      upsert(d.leads,function(row){ return row && row.company===d.lead.company && row.name===d.lead.name; },{
+        company:d.lead.company,
+        name=d.lead.name,
+        contact:d.lead.contact,
+        owner:d.lead.owner,
+        leadStatus:d.lead.status
+      });
+      commit(d);
+      log('Lead updated for '+d.lead.company);
     },
     convertToOpportunity(){
       const d=ensure();
@@ -215,11 +266,11 @@
       addAct(d.oppty.activities,'Convert','Lead converted to Opportunity');
       addTimeline(d,'Opportunity','Converted','Created from '+(d.lead.company||'lead'));
       d.opportunities=d.opportunities||[];
-      d.opportunities.unshift({
+      upsert(d.opportunities,function(row){ return row && row.name===d.oppty.name; },{
         name:d.oppty.name,
         company:d.lead.company,
         stage:d.oppty.stage,
-        amount:'$'+d.oppty.amount.toLocaleString(),
+        amount:d.oppty.amount,
         owner:'Jessica Brooks'
       });
       d.opportunities=d.opportunities.slice(0,10);
@@ -236,14 +287,15 @@
       d.oppty.name=f.name.value;
       d.oppty.amount=Number(f.amount.value||0);
       d.oppty.stage=f.stage.value;
+      d.oppty.account=(f.company && f.company.value) || d.oppty.account || d.lead.company;
       addAct(d.oppty.activities,'Update','Opportunity updated');
       addTimeline(d,'Opportunity','Updated',d.oppty.stage+' stage');
       d.opportunities=d.opportunities||[];
       upsert(d.opportunities, function(item){ return item && item.name===d.oppty.name; }, {
         name:d.oppty.name,
-        company:f.company && f.company.value ? f.company.value : d.lead.company,
+        company=d.oppty.account,
         stage:d.oppty.stage,
-        amount:'$'+d.oppty.amount.toLocaleString(),
+        amount=d.oppty.amount,
         owner:f.owner && f.owner.value ? f.owner.value : 'Jessica Brooks'
       });
       d.opportunities=d.opportunities.slice(0,10);
@@ -315,6 +367,18 @@
       addTimeline(d,'Opportunity','Action: '+type,'Smart Action rail');
       commit(d);
       log('Opportunity action: '+type);
+    },
+    actPursuit(type){
+      const d=ensure();
+      addTimeline(d,'Pursuit','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Pursuit action: '+type);
+    },
+    actProject(type){
+      const d=ensure();
+      addTimeline(d,'Project','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Project action: '+type);
     },
 
     // Sales Cloud flow helpers
@@ -461,6 +525,7 @@
       d.lead.score= info.score || d.lead.score || 75;
       d.lead.status=info.leadStatus||'Working';
       d.oppty.name=info.opportunity || (d.lead.company+' Opportunity');
+      d.oppty.account=info.company || d.oppty.account || d.lead.company;
       d.oppty.amount=amount;
       d.oppty.stage=info.opportunityStage || d.oppty.stage || 'Qualification';
       d.pursuit.name=info.pursuit || (d.oppty.name+' - Pursuit');
@@ -494,12 +559,23 @@
     flowStages: FLOW_STAGES
   };
   function renderNavLinks(current){
-    return NAV_LINKS.map(function(link){
-      var cls=[];
-      if(link.accent) cls.push('accent');
-      if(current===link.href.toLowerCase()) cls.push('active');
-      var classAttr=cls.length?(' class="'+cls.join(' ')+'"'):'';
-      return '<a'+classAttr+' href="'+link.href+'">'+link.label+'</a>';
+    var groups={};
+    NAV_LINKS.forEach(function(link){
+      var key=link.group||'journey';
+      groups[key]=groups[key]||[];
+      groups[key].push(link);
+    });
+    return Object.keys(NAV_GROUP_LABELS).map(function(groupKey){
+      var links=groups[groupKey]||[];
+      if(!links.length) return '';
+      var items=links.map(function(link){
+        var cls=[];
+        if(link.accent) cls.push('accent');
+        if(current===link.href.toLowerCase()) cls.push('active');
+        var classAttr=cls.length?(' class="'+cls.join(' ')+'"'):'';
+        return '<a'+classAttr+' href="'+link.href+'">'+link.label+'</a>';
+      }).join('');
+      return '<div class="nav-group"><div class="nav-label">'+(NAV_GROUP_LABELS[groupKey]||groupKey)+'</div><div class="nav-items">'+items+'</div></div>';
     }).join('');
   }
   function ensureGlobalChrome(){
@@ -508,14 +584,16 @@
     body.dataset.chromeReady='1';
     body.classList.add('miconnex-theme');
     var header=document.querySelector('.miconnex-bar');
+    var headerMarkup='<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     if(!header){
       header=document.createElement('header');
       header.className='miconnex-bar';
-      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      header.innerHTML=headerMarkup;
       body.insertBefore(header, body.firstChild);
     } else {
-      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      header.innerHTML=headerMarkup;
     }
+    document.querySelectorAll('.header, .tabs').forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
     var nav=document.querySelector('nav.quick-nav');
     var current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     if(!nav){
