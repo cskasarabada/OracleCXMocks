@@ -11,6 +11,7 @@
 .sync-step{border:1px solid var(--rw-border);border-radius:16px;padding:16px;background:#fff;box-shadow:0 8px 20px rgba(15,23,42,.07);position:relative;height:100%;}
 .sync-step::before{content:attr(data-step);position:absolute;top:-12px;left:16px;background:#111827;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;}
 .sync-connector{display:flex;align-items:center;justify-content:center;color:#2563eb;font-weight:600;font-size:13px;min-height:120px;border-radius:12px;border:1px dashed rgba(37,99,235,.3);background:rgba(37,99,235,.05);}
+.sync-tag{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#111827;color:#fff;font-size:12px;margin-top:12px;width:max-content}
 </style>
 </head>
 <body class="lead-landing">
@@ -25,7 +26,7 @@
     <div class="sync-step" data-step="1">
       <h3>Opportunity Qualified</h3>
       <p>Argano Quick Sales + CX Sales capture estimate, key contacts, and risk flags.</p>
-      <span class="pill">Trigger: Create Pursuit</span>
+      <span class="sync-tag">Trigger: Create Pursuit</span>
     </div>
     <div class="sync-connector">
       <div>
@@ -36,7 +37,7 @@
     <div class="sync-step" data-step="2">
       <h3>PPM Pursuit Draft</h3>
       <p>Pursuit manager receives auto-built shell with WBS, budget, and attachments.</p>
-      <span class="pill">Status mirrored to sellers</span>
+      <span class="sync-tag">Status mirrored to sellers</span>
     </div>
     <div class="sync-connector">
       <div>
@@ -57,7 +58,7 @@
     <div class="sync-step" data-step="4">
       <h3>Project Kickoff</h3>
       <p>Approved pursuit converts to active PPM project with Argano pods assigned.</p>
-      <span class="pill dark">Status: Execution</span>
+      <span class="sync-tag">Status: Execution</span>
     </div>
   </div>
 
