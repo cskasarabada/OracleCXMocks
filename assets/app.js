@@ -38,6 +38,14 @@
       oppty:{name:'Skyline Microgrid Modernization',amount:1250000,stage:'Qualification'},
       pursuit:{name:'Skyline Microgrid Modernization - Pursuit',estimate:1250000,status:'Draft'},
       project:{name:'Skyline Microgrid Modernization - Construction',budget:1287500,status:'Planning'},
+      leadsList:[
+        {company:'Skyline Renewables',name:'Microgrid Expansion Lead',contact:'Lena Ortiz',owner:'Chandra Kasarabada'},
+        {company:'BrightGrid Solar',name:'Battery Storage Upgrade',contact:'Daniel Reese',owner:'Subash Nagarajan'}
+      ],
+      opptyList:[
+        {name:'Skyline Microgrid Modernization',company:'Skyline Renewables',stage:'Qualification',amount:'$1.25M',owner:'Jessica Brooks'},
+        {name:'BrightGrid Battery Upgrade',company:'BrightGrid Solar',stage:'Evaluation',amount:'$620K',owner:'Subash Nagarajan'}
+      ],
       storyline:[
         {stage:'Lead',event:'Inbound Signal',detail:'Captured during Sustainability Summit registration.'},
         {stage:'Opportunity',event:'AE Assigned',detail:'Jessica Brooks engages value engineering team.'},
@@ -50,6 +58,14 @@
       oppty:{name:'Apex Tower CX/PPM Rollout',amount:1860000,stage:'Evaluation'},
       pursuit:{name:'Apex Tower CX/PPM Pursuit',estimate:1860000,status:'Costing'},
       project:{name:'Apex Tower Delivery',budget:1915000,status:'Planning'},
+      leadsList:[
+        {company:'Apex Healthcare',name:'Tower CX Modernization',contact:'Marcus Lee',owner:'Chandra Kasarabada'},
+        {company:'Trinity Medical',name:'Clinic Expansion',contact:'Sarah Cole',owner:'Subash Nagarajan'}
+      ],
+      opptyList:[
+        {name:'Apex Tower CX/PPM Rollout',company:'Apex Healthcare',stage:'Evaluation',amount:'$1.86M',owner:'Jessica Brooks'},
+        {name:'Trinity Clinic Expansion',company:'Trinity Medical',stage:'Proposal',amount:'$920K',owner:'Subash Nagarajan'}
+      ],
       storyline:[
         {stage:'Lead',event:'Referral',detail:'Partner referred Apex expansion to Argano.'},
         {stage:'Opportunity',event:'Discovery',detail:'Hybrid sales + services bundle framed with Smart Actions.'},
@@ -61,6 +77,13 @@
   const write=(d)=>localStorage.setItem(KEY, JSON.stringify(d));
   const subscribers=new Set();
   const now=()=>new Date().toLocaleString();
+  const clone=(data)=>data ? JSON.parse(JSON.stringify(data)) : data;
+  function upsert(list,predicate,data){
+    if(!Array.isArray(list)) return;
+    const idx=list.findIndex(predicate);
+    if(idx>-1){ list[idx]=Object.assign({}, list[idx], data); }
+    else{ list.unshift(data); }
+  }
   function broadcast(){
     const snapshot=ensure();
     subscribers.forEach(function(cb){
@@ -86,6 +109,8 @@
     }
     d.logs=d.logs||[];
     d.timeline=d.timeline||[];
+    d.leads=d.leads||[];
+    d.opportunities=d.opportunities||[];
     write(d);
     return d;
   }
@@ -130,6 +155,8 @@
       d.const=Object.assign({}, d.const, conf.project||{});
       if(d.salesFlow.lead){ d.salesFlow.lead.status=d.lead.status||d.salesFlow.lead.status; d.salesFlow.lead.updated=now(); }
       if(d.salesFlow.opportunity){ d.salesFlow.opportunity.status=d.oppty.stage||d.salesFlow.opportunity.status; d.salesFlow.opportunity.updated=now(); }
+      d.leads=clone(conf.leadsList||[]);
+      d.opportunities=clone(conf.opptyList||[]);
       d.timeline=[];
       (conf.storyline||[]).forEach(function(item){
         addTimeline(d,item.stage,item.event,item.detail);
@@ -158,6 +185,14 @@
       d.lead.status='Qualified';
       addAct(d.lead.activities,'Update','Lead qualified');
       addTimeline(d,'Lead','Qualified','Score '+d.lead.score);
+      d.leads=d.leads||[];
+      d.leads.unshift({
+        company:d.lead.company,
+        name:f.name && f.name.value ? f.name.value : (d.lead.company+' Lead'),
+        contact:d.lead.contact,
+        owner:f.owner && f.owner.value ? f.owner.value : 'Chandra Kasarabada'
+      });
+      d.leads=d.leads.slice(0,10);
       commit(d);
       log('Lead qualified for '+d.lead.company);
     },
@@ -168,6 +203,15 @@
       d.oppty.stage='Qualification';
       addAct(d.oppty.activities,'Convert','Lead converted to Opportunity');
       addTimeline(d,'Opportunity','Converted','Created from '+(d.lead.company||'lead'));
+      d.opportunities=d.opportunities||[];
+      d.opportunities.unshift({
+        name:d.oppty.name,
+        company:d.lead.company,
+        stage:d.oppty.stage,
+        amount:'$'+d.oppty.amount.toLocaleString(),
+        owner:'Jessica Brooks'
+      });
+      d.opportunities=d.opportunities.slice(0,10);
       commit(d);
       log('Lead converted to Opportunity');
     },
@@ -183,6 +227,15 @@
       d.oppty.stage=f.stage.value;
       addAct(d.oppty.activities,'Update','Opportunity updated');
       addTimeline(d,'Opportunity','Updated',d.oppty.stage+' stage');
+      d.opportunities=d.opportunities||[];
+      upsert(d.opportunities, function(item){ return item && item.name===d.oppty.name; }, {
+        name:d.oppty.name,
+        company:f.company && f.company.value ? f.company.value : d.lead.company,
+        stage:d.oppty.stage,
+        amount:'$'+d.oppty.amount.toLocaleString(),
+        owner:f.owner && f.owner.value ? f.owner.value : 'Jessica Brooks'
+      });
+      d.opportunities=d.opportunities.slice(0,10);
       commit(d);
     },
     createPursuitViaOIC(cb){
@@ -362,8 +415,22 @@
     runScenarioFlow(opts){
       const scenarioKey=this.loadScenario(opts && opts.scenario);
       const scenario=SCENARIOS[scenarioKey];
-      const leadForm={company:{value:scenario.lead.company},contact:{value:scenario.lead.contact},score:{value:scenario.lead.score}};
-      const opptyForm={name:{value:scenario.oppty.name},amount:{value:scenario.oppty.amount},stage:{value:scenario.oppty.stage||'Qualification'}};
+      const leadEntry=(scenario.leadsList && scenario.leadsList[0])||{};
+      const opptyEntry=(scenario.opptyList && scenario.opptyList[0])||{};
+      const leadForm={
+        company:{value:scenario.lead.company},
+        contact:{value:scenario.lead.contact},
+        score:{value:scenario.lead.score},
+        name:{value:leadEntry.name || (scenario.lead.company+' Lead')},
+        owner:{value:leadEntry.owner || 'Chandra Kasarabada'}
+      };
+      const opptyForm={
+        name:{value:scenario.oppty.name},
+        amount:{value:scenario.oppty.amount},
+        stage:{value:scenario.oppty.stage||'Qualification'},
+        company:{value:opptyEntry.company || scenario.lead.company},
+        owner:{value:opptyEntry.owner || 'Jessica Brooks'}
+      };
       const pursuitForm={name:{value:scenario.pursuit.name},estimate:{value:scenario.pursuit.estimate}};
       const steps=[
         ()=>new Promise((resolve)=>{ this.saveLead(leadForm); setTimeout(resolve,500); }),
