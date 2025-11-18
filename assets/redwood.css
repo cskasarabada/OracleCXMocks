@@ -271,6 +271,10 @@ body.oppty-landing{background:#f5efe7;}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
 .btn.outline{background:transparent;}
 .quick-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.quick-nav.auto-nav{flex-direction:column;gap:10px;}
+.quick-nav .nav-group{display:flex;flex-direction:column;gap:6px;}
+.quick-nav .nav-label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#65738b;}
+.quick-nav .nav-items{display:flex;flex-wrap:wrap;gap:6px;}
 .quick-nav a{
   padding:8px 16px;
   border-radius:999px;
@@ -367,7 +371,7 @@ body.modal-visible .lead-shell{filter:blur(2px);}
 .smart-banner select{border-radius:12px;border:1px solid var(--rw-border);padding:8px 12px;background:#fff;font-size:14px;min-width:180px;}
 .smart-banner .action-block{display:flex;flex-direction:column;gap:8px;}
 body.miconnex-theme{
-  background:linear-gradient(135deg,#fdfdfd,#f0f5fb);
+  background:linear-gradient(135deg,#f7fbff,#dfeffd);
   min-height:100vh;
   position:relative;
   color:#0f172a;
@@ -377,9 +381,9 @@ body.miconnex-theme::before{
   position:fixed;
   inset:0;
   background:
-    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.65), transparent 55%),
-    linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(111,76,255,0.08) 32%, rgba(53,141,255,0.12) 70%, rgba(255,255,255,0) 100%),
-    repeating-linear-gradient(-45deg, rgba(83,57,255,0.08), rgba(83,57,255,0.08) 8px, transparent 8px, transparent 22px);
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.78), transparent 55%),
+    linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(141,98,255,0.15) 35%, rgba(88,120,255,0.18) 60%, rgba(255,255,255,0) 100%),
+    repeating-linear-gradient(-35deg, rgba(87,43,216,0.08), rgba(87,43,216,0.08) 10px, transparent 10px, transparent 26px);
   pointer-events:none;
   z-index:0;
 }
@@ -387,14 +391,15 @@ body.miconnex-theme > *{position:relative;z-index:1;}
 .miconnex-theme .header,
 .miconnex-theme .tabs{display:none!important;}
 .miconnex-bar{
-  background:#05070c;
-  border-bottom:4px solid #ff7a18;
+  background:linear-gradient(90deg,#0f172a 0%,#111b2e 45%,#1f2b44 100%);
+  border-bottom:5px solid #ff7a18;
 }
-.logo-mark{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.04em;}
+.logo-mark{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.04em;}
 .logo-mark .logo-icon{
   width:46px;height:46px;border-radius:50%;border:2px solid #ff7a18;
   display:flex;align-items:center;justify-content:center;
   color:#ff7a18;font-size:26px;font-weight:800;
+  background:rgba(255,122,24,.1);
 }
-.logo-mark .logo-text{font-size:20px;color:#fff;font-weight:700;text-transform:uppercase;}
+.logo-mark .logo-text{font-size:20px;color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.1em;}
 .logo-mark .logo-sub{font-size:12px;color:#ffd7bd;text-transform:uppercase;letter-spacing:.25em;}

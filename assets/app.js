@@ -1,28 +1,30 @@
 (function(){
   const NAV_LINKS=[
-    {href:'index.html',label:'Overview'},
-    {href:'Easy_Start_Flows.html',label:'Easy Start'},
-    {href:'sales_cloud.html',label:'Sales Flow'},
-    {href:'sales_tools.html',label:'Sales Tools'},
-    {href:'cx_lead.html',label:'Lead'},
-    {href:'cx_opportunity.html',label:'Opportunity'},
-    {href:'ppm_pursuit.html',label:'PPM Pursuit'},
-    {href:'ppm_construction.html',label:'PPM Construction'},
-    {href:'analytics.html',label:'Analytics'},
-    {href:'forecasting_pipeline.html',label:'Forecasting'},
-    {href:'integration_features.html',label:'Integration'},
-    {href:'sales_process_visualization.html',label:'Process Visualization'},
-    {href:'results_driven.html',label:'Results Driven'},
-    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true},
-    {href:'executive_command_center.html',label:'Exec Command'},
-    {href:'account_360.html',label:'Account 360'},
-    {href:'partner_hub.html',label:'Partner Hub'},
-    {href:'revenue_intelligence.html',label:'Revenue Intelligence'},
-    {href:'field_mobile_snapshot.html',label:'Field Mobile'},
-    {href:'sales_ppm_sync.html',label:'Sales↔PPM'},
-    {href:'quote_to_docusign.html',label:'Quote → DocuSign'},
-    {href:'pursuit_project.html',label:'Pursuit Project'}
+    {href:'index.html',label:'Overview',group:'journey'},
+    {href:'Easy_Start_Flows.html',label:'Easy Start',group:'journey'},
+    {href:'sales_cloud.html',label:'Sales Flow',group:'journey'},
+    {href:'sales_tools.html',label:'Sales Tools',group:'journey'},
+    {href:'cx_lead.html',label:'Lead',group:'journey'},
+    {href:'cx_opportunity.html',label:'Opportunity',group:'journey'},
+    {href:'ppm_pursuit.html',label:'PPM Pursuit',group:'journey'},
+    {href:'ppm_construction.html',label:'PPM Construction',group:'journey'},
+    {href:'quick_sales_screen.html',label:'Quick Sales Screen',accent:true,group:'journey'},
+    {href:'analytics.html',label:'Analytics',group:'toolkit'},
+    {href:'forecasting_pipeline.html',label:'Forecasting',group:'toolkit'},
+    {href:'integration_features.html',label:'Integration',group:'toolkit'},
+    {href:'sales_process_visualization.html',label:'Process Visualization',group:'toolkit'},
+    {href:'results_driven.html',label:'Results Driven',group:'toolkit'},
+    {href:'executive_command_center.html',label:'Exec Command',group:'toolkit'},
+    {href:'account_360.html',label:'Account 360',group:'toolkit'},
+    {href:'partner_hub.html',label:'Partner Hub',group:'toolkit'},
+    {href:'revenue_intelligence.html',label:'Revenue Intelligence',group:'toolkit'},
+    {href:'field_mobile_snapshot.html',label:'Field Mobile',group:'toolkit'},
+    {href:'sales_ppm_sync.html',label:'Sales↔PPM',group:'toolkit'},
+    {href:'quote_to_docusign.html',label:'Quote → DocuSign',group:'toolkit'},
+    {href:'pursuit_project.html',label:'Pursuit Project',group:'toolkit'}
   ];
+  const NAV_GROUP_LABELS={journey:'Sales & Delivery Journey',toolkit:'Insights & Toolkit'};
+
   const KEY='rw_demo_v2';
   const FLOW_STAGES=[
     {key:'lead',label:'Lead',owner:'Sales Development',statuses:['New','Working','Qualified','Nurture'],description:'SDR captures interest and qualifies the inbound record.'},
@@ -557,12 +559,23 @@
     flowStages: FLOW_STAGES
   };
   function renderNavLinks(current){
-    return NAV_LINKS.map(function(link){
-      var cls=[];
-      if(link.accent) cls.push('accent');
-      if(current===link.href.toLowerCase()) cls.push('active');
-      var classAttr=cls.length?(' class="'+cls.join(' ')+'"'):'';
-      return '<a'+classAttr+' href="'+link.href+'">'+link.label+'</a>';
+    var groups={};
+    NAV_LINKS.forEach(function(link){
+      var key=link.group||'journey';
+      groups[key]=groups[key]||[];
+      groups[key].push(link);
+    });
+    return Object.keys(NAV_GROUP_LABELS).map(function(groupKey){
+      var links=groups[groupKey]||[];
+      if(!links.length) return '';
+      var items=links.map(function(link){
+        var cls=[];
+        if(link.accent) cls.push('accent');
+        if(current===link.href.toLowerCase()) cls.push('active');
+        var classAttr=cls.length?(' class="'+cls.join(' ')+'"'):'';
+        return '<a'+classAttr+' href="'+link.href+'">'+link.label+'</a>';
+      }).join('');
+      return '<div class="nav-group"><div class="nav-label">'+(NAV_GROUP_LABELS[groupKey]||groupKey)+'</div><div class="nav-items">'+items+'</div></div>';
     }).join('');
   }
   function ensureGlobalChrome(){
@@ -571,13 +584,14 @@
     body.dataset.chromeReady='1';
     body.classList.add('miconnex-theme');
     var header=document.querySelector('.miconnex-bar');
+    var headerMarkup='<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     if(!header){
       header=document.createElement('header');
       header.className='miconnex-bar';
-      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      header.innerHTML=headerMarkup;
       body.insertBefore(header, body.firstChild);
     } else {
-      header.innerHTML='<div class="logo-mark"><span class="logo-icon">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+      header.innerHTML=headerMarkup;
     }
     var nav=document.querySelector('nav.quick-nav');
     var current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
