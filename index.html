@@ -310,9 +310,16 @@
     setInterval(refreshAgentStatus, 2000);
     const scenarioSelect=document.getElementById('simScenario');
     const timelineList=document.getElementById('timelineList');
+    function fallbackScenarios(){
+      return [{key:'demo',label:'Demo CX→PPM Story'}];
+    }
     function populateScenarios(){
-      if(!scenarioSelect || !(window.RWD && typeof RWD.availableScenarios==='function')) return;
-      const options=RWD.availableScenarios();
+      if(!scenarioSelect) return;
+      var options=[];
+      if(window.RWD && typeof RWD.availableScenarios==='function'){
+        options=RWD.availableScenarios()||[];
+      }
+      if(!options.length) options=fallbackScenarios();
       scenarioSelect.innerHTML='';
       options.forEach(function(opt,index){
         const option=document.createElement('option');
@@ -336,9 +343,19 @@
     populateScenarios();
     renderTimeline(d);
     const btnStart=document.getElementById('btnStartSim');
+    function guidedSampleTimeline(){
+      var now=new Date();
+      return [
+        {stage:'Lead',ts:now.toLocaleString(),event:'Qualified',detail:'AE verified scope & budget'},
+        {stage:'Opportunity',ts:now.toLocaleString(),event:'Proposal',detail:'Quote delivered with CPQ bundle'},
+        {stage:'Pursuit',ts:now.toLocaleString(),event:'Costing',detail:'PPM pursuit estimating in-flight'},
+        {stage:'Project',ts:now.toLocaleString(),event:'Awarded',detail:'Construction kickoff ready'}
+      ];
+    }
+
     if(btnStart){
-       btnStart.addEventListener('click', function(ev){
-         ev.preventDefault();
+      btnStart.addEventListener('click', function(ev){
+        ev.preventDefault();
         const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
         if(window.RWD && typeof RWD.runScenarioFlow==='function'){
           btnStart.textContent='Simulating...';
@@ -346,33 +363,36 @@
             btnStart.textContent='Start Guided Flow';
           });
         }else{
-          if(typeof showToast==='function') showToast('Scenario runner unavailable offline');
+          renderTimeline({timeline:guidedSampleTimeline()});
+          if(typeof showToast==='function') showToast('Guided flow simulated (offline)');
         }
-       });
-     }
+      });
+    }
     const btnLoad=document.getElementById('btnLoadScenario');
     if(btnLoad){
-       btnLoad.addEventListener('click', function(ev){
-         ev.preventDefault();
+      btnLoad.addEventListener('click', function(ev){
+        ev.preventDefault();
         const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
         if(window.RWD && typeof RWD.loadScenario==='function'){
           RWD.loadScenario(scenarioKey);
-        }else if(typeof showToast==='function'){
-          showToast('Scenario load unavailable');
+        }else{
+          renderTimeline({timeline:guidedSampleTimeline()});
+          if(typeof showToast==='function') showToast('Loaded demo snapshot');
         }
-       });
-     }
+      });
+    }
     const btnClear=document.getElementById('btnClearTimeline');
     if(btnClear){
-       btnClear.addEventListener('click', function(ev){
-         ev.preventDefault();
+      btnClear.addEventListener('click', function(ev){
+        ev.preventDefault();
         if(window.RWD && typeof RWD.clearTimeline==='function'){
           RWD.clearTimeline();
-        }else if(typeof showToast==='function'){
-          showToast('Timeline already clear');
+        }else{
+          renderTimeline({timeline:[]});
+          if(typeof showToast==='function') showToast('Timeline cleared');
         }
-       });
-     }
+      });
+    }
     window.startSalesAgentWithAssistant=function(){
       if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('sales'); }
       openSalesAssistant();
