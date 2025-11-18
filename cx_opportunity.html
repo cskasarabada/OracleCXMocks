@@ -245,14 +245,49 @@ function closeAddOppty(){
 
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('add-new-oppty-btn'); if(btn) btn.addEventListener('click', openAddOppty);
-  var form = document.getElementById('addOpptyForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var fd=new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; }); if(window.RWD && typeof RWD.saveOppty==='function'){ RWD.saveOppty(obj); } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){ var s = RWD.get(); s.opportunities = s.opportunities || []; s.opportunities.unshift(obj); s.oppty = s.oppty || {}; s.oppty.activities = s.oppty.activities || []; s.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text: 'Opportunity created: ' + (obj.name || obj.account || '') }); try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); } }
-        if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
-      }catch(e){ console.error('save oppty failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+  var form = document.getElementById('addOpptyForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var obj=formToObject(form); persistOpportunity(obj); }catch(e){ console.error('save oppty failed', e); if(typeof showToast==='function') showToast('Save failed'); }
       closeAddOppty(); try{ renderOppsPreview(); }catch(e){}
   }); }
   // initial preview render
   try{ renderOppsPreview(); }catch(e){}
 });
+
+function persistOpportunity(obj){
+  var saved=false;
+  if(window.RWD && typeof RWD.saveOppty==='function'){
+    try{ RWD.saveOppty(obj); saved=true; }catch(e){ console.error('RWD.saveOppty failed', e); }
+  } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+    try{
+      var s = RWD.get() || {};
+      s.opportunities = s.opportunities || [];
+      s.opportunities.unshift(obj);
+      s.oppty = s.oppty || {};
+      s.oppty.activities = s.oppty.activities || [];
+      s.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text: 'Opportunity created: ' + (obj.name || obj.account || '') });
+      RWD.set(s);
+      saved=true;
+    }catch(err){ console.warn('Fallback RWD.set failed', err); }
+  }
+  if(saved){
+    if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
+  } else {
+    console.warn('Opportunity not persisted (demo services unavailable)');
+  }
+}
+
+function formToObject(form){
+  var obj={};
+  if(!form) return obj;
+  try{
+    var fd=new FormData(form);
+    fd.forEach(function(v,k){ obj[k]=v; });
+  }catch(e){
+    console.warn('FormData unavailable, attempting manual serialization', e);
+    var elements = form.elements || [];
+    Array.prototype.forEach.call(elements, function(el){ if(el.name) obj[el.name]=el.value; });
+  }
+  return obj;
+}
 
 // Render recent opportunities preview
 function renderOppsPreview(){
