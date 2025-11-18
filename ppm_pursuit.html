@@ -138,8 +138,88 @@ function initPursuitSmartBanner(){
 }
 function firePursuitAction(action){
   if(!action) return;
+  var handled=openPursuitActionModal(action);
   if(window.RWD && typeof RWD.actPursuit==='function'){ RWD.actPursuit(action); }
-  if(typeof showToast==='function') showToast(action+' triggered');
+  if(!handled && typeof showToast==='function') showToast(action+' triggered');
+}
+
+function openPursuitActionModal(action){
+  var modal=document.getElementById('pursuit-action-modal');
+  if(!modal) return false;
+  var forms=modal.querySelectorAll('[data-pursuit-form]');
+  var found=false;
+  forms.forEach(function(form){
+    var show=form.dataset.pursuitForm===action;
+    form.style.display=show?'flex':'none';
+    if(show){
+      found=true;
+      prefillPursuitAction(form);
+      setTimeout(function(){ var first=form.querySelector('input,textarea,select'); if(first) first.focus(); }, 30);
+    }
+  });
+  if(!found) return false;
+  var title=document.getElementById('pursuitActionTitle'); if(title) title.textContent=action;
+  modal.style.display='flex';
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-visible');
+  return true;
+}
+
+function closePursuitAction(){
+  var modal=document.getElementById('pursuit-action-modal');
+  if(!modal) return;
+  modal.style.display='none';
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-visible');
+}
+
+function prefillPursuitAction(form){
+  var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
+  var pursuit=state.pursuit||{};
+  if(form.dataset.pursuitForm==='Request Estimate'){
+    if(form.elements.scope && !form.elements.scope.value){ form.elements.scope.value=(pursuit.name||'Pursuit')+' estimate'; }
+  }
+  if(form.dataset.pursuitForm==='Sync to CX'){
+    if(form.elements.syncMessage && !form.elements.syncMessage.value){ form.elements.syncMessage.value='Sharing '+(pursuit.name||'pursuit')+' status to CX'; }
+  }
+  if(form.dataset.pursuitForm==='Share Status'){
+    if(form.elements.statusSummary && !form.elements.statusSummary.value){ form.elements.statusSummary.value='Status '+(pursuit.status||'Draft'); }
+  }
+  if(form.dataset.pursuitForm==='Trigger Doc Review'){
+    if(form.elements.docName && !form.elements.docName.value){ form.elements.docName.value=(pursuit.name||'Pursuit')+' SOW'; }
+  }
+}
+
+function submitPursuitAction(ev){
+  if(ev) ev.preventDefault();
+  var form=ev?ev.target:null;
+  if(!form) return false;
+  var action=form.dataset.pursuitForm || 'Action';
+  switch(action){
+    case 'Request Estimate':
+      if(window.RWD && typeof RWD.runOICJob==='function'){ try{ RWD.runOICJob('Estimate request'); }catch(e){} }
+      if(typeof showToast==='function') showToast('Estimate requested');
+      break;
+    case 'Assign Resources':
+      if(typeof showToast==='function') showToast('Resources assigned');
+      break;
+    case 'Sync to CX':
+      if(window.RWD && typeof RWD.runOICJob==='function'){ try{ RWD.runOICJob('Sync pursuit to CX'); }catch(e){} }
+      if(typeof showToast==='function') showToast('Pursuit synced to CX');
+      break;
+    case 'Share Status':
+      if(typeof showToast==='function') showToast('Status shared to team');
+      break;
+    case 'Trigger Doc Review':
+      if(window.RWD && typeof RWD.runOICJob==='function'){ try{ RWD.runOICJob('Doc review'); }catch(e){} }
+      if(typeof showToast==='function') showToast('Doc review triggered');
+      break;
+    default:
+      if(typeof showToast==='function') showToast(action+' completed');
+  }
+  form.reset();
+  closePursuitAction();
+  return false;
 }
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>

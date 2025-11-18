@@ -202,6 +202,96 @@
 
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 
+<div id="oppty-action-modal" class="lead-overlay" aria-hidden="true">
+  <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="opptyActionTitle" tabindex="-1">
+    <div class="lead-modal-header">
+      <div>
+        <p class="eyebrow">Opportunity Smart Action</p>
+        <h2 id="opptyActionTitle">Engage Opportunity</h2>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeOpptyAction()">Close &times;</button>
+    </div>
+    <div class="lead-action-panels">
+      <form class="lead-action-form" data-oppty-form="Log Call" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Capture call highlights and next steps.</p>
+        <label>Call Type
+          <select name="callType" required>
+            <option value="Exec">Executive</option>
+            <option value="Solutioning">Solutioning</option>
+            <option value="Commercial">Commercial</option>
+          </select>
+        </label>
+        <label>Participants<textarea name="participants" rows="2" placeholder="AE, Architect, CFO..."></textarea></label>
+        <label>Summary<textarea name="summary" rows="3" placeholder="Discussed approval path, risks, etc."></textarea></label>
+        <label>Next Step<textarea name="nextStep" rows="2" placeholder="Send updated quote with GP adjustments"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Log Call</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-oppty-form="Send Quote" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Launch CPQ with a pre-built Quick Quote.</p>
+        <label>Quote Name<input name="quoteName" placeholder="Renewal Quote" required></label>
+        <label>Amount<input type="number" name="quoteAmount" placeholder="550000" step="1000"></label>
+        <label>Notes<textarea name="quoteNotes" rows="3" placeholder="Include change order items and terms"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Send Quote</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-oppty-form="Request Approval" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Route a pricing or commercial approval.</p>
+        <label>Approval Type
+          <select name="approvalType" required>
+            <option value="Discount">Discount</option>
+            <option value="Contract">Contract Exception</option>
+            <option value="Executive">Executive Review</option>
+          </select>
+        </label>
+        <label>Justification<textarea name="justification" rows="3" placeholder="Customer requested accelerated payment terms..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Submit Approval</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-oppty-form="Launch DocuSign" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Send the latest SOW or quote packet for signature.</p>
+        <label>Document Name<input name="docName" placeholder="Phase 2 SOW" required></label>
+        <label>Signers<textarea name="signers" rows="2" placeholder="Customer CFO, PMO lead..."></textarea></label>
+        <label>Message<textarea name="docMessage" rows="3" placeholder="Please review and sign to begin mobilization."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Launch DocuSign</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-oppty-form="Create Pursuit" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Push this opportunity to PPM Pursuit via OIC.</p>
+        <label>Pursuit Name<input name="pursuitName" placeholder="Apex Tower Pursuit" required></label>
+        <label>Budget<input type="number" name="pursuitBudget" placeholder="1250000" step="1000"></label>
+        <label>Notes<textarea name="pursuitNotes" rows="3" placeholder="Include risk register and resourcing plan"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Create Pursuit</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-oppty-form="Escalate" onsubmit="return submitOpptyAction(event)" style="display:none">
+        <p class="muted">Notify leadership and partner teams about blockers.</p>
+        <label>Escalation To<input name="escalateTo" placeholder="Regional VP / Partner" required></label>
+        <label>Summary<textarea name="escalateSummary" rows="3" placeholder="Need pricing flexibility to beat competitor..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeOpptyAction()">Cancel</button>
+          <button type="submit" class="btn primary">Escalate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:120" aria-hidden="true">
   <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
     <h2 id="addOpptyTitle">Create Opportunity</h2>
@@ -223,9 +313,9 @@
 </div>
 
 <script>
-window.addEventListener('DOMContentLoaded', function(){
-  var fallbackState = { oppty:{ activities:[] }, lead:{}, opportunities:[] };
-  var hasRWD = !!(window.RWD && typeof window.RWD.get==='function');
+ window.addEventListener('DOMContentLoaded', function(){
+   var fallbackState = { oppty:{ activities:[] }, lead:{}, opportunities:[] };
+   var hasRWD = !!(window.RWD && typeof window.RWD.get==='function');
   function safeSnapshot(){
     if(!hasRWD) return JSON.parse(JSON.stringify(fallbackState));
     try{
@@ -442,10 +532,139 @@ function initOpptySmartBanner(){
 
 function fireOpptyAction(action){
   if(!action) return;
+  var handled=openOpptyActionModal(action);
   if(window.RWD && typeof RWD.actOppty==='function'){
     RWD.actOppty(action);
   }
-  if(typeof showToast==='function') showToast(action+' triggered');
+  if(!handled && typeof showToast==='function') showToast(action+' triggered');
+}
+
+function openOpptyActionModal(action){
+  var modal=document.getElementById('oppty-action-modal');
+  if(!modal) return false;
+  var forms=modal.querySelectorAll('[data-oppty-form]');
+  var found=false;
+  forms.forEach(function(form){
+    var show=form.dataset.opptyForm===action;
+    form.style.display=show?'flex':'none';
+    if(show){
+      found=true;
+      prefillOpptyAction(form);
+      setTimeout(function(){ var field=form.querySelector('input,textarea,select'); if(field) field.focus(); }, 30);
+    }
+  });
+  if(!found) return false;
+  var title=document.getElementById('opptyActionTitle'); if(title) title.textContent=action;
+  modal.style.display='flex';
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-visible');
+  return true;
+}
+
+function closeOpptyAction(){
+  var modal=document.getElementById('oppty-action-modal');
+  if(!modal) return;
+  modal.style.display='none';
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-visible');
+}
+
+function prefillOpptyAction(form){
+  var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
+  var opp=state.oppty||{};
+  if(form.dataset.opptyForm==='Send Quote'){
+    if(form.elements.quoteName && !form.elements.quoteName.value){ form.elements.quoteName.value=(opp.name||'Opportunity')+' Quote'; }
+    if(form.elements.quoteAmount && !form.elements.quoteAmount.value && opp.amount){ form.elements.quoteAmount.value=opp.amount; }
+  }
+  if(form.dataset.opptyForm==='Launch DocuSign'){
+    if(form.elements.docName && !form.elements.docName.value){ form.elements.docName.value=(opp.name||'Opportunity')+' SOW'; }
+  }
+  if(form.dataset.opptyForm==='Create Pursuit'){
+    if(form.elements.pursuitName && !form.elements.pursuitName.value){ form.elements.pursuitName.value=(opp.name||'Opportunity')+' Pursuit'; }
+    if(form.elements.pursuitBudget && !form.elements.pursuitBudget.value && opp.amount){ form.elements.pursuitBudget.value=opp.amount; }
+  }
+}
+
+function submitOpptyAction(ev){
+  if(ev) ev.preventDefault();
+  var form=ev?ev.target:null;
+  if(!form) return false;
+  var action=form.dataset.opptyForm || 'Action';
+  switch(action){
+    case 'Send Quote':
+      launchOpptyQuote(form);
+      break;
+    case 'Request Approval':
+      runApproval(form);
+      break;
+    case 'Launch DocuSign':
+      launchDocuSignFlow(form);
+      break;
+    case 'Create Pursuit':
+      pushPursuitFromOppty(form);
+      break;
+    case 'Escalate':
+      escalateOppty(form);
+      break;
+    default:
+      if(typeof showToast==='function') showToast(action+' completed');
+  }
+  form.reset();
+  closeOpptyAction();
+  return false;
+}
+
+function launchOpptyQuote(form){
+  var name=(form.elements.quoteName && form.elements.quoteName.value)||'Quote';
+  if(window.RWD && typeof RWD.runOICJob==='function'){
+    try{ RWD.runOICJob('CPQ Quote: '+name); }catch(e){ console.warn('runOICJob failed', e); }
+  }
+  try{ window.open('quote_to_docusign.html','_blank','noopener'); }catch(err){ console.warn('open quote screen failed', err); }
+  if(typeof showToast==='function') showToast('Quote '+name+' launched to CPQ');
+}
+
+function runApproval(form){
+  var type=form.elements.approvalType ? form.elements.approvalType.value : 'Approval';
+  if(window.RWD && typeof RWD.runOICJob==='function'){
+    try{ RWD.runOICJob('Approval: '+type); }catch(e){ console.warn('approval push failed', e); }
+  }
+  if(typeof showToast==='function') showToast(type+' approval requested');
+}
+
+function launchDocuSignFlow(form){
+  var doc=form.elements.docName ? form.elements.docName.value : 'Agreement';
+  if(window.RWD && typeof RWD.runOICJob==='function'){
+    try{ RWD.runOICJob('DocuSign: '+doc); }catch(e){ console.warn('docuSign job failed', e); }
+  }
+  try{ window.open('quote_to_docusign.html','_blank','noopener'); }catch(err){ console.warn('DocuSign page open failed', err); }
+  if(typeof showToast==='function') showToast('DocuSign launched for '+doc);
+}
+
+function pushPursuitFromOppty(form){
+  var name=form.elements.pursuitName ? form.elements.pursuitName.value : 'Pursuit';
+  var go=function(){
+    try{ window.open('ppm_pursuit.html','_blank','noopener'); }catch(e){ console.warn('open pursuit page failed', e); }
+    if(typeof showToast==='function') showToast('Pursuit "'+name+'" created');
+  };
+  if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+    try{ RWD.createPursuitViaOIC(go); return; }catch(e){ console.warn('createPursuitViaOIC failed', e); }
+  }
+  go();
+}
+
+function escalateOppty(form){
+  var target=form.elements.escalateTo ? form.elements.escalateTo.value : 'Leadership';
+  var body=form.elements.escalateSummary ? form.elements.escalateSummary.value : '';
+  if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+    try{
+      var state=RWD.get();
+      state.oppty=state.oppty||{};
+      state.oppty.activities=state.oppty.activities||[];
+      state.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Escalation', text: 'Sent to '+target+': '+body, who:'Sales' });
+      RWD.set(state);
+    }catch(e){ console.warn('escalation log failed', e); }
+  }
+  if(typeof showToast==='function') showToast('Escalation sent to '+target);
 }
 </script>
 <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
