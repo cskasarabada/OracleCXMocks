@@ -46,7 +46,7 @@
         <h3>Sales Agent</h3>
         <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
         <div class="actions">
-          <a class="btn" href="#" onclick="RWD.startAgent('sales'); return false;">Start</a>
+          <a class="btn" href="#" onclick="return startSalesAgentWithAssistant();">Start</a>
           <a class="btn" href="#" onclick="RWD.stopAgent('sales'); return false;">Stop</a>
           <span class="agent-status" id="agent-sales-status">idle</span>
         </div>
@@ -186,8 +186,97 @@
     }
     refreshAgentStatus();
     setInterval(refreshAgentStatus, 2000);
+    window.startSalesAgentWithAssistant=function(){
+      if(window.RWD){ RWD.startAgent('sales'); }
+      openSalesAssistant();
+      return false;
+    };
+    function openSalesAssistant(){
+      const modal=document.getElementById('sales-assistant-modal');
+      if(!modal) return;
+      modal.classList.add('visible');
+      const feed=modal.querySelector('.chat-feed');
+      if(feed && !feed.dataset.seeded){
+        feed.dataset.seeded='1';
+        appendAssistantMessage('Need anything on leads, opps, or pursuits? Ask me and I will pull live demo data.');
+      }
+      document.getElementById('sales-assistant-input').focus();
+    }
+    window.closeSalesAssistant=function(){
+      document.getElementById('sales-assistant-modal').classList.remove('visible');
+    };
+    function appendMessage(sender,text){
+      const feed=document.querySelector('#sales-assistant-modal .chat-feed');
+      if(!feed) return;
+      const li=document.createElement('li');
+      li.className='msg '+sender;
+      li.innerHTML='<span>'+text+'</span>';
+      feed.appendChild(li);
+      feed.scrollTop=feed.scrollHeight;
+    }
+    function appendAssistantMessage(text){ appendMessage('assistant', text); }
+    function appendUserMessage(text){ appendMessage('user', text); }
+    window.sendSalesAssistantMessage=function(ev){
+      ev.preventDefault();
+      const input=document.getElementById('sales-assistant-input');
+      const q=(input.value||'').trim();
+      if(!q) return false;
+      appendUserMessage(q);
+      input.value='';
+      setTimeout(function(){ respondFromDemoData(q); }, 400);
+      return false;
+    };
+    function respondFromDemoData(q){
+      const data = window.RWD ? RWD.get() : {lead:{},oppty:{},pursuit:{},const:{}};
+      const lower=q.toLowerCase();
+      let answer='';
+      if(lower.includes('lead')){
+        answer='Latest lead: '+(data.lead.company||'Unnamed')+' ('+(data.lead.contact||'contact TBD')+') score '+(data.lead.score||'60')+'. We can convert or nudge via Smart Actions.';
+      }else if(lower.includes('opportunity')||lower.includes('deal')){
+        answer='Opportunity "'+(data.oppty.name||'New Build')+'" at $'+(data.oppty.amount||250000).toLocaleString()+' is in '+(data.oppty.stage||'Qualification')+'. Need a next step? I can suggest partner involvement or run a CPQ quote.';
+      }else if(lower.includes('pursuit')||lower.includes('ppm')){
+        answer='Pursuit "'+(data.pursuit.name||'Demo Pursuit')+'" is '+(data.pursuit.status||'Draft')+' with estimate $'+(data.pursuit.estimate||0).toLocaleString()+'. Integration agent is ready to sync cost sheets.';
+      }else if(lower.includes('project')){
+        answer='Delivery project "'+(data.const.name||'Demo Construction')+'" is '+(data.const.status||'Planned')+' with budget $'+(data.const.budget||0).toLocaleString()+'. I can highlight schedule or warranty milestones.';
+      }else if(lower.includes('help')||lower.includes('what can you do')){
+        answer='I can qualify leads, propose next actions, launch approvals, or create pursuits via OIC. Just ask about leads, opportunities, quotes, or delivery.';
+      }else{
+        answer='I pulled context but need a specific area (lead, opportunity, pursuit, project). Ask something like "What\'s the status of our pursuit?" and I will respond with live data.';
+      }
+      appendAssistantMessage(answer);
+    }
  });
 </script>
+<div id="sales-assistant-modal" class="agent-modal">
+  <div class="agent-modal-content">
+    <header>
+      <div>
+        <p class="eyebrow">Argano GenAI</p>
+        <h3>Sales Agent Assist</h3>
+      </div>
+      <button class="ghost-btn small" onclick="closeSalesAssistant()">Close</button>
+    </header>
+    <ul class="chat-feed"></ul>
+    <form class="chat-compose" onsubmit="return sendSalesAssistantMessage(event);">
+      <input type="text" id="sales-assistant-input" placeholder="Ask about a lead, opportunity, quote, or pursuit..." autocomplete="off"/>
+      <button class="btn brand" type="submit">Ask</button>
+    </form>
+  </div>
+</div>
+<style>
+.agent-modal{position:fixed;inset:0;background:rgba(6,16,41,.6);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:999;}
+.agent-modal.visible{opacity:1;pointer-events:auto;}
+.agent-modal-content{width:min(480px,90vw);background:#fff;border-radius:20px;padding:18px;box-shadow:0 30px 70px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:12px;}
+.agent-modal-content header{display:flex;justify-content:space-between;align-items:center;}
+.chat-feed{list-style:none;margin:0;padding:0;height:280px;overflow:auto;border:1px solid var(--rw-border);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:10px;background:#f8fafc;}
+.chat-feed .msg{display:flex;}
+.chat-feed .msg span{padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.3;max-width:90%;}
+.chat-feed .msg.user{justify-content:flex-end;}
+.chat-feed .msg.user span{background:#ffeadb;color:#7c2d12;}
+.chat-feed .msg.assistant span{background:#0f172a;color:#fff;}
+.chat-compose{display:flex;gap:10px;}
+.chat-compose input{flex:1;border:1px solid var(--rw-border);border-radius:12px;padding:10px 12px;font-size:14px;}
+</style>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
 </html>
