@@ -340,8 +340,19 @@
 </style>
 
 <script>
+ function getLeadState(){
+   var fallback={lead:{}, timeline:[], logs:[], opportunities:[], pursuit:{}, const:{}};
+   if(window.RWD && typeof RWD.get==='function'){
+     try{
+       return Object.assign(fallback, RWD.get()||{});
+     }catch(e){
+       console.warn('Lead state fetch failed', e);
+     }
+   }
+   return fallback;
+ }
  window.addEventListener('DOMContentLoaded', function(){
-   var state = RWD.get();
+   var state = getLeadState();
    var timelineTargets=[document.getElementById('leadTlMain')];
    function renderTimeline(snapshot){
      var data=snapshot||state;
@@ -376,17 +387,17 @@
    handleSnapshot(state);
    initLeadSmartBanner();
    try{ renderLeadsPreview(); }catch(e){}
-   if(RWD.subscribe){
-     RWD.subscribe(handleSnapshot);
-   }
- });
+    if(window.RWD && typeof RWD.subscribe==='function'){
+      RWD.subscribe(handleSnapshot);
+    }
+  });
 
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('add-new-lead-btn');
   if(btn) btn.addEventListener('click', function(){ prepareLeadForm(); openAddLead('create'); });
   var editBtn=document.getElementById('edit-lead-btn');
   if(editBtn) editBtn.addEventListener('click', function(){
-    var snapshot = RWD.get();
+    var snapshot = getLeadState();
     openAddLead('edit', snapshot.lead);
   });
   var form = document.getElementById('addLeadForm');
