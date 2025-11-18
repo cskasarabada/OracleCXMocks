@@ -14,6 +14,10 @@
 .mobile-card{border:1px solid var(--rw-border);border-radius:16px;padding:12px;box-shadow:0 4px 12px rgba(15,23,42,.08);}
 .mobile-card h3{margin:0 0 4px;font-size:16px;}
 .mobile-card p{margin:0;font-size:13px;color:var(--rw-muted);}
+.mobile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:200;}
+.mobile-overlay .modal-phone{max-width:520px;width:90%;background:#05070c;border-radius:36px;padding:20px;border:6px solid #1f2937;box-shadow:0 28px 55px rgba(2,6,23,.65);}
+.mobile-overlay .modal-content{background:#fff;border-radius:28px;padding:20px;display:flex;flex-direction:column;gap:16px;min-height:540px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;}
 </style>
 </head>
 <body class="lead-landing">
@@ -35,7 +39,7 @@
         <h3>Next Stop · Warner HQ</h3>
         <p>15 min away • AI recommends Quick Sales expansion follow-up.</p>
         <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="btn primary" style="flex:1">Launch Quick Sales</button>
+          <button class="btn primary" style="flex:1" onclick="openQuickSalesMobile()">Launch Quick Sales</button>
           <button class="btn" style="flex:1">Navigate</button>
         </div>
       </div>
@@ -58,6 +62,48 @@
     </div>
   </div>
 </main>
+<div class="mobile-overlay" id="quickSalesMobile" aria-hidden="true">
+  <div class="modal-phone" role="dialog" aria-modal="true" aria-labelledby="qsMobileTitle" tabindex="-1">
+    <div class="modal-content">
+      <div class="phone-status"><span>09:41</span><span>5G ▪︎ 100%</span></div>
+      <h2 id="qsMobileTitle" style="margin:0;font-size:20px;text-align:center">Quick Sales Mobile Flow</h2>
+      <div class="mobile-card">
+        <h3>Account + Need</h3>
+        <p>Fox Crossing · AI confirmed need</p>
+        <button class="btn" style="width:100%;margin-top:8px">Convert with Quick Sales</button>
+      </div>
+      <div class="mobile-card">
+        <h3>Quote + Approval</h3>
+        <p>Pre-built CPQ bundle ready · 2 approvals pending DocuSign.</p>
+        <button class="btn primary" style="width:100%;margin-top:8px">Send for Signature</button>
+      </div>
+      <div class="mobile-card">
+        <h3>Execution & Handoff</h3>
+        <p>Push pursuit to PPM and add project tasks.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeQuickSalesMobile()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+<script>
+function openQuickSalesMobile(){
+  var overlay=document.getElementById('quickSalesMobile');
+  if(!overlay) return;
+  overlay.style.display='flex';
+  overlay.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-visible');
+  setTimeout(function(){ try{ overlay.querySelector('.modal-phone').focus(); }catch(e){} },50);
+}
+function closeQuickSalesMobile(){
+  var overlay=document.getElementById('quickSalesMobile');
+  if(!overlay) return;
+  overlay.style.display='none';
+  overlay.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-visible');
+}
+</script>
 </body>
 </html>
