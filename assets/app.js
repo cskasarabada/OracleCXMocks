@@ -593,6 +593,7 @@
     } else {
       header.innerHTML=headerMarkup;
     }
+    document.querySelectorAll('.header, .tabs').forEach(function(el){ el.parentNode && el.parentNode.removeChild(el); });
     var nav=document.querySelector('nav.quick-nav');
     var current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
     if(!nav){
