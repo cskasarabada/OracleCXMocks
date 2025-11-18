@@ -173,19 +173,56 @@
 
 <script>
  window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
-   document.getElementById('opptyName').value=d.oppty.name||'';
-   document.getElementById('opptyAmount').value=d.oppty.amount||0;
+   var defaultState = { oppty:{ activities:[] }, opportunities:[] };
+   var canReadRWD = !!(window.RWD && typeof RWD.get==='function');
+   var d = defaultState;
+   if(canReadRWD){
+     try{ d = RWD.get() || defaultState; }catch(err){ console.warn('RWD.get failed', err); }
+   }
+   d.oppty = d.oppty || { activities:[] };
+   d.oppty.activities = d.oppty.activities || [];
+   var nameInput = document.getElementById('opptyName'); if(nameInput) nameInput.value=d.oppty.name||'';
+   var amountInput = document.getElementById('opptyAmount'); if(amountInput) amountInput.value=d.oppty.amount||0;
   // set hero title from demo state if available
   try{ var hero = document.getElementById('opptyHeroTitle'); if(hero) hero.textContent = (d.oppty && (d.oppty.name || d.oppty.title)) || 'Sample Opportunity'; var sub = document.getElementById('opptyHeroSub'); if(sub) sub.textContent = (d.oppty && d.oppty.account) || 'Account - Primary Contact'; }catch(e){}
-   function setStage(v){ document.getElementById('stageVal').value=v; Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); }); }
+   var stageInput = document.getElementById('stageVal');
+   function setStage(v){
+     if(stageInput) stageInput.value=v;
+     Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.classList.toggle('cur', sp.dataset.v===v); });
+   }
    setStage(d.oppty.stage||'Qualification');
    Array.prototype.slice.call(document.querySelectorAll('.stage .s')).forEach(function(sp){ sp.addEventListener('click', function(){ setStage(sp.dataset.v); }); });
-   document.getElementById('btnCreatePursuit').addEventListener('click', function(){ var f=document.getElementById('oppForm'); RWD.saveOppty(f); document.getElementById('status').textContent='Running OIC job...'; document.getElementById('prog').style.width='60%'; RWD.createPursuitViaOIC(function(){ document.getElementById('status').textContent='Completed'; document.getElementById('prog').style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); }); });
+   var pursuitBtn = document.getElementById('btnCreatePursuit');
+   if(pursuitBtn){
+     pursuitBtn.addEventListener('click', function(){
+       var payload = formToObject(document.getElementById('oppForm'));
+       persistOpportunity(payload);
+       var statusEl=document.getElementById('status'); if(statusEl) statusEl.textContent='Running OIC job...';
+       var progEl=document.getElementById('prog'); if(progEl) progEl.style.width='60%';
+       var kickoff = function(){ if(statusEl) statusEl.textContent='Completed'; if(progEl) progEl.style.width='100%'; setTimeout(function(){ window.location='ppm_pursuit.html'; }, 600); };
+       if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+         try{ RWD.createPursuitViaOIC(kickoff); }catch(err){ console.error('createPursuitViaOIC failed', err); kickoff(); }
+       } else {
+         kickoff();
+       }
+     });
+   }
    // render timeline
    var tl=document.getElementById('opptyTl');
-   function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
-   render(); setInterval(function(){ var nd=RWD.get(); if((nd.oppty.activities||[]).length !== (d.oppty.activities||[]).length){ d=nd; render(); } }, 800);
+   if(tl){
+     function render(){ tl.innerHTML=''; (d.oppty.activities||[]).forEach(function(a){ var div=document.createElement('div'); div.className='item'; div.innerHTML='<div class="t">'+a.ts+'</div><div><div class="who">'+a.type+'</div><div class="what">'+a.text+'</div></div>'; tl.appendChild(div); }); }
+     render();
+     if(canReadRWD){
+       setInterval(function(){
+         try{
+           var nd = RWD.get() || defaultState;
+           nd.oppty = nd.oppty || { activities:[] };
+           nd.oppty.activities = nd.oppty.activities || [];
+           if((nd.oppty.activities||[]).length !== (d.oppty.activities||[]).length){ d=nd; render(); }
+         }catch(err){ console.warn('timeline poll failed', err); }
+       }, 800);
+     }
+   }
   // render opportunities preview initially
   try{ renderOppsPreview(); }catch(e){}
  });
@@ -214,14 +251,49 @@ function closeAddOppty(){
 
 document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('add-new-oppty-btn'); if(btn) btn.addEventListener('click', openAddOppty);
-  var form = document.getElementById('addOpptyForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var fd=new FormData(form); var obj={}; fd.forEach(function(v,k){ obj[k]=v; }); if(window.RWD && typeof RWD.saveOppty==='function'){ RWD.saveOppty(obj); } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){ var s = RWD.get(); s.opportunities = s.opportunities || []; s.opportunities.unshift(obj); s.oppty = s.oppty || {}; s.oppty.activities = s.oppty.activities || []; s.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text: 'Opportunity created: ' + (obj.name || obj.account || '') }); try{ RWD.set(s); }catch(e){ console.warn('RWD.set failed', e); } }
-        if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
-      }catch(e){ console.error('save oppty failed', e); if(typeof showToast==='function') showToast('Save failed'); }
+  var form = document.getElementById('addOpptyForm'); if(form){ form.addEventListener('submit', function(ev){ ev.preventDefault(); try{ var obj=formToObject(form); persistOpportunity(obj); }catch(e){ console.error('save oppty failed', e); if(typeof showToast==='function') showToast('Save failed'); }
       closeAddOppty(); try{ renderOppsPreview(); }catch(e){}
   }); }
   // initial preview render
   try{ renderOppsPreview(); }catch(e){}
 });
+
+function persistOpportunity(obj){
+  var saved=false;
+  if(window.RWD && typeof RWD.saveOppty==='function'){
+    try{ RWD.saveOppty(obj); saved=true; }catch(e){ console.error('RWD.saveOppty failed', e); }
+  } else if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+    try{
+      var s = RWD.get() || {};
+      s.opportunities = s.opportunities || [];
+      s.opportunities.unshift(obj);
+      s.oppty = s.oppty || {};
+      s.oppty.activities = s.oppty.activities || [];
+      s.oppty.activities.unshift({ ts:new Date().toLocaleString(), type:'Create', text: 'Opportunity created: ' + (obj.name || obj.account || '') });
+      RWD.set(s);
+      saved=true;
+    }catch(err){ console.warn('Fallback RWD.set failed', err); }
+  }
+  if(saved){
+    if(typeof showToast==='function') showToast('Opportunity saved'); else alert('Opportunity saved');
+  } else {
+    console.warn('Opportunity not persisted (demo services unavailable)');
+  }
+}
+
+function formToObject(form){
+  var obj={};
+  if(!form) return obj;
+  try{
+    var fd=new FormData(form);
+    fd.forEach(function(v,k){ obj[k]=v; });
+  }catch(e){
+    console.warn('FormData unavailable, attempting manual serialization', e);
+    var elements = form.elements || [];
+    Array.prototype.forEach.call(elements, function(el){ if(el.name) obj[el.name]=el.value; });
+  }
+  return obj;
+}
 
 // Render recent opportunities preview
 function renderOppsPreview(){
