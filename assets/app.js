@@ -3,6 +3,7 @@
     {href:'index.html',label:'Overview'},
     {href:'Easy_Start_Flows.html',label:'Easy Start'},
     {href:'sales_cloud.html',label:'Sales Flow'},
+    {href:'sales_tools.html',label:'Sales Tools'},
     {href:'cx_lead.html',label:'Lead'},
     {href:'cx_opportunity.html',label:'Opportunity'},
     {href:'ppm_pursuit.html',label:'PPM Pursuit'},
