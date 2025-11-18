@@ -6,91 +6,182 @@
 <title>Argano Sales Tools</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<style>
+:root{--argano-orange:#ff7a18;--deep-navy:#0f172a;}
+body{font-family:"Century Gothic","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
+.sales-hero{background:linear-gradient(120deg,var(--deep-navy),#1f2a44);color:#fff;padding:24px 28px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:28px;align-items:center;}
+.sales-hero h1{margin:6px 0 12px;font-size:2.2rem;}
+.sales-hero p{color:#dbe3ff;margin-bottom:12px;}
+.hero-visual{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:18px;}
+.hero-visual .window{background:#fff;border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.25);padding:16px;color:#0f172a;}
+.hero-visual .window-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.hero-visual .pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+.hero-visual .pill{padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;background:rgba(15,23,42,.08);color:var(--deep-navy);}
+.hero-visual .pill.active{background:var(--argano-orange);color:#fff;text-decoration:underline;}
+.hero-visual .grid-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.hero-visual .grid-preview .cell{border-radius:12px;padding:10px;font-size:12px;background:linear-gradient(135deg,#fdf2e9,#fff);}
+.eyebrow{letter-spacing:.2em;text-transform:uppercase;font-size:12px;margin-bottom:6px;}
+.sales-section{margin-top:20px;}
+.dual-grid{display:grid;grid-template-columns:1fr 0.9fr;gap:24px;}
+.panel{background:#f9f9ff;border:1px solid var(--rw-border);border-radius:18px;padding:18px;}
+.checklist{margin:12px 0 0;padding-left:18px;color:var(--rw-ink);}
+.collab-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px;}
+.collab-grid .badge{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(255,122,24,.1);color:var(--argano-orange);font-weight:600;font-size:13px;margin-bottom:12px;}
+.approvals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:18px;}
+.approvals-grid .step{border-radius:18px;padding:16px;border:1px solid var(--rw-border);background:linear-gradient(160deg,#fff,#fff7f0);}
+.approvals-grid .step h3{margin:0 0 8px;font-size:1rem;color:var(--argano-orange);}
+.pipeline-card{background:#0f172a;color:#fff;border-radius:22px;padding:24px;margin-top:24px;}
+.pipeline-card .stat-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;}
+.pipeline-card .stat{flex:1;min-width:160px;background:rgba(255,255,255,.1);border-radius:14px;padding:14px;}
+.mobile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:18px;}
+.mobile-grid .item{border-radius:18px;padding:16px;background:#f6faff;border:1px solid #d9e7ff;}
+.mobile-grid .item strong{display:block;margin-bottom:6px;color:#0f3066;font-size:1rem;}
+@media(max-width:900px){
+  .sales-hero{grid-template-columns:1fr;padding:20px;}
+  .dual-grid{grid-template-columns:1fr;}
+  .collab-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 <body class="lead-landing">
 <main class="lead-shell">
-  <section class="card" style="text-align:center">
-    <p class="eyebrow">Embedded Sales Tools</p>
-    <h1 style="margin:6px 0 10px">Coaching, controls, and collaboration aids</h1>
-    <p style="color:var(--rw-muted)">Oracle CX Sales Cloud embeds sales accelerators directly into Smart Actions so presenters can show value beyond CRM data capture.</p>
-  </section>
-
-  <section class="card" style="margin-top:16px">
-    <h2>Digital coaches inside every screen</h2>
-    <div class="body">
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Sales Coaching</h3>
-          <p>Scenario prompts and best practice recommendations guide reps through complex conversations.</p>
-          <ul>
-            <li>Context-aware nudges in Smart Actions.</li>
-            <li>AI suggestions drawn from similar accounts.</li>
-          </ul>
+  <section class="card sales-hero">
+    <div>
+      <p class="eyebrow" style="color:#fbd5bb">Oracle CX Sales Cloud</p>
+      <h1>Intelligent Selling with Embedded Sales Tools</h1>
+      <p>Argano’s experience-led layer wraps Oracle CX Sales Cloud with ready-to-demo coaches, controls, and collaboration aids so leaders can showcase the full pursuit story—without touching code.</p>
+      <ul class="checklist" style="color:#fff">
+        <li>Coaching + guided selling infused in Smart Actions, Quick Sales, and Partner Hub.</li>
+        <li>Automated approvals flow through Teams, DocuSign, and CX-native SLAs.</li>
+        <li>Field and HQ stay aligned through mobile-first logging and analytics tiles.</li>
+      </ul>
+    </div>
+    <div class="hero-visual">
+      <div class="window">
+        <div class="window-header">
+          <div class="pill-row">
+            <span class="pill active">Sales CoPilot</span>
+            <span class="pill">Approvals</span>
+            <span class="pill">Collab</span>
+          </div>
+          <span style="font-size:12px;color:#475569">Live inside Smart Actions</span>
         </div>
-        <div class="panel">
-          <h3>Guided Selling</h3>
-          <p>Regulated markets, policy thresholds, and conditional workflows ensure consistency.</p>
-          <ul>
-            <li>Curated playbooks by industry.</li>
-            <li>Next best steps aligned to win plans.</li>
-          </ul>
+        <div style="border-radius:12px;border:1px dashed #cbd5f5;padding:12px;text-align:center;color:#475569">
+          Stylized screenshot placeholder showing Argano theme
         </div>
-        <div class="panel">
-          <h3>Automated Approvals</h3>
-          <p>Discount requests, contractual checks, and legal reviews trigger instantly from Smart Actions.</p>
-          <ul>
-            <li>Pre-built approval chains and SLAs.</li>
-            <li>Audit-ready history per transaction.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Seamless Collaboration</h3>
-          <p>Native Outlook and Microsoft Teams integration keeps the whole pursuit team aligned.</p>
-          <ul>
-            <li>Update opportunity logs from Teams.</li>
-            <li>Share files, quotes, and analytics insights.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Pipeline Analytics</h3>
-          <p>Redline dashboards visualize conversion velocity, forecast accuracy, and confidence by cohort.</p>
-          <ul>
-            <li>Stage-level pacing indicators.</li>
-            <li>Early warning alerts surfaced in Smart Actions.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Mobile Access</h3>
-          <p>Full CRM functionality on iOS and Android so teams stay productive anywhere.</p>
-          <ul>
-            <li>Instant logging for calls, visits, or notes.</li>
-            <li>Offline capture syncs once reconnected.</li>
-          </ul>
+        <div class="pill-row" style="margin-top:14px">
+          <span class="pill active">Coach Summary</span>
+          <span class="pill">Next Steps</span>
+          <span class="pill">AI Notes</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="card" style="margin-top:16px">
-    <h2>Demo storyline</h2>
-    <div class="body">
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Why it matters</h3>
-          <ul>
-            <li>Coaching surfaces right inside seller workflows.</li>
-            <li>Automated controls protect margins and compliance.</li>
-            <li>Collaboration tools keep pursuit teams aligned.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>How to present</h3>
-          <ul>
-            <li>Show the Smart Action rail lighting up with coaching steps.</li>
-            <li>Demo an approval request flowing through Teams.</li>
-            <li>Highlight analytics tiles that feed forecasting accuracy.</li>
-          </ul>
-        </div>
+  <section class="card sales-section">
+    <div class="dual-grid">
+      <div>
+        <p class="eyebrow">Sales Coaching & Guided Selling</p>
+        <h2 style="margin:0 0 12px">Always-on digital coaches that match your pursuit playbook</h2>
+        <p>Scenario prompts, win-plan nudges, and industry playbooks surface exactly where reps work—Quick Sales, Opportunity 360, and Partner Hub. Every cue mirrors the Argano visual system so the experience feels consistent across the mockup.</p>
+        <ul class="checklist">
+          <li>Context-aware prompts referencing account intent signals.</li>
+          <li>Playbook tiles switch based on stage, buying role, or region.</li>
+          <li>Smart Action cards provide “Why it matters” copy for presenters.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3 style="margin-top:0">What presenters highlight</h3>
+        <ul class="checklist">
+          <li>Coach banner at the top with Century Gothic typography.</li>
+          <li>Pills showing Recommended Action, Risk, Counter-move.</li>
+          <li>Embedded checklist linking to Sales↔PPM sync steps.</li>
+        </ul>
+        <p style="margin-top:12px;color:var(--rw-muted)">All guidance respects the Argano orange accent (#ff7a18) so pills remain uncluttered yet consistent.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card sales-section">
+    <div class="collab-grid">
+      <div>
+        <span class="badge">Seamless Collaboration</span>
+        <h2 style="margin:0 0 10px">Teams + Outlook in the flow of work</h2>
+        <p>Whether the pursuit team is in Outlook, Microsoft Teams, or CX Sales, the same Smart Action rail appears so information never fragments. Presentations can highlight how a PM drops notes straight into the opportunity log without switching tabs.</p>
+      </div>
+      <div class="panel" style="background:#fff2e9;border-color:#ffd2b4">
+        <ul class="checklist">
+          <li>Post status to a “#Argano-Pursuit” Team channel and it records as activity.</li>
+          <li>Attach CPQ quotes, DocuSign packets, or PPM updates in one message.</li>
+          <li>Push AI-generated summary back to the executive dashboard.</li>
+        </ul>
+        <p style="margin-top:10px;font-size:12px;color:#b45309">Smart Action rail remains visible in every embedded surface.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card sales-section">
+    <p class="eyebrow">Automated Approvals</p>
+    <h2 style="margin:0 0 14px">Controls that keep deals moving without manual chasing</h2>
+    <div class="approvals-grid">
+      <div class="step">
+        <h3>Instant Discount Approvals</h3>
+        <p>Trigger straight from Quick Quote or Sales Tools; status returns to the same panel in seconds.</p>
+      </div>
+      <div class="step">
+        <h3>Contractual & Legal Reviews</h3>
+        <p>DocuSign packages launch workflows with pre-filled clauses tied to the Argano template library.</p>
+      </div>
+      <div class="step">
+        <h3>Built-in SLAs</h3>
+        <p>Badges show “Legal 2 hr SLA” or “Finance 4 hr SLA” so sellers set expectations instantly.</p>
+      </div>
+      <div class="step">
+        <h3>Audit-ready History</h3>
+        <p>Every approval write-back syncs with PPM cost centers and the Revenue Intelligence dashboard.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pipeline-card">
+    <p class="eyebrow" style="color:#fbd5bb">Pipeline Analytics & Insights</p>
+    <h2 style="margin:4px 0 10px">Show the data story without leaving the mockup</h2>
+    <p>Use the Argano-themed analytics tile to narrate conversion velocity, forecast accuracy, and partner contribution. Data chips can be swapped with client-specific numbers but the structure stays the same for every demo.</p>
+    <div class="stat-row">
+      <div class="stat">
+        <div style="font-size:12px;color:#cbd5f5">Conversion Velocity</div>
+        <div style="font-size:22px;font-weight:700">+18%</div>
+        <div style="font-size:12px;color:#cbd5f5">vs last quarter</div>
+      </div>
+      <div class="stat">
+        <div style="font-size:12px;color:#cbd5f5">Forecast Confidence</div>
+        <div style="font-size:22px;font-weight:700">93%</div>
+        <div style="font-size:12px;color:#cbd5f5">AI vs Manager</div>
+      </div>
+      <div class="stat">
+        <div style="font-size:12px;color:#cbd5f5">Partner Influence</div>
+        <div style="font-size:22px;font-weight:700">42%</div>
+        <div style="font-size:12px;color:#cbd5f5">Of pipeline</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card sales-section">
+    <p class="eyebrow">Mobile Access</p>
+    <h2 style="margin:0 0 8px">The Quick Sales Screen experience on any device</h2>
+    <p>When the blue CTA fires, showcase the responsive mobile shell so stakeholders see that the same Argano experience follows every seller on site visits.</p>
+    <div class="mobile-grid">
+      <div class="item">
+        <strong>Complete Functionality</strong>
+        <p>Create opportunities, kick off DocuSign, or update Sales↔PPM sync tasks from one tap.</p>
+      </div>
+      <div class="item">
+        <strong>Instant Activity Logging</strong>
+        <p>Call notes, photos, or partner updates post directly into the activity timeline with Argano pills.</p>
+      </div>
+      <div class="item">
+        <strong>Offline Capture & Sync</strong>
+        <p>Work crews can log updates on site; data syncs back to CX Sales, CPQ, and PPM once connected.</p>
       </div>
     </div>
   </section>
