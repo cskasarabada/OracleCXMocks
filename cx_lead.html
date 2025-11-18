@@ -324,6 +324,51 @@
           <button type="submit" class="btn primary">Create Task</button>
         </div>
       </form>
+
+      <form class="lead-action-form" data-action-form="Create Quote" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Move straight into quoting with CPQ + DocuSign orchestration.</p>
+        <label>Quote Name<input name="quoteName" placeholder="QS Expansion Quote" required></label>
+        <label>Target Amount<input name="quoteAmount" type="number" min="0" step="1000" placeholder="250000"></label>
+        <label>Notes<textarea name="quoteNotes" rows="3" placeholder="Bundle pre-approved rates + attach docs."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Launch Quote &amp; Push to CPQ</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Assign Owner" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Surface leads lacking engagement and assign an owner.</p>
+        <label>Lead
+          <select name="leadIndex" required></select>
+        </label>
+        <label>Assign To<input name="newOwner" placeholder="Jessica Brooks" required></label>
+        <label>Coaching Notes<textarea name="ownerNotes" rows="2" placeholder="Loop in pursuit manager for costing"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Assign Owner</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Add Note" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Drop coaching notes or executive context against the lead.</p>
+        <label>Note Title<input name="noteTitle" placeholder="Executive briefing"></label>
+        <label>Details<textarea name="noteBody" rows="4" placeholder="Summarize pain points, blockers, or approvals needed."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Add Note</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-action-form="Create Pursuit" onsubmit="return submitLeadAction(event)" style="display:none">
+        <p class="muted">Send the qualified lead to PPM Pursuit via OIC.</p>
+        <label>Pursuit Name<input name="pursuitName" placeholder="Skyline Renewables Pursuit" required></label>
+        <label>Est. Budget<input name="pursuitBudget" type="number" step="1000" placeholder="750000"></label>
+        <label>Notes<textarea name="pursuitNotes" rows="3" placeholder="Kickoff with pre-sales estimate + attach SOW draft."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
+          <button type="submit" class="btn primary">Create Pursuit</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -608,6 +653,31 @@ function prefillLeadAction(form){
   if(form.dataset.actionForm==='Create Task'){
     if(form.elements.owner && !form.elements.owner.value){ form.elements.owner.value = lead.owner || 'Chandra Kasarabada'; }
   }
+  if(form.dataset.actionForm==='Create Quote'){
+    if(form.elements.quoteName && !form.elements.quoteName.value){ form.elements.quoteName.value = (lead.company || 'Lead') + ' Quote'; }
+    if(form.elements.quoteAmount && !form.elements.quoteAmount.value && lead.amount){ form.elements.quoteAmount.value = lead.amount; }
+  }
+  if(form.dataset.actionForm==='Assign Owner'){
+    var select=form.elements.leadIndex;
+    if(select){
+      var rows=getLeadRows();
+      if(rows && rows.length){
+        select.innerHTML=rows.map(function(item,idx){
+          var owner=item.owner ? 'Owner: '+item.owner : 'Owner needed';
+          return '<option value="'+idx+'">'+(item.company||item.name||'Lead')+' - '+owner+'</option>';
+        }).join('');
+      }else{
+        select.innerHTML='<option value="">No leads available</option>';
+      }
+    }
+  }
+  if(form.dataset.actionForm==='Add Note'){
+    if(form.elements.noteTitle && !form.elements.noteTitle.value){ form.elements.noteTitle.value=(lead.company||'Lead')+' update'; }
+  }
+  if(form.dataset.actionForm==='Create Pursuit'){
+    if(form.elements.pursuitName && !form.elements.pursuitName.value){ form.elements.pursuitName.value=(lead.company||'Lead')+' Pursuit'; }
+    if(form.elements.pursuitBudget && !form.elements.pursuitBudget.value && lead.amount){ form.elements.pursuitBudget.value=lead.amount; }
+  }
 }
 
 function submitLeadAction(ev){
@@ -615,10 +685,95 @@ function submitLeadAction(ev){
   var form = ev ? ev.target : null;
   if(!form) return false;
   var action=form.dataset.actionForm || 'Smart Action';
-  if(typeof showToast==='function') showToast(action+' completed');
+  switch(action){
+    case 'Create Quote':
+      launchQuoteFlow(form);
+      break;
+    case 'Assign Owner':
+      assignLeadOwner(form);
+      break;
+    case 'Add Note':
+      addLeadNote(form);
+      break;
+    case 'Create Pursuit':
+      launchPursuitFlow(form);
+      break;
+    default:
+      if(typeof showToast==='function') showToast(action+' completed');
+  }
   form.reset();
   closeLeadAction();
   return false;
+}
+
+function launchQuoteFlow(form){
+  var name=(form.elements.quoteName && form.elements.quoteName.value) || 'Quick Quote';
+  if(window.RWD && typeof RWD.runOICJob==='function'){
+    try{ RWD.runOICJob('Push to CPQ: '+name); }catch(e){ console.warn('runOICJob failed', e); }
+  }
+  try{ window.open('quote_to_docusign.html','_blank','noopener'); }catch(err){ console.warn('open quote screen failed', err); }
+  if(typeof showToast==='function') showToast('Quote '+name+' launched');
+}
+
+function assignLeadOwner(form){
+  var idx=form.elements.leadIndex ? parseInt(form.elements.leadIndex.value,10) : NaN;
+  var owner=form.elements.newOwner ? form.elements.newOwner.value : '';
+  if(isNaN(idx) || !owner){
+    if(typeof showToast==='function') showToast('Select a lead and owner');
+    return;
+  }
+  var rows=getLeadRows();
+  var lead=rows && rows[idx];
+  if(!lead){
+    if(typeof showToast==='function') showToast('Lead not found');
+    return;
+  }
+  lead.owner=owner;
+  var applied=false;
+  if(window.RWD && typeof RWD.updateLead==='function'){
+    try{ RWD.updateLead(lead); applied=true; }catch(e){ console.warn('updateLead failed', e); }
+  }
+  if(!applied && window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+    try{
+      var state=RWD.get();
+      state.lead=Object.assign(state.lead||{}, lead);
+      RWD.set(state);
+      applied=true;
+    }catch(e){ console.warn('assign owner fallback failed', e); }
+  }
+  if(typeof showToast==='function') showToast('Owner set to '+owner+(applied?'':' (demo only)'));
+  renderLeadsPreview();
+}
+
+function addLeadNote(form){
+  var title=form.elements.noteTitle ? form.elements.noteTitle.value : '';
+  var body=form.elements.noteBody ? form.elements.noteBody.value : '';
+  var entry={ ts:new Date().toLocaleString(), type:title || 'Note', text:body || 'Update added', who:'Coach' };
+  var applied=false;
+  if(window.RWD && typeof RWD.get==='function' && typeof RWD.set==='function'){
+    try{
+      var state=RWD.get();
+      state.lead=state.lead||{};
+      state.lead.activities=state.lead.activities||[];
+      state.lead.activities.unshift(entry);
+      RWD.set(state);
+      applied=true;
+    }catch(e){ console.warn('add note failed', e); }
+  }
+  if(typeof showToast==='function') showToast(applied?'Note added to lead':'Note recorded (demo)');
+}
+
+function launchPursuitFlow(form){
+  var name=(form.elements.pursuitName && form.elements.pursuitName.value) || 'Demo Pursuit';
+  var budget=form.elements.pursuitBudget ? form.elements.pursuitBudget.value : '';
+  var run=function(){
+    try{ window.open('ppm_pursuit.html','_blank','noopener'); }catch(e){ console.warn('open pursuit page failed', e); }
+    if(typeof showToast==='function') showToast('Pursuit "'+name+'" created');
+  };
+  if(window.RWD && typeof RWD.createPursuitViaOIC==='function'){
+    try{ RWD.createPursuitViaOIC(run); return; }catch(e){ console.warn('createPursuitViaOIC failed', e); }
+  }
+  run();
 }
 
 function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\'/g,'&#39;'); }
