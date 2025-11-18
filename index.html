@@ -88,7 +88,7 @@
         <h3>Forecasting Agent</h3>
         <p>Analyze pipeline data and suggest forecast adjustments.</p>
         <div class="actions">
-          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('forecast'); } return false;">Start</a>
+          <a class="btn" href="#" onclick="return startForecastAgentWithAssistant();">Start</a>
           <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('forecast'); } return false;">Stop</a>
           <span class="agent-status" id="agent-forecast-status">idle</span>
         </div>
@@ -97,7 +97,7 @@
         <h3>Integration Agent</h3>
         <p>Simulate integrations between CX and PPM for demo scenarios.</p>
         <div class="actions">
-          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('integration'); } return false;">Start</a>
+          <a class="btn" href="#" onclick="return startIntegrationAgentWithAssistant();">Start</a>
           <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('integration'); } return false;">Stop</a>
           <span class="agent-status" id="agent-integration-status">idle</span>
         </div>
@@ -373,11 +373,11 @@
         }
        });
      }
-     window.startSalesAgentWithAssistant=function(){
+    window.startSalesAgentWithAssistant=function(){
       if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('sales'); }
       openSalesAssistant();
       return false;
-     };
+    };
     function openSalesAssistant(){
       const modal=document.getElementById('sales-assistant-modal');
       if(!modal) return;
@@ -468,6 +468,85 @@
     if(window.RWD && typeof RWD.subscribe==='function'){
       RWD.subscribe(handleState);
     }
+    window.startForecastAgentWithAssistant=function(){
+      if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('forecast'); }
+      openForecastAssistant();
+      return false;
+    };
+    function openForecastAssistant(){
+      var modal=document.getElementById('forecast-assistant-modal');
+      if(!modal) return;
+      var feed=document.getElementById('forecast-assistant-feed');
+      if(feed){
+        feed.innerHTML='';
+        appendForecastInsight();
+      }
+      modal.classList.add('visible');
+    }
+    window.closeForecastAssistant=function(){
+      var modal=document.getElementById('forecast-assistant-modal');
+      if(modal) modal.classList.remove('visible');
+    };
+    function appendForecastInsight(){
+      var feed=document.getElementById('forecast-assistant-feed');
+      if(!feed) return;
+      var data=safeState();
+      var amount=(data.oppty && data.oppty.amount) || 480000;
+      var prob=(data.oppty && data.oppty.stage==='Proposal')?0.68:0.42;
+      var text='Pipeline at $'+Number(amount).toLocaleString()+' with win confidence '+Math.round(prob*100)+'%. Recommend focusing on '+(data.oppty && data.oppty.name ? data.oppty.name : 'top pursuit')+'.';
+      var li=document.createElement('li');
+      li.className='msg assistant';
+      li.innerHTML='<span>'+text+'</span>';
+      feed.appendChild(li);
+      feed.scrollTop=feed.scrollHeight;
+    }
+    window.refreshForecastInsight=function(){
+      var feed=document.getElementById('forecast-assistant-feed');
+      if(feed) feed.innerHTML='';
+      appendForecastInsight();
+    };
+
+    window.startIntegrationAgentWithAssistant=function(){
+      if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('integration'); }
+      openIntegrationAssistant();
+      return false;
+    };
+    function openIntegrationAssistant(){
+      var modal=document.getElementById('integration-assistant-modal');
+      if(!modal) return;
+      var feed=document.getElementById('integration-assistant-feed');
+      if(feed){
+        feed.innerHTML='';
+        appendIntegrationInsight();
+      }
+      modal.classList.add('visible');
+    }
+    window.closeIntegrationAssistant=function(){
+      var modal=document.getElementById('integration-assistant-modal');
+      if(modal) modal.classList.remove('visible');
+    };
+    function appendIntegrationInsight(){
+      var feed=document.getElementById('integration-assistant-feed');
+      if(!feed) return;
+      var data=safeState();
+      var steps=[
+        'Pushed quote to CPQ for '+((data.oppty&&data.oppty.name)||'current opportunity'),
+        'DocuSign ready with '+((data.oppty&&data.oppty.account)||'customer'),
+        'PPM Pursuit synced with estimate '+Number((data.pursuit&&data.pursuit.estimate)||0).toLocaleString()
+      ];
+      steps.forEach(function(msg){
+        var li=document.createElement('li');
+        li.className='msg assistant';
+        li.innerHTML='<span>'+msg+'</span>';
+        feed.appendChild(li);
+      });
+      feed.scrollTop=feed.scrollHeight;
+    }
+    window.refreshIntegrationInsight=function(){
+      var feed=document.getElementById('integration-assistant-feed');
+      if(feed) feed.innerHTML='';
+      appendIntegrationInsight();
+    };
  });
  </script>
 <div id="sales-assistant-modal" class="agent-modal">
@@ -484,6 +563,38 @@
       <input type="text" id="sales-assistant-input" placeholder="Ask about a lead, opportunity, quote, or pursuit..." autocomplete="off"/>
       <button class="btn brand" type="submit">Ask</button>
     </form>
+  </div>
+</div>
+
+<div id="forecast-assistant-modal" class="agent-modal">
+  <div class="agent-modal-content">
+    <header>
+      <div>
+        <p class="eyebrow">Forecasting Analyst</p>
+        <h3>Pipeline &amp; AI Insights</h3>
+      </div>
+      <button class="ghost-btn small" onclick="closeForecastAssistant()">Close</button>
+    </header>
+    <ul class="chat-feed" id="forecast-assistant-feed"></ul>
+    <div class="chat-compose">
+      <button class="btn brand" type="button" onclick="refreshForecastInsight()">Refresh Insight</button>
+    </div>
+  </div>
+</div>
+
+<div id="integration-assistant-modal" class="agent-modal">
+  <div class="agent-modal-content">
+    <header>
+      <div>
+        <p class="eyebrow">Integration Orchestrator</p>
+        <h3>CPQ / DocuSign / PPM</h3>
+      </div>
+      <button class="ghost-btn small" onclick="closeIntegrationAssistant()">Close</button>
+    </header>
+    <ul class="chat-feed" id="integration-assistant-feed"></ul>
+    <div class="chat-compose">
+      <button class="btn brand" type="button" onclick="refreshIntegrationInsight()">Refresh Flow</button>
+    </div>
   </div>
 </div>
 <style>
