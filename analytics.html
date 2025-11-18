@@ -3,148 +3,283 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Analytics (Redwood)</title>
+<title>Argano Analytics Command Deck</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<style>
+:root{--argano-orange:#ff7a18;--deep-navy:#0f172a;}
+body{font-family:"Century Gothic","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
+.analytics-hero{background:linear-gradient(110deg,var(--deep-navy),#1f2a44);color:#fff;padding:26px 32px;border-radius:28px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:26px;align-items:center;}
+.analytics-hero h1{margin:8px 0 12px;font-size:2.3rem;}
+.analytics-hero p{color:#d9e3ff;margin:0 0 14px;}
+.hero-pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.hero-pill{padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.4);color:#fff;}
+.hero-panel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:18px;}
+.hero-panel h3{margin:0 0 10px;font-size:1rem;color:#fbd5bb;}
+.hero-panel .kv{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:#e2e8ff;}
+.hero-panel .kv span{font-weight:600;color:#fff;}
+.section-eyebrow{letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:#64748b;margin-bottom:6px;text-align:center;}
+.section-title{text-align:center;margin:0 auto 20px;max-width:640px;}
+.analytics-section{margin-top:24px;}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.dash-card{border-radius:18px;padding:18px;border:1px solid var(--rw-border);background:#fff;}
+.dash-card h3{margin:0 0 6px;font-size:1rem;color:#0f172a;}
+.dash-card p{margin:0;color:#475569;font-size:13px;}
+.dash-card .value{font-size:26px;font-weight:700;color:var(--argano-orange);margin-bottom:4px;}
+.dash-card .trend{font-size:12px;color:#16a34a;}
+.dash-card .trend.down{color:#dc2626;}
+.dash-card ul{margin:8px 0 0;padding-left:16px;font-size:13px;color:#475569;}
+.double-width{grid-column:span 2;}
+.heatmap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.heatmap .tile{border-radius:12px;padding:10px;text-align:center;background:linear-gradient(135deg,#fff3eb,#ffe5d1);}
+.heatmap .tile strong{display:block;font-size:20px;color:#b45309;}
+.customer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+.customer-card{border-radius:22px;padding:20px;background:linear-gradient(135deg,#f6f8ff,#fff);border:1px solid #e2e8f0;}
+.customer-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.customer-card header h3{margin:0;font-size:1rem;}
+.customer-card header span{font-size:12px;padding:4px 10px;border-radius:999px;background:rgba(255,122,24,.12);color:var(--argano-orange);font-weight:600;}
+.customer-card ul{margin:0;padding-left:18px;color:#475569;font-size:13px;}
+.split-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.split-grid .dash-card{background:#f8fafc;}
+@media(max-width:960px){
+  .analytics-hero{grid-template-columns:1fr;padding:22px;}
+}
+</style>
 </head>
-<body>
-
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Redwood Demo</span></div>
-<div class="shell">
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-  </div>
-
-<div class="grid">
-  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
-  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
-</div>
-
-<div class="card" style="margin-top:16px">
-  <h2>Measurable Business Outcomes</h2>
-  <div class="body">
-    <p>Use these quick stats to anchor the measurable impact of Oracle CX Sales Cloud before diving into dashboards.</p>
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="value">35%</div>
-        <div class="label">Faster Onboarding</div>
-        <p>Guided workflows accelerate new rep productivity.</p>
-      </div>
-      <div class="stat-card">
-        <div class="value">28%</div>
-        <div class="label">Forecast Accuracy</div>
-        <p>Weighted stage methodology improves prediction precision.</p>
-      </div>
-      <div class="stat-card">
-        <div class="value">92%</div>
-        <div class="label">Process Compliance</div>
-        <p>Consistent methodology across the entire sales organization.</p>
+<body class="lead-landing">
+<main class="lead-shell">
+  <section class="card analytics-hero">
+    <div>
+      <p class="eyebrow" style="color:#fbd5bb">Oracle CX Sales Cloud</p>
+      <h1>Analytics Command Deck</h1>
+      <p>Bring the Argano storytelling layer to life with dashboards that span Leads, Opportunities, Quotes, Pursuits, Projects, Accounts, and Customers—each curated to show how CX Sales, CPQ, and PPM tie together.</p>
+      <div class="hero-pill-row">
+        <span class="hero-pill">Leads Velocity</span>
+        <span class="hero-pill">Opportunity Health</span>
+        <span class="hero-pill">Quote Controls</span>
+        <span class="hero-pill">Pursuit Burn</span>
+        <span class="hero-pill">Project Pulse</span>
+        <span class="hero-pill">Customer Signals</span>
       </div>
     </div>
-    <div class="content-grid" style="margin-top:12px">
-      <div class="panel">
-        <h3>Auditable Methodology</h3>
-        <p>Every stage transition, approval, and customer interaction is logged, making compliance and quality reviews effortless.</p>
+    <div class="hero-panel">
+      <h3>Live Story Anchors</h3>
+      <div class="kv"><span>Lead</span><div class="dynamic-lead">Loading...</div></div>
+      <div class="kv"><span>Opportunity</span><div class="dynamic-oppty">Loading...</div></div>
+      <div class="kv"><span>Pursuit</span><div class="dynamic-pursuit">Loading...</div></div>
+      <div class="kv"><span>Project</span><div class="dynamic-project">Loading...</div></div>
+    </div>
+  </section>
+
+  <section class="analytics-section">
+    <p class="section-eyebrow">Leads Intelligence</p>
+    <h2 class="section-title">Three-view lens on how top-of-funnel activity feeds qualified pipeline</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="value">128</div>
+        <h3>Weekly Lead Velocity</h3>
+        <p>Avg. 18 per day | 56% inbound</p>
+        <div class="trend">+12% vs last sprint</div>
       </div>
-      <div class="panel">
-        <h3>Predictable Forecasting</h3>
-        <p>Probability-weighted stages eliminate guesswork and generate accurate revenue projections for leadership.</p>
+      <div class="dash-card">
+        <div class="value">42%</div>
+        <h3>Marketing Qualification Rate</h3>
+        <p>AI propensity pushes top 20 prospects to sales immediately.</p>
       </div>
-      <div class="panel">
-        <h3>Win/Loss Intelligence</h3>
-        <p>Structured capture of outcomes builds a knowledge base for future pursuits and qualification scoring.</p>
+      <div class="dash-card">
+        <div class="value">7m 14s</div>
+        <h3>Speed-to-Engage</h3>
+        <p>Median SLA triggered by Smart Action alerts.</p>
       </div>
-      <div class="panel">
-        <h3>Enhanced Productivity</h3>
-        <p>Automation and embedded tools remove manual tasks so teams focus on relationship building.</p>
+      <div class="dash-card double-width">
+        <h3>Channel Mix</h3>
+        <div class="heatmap">
+          <div class="tile"><strong>38%</strong><span>Web</span></div>
+          <div class="tile"><strong>29%</strong><span>Events</span></div>
+          <div class="tile"><strong>22%</strong><span>Partners</span></div>
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:#b45309">Outbound pods supply the remaining 11%.</p>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="card" style="margin-top:16px">
-  <h2>Reporting &amp; Analytics</h2>
-  <div class="body">
-    <p>Transform sales data into actionable insights with comprehensive analytics capabilities.</p>
-    <div class="content-grid">
-      <div class="panel">
-        <h3>OTBI Dashboards</h3>
-        <ul>
-          <li>Real-time pipeline visibility.</li>
-          <li>Win/loss analysis.</li>
-          <li>Activity tracking for every pursuit.</li>
-        </ul>
+  <section class="analytics-section">
+    <p class="section-eyebrow">Opportunity Momentum</p>
+    <h2 class="section-title">Health, pacing, and Smart Action guidance for active pursuits</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="value">$48.6M</div>
+        <h3>Committed Pipeline</h3>
+        <p>Stage 3+ deals across direct + partner GTM.</p>
+        <div class="trend">+6% week over week</div>
       </div>
-      <div class="panel">
-        <h3>BIP Reports</h3>
-        <ul>
-          <li>Sales performance metrics.</li>
-          <li>Structured outputs for stakeholders.</li>
-          <li>Scheduled delivery to leadership.</li>
-        </ul>
+      <div class="dash-card">
+        <div class="value">93%</div>
+        <h3>Forecast Accuracy</h3>
+        <p>AI vs manager alignment using weighted stages.</p>
       </div>
-      <div class="panel">
-        <h3>FAW Predictive Analytics</h3>
+      <div class="dash-card">
+        <div class="value">4.2x</div>
+        <h3>Coverage</h3>
+        <p>Target 3.5x | redline hits 2.8x for SW region.</p>
+      </div>
+      <div class="dash-card">
+        <h3>Smart Action Pulse</h3>
         <ul>
-          <li>Forecast accuracy modeling.</li>
-          <li>Renewal propensity scoring.</li>
-          <li>Churn prediction for at-risk accounts.</li>
+          <li>16 coaching alerts resolved today.</li>
+          <li>4 pursuits flagged “needs partner pod”.</li>
+          <li>3 integration lags escalated to OIC.</li>
         </ul>
       </div>
     </div>
-    <div class="output-note">Output: real-time dashboards and predictive insights for executive decision-making.</div>
-  </div>
-</div>
+  </section>
 
-<div class="card" style="margin-top:16px">
-  <h2>Deep-Dive Navigator</h2>
-  <div class="body">
-    <p>Use the new dedicated pages to keep presentations focused while still having the full story at your fingertips.</p>
-    <div class="content-grid">
-      <div class="panel">
-        <h3>Forecasting &amp; Pipeline Management</h3>
-        <p>Show how weighted stages, AI, and leadership reviews align. <a href="forecasting_pipeline.html">Open forecasting page →</a></p>
+  <section class="analytics-section">
+    <p class="section-eyebrow">Quotes &amp; Approvals</p>
+    <h2 class="section-title">Controls that protect margin while keeping deals in motion</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="value">18</div>
+        <h3>Quotes Submitted</h3>
+        <p>Quick Quote panels feed CPQ + DocuSign packages.</p>
       </div>
-      <div class="panel">
-        <h3>Integration Features</h3>
-        <p>Walk through ERP, HCM, CPQ, and marketing connectivity in one place. <a href="integration_features.html">Open integration page →</a></p>
+      <div class="dash-card">
+        <div class="value">2h 04m</div>
+        <h3>Avg Approval SLA</h3>
+        <p>Discount + legal combo workflows.</p>
       </div>
-      <div class="panel">
-        <h3>Complete Sales Process Visualization</h3>
-        <p>Pair the seven-step rail with the ten-stage blueprint for storytelling. <a href="sales_process_visualization.html">Open visualization page →</a></p>
+      <div class="dash-card">
+        <div class="value">3</div>
+        <h3>Hold Status</h3>
+        <p>Awaiting revised T&amp;Cs from legal playbook.</p>
       </div>
-      <div class="panel">
-        <h3>Results-Driven Story</h3>
-        <p>Keep proof points and win stories ready for exec briefings. <a href="results_driven.html">Open results-driven page →</a></p>
+      <div class="dash-card">
+        <h3>Automation Highlights</h3>
+        <ul>
+          <li>DocuSign statuses write back instantly.</li>
+          <li>Finance receives pre-filled justification.</li>
+          <li>Audit trail saved to Sales Tools page.</li>
+        </ul>
       </div>
     </div>
-  </div>
-</div>
+  </section>
+
+  <section class="analytics-section">
+    <p class="section-eyebrow">Pursuits in Process</p>
+    <h2 class="section-title">Link preconstruction planning to sales execution</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="value">12</div>
+        <h3>Live Pursuit Projects</h3>
+        <p>Cost-only PPM shells tied to CX opportunities.</p>
+      </div>
+      <div class="dash-card">
+        <div class="value">$21.4M</div>
+        <h3>Internal Spend</h3>
+        <p>Tracked labor for estimating and engineering.</p>
+      </div>
+      <div class="dash-card">
+        <div class="value">+8</div>
+        <h3>Resource Requests</h3>
+        <p>Estimators, PMs, schedulers pending assignment.</p>
+      </div>
+      <div class="dash-card">
+        <h3>Decision Signals</h3>
+        <ul>
+          <li>Win/Loss trend: 62% when pursuit cost &lt; 4% of deal.</li>
+          <li>Capacity watch: Central team at 78% load.</li>
+          <li>AI suggests adding design pod for 3 pursuits.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="analytics-section">
+    <p class="section-eyebrow">Project &amp; Delivery Pulse</p>
+    <h2 class="section-title">Ensure awarded work stays aligned with the promise made in CX Sales</h2>
+    <div class="split-grid">
+      <div class="dash-card">
+        <div class="value">9</div>
+        <h3>Active Construction Projects</h3>
+        <p>$142M in backlog, 3 flagged for schedule variance.</p>
+      </div>
+      <div class="dash-card">
+        <div class="value">96%</div>
+        <h3>Billing Predictability</h3>
+        <p>PPM milestones synced to CX Sales commitments.</p>
+      </div>
+      <div class="dash-card">
+        <div class="value">4</div>
+        <h3>Change Orders</h3>
+        <p>Collaborative tracking between PM and account teams.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="analytics-section">
+    <p class="section-eyebrow">Accounts &amp; Customers</p>
+    <h2 class="section-title">Human-centric story tiles for executive conversations</h2>
+    <div class="customer-grid">
+      <div class="customer-card">
+        <header>
+          <h3>Northwind Utilities</h3>
+          <span>Strategic</span>
+        </header>
+        <ul>
+          <li>$18.4M pipeline | 3 pursuits cross-practice.</li>
+          <li>Adoption score 92% (all key roles active).</li>
+          <li>Renewal play triggered for FY25.</li>
+        </ul>
+      </div>
+      <div class="customer-card">
+        <header>
+          <h3>Brighton Manufacturing</h3>
+          <span>Growth</span>
+        </header>
+        <ul>
+          <li>Partner-led expansion stage 4.</li>
+          <li>Service tickets down 32% after mobile rollout.</li>
+          <li>Customer health rated “Strong”.</li>
+        </ul>
+      </div>
+      <div class="customer-card">
+        <header>
+          <h3>Pinnacle Housing</h3>
+          <span>Watch</span>
+        </header>
+        <ul>
+          <li>Forecast risk due to permit delays.</li>
+          <li>Exec sponsor requested weekly cadence.</li>
+          <li>Integration lag flagged to Sales↔PPM map.</li>
+        </ul>
+      </div>
+      <div class="customer-card">
+        <header>
+          <h3>Vertex Digital</h3>
+          <span>Loyal</span>
+        </header>
+        <ul>
+          <li>3-year streak meeting CSAT KPI.</li>
+          <li>Upsell identified in Quick Sales mobile view.</li>
+          <li>Joint innovation workshop scheduled.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 <script>
- window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
-   var sum=document.getElementById('sum');
-   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
-     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
-     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
-     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
-   var log=document.getElementById('log');
-   (d.logs||[]).forEach(function(m){
-     var p=document.createElement('div');
-     p.textContent=m;
-     log.appendChild(p);
-   });
- });
+window.addEventListener('DOMContentLoaded', function(){
+  var d = RWD.get();
+  var lead = document.querySelector('.dynamic-lead');
+  var oppty = document.querySelector('.dynamic-oppty');
+  var pursuit = document.querySelector('.dynamic-pursuit');
+  var proj = document.querySelector('.dynamic-project');
+  if(lead){lead.textContent = (d.lead.company||'-') + ' / ' + (d.lead.score||'-');}
+  if(oppty){oppty.textContent = (d.oppty.name||'-') + ' · $' + (d.oppty.amount||0).toLocaleString();}
+  if(pursuit){pursuit.textContent = (d.pursuit.name||'-') + ' · ' + (d.pursuit.status||'-');}
+  if(proj){proj.textContent = (d.const.name||'-') + ' · $' + (d.const.budget||0).toLocaleString();}
+});
 </script>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
 </html>
