@@ -31,9 +31,46 @@
     {key:'pursuit',label:'Pursuit (PPM)',owner:'Pursuit Manager',statuses:['Draft','Costing','Submitted','Awarded'],description:'OIC pushes qualified deals to PPM where Pursuit Managers refine estimates.'},
     {key:'project',label:'Project Delivery',owner:'Project Manager',statuses:['Planning','Execution','Substantial Completion','Warranty'],description:'Awarded pursuits become delivery projects that track execution milestones.'}
   ];
+  const SCENARIOS={
+    skyline:{
+      label:'Skyline Renewables Microgrid',
+      lead:{company:'Skyline Renewables',contact:'Lena Ortiz',score:78,status:'Working'},
+      oppty:{name:'Skyline Microgrid Modernization',amount:1250000,stage:'Qualification'},
+      pursuit:{name:'Skyline Microgrid Modernization - Pursuit',estimate:1250000,status:'Draft'},
+      project:{name:'Skyline Microgrid Modernization - Construction',budget:1287500,status:'Planning'},
+      storyline:[
+        {stage:'Lead',event:'Inbound Signal',detail:'Captured during Sustainability Summit registration.'},
+        {stage:'Opportunity',event:'AE Assigned',detail:'Jessica Brooks engages value engineering team.'},
+        {stage:'Pursuit',event:'Costing',detail:'PPM estimators loading rates for quick-turn proposal.'}
+      ]
+    },
+    apex:{
+      label:'Apex Healthcare Tower',
+      lead:{company:'Apex Healthcare',contact:'Marcus Lee',score:84,status:'New'},
+      oppty:{name:'Apex Tower CX/PPM Rollout',amount:1860000,stage:'Evaluation'},
+      pursuit:{name:'Apex Tower CX/PPM Pursuit',estimate:1860000,status:'Costing'},
+      project:{name:'Apex Tower Delivery',budget:1915000,status:'Planning'},
+      storyline:[
+        {stage:'Lead',event:'Referral',detail:'Partner referred Apex expansion to Argano.'},
+        {stage:'Opportunity',event:'Discovery',detail:'Hybrid sales + services bundle framed with Smart Actions.'},
+        {stage:'Pursuit',event:'Resource Request',detail:'PPM resource manager flagged estimating gap.'}
+      ]
+    }
+  };
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}};
   const write=(d)=>localStorage.setItem(KEY, JSON.stringify(d));
+  const subscribers=new Set();
   const now=()=>new Date().toLocaleString();
+  function broadcast(){
+    const snapshot=ensure();
+    subscribers.forEach(function(cb){
+      try{ cb(snapshot); }catch(e){ console.warn('timeline subscriber failed', e); }
+    });
+  }
+  function commit(d){
+    write(d);
+    broadcast();
+  }
   function ensure(){
     const d=read();
     d.lead=d.lead||{company:'',contact:'',score:60,status:'Unqualified',activities:[]};
@@ -48,37 +85,173 @@
       });
     }
     d.logs=d.logs||[];
+    d.timeline=d.timeline||[];
     write(d);
     return d;
   }
-  function log(msg){const d=ensure(); d.logs.unshift('['+now()+'] '+msg); write(d);}
+  function log(msg){
+    const d=ensure();
+    d.logs.unshift('['+now()+'] '+msg);
+    d.logs=d.logs.slice(0,60);
+    commit(d);
+  }
   function addAct(arr,type,text){arr.unshift({ts:now(), type, text, who:'System'});}
+  function stageName(key){
+    const hit=FLOW_STAGES.find(function(s){ return s.key===key; });
+    return hit ? hit.label : (key||'Stage');
+  }
+  function addTimeline(d,stage,event,detail){
+    if(!d.timeline) d.timeline=[];
+    d.timeline.unshift({ts:now(),stage:stage,event:event,detail:detail||''});
+    d.timeline=d.timeline.slice(0,30);
+  }
+  function pickScenario(name){
+    if(name && SCENARIOS[name]) return name;
+    return Object.keys(SCENARIOS)[0];
+  }
 
   window.RWD={
-    reset(){localStorage.removeItem(KEY);},
+    reset(){localStorage.removeItem(KEY); broadcast();},
     get(){return ensure();},
+    availableScenarios(){
+      return Object.keys(SCENARIOS).map(function(key){
+        return {key,label:SCENARIOS[key].label||key};
+      });
+    },
+    loadScenario(name){
+      const scenarioKey=pickScenario(name);
+      const conf=SCENARIOS[scenarioKey];
+      const d=ensure();
+      d.lead=Object.assign({}, d.lead, conf.lead||{});
+      d.lead.activities=[];
+      d.oppty=Object.assign({}, d.oppty, conf.oppty||{});
+      d.oppty.activities=[];
+      d.pursuit=Object.assign({}, d.pursuit, conf.pursuit||{});
+      d.const=Object.assign({}, d.const, conf.project||{});
+      if(d.salesFlow.lead){ d.salesFlow.lead.status=d.lead.status||d.salesFlow.lead.status; d.salesFlow.lead.updated=now(); }
+      if(d.salesFlow.opportunity){ d.salesFlow.opportunity.status=d.oppty.stage||d.salesFlow.opportunity.status; d.salesFlow.opportunity.updated=now(); }
+      d.timeline=[];
+      (conf.storyline||[]).forEach(function(item){
+        addTimeline(d,item.stage,item.event,item.detail);
+      });
+      d.logs=[];
+      commit(d);
+      log('Scenario loaded: '+(conf.label||scenarioKey));
+      return scenarioKey;
+    },
+    timeline(limit){
+      const d=ensure();
+      return (d.timeline||[]).slice(0, typeof limit==='number'?limit:10);
+    },
+    clearTimeline(){
+      const d=ensure();
+      d.timeline=[];
+      commit(d);
+    },
 
     // Lead
-    saveLead(f){const d=ensure(); d.lead.company=f.company.value; d.lead.contact=f.contact.value; d.lead.score=Number(f.score.value||60); d.lead.status='Qualified'; addAct(d.lead.activities,'Update','Lead qualified'); write(d); log('Lead qualified for '+d.lead.company);},
-    convertToOpportunity(){const d=ensure(); d.oppty.name=d.lead.company+' – New Build'; d.oppty.amount=Math.max(250000, d.lead.score*10000); d.oppty.stage='Qualification'; addAct(d.oppty.activities,'Convert','Lead converted to Opportunity'); write(d); log('Lead converted to Opportunity');},
+    saveLead(f){
+      const d=ensure();
+      d.lead.company=f.company.value;
+      d.lead.contact=f.contact.value;
+      d.lead.score=Number(f.score.value||60);
+      d.lead.status='Qualified';
+      addAct(d.lead.activities,'Update','Lead qualified');
+      addTimeline(d,'Lead','Qualified','Score '+d.lead.score);
+      commit(d);
+      log('Lead qualified for '+d.lead.company);
+    },
+    convertToOpportunity(){
+      const d=ensure();
+      d.oppty.name=d.lead.company+' - New Build';
+      d.oppty.amount=Math.max(250000, d.lead.score*10000);
+      d.oppty.stage='Qualification';
+      addAct(d.oppty.activities,'Convert','Lead converted to Opportunity');
+      addTimeline(d,'Opportunity','Converted','Created from '+(d.lead.company||'lead'));
+      commit(d);
+      log('Lead converted to Opportunity');
+    },
 
     // OIC job simulator
     runOICJob(kind,next){ ensure(); log('OIC job started: '+kind); const id=Math.floor(Math.random()*9000+1000); setTimeout(()=>{ log('OIC job '+id+' completed: '+kind); if(next) next(id); }, 900); },
 
     // Opportunity
-    saveOppty(f){const d=ensure(); d.oppty.name=f.name.value; d.oppty.amount=Number(f.amount.value||0); d.oppty.stage=f.stage.value; addAct(d.oppty.activities,'Update','Opportunity updated'); write(d);},
-    createPursuitViaOIC(cb){const d=ensure(); d.pursuit.name=d.oppty.name+' – Pursuit'; d.pursuit.estimate=d.oppty.amount; d.pursuit.status='Draft'; write(d); this.runOICJob('Create Pursuit in PPM', ()=>{ addAct(d.oppty.activities,'Integration','Pursuit created in PPM'); if(cb) cb(); });},
+    saveOppty(f){
+      const d=ensure();
+      d.oppty.name=f.name.value;
+      d.oppty.amount=Number(f.amount.value||0);
+      d.oppty.stage=f.stage.value;
+      addAct(d.oppty.activities,'Update','Opportunity updated');
+      addTimeline(d,'Opportunity','Updated',d.oppty.stage+' stage');
+      commit(d);
+    },
+    createPursuitViaOIC(cb){
+      const d=ensure();
+      d.pursuit.name=d.oppty.name+' - Pursuit';
+      d.pursuit.estimate=d.oppty.amount;
+      d.pursuit.status='Draft';
+      addTimeline(d,'Pursuit','OIC Sync','Creating pursuit in PPM');
+      commit(d);
+      this.runOICJob('Create Pursuit in PPM', ()=>{
+        const latest=ensure();
+        addAct(latest.oppty.activities,'Integration','Pursuit created in PPM');
+        addTimeline(latest,'Pursuit','PPM Record Ready',latest.pursuit.name);
+        commit(latest);
+        if(cb) cb();
+      });
+    },
 
     // Pursuit
-    savePursuit(f){const d=ensure(); d.pursuit.name=f.name.value; d.pursuit.estimate=Number(f.estimate.value||0); write(d);},
-    awardToConstruction(cb){const d=ensure(); d.const.name=d.pursuit.name.replace(/ – Pursuit$/,'')+' – Construction'; d.const.budget=Math.round(d.pursuit.estimate*1.03); d.const.status='Active'; write(d); this.runOICJob('Create Construction in PPM', ()=>{ addAct(d.oppty.activities,'Integration','Construction project created'); if(cb) cb(); });},
+    savePursuit(f){
+      const d=ensure();
+      d.pursuit.name=f.name.value;
+      d.pursuit.estimate=Number(f.estimate.value||0);
+      addTimeline(d,'Pursuit','Updated','Estimate $'+d.pursuit.estimate.toLocaleString());
+      commit(d);
+    },
+    awardToConstruction(cb){
+      const d=ensure();
+      d.const.name=d.pursuit.name.replace(/ - Pursuit$/,'')+' - Construction';
+      d.const.budget=Math.round(d.pursuit.estimate*1.03);
+      d.const.status='Active';
+      addTimeline(d,'Project','Award in progress',d.const.name);
+      commit(d);
+      this.runOICJob('Create Construction in PPM', ()=>{
+        const latest=ensure();
+        addAct(latest.oppty.activities,'Integration','Construction project created');
+        addTimeline(latest,'Project','Activated',latest.const.name+' budget $'+latest.const.budget.toLocaleString());
+        latest.const.status='Active';
+        commit(latest);
+        if(cb) cb();
+      });
+    },
 
     // Construction
-    completeSubstantial(cb){const d=ensure(); d.const.status='Substantially Complete'; write(d); log('Substantial Completion → Warranty start'); addAct(d.oppty.activities,'Milestone','Substantial Completion'); if(cb) cb();},
+    completeSubstantial(cb){
+      const d=ensure();
+      d.const.status='Substantially Complete';
+      addTimeline(d,'Project','Milestone','Substantial completion achieved');
+      commit(d);
+      log('Substantial Completion -> Warranty start');
+      addAct(d.oppty.activities,'Milestone','Substantial Completion');
+      if(cb) cb();
+    },
 
     // Smart Actions
-    actLead(type){const d=ensure(); addAct(d.lead.activities,type,'Action on Lead: '+type); write(d); log('Lead action: '+type);},
-    actOppty(type){const d=ensure(); addAct(d.oppty.activities,type,'Action on Opportunity: '+type); write(d); log('Opportunity action: '+type);},
+    actLead(type){
+      const d=ensure();
+      addAct(d.lead.activities,type,'Action on Lead: '+type);
+      addTimeline(d,'Lead','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Lead action: '+type);
+    },
+    actOppty(type){
+      const d=ensure();
+      addAct(d.oppty.activities,type,'Action on Opportunity: '+type);
+      addTimeline(d,'Opportunity','Action: '+type,'Smart Action rail');
+      commit(d);
+      log('Opportunity action: '+type);
+    },
 
     // Sales Cloud flow helpers
     updateSalesFlow(stageKey,status,note){
@@ -87,11 +260,12 @@
       d.salesFlow[stageKey].status=status;
       if(typeof note==='string') d.salesFlow[stageKey].note=note;
       d.salesFlow[stageKey].updated=now();
-      addAct(d.oppty.activities,'Sales Flow',stageKey+' → '+status);
+      addAct(d.oppty.activities,'Sales Flow',stageKey+' -> '+status);
       if(stageKey==='lead' && status==='Qualified'){ d.lead.status='Qualified'; }
       if(stageKey==='opportunity'){ d.oppty.stage=status; }
-      write(d);
-      log('Sales flow updated: '+stageKey+' → '+status);
+      addTimeline(d,stageName(stageKey),status,note||'');
+      commit(d);
+      log('Sales flow updated: '+stageKey+' -> '+status);
     },
     // Agent simulation: run demo agents that perform periodic actions
     _agentHandles: {},
@@ -179,6 +353,27 @@
       this._agentState[key]=this._agentState[key]||{}; this._agentState[key].running=false; this._agentState[key].lastAction='stopped';
     },
     getAgentStates(){ return Object.assign({}, this._agentState); },
+    subscribe(fn){
+      if(typeof fn!=='function') return function(){};
+      subscribers.add(fn);
+      try{ fn(ensure()); }catch(e){}
+      return function(){ subscribers.delete(fn); };
+    },
+    runScenarioFlow(opts){
+      const scenarioKey=this.loadScenario(opts && opts.scenario);
+      const scenario=SCENARIOS[scenarioKey];
+      const leadForm={company:{value:scenario.lead.company},contact:{value:scenario.lead.contact},score:{value:scenario.lead.score}};
+      const opptyForm={name:{value:scenario.oppty.name},amount:{value:scenario.oppty.amount},stage:{value:scenario.oppty.stage||'Qualification'}};
+      const pursuitForm={name:{value:scenario.pursuit.name},estimate:{value:scenario.pursuit.estimate}};
+      const steps=[
+        ()=>new Promise((resolve)=>{ this.saveLead(leadForm); setTimeout(resolve,500); }),
+        ()=>new Promise((resolve)=>{ this.convertToOpportunity(); setTimeout(resolve,500); }),
+        ()=>new Promise((resolve)=>{ this.saveOppty(opptyForm); setTimeout(resolve,500); }),
+        ()=>new Promise((resolve)=>{ this.createPursuitViaOIC(()=>{ this.savePursuit(pursuitForm); setTimeout(resolve,600); }); }),
+        ()=>new Promise((resolve)=>{ this.awardToConstruction(()=>{ this.completeSubstantial(()=>{ setTimeout(resolve,700); }); }); })
+      ];
+      return steps.reduce(function(promise,step){ return promise.then(step); }, Promise.resolve()).then(()=>scenarioKey);
+    },
     flowStages: FLOW_STAGES
   };
   function renderNavLinks(current){

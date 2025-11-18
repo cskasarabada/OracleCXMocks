@@ -151,6 +151,23 @@
       </div>
     </div>
   </div>
+  <div class="card" id="simulation-card">
+    <h2>Realtime CX &amp; PPM Simulation</h2>
+    <div class="body sim-deck">
+      <p>Run a guided scenario to show data traveling from Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project, with integration events logged along the way.</p>
+      <div class="sim-controls">
+        <label>Scenario
+          <select id="simScenario"></select>
+        </label>
+        <a class="btn brand" href="#" id="btnStartSim">Start Guided Flow</a>
+        <a class="btn" href="#" id="btnLoadScenario">Load Snapshot</a>
+        <a class="btn outline" href="#" id="btnClearTimeline">Clear Timeline</a>
+      </div>
+      <ul class="event-feed" id="timelineList">
+        <li class="empty">Timeline ready &mdash; start the sim to see Oracle CX Sales Cloud + PPM sync in action.</li>
+      </ul>
+    </div>
+  </div>
 </div>
 <style>
 #agent-sim-card .agent-sim{display:flex;flex-direction:column;gap:18px;}
@@ -177,6 +194,17 @@
 .workflow-callouts{margin-top:12px;font-size:12px;color:#0f172a;display:flex;flex-direction:column;gap:6px;}
 .workflow-callouts span{padding:6px 10px;border-radius:10px;background:#fff;border:1px solid rgba(255,122,24,.3);}
 .stage-intel-inline{margin-top:18px;padding-top:18px;border-top:1px solid var(--rw-border);display:flex;flex-direction:column;gap:12px;}
+#simulation-card .sim-deck{display:flex;flex-direction:column;gap:18px;}
+.sim-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;}
+.sim-controls label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#475569;display:flex;flex-direction:column;gap:6px;}
+.sim-controls select{min-width:210px;border-radius:10px;border:1px solid var(--rw-border);padding:8px 10px;font-size:14px;}
+.event-feed{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.event-feed li{border:1px solid var(--rw-border);border-radius:16px;padding:12px;background:#fff;}
+.event-head{display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-bottom:6px;}
+.event-head .stage{font-weight:600;color:#0f172a;}
+.event-feed li strong{display:block;margin-bottom:4px;color:#0f172a;}
+.event-feed li p{margin:0;font-size:12px;color:#475569;}
+.event-feed .empty{text-align:center;color:#94a3b8;font-style:italic;padding:14px;}
 @media(max-width:640px){
   .agent-sim-controls{flex-direction:column;}
 }
@@ -184,7 +212,7 @@
 <script>
  window.addEventListener('DOMContentLoaded', function(){
    var d=RWD.get();
-   var log=document.getElementById('log');
+  var log=document.getElementById('log');
    (d.logs||[]).forEach(function(m){
      var p=document.createElement('div');
      p.textContent=m;
@@ -233,6 +261,59 @@
     }
     refreshAgentStatus();
     setInterval(refreshAgentStatus, 2000);
+    const scenarioSelect=document.getElementById('simScenario');
+    const timelineList=document.getElementById('timelineList');
+    function populateScenarios(){
+      if(!scenarioSelect || !RWD.availableScenarios) return;
+      const options=RWD.availableScenarios();
+      scenarioSelect.innerHTML='';
+      options.forEach(function(opt,index){
+        const option=document.createElement('option');
+        option.value=opt.key;
+        option.textContent=opt.label;
+        if(index===0) option.selected=true;
+        scenarioSelect.appendChild(option);
+      });
+    }
+    function renderTimeline(state){
+      if(!timelineList) return;
+      const events=(state && state.timeline ? state.timeline : []).slice(0,8);
+      if(!events.length){
+        timelineList.innerHTML='<li class="empty">Timeline ready &mdash; start the sim to connect CX Sales Cloud with PPM.</li>';
+        return;
+      }
+      timelineList.innerHTML=events.map(function(evt){
+        return '<li><div class="event-head"><span class="stage">'+(evt.stage||'Stage')+'</span><span class="ts">'+evt.ts+'</span></div><strong>'+ (evt.event||'Update') +'</strong><p>'+(evt.detail||'')+'</p></li>';
+      }).join('');
+    }
+    populateScenarios();
+    renderTimeline(d);
+    const btnStart=document.getElementById('btnStartSim');
+    if(btnStart){
+      btnStart.addEventListener('click', function(ev){
+        ev.preventDefault();
+        const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
+        btnStart.textContent='Simulating...';
+        RWD.runScenarioFlow({scenario:scenarioKey}).finally(function(){
+          btnStart.textContent='Start Guided Flow';
+        });
+      });
+    }
+    const btnLoad=document.getElementById('btnLoadScenario');
+    if(btnLoad){
+      btnLoad.addEventListener('click', function(ev){
+        ev.preventDefault();
+        const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
+        RWD.loadScenario(scenarioKey);
+      });
+    }
+    const btnClear=document.getElementById('btnClearTimeline');
+    if(btnClear){
+      btnClear.addEventListener('click', function(ev){
+        ev.preventDefault();
+        RWD.clearTimeline();
+      });
+    }
     window.startSalesAgentWithAssistant=function(){
       if(window.RWD){ RWD.startAgent('sales'); }
       openSalesAssistant();
@@ -292,9 +373,9 @@
       }
       appendAssistantMessage(answer);
     }
-    function renderStageBoards(){
+    function renderStageBoards(state){
       if(!window.RWD) return;
-      const data = RWD.get();
+      const data = state || RWD.get();
       const leadList=document.getElementById('stage-lead-steps');
       const oppList=document.getElementById('stage-opportunity-steps');
       const stages=RWD.flowStages||[];
@@ -321,8 +402,15 @@
         });
       }
     }
-    renderStageBoards();
- });
+    function handleState(snapshot){
+      renderStageBoards(snapshot);
+      renderTimeline(snapshot);
+    }
+    handleState(d);
+    if(RWD.subscribe){
+      RWD.subscribe(handleState);
+    }
+});
 </script>
 <div id="sales-assistant-modal" class="agent-modal">
   <div class="agent-modal-content">
