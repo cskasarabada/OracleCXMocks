@@ -112,6 +112,86 @@
     </div>
     <div class="lead-action-panels">
       <form class="lead-action-form" data-project-form="Send Progress Update" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Share completion progress and risks.</p>
+        <label>Audience<select name="audience">
+          <option value="Client">Client</option>
+          <option value="Exec">Executive</option>
+          <option value="Field">Field Ops</option>
+        </select></label>
+        <label>Summary<textarea name="summary" rows="3" placeholder="Concrete pour complete, steel erection 50%"></textarea></label>
+        <label>Risks<textarea name="risks" rows="2" placeholder="Weather delays, vendor change..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Send Update</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Request Change Order" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Launch the change-order process.</p>
+        <label>Change Order<input name="coName" placeholder="CO-07: Elevator Upgrade" required></label>
+        <label>Amount<input type="number" name="coAmount" placeholder="85000" step="1000"></label>
+        <label>Reason<textarea name="coReason" rows="3" placeholder="Owner requested premium finishes"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Request CO</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Notify Warranty Team" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Handoff key data to the warranty desk.</p>
+        <label>Warranty Lead<input name="wLead" placeholder="Warranty Manager" required></label>
+        <label>Notes<textarea name="wNotes" rows="3" placeholder="Punch list cleared, schedule handover"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Notify Warranty</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Sync Actuals" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Sync latest cost actuals back to CX/Finance.</p>
+        <label>Message<textarea name="syncMsg" rows="3" placeholder="Pushing week 10 actuals to CX + ERP"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Sync Actuals</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Share Lessons Learned" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Capture lessons for future pursuits.</p>
+        <label>Title<input name="lessonTitle" placeholder="Procurement Optimization" required></label>
+        <label>Details<textarea name="lessonBody" rows="4" placeholder="Ordering steel earlier saved 4 weeks..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Share Insight</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.lead-action-panels{display:flex;flex-direction:column;gap:16px;}
+.lead-action-form{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--rw-border);border-radius:16px;padding:16px;}
+.lead-action-form p{margin:0;color:var(--rw-muted);}
+.lead-action-form label{display:flex;flex-direction:column;font-size:14px;font-weight:600;color:#0f172a;}
+.lead-action-form input,
+.lead-action-form select,
+.lead-action-form textarea{margin-top:4px;border:1px solid var(--rw-border);border-radius:10px;padding:8px;font:inherit;}
+.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+</style>
+
+
+<div id="project-action-modal" class="lead-overlay" aria-hidden="true">
+  <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="projectActionTitle" tabindex="-1">
+    <div class="lead-modal-header">
+      <div>
+        <p class="eyebrow">Project Smart Action</p>
+        <h2 id="projectActionTitle">Project Workflow</h2>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeProjectAction()">Close &times;</button>
+    </div>
+    <div class="lead-action-panels">
+      <form class="lead-action-form" data-project-form="Send Progress Update" onsubmit="return submitProjectAction(event)" style="display:none">
         <p class="muted">Share construction progress with stakeholders.</p>
         <label>Audience<select name="audience">
           <option value="Client">Client</option>
