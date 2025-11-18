@@ -8,8 +8,57 @@
 <script defer src="assets/app.js"></script>
 </head>
 <body>
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a class="active" href="index.html">Overview</a>
+      <a href="Easy_Start_Flows.html">Easy Start</a>
+      <a href="sales_cloud.html">Sales Flow</a>
+      <a href="sales_tools.html">Sales Tools</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="ppm_pursuit.html">PPM Pursuit</a>
+      <a href="ppm_construction.html">PPM Construction</a>
+      <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Insights &amp; Toolkit</div>
+    <div class="nav-items">
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="integration_features.html">Integration</a>
+      <a href="sales_process_visualization.html">Process Visualization</a>
+      <a href="results_driven.html">Results Driven</a>
+      <a href="executive_command_center.html">Exec Command</a>
+      <a href="account_360.html">Account 360</a>
+      <a href="partner_hub.html">Partner Hub</a>
+      <a href="revenue_intelligence.html">Revenue Intelligence</a>
+      <a href="field_mobile_snapshot.html">Field Mobile</a>
+      <a href="sales_ppm_sync.html">Sales-PPM</a>
+      <a href="quote_to_docusign.html">Quote to DocuSign</a>
+      <a href="pursuit_project.html">Pursuit Project</a>
+    </div>
+  </div>
+</nav>
 
-<nav class="quick-nav auto-nav"></nav>
+
+
 <div class="shell">
 <div class="grid">
   <div class="card"><h2>Flow Overview</h2><div class="body">
@@ -21,7 +70,7 @@
       <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off warranty at substantial completion.</li>
     </ol>
     <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead, opportunity, quote, pursuit and project delivery.</p>
-    <div class="actions"><a class="btn brand" href="cx_lead.html">Start with Lead</a><a class="btn" href="#" onclick="RWD.reset(); alert('Demo state cleared'); return false;">Reset State</a></div>
+    <div class="actions"><a class="btn brand" href="cx_lead.html">Start with Lead</a><a class="btn" href="#" onclick="if(window.RWD && typeof RWD.reset==='function'){ RWD.reset(); alert('Demo state cleared'); } else { alert('Demo engine unavailable offline'); } return false;">Reset State</a></div>
   </div></div>
   <div class="card"><h2>Activity Log</h2><div class="body" id="log"></div></div>
   <div class="card"><h2>Agents</h2><div class="body">
@@ -31,7 +80,7 @@
         <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
         <div class="actions">
           <a class="btn" href="#" onclick="return startSalesAgentWithAssistant();">Start</a>
-          <a class="btn" href="#" onclick="RWD.stopAgent('sales'); return false;">Stop</a>
+          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('sales'); } return false;">Stop</a>
           <span class="agent-status" id="agent-sales-status">idle</span>
         </div>
       </div>
@@ -39,8 +88,8 @@
         <h3>Forecasting Agent</h3>
         <p>Analyze pipeline data and suggest forecast adjustments.</p>
         <div class="actions">
-          <a class="btn" href="#" onclick="RWD.startAgent('forecast'); return false;">Start</a>
-          <a class="btn" href="#" onclick="RWD.stopAgent('forecast'); return false;">Stop</a>
+          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('forecast'); } return false;">Start</a>
+          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('forecast'); } return false;">Stop</a>
           <span class="agent-status" id="agent-forecast-status">idle</span>
         </div>
       </div>
@@ -48,8 +97,8 @@
         <h3>Integration Agent</h3>
         <p>Simulate integrations between CX and PPM for demo scenarios.</p>
         <div class="actions">
-          <a class="btn" href="#" onclick="RWD.startAgent('integration'); return false;">Start</a>
-          <a class="btn" href="#" onclick="RWD.stopAgent('integration'); return false;">Stop</a>
+          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('integration'); } return false;">Start</a>
+          <a class="btn" href="#" onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('integration'); } return false;">Stop</a>
           <span class="agent-status" id="agent-integration-status">idle</span>
         </div>
       </div>
@@ -193,15 +242,29 @@
   .agent-sim-controls{flex-direction:column;}
 }
 </style>
-<script>
- window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
+ <script>
+  window.addEventListener('DOMContentLoaded', function(){
+   function safeState(){
+     var stub={logs:[],timeline:[],lead:{},oppty:{},pursuit:{},const:{}};
+     if(window.RWD && typeof RWD.get==='function'){
+       try{
+         var live=RWD.get();
+         return Object.assign(stub, live||{});
+       }catch(e){
+         console.warn('RWD.get failed', e);
+       }
+     }
+     return stub;
+   }
+   var d=safeState();
   var log=document.getElementById('log');
-   (d.logs||[]).forEach(function(m){
-     var p=document.createElement('div');
-     p.textContent=m;
-     log.appendChild(p);
-   });
+   if(log && Array.isArray(d.logs)){
+     d.logs.forEach(function(m){
+       var p=document.createElement('div');
+       p.textContent=m;
+       log.appendChild(p);
+     });
+   }
     // Periodically refresh agent status display
     const lastActionCache={};
     function pushFeed(agent,action){
@@ -225,7 +288,7 @@
     }
     function refreshAgentStatus(){
       try{
-        var s = RWD.getAgentStates ? RWD.getAgentStates() : {};
+        var s = (window.RWD && typeof RWD.getAgentStates==='function') ? RWD.getAgentStates() : {};
         var sales = s.sales || s['sales agent'] || {};
         var fc = s.forecast || s['forecasting agent'] || {};
         var integ = s.integration || s['integration agent'] || {};
@@ -248,7 +311,7 @@
     const scenarioSelect=document.getElementById('simScenario');
     const timelineList=document.getElementById('timelineList');
     function populateScenarios(){
-      if(!scenarioSelect || !RWD.availableScenarios) return;
+      if(!scenarioSelect || !(window.RWD && typeof RWD.availableScenarios==='function')) return;
       const options=RWD.availableScenarios();
       scenarioSelect.innerHTML='';
       options.forEach(function(opt,index){
@@ -274,35 +337,47 @@
     renderTimeline(d);
     const btnStart=document.getElementById('btnStartSim');
     if(btnStart){
-      btnStart.addEventListener('click', function(ev){
-        ev.preventDefault();
+       btnStart.addEventListener('click', function(ev){
+         ev.preventDefault();
         const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
-        btnStart.textContent='Simulating...';
-        RWD.runScenarioFlow({scenario:scenarioKey}).finally(function(){
-          btnStart.textContent='Start Guided Flow';
-        });
-      });
-    }
+        if(window.RWD && typeof RWD.runScenarioFlow==='function'){
+          btnStart.textContent='Simulating...';
+          RWD.runScenarioFlow({scenario:scenarioKey}).finally(function(){
+            btnStart.textContent='Start Guided Flow';
+          });
+        }else{
+          if(typeof showToast==='function') showToast('Scenario runner unavailable offline');
+        }
+       });
+     }
     const btnLoad=document.getElementById('btnLoadScenario');
     if(btnLoad){
-      btnLoad.addEventListener('click', function(ev){
-        ev.preventDefault();
+       btnLoad.addEventListener('click', function(ev){
+         ev.preventDefault();
         const scenarioKey=scenarioSelect ? scenarioSelect.value : undefined;
-        RWD.loadScenario(scenarioKey);
-      });
-    }
+        if(window.RWD && typeof RWD.loadScenario==='function'){
+          RWD.loadScenario(scenarioKey);
+        }else if(typeof showToast==='function'){
+          showToast('Scenario load unavailable');
+        }
+       });
+     }
     const btnClear=document.getElementById('btnClearTimeline');
     if(btnClear){
-      btnClear.addEventListener('click', function(ev){
-        ev.preventDefault();
-        RWD.clearTimeline();
-      });
-    }
-    window.startSalesAgentWithAssistant=function(){
-      if(window.RWD){ RWD.startAgent('sales'); }
+       btnClear.addEventListener('click', function(ev){
+         ev.preventDefault();
+        if(window.RWD && typeof RWD.clearTimeline==='function'){
+          RWD.clearTimeline();
+        }else if(typeof showToast==='function'){
+          showToast('Timeline already clear');
+        }
+       });
+     }
+     window.startSalesAgentWithAssistant=function(){
+      if(window.RWD && typeof RWD.startAgent==='function'){ RWD.startAgent('sales'); }
       openSalesAssistant();
       return false;
-    };
+     };
     function openSalesAssistant(){
       const modal=document.getElementById('sales-assistant-modal');
       if(!modal) return;
@@ -339,7 +414,7 @@
       return false;
     };
     function respondFromDemoData(q){
-      const data = window.RWD ? RWD.get() : {lead:{},oppty:{},pursuit:{},const:{}};
+      const data = safeState();
       const lower=q.toLowerCase();
       let answer='';
       if(lower.includes('lead')){
@@ -358,11 +433,10 @@
       appendAssistantMessage(answer);
     }
     function renderStageBoards(state){
-      if(!window.RWD) return;
-      const data = state || RWD.get();
+      const data = state || safeState();
       const leadList=document.getElementById('stage-lead-steps');
       const oppList=document.getElementById('stage-opportunity-steps');
-      const stages=RWD.flowStages||[];
+      const stages=(window.RWD && RWD.flowStages)||[];
       const leadStage=stages.find(s=>s.key==='lead');
       const oppStage=stages.find(s=>s.key==='opportunity');
       if(leadStage && leadList){
@@ -391,11 +465,11 @@
       renderTimeline(snapshot);
     }
     handleState(d);
-    if(RWD.subscribe){
+    if(window.RWD && typeof RWD.subscribe==='function'){
       RWD.subscribe(handleState);
     }
-});
-</script>
+ });
+ </script>
 <div id="sales-assistant-modal" class="agent-modal">
   <div class="agent-modal-content">
     <header>
@@ -429,3 +503,4 @@
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
 </html>
+

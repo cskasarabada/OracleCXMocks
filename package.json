@@ -1,0 +1,23 @@
+{
+  "name": "oraclecxmocks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cskasarabada/OracleCXMocks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cskasarabada/OracleCXMocks/issues"
+  },
+  "homepage": "https://github.com/cskasarabada/OracleCXMocks#readme",
+  "description": "",
+  "dependencies": {
+    "jsdom": "^27.2.0"
+  }
+}

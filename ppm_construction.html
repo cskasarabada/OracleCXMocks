@@ -8,8 +8,57 @@
 <script defer src="assets/app.js"></script>
 </head>
 <body>
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="Easy_Start_Flows.html">Easy Start</a>
+      <a href="sales_cloud.html">Sales Flow</a>
+      <a href="sales_tools.html">Sales Tools</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="ppm_pursuit.html">PPM Pursuit</a>
+      <a class="active" href="ppm_construction.html">PPM Construction</a>
+      <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Insights &amp; Toolkit</div>
+    <div class="nav-items">
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="integration_features.html">Integration</a>
+      <a href="sales_process_visualization.html">Process Visualization</a>
+      <a href="results_driven.html">Results Driven</a>
+      <a href="executive_command_center.html">Exec Command</a>
+      <a href="account_360.html">Account 360</a>
+      <a href="partner_hub.html">Partner Hub</a>
+      <a href="revenue_intelligence.html">Revenue Intelligence</a>
+      <a href="field_mobile_snapshot.html">Field Mobile</a>
+      <a href="sales_ppm_sync.html">Sales-PPM</a>
+      <a href="quote_to_docusign.html">Quote to DocuSign</a>
+      <a href="pursuit_project.html">Pursuit Project</a>
+    </div>
+  </div>
+</nav>
 
-<nav class="quick-nav auto-nav"></nav>
+
+
 <div class="shell">
 
 <div class="grid">
@@ -51,9 +100,96 @@
     </div>
   </div>
 </section>
+
+<div id="project-action-modal" class="lead-overlay" aria-hidden="true">
+  <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="projectActionTitle" tabindex="-1">
+    <div class="lead-modal-header">
+      <div>
+        <p class="eyebrow">Project Smart Action</p>
+        <h2 id="projectActionTitle">Project Workflow</h2>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeProjectAction()">Close &times;</button>
+    </div>
+    <div class="lead-action-panels">
+      <form class="lead-action-form" data-project-form="Send Progress Update" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Share construction progress with stakeholders.</p>
+        <label>Audience<select name="audience">
+          <option value="Client">Client</option>
+          <option value="Executive">Executive</option>
+          <option value="Field">Field</option>
+        </select></label>
+        <label>Summary<textarea name="summary" rows="3" placeholder="Core complete, finishing HVAC rough-in..."></textarea></label>
+        <label>Risks<textarea name="risks" rows="2" placeholder="Weather delays, supply issues..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Send Update</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Request Change Order" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Launch the change-order approval workflow.</p>
+        <label>Change Order Name<input name="coName" placeholder="CO-07 - Elevator Upgrade" required></label>
+        <label>Amount<input type="number" name="coAmount" placeholder="85000" step="1000"></label>
+        <label>Reason<textarea name="coReason" rows="3" placeholder="Client requested premium cab finish..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Request CO</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Notify Warranty Team" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Hand off key completion details to the warranty desk.</p>
+        <label>Warranty Lead<input name="wLead" placeholder="Warranty Manager" required></label>
+        <label>Notes<textarea name="wNotes" rows="3" placeholder="Punch list cleared, start warranty intake"></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Notify Warranty</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Sync Actuals" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Sync cost actuals back to CX &amp; Finance.</p>
+        <label>Message<textarea name="syncMsg" rows="3" placeholder="Updating CX and ERP with latest cost actuals."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Sync Actuals</button>
+        </div>
+      </form>
+
+      <form class="lead-action-form" data-project-form="Share Lessons Learned" onsubmit="return submitProjectAction(event)" style="display:none">
+        <p class="muted">Capture lessons learned for future pursuits.</p>
+        <label>Title<input name="lessonTitle" placeholder="Procurement Optimization" required></label>
+        <label>Details<textarea name="lessonBody" rows="4" placeholder="Ordering structural steel earlier saved 4 weeks..."></textarea></label>
+        <div class="dialog-actions">
+          <button type="button" class="ghost-btn" onclick="closeProjectAction()">Cancel</button>
+          <button type="submit" class="btn primary">Share Insight</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+.lead-action-panels{display:flex;flex-direction:column;gap:16px;}
+.lead-action-form{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--rw-border);border-radius:16px;padding:16px;}
+.lead-action-form p{margin:0;color:var(--rw-muted);}
+.lead-action-form label{display:flex;flex-direction:column;font-size:14px;font-weight:600;color:#0f172a;}
+.lead-action-form input,
+.lead-action-form select,
+.lead-action-form textarea{margin-top:4px;border:1px solid var(--rw-border);border-radius:10px;padding:8px;font:inherit;}
+.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+</style>
+
 <script>
+ function getProjectState(){
+   var fallback={const:{name:'Demo Project', budget:0}};
+   if(window.RWD && typeof RWD.get==='function'){
+     try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('project state fetch failed', e); }
+   }
+   return fallback;
+ }
  window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
+   var d=getProjectState();
    document.getElementById('cName').textContent=d.const.name||'-';
    document.getElementById('cBudget').textContent='$'+Number(d.const.budget||0).toLocaleString();
    var smartLabel=document.getElementById('project-smart-name'); if(smartLabel) smartLabel.textContent=d.const.name||'this project';
@@ -66,12 +202,14 @@
      body.appendChild(tr);
    });
    document.getElementById('btnComplete').addEventListener('click', function(){
-     RWD.completeSubstantial(function(){
+     var finish=function(){
        var s=new Date();
        var e=new Date(s.getFullYear()+1,s.getMonth(),s.getDate());
        document.getElementById('wStart').textContent=s.toLocaleDateString();
        document.getElementById('wEnd').textContent=e.toLocaleDateString();
-     });
+     };
+     if(window.RWD && typeof RWD.completeSubstantial==='function'){ RWD.completeSubstantial(finish); }
+     else{ finish(); }
    });
  });
 function initProjectSmartBanner(){
@@ -85,10 +223,84 @@ function initProjectSmartBanner(){
 }
 function fireProjectAction(action){
   if(!action) return;
+  var handled=openProjectActionModal(action);
   if(window.RWD && typeof RWD.actProject==='function'){ RWD.actProject(action); }
-  if(typeof showToast==='function') showToast(action+' triggered');
+  if(!handled && typeof showToast==='function') showToast(action+' triggered');
+}
+
+function openProjectActionModal(action){
+  var modal=document.getElementById('project-action-modal');
+  if(!modal) return false;
+  var forms=modal.querySelectorAll('[data-project-form]');
+  var match=false;
+  forms.forEach(function(form){
+    var show=form.dataset.projectForm===action;
+    form.style.display=show?'flex':'none';
+    if(show){
+      match=true;
+      prefillProjectAction(form);
+      setTimeout(function(){ var first=form.querySelector('input,textarea,select'); if(first) first.focus(); }, 30);
+    }
+  });
+  if(!match) return false;
+  var title=document.getElementById('projectActionTitle'); if(title) title.textContent=action;
+  modal.style.display='flex';
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-visible');
+  return true;
+}
+
+function closeProjectAction(){
+  var modal=document.getElementById('project-action-modal');
+  if(!modal) return;
+  modal.style.display='none';
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-visible');
+}
+
+function prefillProjectAction(form){
+  var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
+  var project=state.const||{};
+  if(form.dataset.projectForm==='Send Progress Update'){
+    if(form.elements.summary && !form.elements.summary.value){ form.elements.summary.value=project.name+' progress update'; }
+  }
+  if(form.dataset.projectForm==='Request Change Order'){
+    if(form.elements.coName && !form.elements.coName.value){ form.elements.coName.value='CO - '+(project.name||'Project'); }
+  }
+}
+
+function submitProjectAction(ev){
+  if(ev) ev.preventDefault();
+  var form=ev?ev.target:null;
+  if(!form) return false;
+  var action=form.dataset.projectForm || 'Action';
+  switch(action){
+    case 'Send Progress Update':
+      if(typeof showToast==='function') showToast('Progress update sent');
+      break;
+    case 'Request Change Order':
+      if(window.RWD && typeof RWD.runOICJob==='function'){ try{ RWD.runOICJob('Change order'); }catch(e){} }
+      if(typeof showToast==='function') showToast('Change order requested');
+      break;
+    case 'Notify Warranty Team':
+      if(typeof showToast==='function') showToast('Warranty team notified');
+      break;
+    case 'Sync Actuals':
+      if(window.RWD && typeof RWD.runOICJob==='function'){ try{ RWD.runOICJob('Sync actuals'); }catch(e){} }
+      if(typeof showToast==='function') showToast('Actuals sync in progress');
+      break;
+    case 'Share Lessons Learned':
+      if(typeof showToast==='function') showToast('Lessons learned shared');
+      break;
+    default:
+      if(typeof showToast==='function') showToast(action+' completed');
+  }
+  form.reset();
+  closeProjectAction();
+  return false;
 }
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
 </html>
+
