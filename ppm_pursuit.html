@@ -59,7 +59,36 @@
 
 
 
-<div class="shell">
+<div class="shell oppty-shell">
+
+<section class="oppty-oracle-hero">
+  <p class="eyebrow">PPM Pursuit</p>
+  <h1 id="purNameDisplay">Skyline Renewables Microgrid</h1>
+  <div class="meta-row">
+    <span class="pill">Status <strong id="purStatusPill">Draft</strong></span>
+    <span class="pill">Estimate <strong id="purEstimatePill">$0</strong></span>
+    <span class="pill">Owner Pursuit Manager</span>
+  </div>
+  <div class="hero-details">
+    <div>Opportunity <strong>Skyline Renewables</strong></div>
+    <div>Last Update <strong id="purStateHero">Draft</strong></div>
+  </div>
+  <div class="hero-search">
+    <input type="search" placeholder="Ask GenAI to summarize this pursuit"/>
+    <button class="btn primary" onclick="return runPursuitAISummary('overview');">Summarize</button>
+    <div class="ai-pill">AI ready · Nudges</div>
+  </div>
+</section>
+
+<section class="oppty-ai-summary">
+  <h3>Oracle GenAI Guidance</h3>
+  <p id="pursuitAiSummaryText">Select a mode to summarize progress, risks, or recommended Smart Actions.</p>
+  <div class="ai-actions">
+    <button class="btn brand" onclick="return runPursuitAISummary('overview');">Overview</button>
+    <button class="btn" onclick="return runPursuitAISummary('risk');">Risks & Signals</button>
+    <button class="btn" onclick="return runPursuitAISummary('action');">Smart Actions</button>
+  </div>
+</section>
 
 <div class="grid">
   <div class="card"><h2>PPM Pursuit</h2><div class="body">
@@ -103,8 +132,8 @@
         <option value="Trigger Doc Review">Trigger Doc Review</option>
       </select>
       <button type="button" class="btn" id="pursuit-smart-apply">Apply</button>
-    </div>
   </div>
+</div>
 </section>
 
 <div id="pursuit-action-modal" class="lead-overlay" aria-hidden="true">
@@ -311,6 +340,23 @@ function submitPursuitAction(ev){
   }
   form.reset();
   closePursuitAction();
+  return false;
+}
+
+function runPursuitAISummary(mode){
+  var el=document.getElementById('pursuitAiSummaryText');
+  if(!el) return false;
+  var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
+  var pursuit=state.pursuit || {name:'Demo Pursuit', estimate:0, status:'Draft'};
+  var message='';
+  if(mode==='risk'){
+    message='Risks: estimate still draft and integration approvals pending. Recommend assigning estimator + nudging integration agent.';
+  }else if(mode==='action'){
+    message='Smart Actions: Request Estimate, assign resources, sync updates to CX, and trigger Doc Review before award.';
+  }else{
+    message='Summary: '+pursuit.name+' valued at $'+Number(pursuit.estimate||0).toLocaleString()+' currently '+(pursuit.status||'Draft')+'. Keep cadence with sales and prep for construction award.';
+  }
+  el.textContent=message;
   return false;
 }
 </script>
