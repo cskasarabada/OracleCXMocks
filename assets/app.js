@@ -583,6 +583,7 @@
     if(!body || body.dataset.chromeReady==='1') return;
     body.dataset.chromeReady='1';
     body.classList.add('miconnex-theme');
+    body.classList.add('oracle-fusion-skin');
     var header=document.querySelector('.miconnex-bar');
     var headerMarkup='<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     if(!header){
