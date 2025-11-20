@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Redwood CX→PPM Demo</title>
+<title>Redwood CXâ†’PPM Demo</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 </head>
@@ -59,21 +59,67 @@
 
 
 
-<div class="shell">
-<div class="grid">
-  <div class="card"><h2>Flow Overview</h2><div class="body">
-    <ol>
-      <li><strong>Lead (CX Sales – Redwood)</strong>: qualify a lead and convert to Opportunity.</li>
-      <li><strong>Opportunity (CX Sales – Redwood)</strong>: manage discovery, value engineering and next actions.</li>
-      <li><strong>Quote</strong>: configure + price the solution, then deliver a customer-ready proposal.</li>
-      <li><strong>PPM Pursuit</strong>: use OIC to open a pursuit record in PPM and refine estimates.</li>
-      <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off warranty at substantial completion.</li>
-    </ol>
-    <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead, opportunity, quote, pursuit and project delivery.</p>
-    <div class="actions"><a class="btn brand" href="cx_lead.html">Start with Lead</a><a class="btn" href="#" onclick="if(window.RWD && typeof RWD.reset==='function'){ RWD.reset(); alert('Demo state cleared'); } else { alert('Demo engine unavailable offline'); } return false;">Reset State</a></div>
-  </div></div>
-  <div class="card"><h2>Activity Log</h2><div class="body" id="log"></div></div>
-  <div class="card"><h2>Agents</h2><div class="body">
+<div class="shell index-shell">
+  <section class="index-hero">
+    <p class="eyebrow">Oracle CX + PPM</p>
+    <h1>Connected Sales &amp; Delivery Journey</h1>
+    <p class="hero-sub">Guide execs through the unified Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project story while GenAI narrates status, risks, and smart actions.</p>
+    <div class="index-hero-metrics">
+      <div class="metric"><span class="metric-label">Scenario</span><strong id="indexScenarioName">Demo Account</strong></div>
+      <div class="metric"><span class="metric-label">Lead</span><strong id="indexLeadStatus">--</strong></div>
+      <div class="metric"><span class="metric-label">Opportunity</span><strong id="indexOppStatus">--</strong></div>
+      <div class="metric"><span class="metric-label">Pursuit / Project</span><strong><span id="indexPursuitStatus">--</span> / <span id="indexProjectStatus">--</span></strong></div>
+    </div>
+    <div class="index-hero-actions">
+      <a class="btn brand" href="cx_lead.html">Start with Lead</a>
+      <button type="button" class="btn" id="heroStartSim">Start Guided Flow</button>
+      <button type="button" class="btn" id="heroResetState">Reset Demo</button>
+    </div>
+  </section>
+
+  <section class="index-ai-summary">
+    <h3>Oracle GenAI Narrative</h3>
+    <div id="indexAiSummaryText" class="ai-copy">Select a mode to narrate the connected CX Sales &amp; PPM journey.</div>
+    <div class="ai-actions">
+      <button class="btn brand" onclick="return runIndexAISummary('overview');">Overview</button>
+      <button class="btn" onclick="return runIndexAISummary('risk');">Risks &amp; Signals</button>
+      <button class="btn" onclick="return runIndexAISummary('action');">Smart Actions</button>
+    </div>
+  </section>
+
+  <div class="index-layout">
+    <div class="index-main">
+      <div class="card index-flow-card"><h2>Flow Overview</h2><div class="body">
+        <ol>
+          <li><strong>Lead (CX Sales - Redwood)</strong>: qualify a lead and convert to Opportunity.</li>
+          <li><strong>Opportunity (CX Sales - Redwood)</strong>: manage discovery, value engineering and next actions.</li>
+          <li><strong>Quote</strong>: configure + price the solution, then deliver a customer-ready proposal.</li>
+          <li><strong>PPM Pursuit</strong>: use OIC to open a pursuit record in PPM and refine estimates.</li>
+          <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off warranty at substantial completion.</li>
+        </ol>
+        <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead, opportunity, quote, pursuit and project delivery.</p>
+      </div></div>
+      <div class="card" id="simulation-card">
+        <h2>Realtime CX &amp; PPM Simulation</h2>
+        <div class="body sim-deck">
+          <p>Run a guided scenario to show data traveling from Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project, with integration events logged along the way.</p>
+          <div class="sim-controls">
+            <label>Scenario
+              <select id="simScenario"></select>
+            </label>
+            <a class="btn brand" href="#" id="btnStartSim">Start Guided Flow</a>
+            <a class="btn" href="#" id="btnLoadScenario">Load Snapshot</a>
+            <a class="btn outline" href="#" id="btnClearTimeline">Clear Timeline</a>
+          </div>
+          <ul class="event-feed" id="timelineList">
+            <li class="empty">Timeline ready &mdash; start the sim to see Oracle CX Sales Cloud + PPM sync in action.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="index-side">
+      <div class="card index-activity-card"><h2>Activity Log</h2><div class="body" id="log"></div></div>
+      <div class="card index-agents-card"><h2>Agents</h2><div class="body">
     <div class="agents">
       <div class="agent">
         <h3>Sales Agent</h3>
@@ -184,21 +230,6 @@
       </div>
     </div>
   </div>
-  <div class="card" id="simulation-card">
-    <h2>Realtime CX &amp; PPM Simulation</h2>
-    <div class="body sim-deck">
-      <p>Run a guided scenario to show data traveling from Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project, with integration events logged along the way.</p>
-      <div class="sim-controls">
-        <label>Scenario
-          <select id="simScenario"></select>
-        </label>
-        <a class="btn brand" href="#" id="btnStartSim">Start Guided Flow</a>
-        <a class="btn" href="#" id="btnLoadScenario">Load Snapshot</a>
-        <a class="btn outline" href="#" id="btnClearTimeline">Clear Timeline</a>
-      </div>
-      <ul class="event-feed" id="timelineList">
-        <li class="empty">Timeline ready &mdash; start the sim to see Oracle CX Sales Cloud + PPM sync in action.</li>
-      </ul>
     </div>
   </div>
 </div>
@@ -244,6 +275,7 @@
 </style>
  <script>
   window.addEventListener('DOMContentLoaded', function(){
+   var indexAiMode='overview';
    function safeState(){
      var stub={logs:[],timeline:[],lead:{},oppty:{},pursuit:{},const:{}};
      if(window.RWD && typeof RWD.get==='function'){
@@ -257,6 +289,14 @@
      return stub;
    }
    var d=safeState();
+   window.IndexDemoState=d;
+   hydrateIndexHero(d);
+   attachHeroActions();
+   renderIndexAISummary(indexAiMode,d);
+   window.runIndexAISummary=function(mode){
+     indexAiMode=mode||'overview';
+     return renderIndexAISummary(indexAiMode, window.IndexDemoState || safeState());
+   };
   var log=document.getElementById('log');
    if(log && Array.isArray(d.logs)){
      d.logs.forEach(function(m){
@@ -264,6 +304,67 @@
        p.textContent=m;
        log.appendChild(p);
      });
+   }
+   function hydrateIndexHero(state){
+      state=state||{};
+      var scenario=(state.lead && state.lead.company)||'Demo Account';
+      var leadStatus=(state.lead && state.lead.status)||'Working';
+      var oppStatus=(state.oppty && (state.oppty.stage||state.oppty.status))||'Qualification';
+      var pursuitStatus=(state.pursuit && state.pursuit.status)||'Draft';
+      var projectStatus=(state.const && state.const.status)||'Planning';
+      var map={
+        indexScenarioName:scenario,
+        indexLeadStatus:leadStatus,
+        indexOppStatus:oppStatus,
+        indexPursuitStatus:pursuitStatus,
+        indexProjectStatus:projectStatus
+      };
+      Object.keys(map).forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.textContent=map[id];
+      });
+   }
+   function attachHeroActions(){
+     var startBtn=document.getElementById('heroStartSim');
+     if(startBtn){
+       startBtn.addEventListener('click', function(ev){
+         ev.preventDefault();
+         var simBtn=document.getElementById('btnStartSim');
+         if(simBtn) simBtn.click();
+       });
+     }
+     var resetBtn=document.getElementById('heroResetState');
+     if(resetBtn){
+       resetBtn.addEventListener('click', function(ev){
+         ev.preventDefault();
+         if(window.RWD && typeof RWD.reset==='function'){
+           RWD.reset();
+           window.location.reload();
+         }else{
+           alert('Demo engine unavailable offline');
+         }
+       });
+     }
+   }
+   function renderIndexAISummary(mode,state){
+     var target=document.getElementById('indexAiSummaryText');
+     if(!target) return false;
+     state=state||{};
+     var lead=(state.lead && state.lead.status)||'Working';
+     var opp=(state.oppty && (state.oppty.stage||state.oppty.status))||'Qualification';
+     var pursuit=(state.pursuit && state.pursuit.status)||'Draft';
+     var project=(state.const && state.const.status)||'Planning';
+     var scenario=(state.lead && state.lead.company)||'the primary account';
+     var message='';
+     if(mode==='risk'){
+       message='<strong>Risk signals:</strong> lead is '+lead+' while opportunity is '+opp+', so ensure approvals stay in lockstep.<ul><li>Pursuit at '+pursuit+' needs pricing and cost reviews before handoff.</li><li>Watch integration jobs when converting to project ('+project+').</li><li>Agents can nudge teams when data quality slips.</li></ul>';
+     }else if(mode==='action'){
+       message='<strong>Smart Actions:</strong><ul><li>Launch the guided flow to show data syncing end-to-end.</li><li>Open Sales/Forecast/Integration assistants to stream AI insights.</li><li>Use the Quick Sales screen for fast-track expansions once pursuit is '+pursuit+'.</li></ul>';
+     }else{
+       message='<strong>Overview:</strong> '+scenario+' is moving from '+lead+' lead to '+opp+' opportunity with pursuit '+pursuit+' and project '+project+'. GenAI keeps every handoff narrated so execs and delivery stay aligned.';
+     }
+     target.innerHTML=message;
+     return false;
    }
     // Periodically refresh agent status display
     const lastActionCache={};
@@ -295,9 +396,9 @@
         var elSales = document.getElementById('agent-sales-status');
         var elFc = document.getElementById('agent-forecast-status');
         var elInt = document.getElementById('agent-integration-status');
-        if(elSales) elSales.textContent = (sales.running ? 'running' : 'stopped') + (sales.lastAction ? ' — '+sales.lastAction : '');
-        if(elFc) elFc.textContent = (fc.running ? 'running' : 'stopped') + (fc.lastAction ? ' — '+fc.lastAction : '');
-        if(elInt) elInt.textContent = (integ.running ? 'running' : 'stopped') + (integ.lastAction ? ' — '+integ.lastAction : '');
+        if(elSales) elSales.textContent = (sales.running ? 'running' : 'stopped') + (sales.lastAction ? ' â€” '+sales.lastAction : '');
+        if(elFc) elFc.textContent = (fc.running ? 'running' : 'stopped') + (fc.lastAction ? ' â€” '+fc.lastAction : '');
+        if(elInt) elInt.textContent = (integ.running ? 'running' : 'stopped') + (integ.lastAction ? ' â€” '+integ.lastAction : '');
         updateChip('sales', sales);
         updateChip('forecast', fc);
         updateChip('integration', integ);
@@ -311,7 +412,7 @@
     const scenarioSelect=document.getElementById('simScenario');
     const timelineList=document.getElementById('timelineList');
     function fallbackScenarios(){
-      return [{key:'demo',label:'Demo CX→PPM Story'}];
+      return [{key:'demo',label:'Demo CXâ†’PPM Story'}];
     }
     function populateScenarios(){
       if(!scenarioSelect) return;
@@ -481,8 +582,12 @@
       }
     }
     function handleState(snapshot){
-      renderStageBoards(snapshot);
-      renderTimeline(snapshot);
+      var latest=snapshot || safeState();
+      window.IndexDemoState=latest;
+      hydrateIndexHero(latest);
+      renderIndexAISummary(indexAiMode, latest);
+      renderStageBoards(latest);
+      renderTimeline(latest);
     }
     handleState(d);
     if(window.RWD && typeof RWD.subscribe==='function'){
@@ -631,7 +736,7 @@
 .chat-compose{display:flex;gap:10px;}
 .chat-compose input{flex:1;border:1px solid var(--rw-border);border-radius:12px;padding:10px 12px;font-size:14px;}
 </style>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+<div class="footer">Â© Demo â€“ Redwood-inspired mockup</div></div>
 </body>
 </html>
 
