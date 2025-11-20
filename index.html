@@ -70,11 +70,11 @@
       <div class="metric"><span class="metric-label">Opportunity</span><strong id="indexOppStatus">--</strong></div>
       <div class="metric"><span class="metric-label">Pursuit / Project</span><strong><span id="indexPursuitStatus">--</span> / <span id="indexProjectStatus">--</span></strong></div>
     </div>
-    <div class="index-hero-actions">
-      <a class="btn brand" href="cx_lead.html">Start with Lead</a>
-      <button type="button" class="btn" id="heroStartSim">Start Guided Flow</button>
-      <button type="button" class="btn" id="heroResetState">Reset Demo</button>
+    <div class="index-hero-search">
+      <input type="search" id="indexSearchInput" placeholder="Search leads, opportunities, pursuits"/>
+      <button type="button" class="btn" id="indexSearchBtn">Search</button>
     </div>
+    <div class="index-search-results" id="indexSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
   </section>
 
   <section class="index-ai-summary">
@@ -324,32 +324,48 @@
         if(el) el.textContent=map[id];
       });
    }
-   function attachHeroActions(){
-     var startBtn=document.getElementById('heroStartSim');
-     if(startBtn){
-       startBtn.addEventListener('click', function(ev){
-         ev.preventDefault();
-         var simBtn=document.getElementById('btnStartSim');
-         if(simBtn) simBtn.click();
-       });
-     }
-     var resetBtn=document.getElementById('heroResetState');
-     if(resetBtn){
-       resetBtn.addEventListener('click', function(ev){
-         ev.preventDefault();
-         if(window.RWD && typeof RWD.reset==='function'){
-           RWD.reset();
-           window.location.reload();
-         }else{
-           alert('Demo engine unavailable offline');
-         }
-       });
-     }
-   }
-   function renderIndexAISummary(mode,state){
-     var target=document.getElementById('indexAiSummaryText');
-     if(!target) return false;
-     state=state||{};
+    function attachHeroActions(){
+      var startBtn=document.getElementById('heroStartSim');
+      if(startBtn){
+        startBtn.addEventListener('click', function(ev){
+          ev.preventDefault();
+          var simBtn=document.getElementById('btnStartSim');
+          if(simBtn) simBtn.click();
+        });
+      }
+      var resetBtn=document.getElementById('heroResetState');
+      if(resetBtn){
+        resetBtn.addEventListener('click', function(ev){
+          ev.preventDefault();
+          if(window.RWD && typeof RWD.reset==='function'){
+            RWD.reset();
+            window.location.reload();
+          }else{
+            alert('Demo engine unavailable offline');
+          }
+        });
+      }
+      var searchInput=document.getElementById('indexSearchInput');
+      var searchBtn=document.getElementById('indexSearchBtn');
+      if(searchInput){
+        searchInput.addEventListener('keypress', function(ev){
+          if(ev.key==='Enter'){
+            ev.preventDefault();
+            runIndexSearch(searchInput.value);
+          }
+        });
+      }
+      if(searchBtn){
+        searchBtn.addEventListener('click', function(ev){
+          ev.preventDefault();
+          runIndexSearch(searchInput?searchInput.value:'');
+        });
+      }
+    }
+    function renderIndexAISummary(mode,state){
+      var target=document.getElementById('indexAiSummaryText');
+      if(!target) return false;
+      state=state||{};
      var lead=(state.lead && state.lead.status)||'Working';
      var opp=(state.oppty && (state.oppty.stage||state.oppty.status))||'Qualification';
      var pursuit=(state.pursuit && state.pursuit.status)||'Draft';
@@ -363,9 +379,41 @@
      }else{
        message='<strong>Overview:</strong> '+scenario+' is moving from '+lead+' lead to '+opp+' opportunity with pursuit '+pursuit+' and project '+project+'. GenAI keeps every handoff narrated so execs and delivery stay aligned.';
      }
-     target.innerHTML=message;
-     return false;
-   }
+      target.innerHTML=message;
+      return false;
+    }
+    function runIndexSearch(query){
+      var panel=document.getElementById('indexSearchResults');
+      if(!panel) return false;
+      var trimmed=(query||'').trim();
+      if(!trimmed){
+        panel.hidden=true;
+        if(typeof showToast==='function') showToast('Enter a search term for leads, opportunities, or pursuits.');
+        return false;
+      }
+      var state=window.IndexDemoState || safeState();
+      var hits=[];
+      if(state.lead && state.lead.company && state.lead.company.toLowerCase().includes(trimmed.toLowerCase())){
+        hits.push({label:'Lead', desc:state.lead.company+' — '+(state.lead.status||'Working')});
+      }
+      if(state.oppty && state.oppty.name && state.oppty.name.toLowerCase().includes(trimmed.toLowerCase())){
+        hits.push({label:'Opportunity', desc:state.oppty.name+' — '+(state.oppty.stage||'Qualification')});
+      }
+      if(state.pursuit && state.pursuit.name && state.pursuit.name.toLowerCase().includes(trimmed.toLowerCase())){
+        hits.push({label:'Pursuit', desc:state.pursuit.name+' — '+(state.pursuit.status||'Draft')});
+      }
+      if(state.const && state.const.name && state.const.name.toLowerCase().includes(trimmed.toLowerCase())){
+        hits.push({label:'Project', desc:state.const.name+' — '+(state.const.status||'Planning')});
+      }
+      if(!hits.length){
+        panel.hidden=false;
+        panel.innerHTML='<h4>No Results</h4><p>Nothing matched “‘+trimmed+'”. Start a guided flow to load that scenario.</p>';
+        return false;
+      }
+      panel.hidden=false;
+      panel.innerHTML='<h4>Search Results</h4><ul>'+hits.map(function(hit){ return '<li><strong>'+hit.label+':</strong> '+hit.desc+'</li>'; }).join('')+'</ul>';
+      return false;
+    }
     // Periodically refresh agent status display
     const lastActionCache={};
     function pushFeed(agent,action){

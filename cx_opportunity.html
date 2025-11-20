@@ -90,10 +90,11 @@
       <div>Win Probability <strong>40%</strong></div>
     </div>
     <div class="hero-search">
-      <input type="search" placeholder="Ask Oracle GenAI to summarize this opportunity"/>
+      <input type="search" placeholder="Ask Oracle GenAI to summarize this opportunity" id="opptyAiInput"/>
       <button class="btn primary" onclick="return runOpptyAISummary('overview');">Summarize Opportunity</button>
       <div class="ai-pill">AI ready · Nudges available</div>
     </div>
+    <div class="oppty-search-results" id="opptySearchResults" aria-live="polite" aria-atomic="true" hidden></div>
     <div class="oppty-summary-grid">
       <div class="oppty-summary-card">
         <div class="label">Amount</div>
@@ -358,18 +359,44 @@
 </div>
 
 <div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:120" aria-hidden="true">
-  <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
+  <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(820px,95%)">
     <h2 id="addOpptyTitle">Create Opportunity</h2>
-    <form id="addOpptyForm">
-      <div class="field"><label>Name</label><input name="name" required></div>
-      <div class="field"><label>Account</label><input name="account"></div>
-      <div class="two-col">
-        <div class="field" style="grid-template-columns:1fr"><label>Amount</label><input name="amount" type="number"></div>
-        <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
-      </div>
-      <div class="field"><label>Stage</label><select name="stage"><option>Qualification</option><option>Evaluation</option><option>Proposal</option><option>Negotiation</option><option>Closed Won</option></select></div>
-      <div class="field"><label>Notes</label><textarea name="notes" rows="3"></textarea></div>
-      <div class="actions">
+    <form id="addOpptyForm" class="oppty-create-grid">
+      <label>Opportunity Name
+        <input name="name" placeholder="Skyline Expansion" required>
+      </label>
+      <label>Account
+        <input name="account" placeholder="Customer name">
+      </label>
+      <label>Amount
+        <input name="amount" type="number" placeholder="1250000">
+      </label>
+      <label>Owner
+        <input name="owner" placeholder="Opportunity owner">
+      </label>
+      <label>Stage
+        <select name="stage">
+          <option>Qualification</option>
+          <option>Evaluation</option>
+          <option>Proposal</option>
+          <option>Negotiation</option>
+          <option>Closed Won</option>
+          <option>Closed Lost</option>
+        </select>
+      </label>
+      <label>Primary Contact
+        <input name="contact" placeholder="Primary contact">
+      </label>
+      <label>Close Date
+        <input name="closeDate" type="date">
+      </label>
+      <label>Probability (%)
+        <input name="probability" type="number" min="0" max="100" placeholder="65">
+      </label>
+      <label>Notes
+        <textarea name="notes" rows="3" placeholder="Add context or next steps"></textarea>
+      </label>
+      <div class="actions" style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
         <button type="button" class="btn" onclick="closeAddOppty()">Cancel</button>
         <button type="submit" class="btn primary">Save Opportunity</button>
       </div>
@@ -477,6 +504,11 @@
     }, 800);
   }
   try{ renderOppsPreview(); }catch(e){}
+    var input=document.getElementById('opptyAiInput');
+    if(input){
+      input.addEventListener('keypress', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); runOpptyAISummary('overview'); } });
+      input.addEventListener('blur', function(){ if(input.value.trim()){ runOpptyAISummary('overview'); } });
+    }
 });
 // Add New Opportunity modal handlers
 function openAddOppty(){
@@ -720,6 +752,8 @@ function pushPursuitFromOppty(form){
 function runOpptyAISummary(mode){
   var target=document.getElementById('opptyAiSummaryText');
   if(!target) return false;
+  var input=document.getElementById('opptyAiInput');
+  var query=(input && input.value.trim())||'';
   var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
   var opp=state.oppty || {name:'Sample Opportunity', account:'Warner Design', stage:'Qualification', amount:1200000};
   var msg='';
@@ -731,6 +765,12 @@ function runOpptyAISummary(mode){
     msg='Summary: '+(opp.name||'Opportunity')+' with '+(opp.account||'customer')+' at '+(opp.stage||'Qualification')+' worth $'+Number(opp.amount||0).toLocaleString()+'. Next milestone is DocuSign + partner validation.';
   }
   target.textContent=msg;
+  var panel=document.getElementById('opptySearchResults');
+  if(panel){
+    panel.hidden=false;
+    var focus=query?('Focus: '+escapeHtml(query)):'Latest AI insight';
+    panel.innerHTML='<h4>Opportunity Insights</h4><p>'+focus+'</p><p>'+escapeHtml(msg)+'</p>';
+  }
   return false;
 }
 

@@ -96,6 +96,7 @@
       <button class="btn primary" onclick="return runLeadAISummary('overview');">Summarize Lead</button>
       <div class="ai-pill">AI ready · Nudges available</div>
     </div>
+    <div class="lead-search-results" id="leadSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
     <div class="lead-summary-grid">
       <div class="lead-summary-card">
         <div class="label">Opportunity Value</div>
@@ -465,7 +466,7 @@
    return fallback;
  }
  window.addEventListener('DOMContentLoaded', function(){
-   var state = getLeadState();
+  var state = getLeadState();
    var timelineTargets=[document.getElementById('leadTlMain')];
    function renderTimeline(snapshot){
      var data=snapshot||state;
@@ -502,6 +503,11 @@
    try{ renderLeadsPreview(); }catch(e){}
     if(window.RWD && typeof RWD.subscribe==='function'){
       RWD.subscribe(handleSnapshot);
+    }
+    var leadInput=document.getElementById('leadAiInput');
+    if(leadInput){
+      leadInput.addEventListener('keypress', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); runLeadAISummary('overview'); } });
+      leadInput.addEventListener('blur', function(){ if(leadInput.value.trim()){ runLeadAISummary('overview'); } });
     }
   });
 
@@ -847,6 +853,8 @@ function launchPursuitFlow(form){
 function runLeadAISummary(mode){
   var target=document.getElementById('leadAiSummaryText');
   if(!target) return false;
+  var queryInput=document.getElementById('leadAiInput');
+  var query=(queryInput && queryInput.value.trim())||'';
   var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
   var lead=state.lead || {company:'Sample Lead', contact:'Bob Flanders'};
   var msg='';
@@ -858,6 +866,12 @@ function runLeadAISummary(mode){
     msg='Summary: '+lead.company+' is in '+(lead.status||'Qualified')+' with potential $'+(lead.amount||'128,200')+'. Key contact '+(lead.contact||'Ravi Patel')+' requested value proof and is ready for a discovery workshop.';
   }
   target.textContent=msg;
+  var panel=document.getElementById('leadSearchResults');
+  if(panel){
+    panel.hidden=false;
+    var focus=query?('Focus: '+escapeHtml(query)):'Latest AI insight';
+    panel.innerHTML='<h4>Lead Insights</h4><p>'+focus+'</p><p>'+escapeHtml(msg)+'</p>';
+  }
   return false;
 }
 
