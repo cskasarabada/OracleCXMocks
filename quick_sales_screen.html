@@ -101,6 +101,179 @@
     </div>
   </section>
 
+  <section class="card qs-workspace">
+    <div class="body">
+      <div class="qs-deal-header">
+        <div>
+          <p class="eyebrow">Active Opportunity</p>
+          <h2>Skyline Microgrid Expansion</h2>
+          <p>Account <strong>Skyline Renewables</strong> &middot; Owner <strong>Jessica Brooks</strong> &middot; Deal Type <strong>Expansion</strong></p>
+        </div>
+        <div class="qs-header-actions">
+          <button class="btn primary">Log Activity</button>
+          <button class="btn">Send Update</button>
+          <button class="btn">Open in Sales Flow</button>
+        </div>
+      </div>
+      <div class="qs-header-grid">
+        <label>Stage
+          <select>
+            <option>Evaluation</option>
+            <option>Proposal</option>
+            <option>Negotiation</option>
+          </select>
+        </label>
+        <label>Probability
+          <input type="number" value="65"/>
+        </label>
+        <label>Close Date
+          <input type="date" value="2024-07-31"/>
+        </label>
+        <label>Amount
+          <input type="text" value="$1,250,000"/>
+        </label>
+        <label>Team
+          <input type="text" value="AE, SC, Delivery Prep"/>
+        </label>
+      </div>
+      <div class="qs-deal-metrics">
+        <div>
+          <span class="label">Deal Health</span>
+          <strong>High</strong>
+          <p>AI Confidence 82%</p>
+        </div>
+        <div>
+          <span class="label">Engagement</span>
+          <strong>Active</strong>
+          <p>Last touch 2h ago</p>
+        </div>
+        <div>
+          <span class="label">Compliance</span>
+          <strong>Pass</strong>
+          <p>All required fields captured</p>
+        </div>
+        <div>
+          <span class="label">Forecast</span>
+          <strong>Best Case</strong>
+          <p>Submit toggle enabled</p>
+        </div>
+      </div>
+      <div class="qs-workspace-columns">
+        <div class="qs-column primary">
+          <div class="qs-insights">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Sales Insights &amp; Deal Health</p>
+                <h3>AI Recommendations</h3>
+              </div>
+              <button class="btn">Refresh</button>
+            </div>
+            <ul>
+              <li><strong>Stage aging:</strong> Evaluation for 9 days. Prep proposal to stay on forecast.</li>
+              <li><strong>Stakeholder gap:</strong> No finance contact logged &mdash; add approver before pricing review.</li>
+              <li><strong>Next Action:</strong> Send summarized scope + pricing recap before Friday.</li>
+              <li><strong>Risk:</strong> Activity gap on influencer &ldquo;G. Singh&rdquo; &mdash; log touchpoint.</li>
+            </ul>
+          </div>
+    <div class="qs-activity">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Activity &amp; Task Management</p>
+          <h3>Timeline</h3>
+        </div>
+        <button class="btn">View All</button>
+      </div>
+      <ul class="qs-activity-feed" id="qs-activity-feed">
+        <li><span class="time">09:24</span><div><strong>Email</strong> Sent follow-up with updated BOM.</div></li>
+        <li><span class="time">Yesterday</span><div><strong>Meeting</strong> Executive briefing with Skyline board.</div></li>
+        <li><span class="time">Mon</span><div><strong>Note</strong> AI flagged missing finance approver.</div></li>
+      </ul>
+      <form class="qs-activity-form" id="qs-activity-form">
+        <label>Log activity
+          <select id="qs-activity-type">
+            <option>Call</option>
+            <option>Email</option>
+            <option>Meeting</option>
+            <option>Internal Note</option>
+          </select>
+        </label>
+        <textarea rows="2" placeholder="Summarize outcome or next step" id="qs-activity-notes"></textarea>
+        <div class="qs-activity-actions">
+          <label><input type="checkbox" id="qs-follow-task"/> Create follow-up task</label>
+          <button class="btn primary" type="button" id="qsLogActivityBtn">Save Activity</button>
+        </div>
+      </form>
+    </div>
+        </div>
+        <div class="qs-column secondary">
+      <div class="qs-validation">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Compliance &amp; Validation</p>
+            <h3>Checks</h3>
+          </div>
+        </div>
+            <ul>
+              <li class="pass">All mandatory fields completed</li>
+              <li class="pass">Contract value within approval threshold</li>
+              <li class="review">Contact validation required &mdash; missing Finance approver</li>
+        </ul>
+        <button class="btn" id="qsRequestReview">Request Review</button>
+          </div>
+          <div class="qs-stakeholder">
+            <div class="section-head">
+              <p class="eyebrow">Stakeholder View</p>
+              <h3>Contacts &amp; Roles</h3>
+            </div>
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Lena Ortiz</td><td>Decision Maker</td><td>Last touch 2h ago</td></tr>
+                <tr><td>Gurmeet Singh</td><td>Coach</td><td>Last touch 5d ago</td></tr>
+                <tr><td>David Chan</td><td>Finance</td><td>Not engaged</td></tr>
+              </tbody>
+            </table>
+            <button class="btn" id="qsAddStakeholder">Add Stakeholder</button>
+          </div>
+          <div class="qs-revenue">
+            <div class="section-head">
+              <p class="eyebrow">Revenue &amp; Forecast</p>
+              <h3>Forecast Planning</h3>
+            </div>
+            <table>
+              <thead><tr><th>Period</th><th>Amount</th><th>Probability</th></tr></thead>
+              <tbody>
+                <tr><td>Q3</td><td>$850,000</td><td>65%</td></tr>
+                <tr><td>Q4</td><td>$400,000</td><td>35%</td></tr>
+              </tbody>
+            </table>
+            <label class="qs-checkbox"><input type="checkbox" id="qsSubmitForecast" checked/> Submit to Forecast</label>
+          </div>
+          <div class="qs-docs">
+            <div class="section-head">
+              <p class="eyebrow">Documents &amp; Templates</p>
+              <h3>Assets</h3>
+            </div>
+            <ul>
+              <li>Executive Summary.pdf <button class="btn" type="button" data-doc-action="view" data-doc-name="Executive Summary.pdf">View</button></li>
+              <li>Proposal Template.docx <button class="btn" type="button" data-doc-action="generate" data-doc-name="Proposal Template.docx">Generate</button></li>
+              <li>SOW Draft.docx <button class="btn" type="button" data-doc-action="docusign" data-doc-name="SOW Draft.docx">Send to DocuSign</button></li>
+            </ul>
+          </div>
+          <div class="qs-manager">
+            <div class="section-head">
+              <p class="eyebrow">Manager Review Mode</p>
+              <h3>Coaching &amp; Overrides</h3>
+            </div>
+            <label>Manager notes<textarea rows="2" placeholder="Drop coaching notes or approvals here"></textarea></label>
+            <label class="qs-checkbox"><input type="checkbox"/> Override rep confidence (set to 70%)</label>
+            <label class="qs-checkbox"><input type="checkbox"/> Approve for forecast commit</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="card qs-purpose-card">
     <div class="body">
       <div class="qs-purpose-grid">
@@ -250,7 +423,10 @@
   </section>
 
     <script>
-    document.addEventListener('DOMContentLoaded', initQuickSalesHero);
+    document.addEventListener('DOMContentLoaded', function(){
+      initQuickSalesHero();
+      initQuickSalesWorkspace();
+    });
 
     function initQuickSalesHero(){
       var data = window.QUICK_SALES_DATA || {};
@@ -284,6 +460,80 @@
       }
       target.innerHTML = summary;
       return false;
+    }
+
+    function initQuickSalesWorkspace(){
+      var logBtn=document.getElementById('qsLogActivityBtn');
+      if(logBtn){
+        logBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          handleActivitySubmit();
+        });
+      }
+      var requestBtn=document.getElementById('qsRequestReview');
+      if(requestBtn){
+        requestBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Compliance review requested &mdash; legal will respond shortly.');
+        });
+      }
+      var addStake=document.getElementById('qsAddStakeholder');
+      if(addStake){
+        addStake.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Stakeholder placeholder added. Use Sales Flow to capture full details.');
+        });
+      }
+      var submitForecast=document.getElementById('qsSubmitForecast');
+      if(submitForecast){
+        submitForecast.addEventListener('change', function(){
+          var msg=this.checked?'Submitted to forecast.':'Removed from forecast.';
+          notifyQuickSales(msg);
+        });
+      }
+      document.querySelectorAll('[data-doc-action]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          var action=btn.dataset.docAction;
+          var name=btn.dataset.docName || 'document';
+          var message='';
+          switch(action){
+            case 'view':
+              message='Opening '+name+'...';
+              break;
+            case 'generate':
+              message='Generating '+name+' via Quick Sales templates.';
+              break;
+            case 'docusign':
+              message='Sending '+name+' to DocuSign.';
+              break;
+            default:
+              message='Processing '+name;
+          }
+          notifyQuickSales(message);
+        });
+      });
+    }
+
+    function handleActivitySubmit(){
+      var type=document.getElementById('qs-activity-type');
+      var notes=document.getElementById('qs-activity-notes');
+      var follow=document.getElementById('qs-follow-task');
+      var feed=document.getElementById('qs-activity-feed');
+      if(!feed || !type || !notes) return;
+      var text=notes.value.trim() || 'Activity logged via Quick Sales workspace.';
+      var li=document.createElement('li');
+      li.innerHTML='<span class="time">'+new Date().toLocaleTimeString()+'</span><div><strong>'+type.value+'</strong> '+text+(follow && follow.checked?' &ndash; follow-up task added.':'')+'</div>';
+      feed.insertBefore(li, feed.firstChild);
+      while(feed.children.length>5){ feed.removeChild(feed.lastChild); }
+      notes.value='';
+      if(follow) follow.checked=false;
+      notifyQuickSales('Activity captured on the Quick Sales timeline.');
+    }
+
+    function notifyQuickSales(message){
+      if(typeof showToast==='function'){ showToast(message); }
+      else alert(message.replace(/&mdash;/g,'—'));
     }
 
     function toggleSampleData(){
