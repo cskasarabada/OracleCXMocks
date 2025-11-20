@@ -81,10 +81,11 @@
       </div>
     </div>
     <div class="hero-search">
-      <input type="search" placeholder="Search existing accounts &amp; needs" aria-label="Search existing accounts for Quick Sales"/>
+      <input type="search" placeholder="Search existing accounts &amp; needs" aria-label="Search existing accounts for Quick Sales" id="qsHeroSearch"/>
       <button type="button" class="btn primary" onclick="openPreview()">Launch Flow Builder</button>
       <button type="button" class="btn" onclick="startInteractiveFlow()">Interactive Demo</button>
     </div>
+    <div class="qs-search-results" id="qsSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
     <div class="qs-hero-actions">
       <button type="button" class="btn" onclick="openQuickSalesMobile()">Mobile Preview</button>
       <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
@@ -423,6 +424,7 @@
   </section>
 
     <script>
+    var qsSearchContext={};
     document.addEventListener('DOMContentLoaded', function(){
       initQuickSalesHero();
       initQuickSalesWorkspace();
@@ -483,6 +485,15 @@
         heroSalesFlow.addEventListener('click', function(e){
           e.preventDefault();
           window.open('sales_cloud.html','_blank');
+        });
+      }
+      var heroSearch=document.getElementById('qsHeroSearch');
+      if(heroSearch){
+        heroSearch.addEventListener('keypress', function(ev){
+          if(ev.key==='Enter'){ ev.preventDefault(); runHeroSearch(heroSearch.value); }
+        });
+        heroSearch.addEventListener('blur', function(){
+          if(heroSearch.value.trim()){ runHeroSearch(heroSearch.value); }
         });
       }
       var logBtn=document.getElementById('qsLogActivityBtn');
@@ -572,6 +583,56 @@
       else alert(message.replace(/&mdash;/g,'—'));
     }
 
+    function runHeroSearch(query){
+      var trimmed=(query||'').trim();
+      var heroInput=document.getElementById('qsHeroSearch'); if(heroInput) heroInput.value=trimmed;
+      var panel=document.getElementById('qsSearchResults');
+      if(panel){ panel.hidden=true; panel.innerHTML=''; }
+      if(!trimmed){
+        notifyQuickSales('Enter an account or need to search.');
+        return;
+      }
+      var matches=(window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.leads||[]).filter(function(lead){
+        return (lead.accountName||'').toLowerCase().includes(trimmed.toLowerCase()) || (lead.customer||'').toLowerCase().includes(trimmed.toLowerCase());
+      });
+      if(matches.length){
+        notifyQuickSales('Showing needs for '+matches[0].accountName+'. Scoped Quick Sales to that account.');
+        qsSearchContext.leadId=matches[0].id;
+        qsSearchContext.leadName=matches[0].accountName;
+        if(quote){ qsSearchContext.quoteId=quote.id; } else { qsSearchContext.quoteId=''; }
+        if(panel){
+          var lead=matches[0];
+          var quote=(window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.quotes||[]).find(function(q){ return (q.accountName||'').toLowerCase().includes(trimmed.toLowerCase()); });
+          panel.innerHTML='';
+          var h=document.createElement('h4'); h.textContent='Search Results'; panel.appendChild(h);
+          var summary=document.createElement('p'); summary.innerHTML='<strong>'+lead.accountName+'</strong> &mdash; Contacts: '+(lead.contact||'Unknown'); panel.appendChild(summary);
+          if(quote){
+            var list=document.createElement('ul');
+            list.innerHTML='<li>Quote '+quote.id+' &middot; $'+(quote.amount||0).toLocaleString()+'</li><li>Status '+(quote.status||'Draft')+'</li>';
+            panel.appendChild(list);
+          }else{
+            var empty=document.createElement('p'); empty.innerHTML='No quotes found &mdash; use Flow Builder to create one.'; panel.appendChild(empty);
+          }
+          var btn=document.createElement('button'); btn.type='button'; btn.className='btn'; btn.textContent='Open in Flow Builder';
+          btn.addEventListener('click', function(){ openPreview(); });
+          panel.appendChild(btn);
+          panel.hidden=false;
+        }
+      }else{
+        notifyQuickSales('No existing account found for "'+trimmed+'". Use Sales Flow to create one.');
+        qsSearchContext={};
+        if(panel){
+          panel.innerHTML='';
+          var title=document.createElement('h4'); title.textContent='No Results'; panel.appendChild(title);
+          var body=document.createElement('p'); body.innerHTML='Could not locate an existing account named <strong>'+trimmed+'</strong>. Jump to Sales Flow to create it.'; panel.appendChild(body);
+          var btn=document.createElement('button'); btn.type='button'; btn.className='btn'; btn.textContent='Open Sales Flow';
+          btn.addEventListener('click', function(){ window.open('sales_cloud.html','_blank'); });
+          panel.appendChild(btn);
+          panel.hidden=false;
+        }
+      }
+    }
+
     function toggleSampleData(){
       var panel = document.getElementById('sample-data-panel');
       if(!panel) return;
@@ -634,11 +695,13 @@
       var quotes = (window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.quotes) || [];
       var leadSel = document.getElementById('preview-lead');
       var quoteSel = document.getElementById('preview-quote');
-      if(leadSel && leadSel.options.length<=1){
-        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ var acct = l.accountName || l.account || l.customer || ''; return '<option value="'+l.id+'">'+l.id+' — '+acct+' ('+(l.contact||'')+')'+'</option>'; }).join('');
+      if(leadSel){
+        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ var acct = l.accountName || l.account || l.customer || ''; return '<option value="'+l.id+'">'+l.id+' - '+acct+' ('+(l.contact||'')+')'+'</option>'; }).join('');
+        if(qsSearchContext.leadId){ leadSel.value=qsSearchContext.leadId; }
       }
-      if(quoteSel && quoteSel.options.length<=1){
-        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ var acct = q.accountName || q.account || q.customer || ''; return '<option value="'+q.id+'">'+q.id+' — '+acct+' — $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+      if(quoteSel){
+        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ var acct = q.accountName || q.account || q.customer || ''; return '<option value="'+q.id+'">'+q.id+' - '+acct+' - $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+        if(qsSearchContext.quoteId){ quoteSel.value=qsSearchContext.quoteId; }
       }
     }
 
