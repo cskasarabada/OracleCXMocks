@@ -23,6 +23,24 @@
 .oppty-summary-card .label{text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:#6c7894;}
 .oppty-summary-card .value{font-size:1.7rem;font-weight:700;margin:4px 0;}
 .oppty-summary-card p{margin:0;font-size:13px;color:#5d6478;}
+.analytics-deck{background:linear-gradient(135deg,#0d1b2e,#0f2438 58%,#12324d);color:#e8eef7;border-radius:18px;padding:22px;box-shadow:0 20px 38px rgba(6,16,36,.28);margin-bottom:26px;border:1px solid rgba(255,255,255,.08);}
+.analytics-deck h2{margin:4px 0 6px;font-size:1.6rem;}
+.analytics-deck .deck-desc{margin:0;color:#c6d4eb;max-width:680px;font-size:14px;}
+.analytics-deck .deck-header{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start;}
+.analytics-deck .deck-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px;}
+.analytics-tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;box-shadow:0 10px 20px rgba(0,0,0,.16);}
+.analytics-tile .label{color:#9fb8d8;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+.analytics-tile .value{font-size:1.5rem;font-weight:700;margin:6px 0;}
+.analytics-tile .meta{margin:0;color:#dfe7f4;font-size:13px;}
+.story-anchors{margin-top:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;}
+.story-anchors .anchor-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.story-anchors .chips{display:flex;gap:8px;flex-wrap:wrap;}
+.story-anchors .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:999px;font-size:12px;color:#f1f6ff;}
+.story-anchors .anchor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px;}
+.anchor-card{background:#0a182b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;box-shadow:0 12px 18px rgba(0,0,0,.22);}
+.anchor-card .label{color:#9fb8d8;font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
+.anchor-card .name{margin:4px 0;font-size:1rem;font-weight:700;}
+.anchor-card .detail{margin:0;color:#dce6f3;font-size:13px;}
 </style>
 </head>
 <body class="oppty-landing">
@@ -121,6 +139,83 @@
       <button class="btn brand" onclick="return runOpptyAISummary('overview');">Overview</button>
       <button class="btn" onclick="return runOpptyAISummary('risk');">Risks & Signals</button>
       <button class="btn" onclick="return runOpptyAISummary('action');">Smart Actions</button>
+    </div>
+  </section>
+  <section class="analytics-deck" id="analytics-command-deck">
+    <div class="deck-header">
+      <div>
+        <p class="eyebrow" style="color:#c6d4eb">Oracle CX Sales Cloud</p>
+        <h2>Analytics Command Deck</h2>
+        <p class="deck-desc">Bring the Argano storytelling layer to life with dashboards that span Leads, Opportunities, Quotes, Pursuits, Projects, Accounts, and Customers—each curated to show how CX Sales, CPQ, and PPM tie together.</p>
+      </div>
+    </div>
+    <div class="deck-grid">
+      <div class="analytics-tile">
+        <div class="label">Leads Velocity</div>
+        <div class="value">+18%</div>
+        <p class="meta">Cycle time shortening across nurtured leads.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Opportunity Health</div>
+        <div class="value">72%</div>
+        <p class="meta">Risk-adjusted win score across open pipeline.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Quote Controls</div>
+        <div class="value">6 in-flight</div>
+        <p class="meta">Active approvals + DocuSign tracking.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Pursuit Burn</div>
+        <div class="value">$325K</div>
+        <p class="meta">Spend versus budget with OIC sync.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Project Pulse</div>
+        <div class="value">On-track</div>
+        <p class="meta">Delivery health fed from PPM projects.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Customer Signals</div>
+        <div class="value">9 alerts</div>
+        <p class="meta">Renewal + adoption cues surfaced by AI.</p>
+      </div>
+    </div>
+    <div class="story-anchors">
+      <div class="anchor-head">
+        <div>
+          <p class="label" style="color:#9fb8d8">Live Story Anchors</p>
+          <div class="chips">
+            <span class="chip">Lead</span>
+            <span class="chip">Opportunity</span>
+            <span class="chip">Pursuit</span>
+            <span class="chip">Project</span>
+            <span class="chip">Customer</span>
+          </div>
+        </div>
+      </div>
+      <div class="anchor-grid">
+        <div class="anchor-card">
+          <div class="label">Lead</div>
+          <div class="name">Skyline Renewables</div>
+          <p class="detail">Score 78 · GenAI nudges ready</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Opportunity</div>
+          <div class="name">Skyline Microgrid Modernization</div>
+          <p class="detail">$1,250,000 · DocuSign next</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Pursuit</div>
+          <div class="name">Skyline Microgrid Modernization - Pursuit</div>
+          <p class="detail">Draft · OIC handoff in-flight</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Project</div>
+          <div class="name">Skyline Microgrid Modernization - Construction</div>
+          <p class="detail">$1,287,500 · Tracking burn vs. plan</p>
+        </div>
+      </div>
     </div>
   </section>
   <section class="smart-banner" id="oppty-smart-banner">

@@ -109,123 +109,6 @@
 
     <div class="index-layout">
       <div class="index-main">
-        <div class="card index-flow-card">
-          <h2>Flow Overview</h2>
-          <div class="body">
-            <ol>
-              <li><strong>Lead (CX Sales - Redwood)</strong>: qualify a lead and convert to Opportunity.</li>
-              <li><strong>Opportunity (CX Sales - Redwood)</strong>: manage discovery, value engineering and next
-                actions.</li>
-              <li><strong>Quote</strong>: configure + price the solution, then deliver a customer-ready proposal.</li>
-              <li><strong>PPM Pursuit</strong>: use OIC to open a pursuit record in PPM and refine estimates.</li>
-              <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off
-                warranty at substantial completion.</li>
-            </ol>
-            <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead,
-              opportunity, quote, pursuit and project delivery.</p>
-          </div>
-        </div>
-        <div class="card" id="simulation-card">
-          <h2>Realtime CX &amp; PPM Simulation</h2>
-          <div class="body sim-deck">
-            <p>Run a guided scenario to show data traveling from Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project,
-              with integration events logged along the way.</p>
-            <div class="sim-controls">
-              <label>Scenario
-                <select id="simScenario"></select>
-              </label>
-              <a class="btn brand" href="#" id="btnStartSim">Start Guided Flow</a>
-              <a class="btn" href="#" id="btnLoadScenario">Load Snapshot</a>
-              <a class="btn outline" href="#" id="btnClearTimeline">Clear Timeline</a>
-            </div>
-            <ul class="event-feed" id="timelineList">
-              <li class="empty">Timeline ready &mdash; start the sim to see Oracle CX Sales Cloud + PPM sync in action.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="index-side">
-        <div class="card index-activity-card">
-          <h2>Activity Log</h2>
-          <div class="body" id="log"></div>
-        </div>
-        <div class="card index-agents-card">
-          <h2>Agents</h2>
-          <div class="body">
-            <div class="agents">
-              <div class="agent">
-                <h3>Sales Agent</h3>
-                <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
-                <div class="actions">
-                  <a class="btn" href="#" onclick="return startSalesAgentWithAssistant();">Start</a>
-                  <a class="btn" href="#"
-                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('sales'); } return false;">Stop</a>
-                  <span class="agent-status" id="agent-sales-status">idle</span>
-                </div>
-              </div>
-              <div class="agent">
-                <h3>Forecasting Agent</h3>
-                <p>Analyze pipeline data and suggest forecast adjustments.</p>
-                <div class="actions">
-                  <a class="btn" href="#" onclick="return startForecastAgentWithAssistant();">Start</a>
-                  <a class="btn" href="#"
-                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('forecast'); } return false;">Stop</a>
-                  <span class="agent-status" id="agent-forecast-status">idle</span>
-                </div>
-              </div>
-              <div class="agent">
-                <h3>Integration Agent</h3>
-                <p>Simulate integrations between CX and PPM for demo scenarios.</p>
-                <div class="actions">
-                  <a class="btn" href="#" onclick="return startIntegrationAgentWithAssistant();">Start</a>
-                  <a class="btn" href="#"
-                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('integration'); } return false;">Stop</a>
-                  <span class="agent-status" id="agent-integration-status">idle</span>
-                </div>
-              </div>
-            </div>
-            <div class="stage-intel-inline">
-              <h3>Agent Stage Intelligence</h3>
-              <p>Use this quick board to show how Sales and Opportunity agents walk through every workflow step with
-                integrated approvals.</p>
-              <div class="stage-boards">
-                <div class="stage-panel" data-stage="lead">
-                  <div class="stage-header">
-                    <div>
-                      <p class="eyebrow">Lead Journey</p>
-                      <h3>Qualify &amp; Route</h3>
-                    </div>
-                    <span class="stage-chip" id="stage-lead-current">--</span>
-                  </div>
-                  <p class="stage-desc">Sales Agent watches every lead step, ties Smart Actions to approvals, and alerts
-                    you when it&rsquo;s time to convert.</p>
-                  <ul class="stage-steps" id="stage-lead-steps"></ul>
-                  <div class="workflow-callouts">
-                    <span>Workflow: SDR capture &rarr; Marketing verify &rarr; AE acceptance</span>
-                    <span>Approvals: Lead source validation, data quality review</span>
-                  </div>
-                </div>
-                <div class="stage-panel" data-stage="opportunity">
-                  <div class="stage-header">
-                    <div>
-                      <p class="eyebrow">Opportunity Journey</p>
-                      <h3>Value Engineering &amp; Controls</h3>
-                    </div>
-                    <span class="stage-chip" id="stage-opportunity-current">--</span>
-                  </div>
-                  <p class="stage-desc">Opportunity Agent keeps the step-by-step workflow visible, including approvals
-                    for pricing, partners, and DocuSign.</p>
-                  <ul class="stage-steps" id="stage-opportunity-steps"></ul>
-                  <div class="workflow-callouts">
-                    <span>Workflow: Discovery &rarr; Solutioning &rarr; Proposal &rarr; Negotiation</span>
-                    <span>Approvals: Discount guardrails, partner onboarding, DocuSign legal pass</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="card" id="agent-sim-card">
           <h2>AI Agent Simulation</h2>
           <div class="body agent-sim">
@@ -277,10 +160,155 @@
             </div>
           </div>
         </div>
+        <div class="card index-flow-card">
+          <h2>Flow Overview</h2>
+          <div class="body">
+            <ol>
+              <li><strong>Lead (CX Sales - Redwood)</strong>: qualify a lead and convert to Opportunity.</li>
+              <li><strong>Opportunity (CX Sales - Redwood)</strong>: manage discovery, value engineering and next
+                actions.</li>
+              <li><strong>Quote</strong>: configure + price the solution, then deliver a customer-ready proposal.</li>
+              <li><strong>PPM Pursuit</strong>: use OIC to open a pursuit record in PPM and refine estimates.</li>
+              <li><strong>Project Delivery</strong>: award the pursuit to construction, track execution, and kick off
+                warranty at substantial completion.</li>
+            </ol>
+            <p>Use the <strong>Sales Flow</strong> tab for a dedicated Oracle Sales Cloud storyline spanning lead,
+              opportunity, quote, pursuit and project delivery.</p>
+          </div>
+        </div>
+        <div class="card" id="simulation-card">
+          <h2>Realtime CX &amp; PPM Simulation</h2>
+          <div class="body sim-deck">
+            <p>Run a guided scenario to show data traveling from Lead &rarr; Opportunity &rarr; Pursuit &rarr; Project,
+              with integration events logged along the way.</p>
+            <div class="sim-controls">
+              <label>Scenario
+                <select id="simScenario"></select>
+              </label>
+              <a class="btn brand" href="#" id="btnStartSim">Start Guided Flow</a>
+              <a class="btn" href="#" id="btnLoadScenario">Load Snapshot</a>
+              <a class="btn outline" href="#" id="btnClearTimeline">Clear Timeline</a>
+            </div>
+            <ul class="event-feed" id="timelineList">
+              <li class="empty">Timeline ready &mdash; start the sim to see Oracle CX Sales Cloud + PPM sync in action.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="index-side">
+        <div class="card index-activity-card">
+          <h2>Activity Log</h2>
+          <div class="body" id="log"></div>
+        </div>
+        <div class="card index-agents-card">
+          <h2>Agents</h2>
+          <div class="body">
+              <div class="agents-row">
+              <div class="agent">
+                <h3>Sales Agent</h3>
+                <p>Assist with lead qualification, follow-ups, and opportunity creation.</p>
+                <div class="actions">
+                  <a class="btn" href="#" onclick="return startSalesAgentWithAssistant();">Start</a>
+                  <a class="btn" href="#"
+                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('sales'); } return false;">Stop</a>
+                  <span class="agent-status" id="agent-sales-status">idle</span>
+                </div>
+              </div>
+              <div class="agent">
+                <h3>Forecasting Agent</h3>
+                <p>Analyze pipeline data and suggest forecast adjustments.</p>
+                <div class="actions">
+                  <a class="btn" href="#" onclick="return startForecastAgentWithAssistant();">Start</a>
+                  <a class="btn" href="#"
+                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('forecast'); } return false;">Stop</a>
+                  <span class="agent-status" id="agent-forecast-status">idle</span>
+                </div>
+              </div>
+              <div class="agent">
+                <h3>Integration Agent</h3>
+                <p>Simulate integrations between CX and PPM for demo scenarios.</p>
+                <div class="actions">
+                  <a class="btn" href="#" onclick="return startIntegrationAgentWithAssistant();">Start</a>
+                  <a class="btn" href="#"
+                    onclick="if(window.RWD && typeof RWD.stopAgent==='function'){ RWD.stopAgent('integration'); } return false;">Stop</a>
+                  <span class="agent-status" id="agent-integration-status">idle</span>
+                </div>
+              </div>
+            </div>
+            <div class="stage-intel-inline">
+              <h3>Agent Stage Intelligence</h3>
+              <p>Use this quick board to show how Sales and Opportunity agents walk through every workflow step with
+                integrated approvals.</p>
+              <div class="stage-boards">
+                <div class="stage-panel" data-stage="opportunity">
+                  <div class="stage-header">
+                    <div>
+                      <p class="eyebrow">Opportunity Journey</p>
+                      <h3>Value Engineering &amp; Controls</h3>
+                    </div>
+                    <span class="stage-chip" id="stage-opportunity-current">--</span>
+                  </div>
+                  <p class="stage-desc">Opportunity Agent keeps the step-by-step workflow visible, including approvals
+                    for pricing, partners, and DocuSign.</p>
+                  <ul class="stage-steps" id="stage-opportunity-steps"></ul>
+                  <div class="workflow-callouts">
+                    <span>Workflow: Discovery &rarr; Solutioning &rarr; Proposal &rarr; Negotiation</span>
+                    <span>Approvals: Discount guardrails, partner onboarding, DocuSign legal pass</span>
+                  </div>
+                </div>
+                <div class="stage-panel" data-stage="lead">
+                  <div class="stage-header">
+                    <div>
+                      <p class="eyebrow">Lead Journey</p>
+                      <h3>Qualify &amp; Route</h3>
+                    </div>
+                    <span class="stage-chip" id="stage-lead-current">--</span>
+                  </div>
+                  <p class="stage-desc">Sales Agent watches every lead step, ties Smart Actions to approvals, and alerts
+                    you when it&rsquo;s time to convert.</p>
+                  <ul class="stage-steps" id="stage-lead-steps"></ul>
+                  <div class="workflow-callouts">
+                    <span>Workflow: SDR capture &rarr; Marketing verify &rarr; AE acceptance</span>
+                    <span>Approvals: Lead source validation, data quality review</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <style>
+    .index-agents-card .agents-row{
+      display:flex;
+      flex-direction:row;
+      flex-wrap:nowrap;
+      gap:12px;
+      align-items:stretch;
+      overflow-x:auto;
+      padding:0 4px 6px;
+      scroll-snap-type:x proximity;
+    }
+    .index-agents-card .agents-row .agent{
+      border:1px solid var(--rw-border);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:240px;
+      flex:0 0 260px;
+      scroll-snap-align:start;
+    }
+    .index-agents-card .agent .actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
     #agent-sim-card .agent-sim {
       display: flex;
       flex-direction: column;

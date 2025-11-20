@@ -9,8 +9,8 @@
 <style>
 :root{--argano-orange:#ff7a18;--deep-navy:#0f172a;}
 body{font-family:"Century Gothic","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
-.analytics-hero{background:linear-gradient(110deg,var(--deep-navy),#1f2a44);color:#fff;padding:26px 32px;border-radius:28px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:26px;align-items:center;}
-.analytics-hero h1{margin:8px 0 12px;font-size:2.3rem;}
+.analytics-hero{background:linear-gradient(110deg,var(--deep-navy),#1f2a44) !important;color:#f5f7ff !important;padding:26px 32px;border-radius:28px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:26px;align-items:center;}
+.analytics-hero h1{margin:8px 0 12px;font-size:2.3rem;color:#fff;}
 .analytics-hero p{color:#d9e3ff;margin:0 0 14px;}
 .hero-pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
 .hero-pill{padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.4);color:#fff;}
@@ -320,15 +320,32 @@ body{font-family:"Century Gothic","Segoe UI",system-ui,-apple-system,BlinkMacSys
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 <script>
 window.addEventListener('DOMContentLoaded', function(){
-  var d = RWD.get();
-  var lead = document.querySelector('.dynamic-lead');
-  var oppty = document.querySelector('.dynamic-oppty');
-  var pursuit = document.querySelector('.dynamic-pursuit');
-  var proj = document.querySelector('.dynamic-project');
-  if(lead){lead.textContent = (d.lead.company||'-') + ' / ' + (d.lead.score||'-');}
-  if(oppty){oppty.textContent = (d.oppty.name||'-') + ' · $' + (d.oppty.amount||0).toLocaleString();}
-  if(pursuit){pursuit.textContent = (d.pursuit.name||'-') + ' · ' + (d.pursuit.status||'-');}
-  if(proj){proj.textContent = (d.const.name||'-') + ' · $' + (d.const.budget||0).toLocaleString();}
+  var fallback={
+    lead:{company:'Skyline Renewables', score:78},
+    oppty:{name:'Skyline Microgrid Modernization', amount:1250000},
+    pursuit:{name:'Skyline Microgrid Modernization - Pursuit', status:'Draft'},
+    const:{name:'Skyline Microgrid Modernization - Construction', budget:1287500}
+  };
+  var snap=fallback;
+  try{
+    if(window.RWD && typeof RWD.get==='function'){
+      var got=RWD.get()||{};
+      snap={
+        lead: got.lead || fallback.lead,
+        oppty: got.oppty || fallback.oppty,
+        pursuit: got.pursuit || fallback.pursuit,
+        const: got.const || fallback.const
+      };
+    }
+  }catch(err){}
+  var lead=document.querySelector('.dynamic-lead');
+  var oppty=document.querySelector('.dynamic-oppty');
+  var pursuit=document.querySelector('.dynamic-pursuit');
+  var proj=document.querySelector('.dynamic-project');
+  if(lead){lead.textContent=(snap.lead.company||'-')+' / '+(snap.lead.score||'-');}
+  if(oppty){oppty.textContent=(snap.oppty.name||'-')+' · $'+(snap.oppty.amount||0).toLocaleString();}
+  if(pursuit){pursuit.textContent=(snap.pursuit.name||'-')+' · '+(snap.pursuit.status||'-');}
+  if(proj){proj.textContent=(snap.const.name||'-')+' · $'+(snap.const.budget||0).toLocaleString();}
 });
 </script>
 </body>
