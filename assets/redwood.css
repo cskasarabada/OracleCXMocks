@@ -3727,3 +3727,47 @@ body.oracle-fusion-skin .smart-banner p {
   cursor: pointer;
   padding: 0 8px;
 }
+
+/* Agents Grid Layout */
+.agents {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.agent {
+  background: #f8fafc;
+  border: 1px solid rgba(27, 38, 56, .1);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.agent h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.agent p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.agent .actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.agent-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
