@@ -225,38 +225,37 @@
       <div class="lead-content">
         <section class="lead-oracle-hero">
           <p class="eyebrow">My Open Leads</p>
-          <h1>Sample Test Lead - 20250910</h1>
+            <h1 id="leadHeroTitle">Skyline Renewables - Microgrid Expansion</h1>
           <div class="meta-row">
             <span class="badge status">Qualified</span>
-            <span class="pill">Account 1818 Investments</span>
+              <span class="pill" id="leadHeroAccount">Account Skyline Renewables</span>
             <span class="pill">Owner Chandra Kasarabada</span>
             <span class="badge score">AI Score 78</span>
           </div>
           <div class="hero-details">
-            <div>Primary Contact <strong>Ravi Patel · +1 (415) 555-0119</strong></div>
-            <div>Product Interest <strong>Solar Power Generation</strong></div>
+            <div>Primary Contact <strong id="leadHeroContact">Ava Nguyen (CIO) &middot; +1 (415) 555-2244</strong></div>
+            <div>Product Interest <strong id="leadHeroProduct">Microgrid Modernization</strong></div>
           </div>
           <div class="hero-search">
             <input type="search" placeholder="Ask Oracle GenAI to summarize this lead" id="leadAiInput" />
             <button class="btn primary" onclick="return runLeadAISummary('overview');">Summarize Lead</button>
-            <div class="ai-pill">AI ready · Nudges available</div>
+            <div class="ai-pill">AI ready &middot; Nudges available</div>
           </div>
           <div class="lead-search-results" id="leadSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
           <div class="lead-summary-grid">
             <div class="lead-summary-card">
               <div class="label">Opportunity Value</div>
-              <div class="value">$128,200</div>
-              <p>Plus $200k follow-on potential.</p>
+              <div class="value" id="leadHeroValue">$1,250,000</div>
+              <p>Includes grid upgrade and resiliency package.</p>
             </div>
             <div class="lead-summary-card">
-              <div class="label">Activities Due</div>
-              <div class="value">3</div>
-              <p>Discovery call, pricing, executive review.</p>
+              <div class="label">Activities Due</div><div class="value" id="leadHeroActivities">2</div>
+              <p>Discovery workshop and pricing review.</p>
             </div>
             <div class="lead-summary-card">
               <div class="label">Last Touch</div>
-              <div class="value">Oct 14</div>
-              <p>Email follow-up sent 2 days ago.</p>
+              <div class="value" id="leadHeroTouch">Oct 18</div>
+              <p>Email follow-up sent; waiting on scope signoff.</p>
             </div>
           </div>
         </section>
@@ -652,7 +651,25 @@
 
   <script>
     function getLeadState() {
-      var fallback = { lead: {}, timeline: [], logs: [], opportunities: [], pursuit: {}, const: {} };
+        var fallback = {
+          lead: {
+            company: 'Skyline Renewables',
+            name: 'Skyline Renewables - Microgrid Expansion',
+            contact: 'Ava Nguyen (CIO)',
+            contactPhone: '+1 (415) 555-2244',
+            product: 'Microgrid Modernization',
+            status: 'Qualified',
+            amount: 1250000,
+            activities: [
+              { ts: new Date().toLocaleString(), type: 'Email', text: 'Sent scope recap and pricing guardrails', who: 'Sales' }
+            ]
+          },
+          timeline: [],
+          logs: [],
+          opportunities: [],
+          pursuit: {},
+          const: {}
+        };
       if (window.RWD && typeof RWD.get === 'function') {
         try {
           return Object.assign(fallback, RWD.get() || {});
@@ -678,17 +695,26 @@
           });
         });
       }
-      function updateHero(snapshot) {
-        var data = snapshot || state;
-        try {
-          var hero = document.getElementById('leadHeroTitle');
-          if (hero) hero.textContent = (data.lead && (data.lead.name || data.lead.company)) || hero.textContent;
-          var acct = document.getElementById('leadHeroAccount');
-          if (acct) acct.textContent = (data.lead && data.lead.company) ? 'Account ' + data.lead.company : acct.textContent;
-          var smartLabel = document.getElementById('lead-smart-company');
-          if (smartLabel) smartLabel.textContent = data.lead.company || 'your lead';
-        } catch (e) { }
-      }
+        function updateHero(snapshot) {
+          var data = snapshot || state;
+          try {
+            var hero = document.getElementById('leadHeroTitle');
+            if (hero) hero.textContent = (data.lead && (data.lead.name || data.lead.company)) || hero.textContent;
+            var acct = document.getElementById('leadHeroAccount');
+            if (acct) acct.textContent = (data.lead && data.lead.company) ? 'Account ' + data.lead.company : acct.textContent;
+            var contact = document.getElementById('leadHeroContact');
+            if (contact) {
+              var phone = data.lead && (data.lead.contactPhone || data.lead.contactPhoneNumber);
+              contact.textContent = ((data.lead && data.lead.contact) || contact.textContent) + (phone ? ' \u2022 ' + phone : '');
+            }
+            var product = document.getElementById('leadHeroProduct');
+            if (product && data.lead && data.lead.product) product.textContent = data.lead.product;
+            var val = document.getElementById('leadHeroValue');
+            if (val && data.lead && data.lead.amount) val.textContent = '$' + Number(data.lead.amount).toLocaleString();
+            var smartLabel = document.getElementById('lead-smart-company');
+            if (smartLabel) smartLabel.textContent = data.lead.company || 'your lead';
+          } catch (e) { }
+        }
       function handleSnapshot(snap) {
         state = snap;
         renderTimeline(snap);
@@ -1081,3 +1107,15 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
