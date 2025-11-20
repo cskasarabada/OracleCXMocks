@@ -38,6 +38,9 @@
 .oq-sign-lines{margin-top:10px;display:grid;gap:10px;}
 .oq-sign-line{border:1px dashed rgba(15,23,42,.25);border-radius:10px;padding:10px;background:#fff;}
 .oq-sign-line strong{display:block;margin-bottom:4px;}
+.oq-opp-detail{display:grid;gap:6px;margin:10px 0;}
+.oq-opp-detail div{font-size:13px;color:#0f172a;}
+.oq-opp-detail strong{color:#111827;}
 </style>
 </head>
 <body class="lead-landing">
@@ -131,6 +134,7 @@
       <button class="btn brand" onclick="return pushOpportunityToCPQ();">Push to CPQ</button>
       <button class="btn" onclick="return refreshCpqPricing();">Refresh Pricing</button>
       <button class="btn outline" onclick="return syncCpqBackToCX();">Sync Back to CX</button>
+      <button class="btn" onclick="return openIntegrationModal();">Open Demo Pop-up</button>
     </div>
     <div class="status" id="oq-integration-status"><span>Idle · waiting for action</span></div>
   </section>
@@ -206,6 +210,24 @@
     </div>
   </div>
 </div>
+<div class="oq-preview-overlay" id="oq-integration-modal" aria-hidden="true">
+  <div class="oq-preview-card" role="dialog" aria-modal="true" aria-labelledby="oqIntegrationTitle" tabindex="-1">
+    <header>
+      <div>
+        <p class="eyebrow">Demo Flows</p>
+        <h3 id="oqIntegrationTitle">Opportunity → CPQ Mock</h3>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeIntegrationModal()">Close</button>
+    </header>
+    <p style="margin:0 0 12px;color:#475569">Trigger the same mock OIC calls from this pop-up: push to CPQ, refresh pricing, and sync back to CX Sales.</p>
+    <div class="actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      <button class="btn brand" onclick="return pushOpportunityToCPQ();">Push to CPQ</button>
+      <button class="btn" onclick="return refreshCpqPricing();">Refresh Pricing</button>
+      <button class="btn outline" onclick="return syncCpqBackToCX();">Sync Back to CX</button>
+    </div>
+    <div class="status" id="oq-integration-status-modal"><span>Idle · waiting for action</span></div>
+  </div>
+</div>
 <script>
 function sendDocuSignEnvelope(){
   if(typeof showToast==='function'){ showToast('Sending envelope via DocuSign...'); }
@@ -238,6 +260,26 @@ function closePreview(){
 function setIntegrationStatus(msg){
   var el=document.getElementById('oq-integration-status');
   if(el){ el.innerHTML='<span>'+msg+'</span>'; }
+  var el2=document.getElementById('oq-integration-status-modal');
+  if(el2){ el2.innerHTML='<span>'+msg+'</span>'; }
+}
+
+function openIntegrationModal(){
+  var modal=document.getElementById('oq-integration-modal');
+  if(modal){
+    modal.style.display='flex';
+    modal.setAttribute('aria-hidden','false');
+    if(typeof showToast==='function'){ showToast('Demo pop-up opened'); }
+    var card=modal.querySelector('.oq-preview-card'); if(card) card.focus();
+  }
+  return false;
+}
+function closeIntegrationModal(){
+  var modal=document.getElementById('oq-integration-modal');
+  if(modal){
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+  }
 }
 
 function pushOpportunityToCPQ(){
