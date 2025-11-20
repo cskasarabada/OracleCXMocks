@@ -110,9 +110,9 @@
           <p>Account <strong>Skyline Renewables</strong> &middot; Owner <strong>Jessica Brooks</strong> &middot; Deal Type <strong>Expansion</strong></p>
         </div>
         <div class="qs-header-actions">
-          <button class="btn primary">Log Activity</button>
-          <button class="btn">Send Update</button>
-          <button class="btn">Open in Sales Flow</button>
+          <button class="btn primary" id="qsHeroLog">Log Activity</button>
+          <button class="btn" id="qsHeroSend">Send Update</button>
+          <button class="btn" id="qsHeroSalesFlow">Open in Sales Flow</button>
         </div>
       </div>
       <div class="qs-header-grid">
@@ -161,13 +161,13 @@
       <div class="qs-workspace-columns">
         <div class="qs-column primary">
           <div class="qs-insights">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Sales Insights &amp; Deal Health</p>
-                <h3>AI Recommendations</h3>
-              </div>
-              <button class="btn">Refresh</button>
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Sales Insights &amp; Deal Health</p>
+              <h3>AI Recommendations</h3>
             </div>
+            <button class="btn" id="qsInsightsRefresh">Refresh</button>
+          </div>
             <ul>
               <li><strong>Stage aging:</strong> Evaluation for 9 days. Prep proposal to stay on forecast.</li>
               <li><strong>Stakeholder gap:</strong> No finance contact logged &mdash; add approver before pricing review.</li>
@@ -175,14 +175,14 @@
               <li><strong>Risk:</strong> Activity gap on influencer &ldquo;G. Singh&rdquo; &mdash; log touchpoint.</li>
             </ul>
           </div>
-    <div class="qs-activity">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Activity &amp; Task Management</p>
-          <h3>Timeline</h3>
+      <div class="qs-activity">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Activity &amp; Task Management</p>
+            <h3>Timeline</h3>
+          </div>
+          <button class="btn" id="qsViewAllActivity">View All</button>
         </div>
-        <button class="btn">View All</button>
-      </div>
       <ul class="qs-activity-feed" id="qs-activity-feed">
         <li><span class="time">09:24</span><div><strong>Email</strong> Sent follow-up with updated BOM.</div></li>
         <li><span class="time">Yesterday</span><div><strong>Meeting</strong> Executive briefing with Skyline board.</div></li>
@@ -463,11 +463,47 @@
     }
 
     function initQuickSalesWorkspace(){
+      var heroLog=document.getElementById('qsHeroLog');
+      if(heroLog){
+        heroLog.addEventListener('click', function(e){
+          e.preventDefault();
+          var form=document.getElementById('qs-activity-form');
+          if(form){ form.scrollIntoView({behavior:'smooth',block:'center'}); var notes=document.getElementById('qs-activity-notes'); if(notes){ setTimeout(function(){ notes.focus(); }, 400); } }
+        });
+      }
+      var heroSend=document.getElementById('qsHeroSend');
+      if(heroSend){
+        heroSend.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Update sent to Skyline stakeholders with latest summary.');
+        });
+      }
+      var heroSalesFlow=document.getElementById('qsHeroSalesFlow');
+      if(heroSalesFlow){
+        heroSalesFlow.addEventListener('click', function(e){
+          e.preventDefault();
+          window.open('sales_cloud.html','_blank');
+        });
+      }
       var logBtn=document.getElementById('qsLogActivityBtn');
       if(logBtn){
         logBtn.addEventListener('click', function(e){
           e.preventDefault();
           handleActivitySubmit();
+        });
+      }
+      var refreshBtn=document.getElementById('qsInsightsRefresh');
+      if(refreshBtn){
+        refreshBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Insights refreshed using latest AI context.');
+        });
+      }
+      var viewAll=document.getElementById('qsViewAllActivity');
+      if(viewAll){
+        viewAll.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Full activity stream opens in Oracle CX Sales list view.');
         });
       }
       var requestBtn=document.getElementById('qsRequestReview');
