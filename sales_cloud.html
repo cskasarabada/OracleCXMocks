@@ -59,23 +59,53 @@
 
 
 
-<div class="shell">
-<div class="grid">
-  <div class="card" style="grid-column:1/-1">
-    <h2>Oracle Sales Cloud Process</h2>
-    <div class="body">
-      <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through downstream PPM project delivery. Each stage pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
-      <div class="flow-steps">
-        <div><strong>Lead</strong> → capture interest, qualify, and convert.</div>
-        <div><strong>Opportunity</strong> → orchestrate discovery and value engineering.</div>
-        <div><strong>Quote</strong> → configure, price, and publish proposals.</div>
-        <div><strong>Pursuit</strong> → leverage OIC to stand up a PPM pursuit for cost modeling.</div>
-        <div><strong>Project</strong> → award the pursuit, execute delivery, and mark substantial completion.</div>
-      </div>
-      <div class="flow-grid" id="flowSummary"></div>
-    </div>
-  </div>
+<div class="shell sales-shell">
 
+<section class="sales-hero">
+  <p class="eyebrow">Oracle Sales Cloud</p>
+  <h1>Sales & Delivery Journey Control Center</h1>
+  <div class="meta-row">
+    <span class="pill">Stages <strong id="salesStageCount">5</strong></span>
+    <span class="pill">Connected Apps <strong>Lead &rarr; Project</strong></span>
+    <span class="pill">AI Assist <strong>Enabled</strong></span>
+  </div>
+  <div class="hero-details">
+    <div>Scenario <strong id="salesScenarioName">Skyline Renewables</strong></div>
+    <div>Owner <strong>Sales & Delivery Squad</strong></div>
+  </div>
+  <div class="hero-search">
+    <input type="search" placeholder="Ask GenAI to brief the current sales journey"/>
+    <button class="btn primary" onclick="return runSalesAISummary('overview');">Summarize</button>
+    <div class="ai-pill">AI ready &mdash; Sales Signals</div>
+  </div>
+</section>
+
+<section class="sales-ai-summary">
+  <h3>Oracle GenAI Journey Guidance</h3>
+  <div id="salesAiSummaryText" class="ai-copy">Let GenAI narrate the state of the sales-to-delivery journey, highlight risks, and recommend smart actions.</div>
+  <div class="ai-actions">
+    <button class="btn brand" onclick="return runSalesAISummary('overview');">Overview</button>
+    <button class="btn" onclick="return runSalesAISummary('risk');">Risks &amp; Signals</button>
+    <button class="btn" onclick="return runSalesAISummary('action');">Smart Actions</button>
+  </div>
+</section>
+
+<section class="sales-stage-overview">
+  <div class="sales-overview-copy">
+    <h2>Oracle Sales Cloud Process</h2>
+    <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through downstream PPM project delivery. Each tile pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
+    <ul>
+      <li><strong>Lead</strong> capture interest, qualify, and convert.</li>
+      <li><strong>Opportunity</strong> orchestrate discovery and value engineering.</li>
+      <li><strong>Quote</strong> configure, price, and publish proposals.</li>
+      <li><strong>Pursuit</strong> leverage OIC to stand up a PPM pursuit for cost modeling.</li>
+      <li><strong>Project</strong> award the pursuit, execute delivery, and mark substantial completion.</li>
+    </ul>
+  </div>
+  <div class="sales-stage-grid flow-grid" id="flowSummary"></div>
+</section>
+
+<div class="grid">
   <div class="card" style="grid-column:1/2">
     <h2>Stage Console</h2>
     <div class="body">
@@ -259,15 +289,17 @@
 </div>
 <script>
  window.addEventListener('DOMContentLoaded', function(){
-   var stageDefs=RWD.flowStages;
-   var d=RWD.get();
-   var summary=document.getElementById('flowSummary');
-   var timeline=document.getElementById('flowTimeline');
+  var stageDefs=RWD.flowStages;
+  var d=RWD.get();
+  var summary=document.getElementById('flowSummary');
+  var timeline=document.getElementById('flowTimeline');
    var stageSelect=document.getElementById('flowStage');
    var statusSelect=document.getElementById('flowStatus');
    var noteInput=document.getElementById('flowNote');
 
    stageDefs.forEach(function(def){ var opt=document.createElement('option'); opt.value=def.key; opt.textContent=def.label; stageSelect.appendChild(opt); });
+   var stageCountEl=document.getElementById('salesStageCount'); if(stageCountEl) stageCountEl.textContent=stageDefs.length+' stages';
+   var scenarioNameEl=document.getElementById('salesScenarioName'); if(scenarioNameEl) scenarioNameEl.textContent=(d.lead && d.lead.company) || scenarioNameEl.textContent;
 
    function render(){
      d=RWD.get();
@@ -319,7 +351,30 @@
    stageSelect.value=stageDefs[0].key;
    populateStatus(stageSelect.value);
    render();
+   runSalesAISummary('overview');
  });
+ function runSalesAISummary(mode){
+   var el=document.getElementById('salesAiSummaryText');
+   if(!el) return false;
+   var data=RWD.get();
+   var flow=data.salesFlow||{};
+   var leadStatus=(flow.lead && flow.lead.status)||'Working';
+   var opptyStatus=(flow.opportunity && flow.opportunity.status)||'Qualification';
+   var quoteStatus=(flow.quote && flow.quote.status)||'Config';
+   var pursuitStatus=(flow.pursuit && flow.pursuit.status)||'Draft';
+   var projectStatus=(flow.project && flow.project.status)||'Planning';
+   var scenario=(data.lead && data.lead.company)||'this account';
+   var message='';
+   if(mode==='risk'){
+     message='<strong>Risk watch:</strong><ul><li>Opportunity currently in '+opptyStatus+' needs exec alignment.</li><li>Quote stage is '+quoteStatus+' — pricing approvals could slip dates.</li><li>Pursuit sits at '+pursuitStatus+', so prep estimating + legal to avoid downstream delays.</li></ul>';
+   }else if(mode==='action'){
+     message='<strong>Recommended Smart Actions:</strong><ul><li>Update lead notes with latest intent and share AI summary to leadership.</li><li>Trigger quote review + push status into CX/forecast.</li><li>Sync pursuit updates and ready project kickoff so '+projectStatus.toLowerCase()+' teams stay engaged.</li></ul>';
+   }else{
+     message='<strong>Overview:</strong> '+scenario+' is moving through '+(RWD.flowStages?RWD.flowStages.length:5)+' stages — Lead '+leadStatus+', Opportunity '+opptyStatus+', Quote '+quoteStatus+'.<ul><li>Pursuit is '+pursuitStatus+' and delivery is tracking '+projectStatus+'.</li><li>Keep AE + pursuit manager aligned so downstream teams stay ready.</li><li>Leverage Smart Actions to push updates into CX + PPM.</li></ul>';
+   }
+   el.innerHTML=message;
+   return false;
+ }
 </script>
 <div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>

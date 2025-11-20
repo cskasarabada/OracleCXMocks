@@ -59,9 +59,9 @@
 
 
 
-<div class="shell oppty-shell">
+<div class="shell pursuit-shell">
 
-<section class="oppty-oracle-hero">
+<section class="pursuit-hero">
   <p class="eyebrow">PPM Pursuit</p>
   <h1 id="purNameDisplay">Skyline Renewables Microgrid</h1>
   <div class="meta-row">
@@ -71,18 +71,18 @@
   </div>
   <div class="hero-details">
     <div>Opportunity <strong>Skyline Renewables</strong></div>
-    <div>Last Update <strong id="purStateHero">Draft</strong></div>
+    <div>Last Update <strong id="purLastUpdate">Draft</strong></div>
   </div>
   <div class="hero-search">
     <input type="search" placeholder="Ask GenAI to summarize this pursuit"/>
     <button class="btn primary" onclick="return runPursuitAISummary('overview');">Summarize</button>
-    <div class="ai-pill">AI ready · Nudges</div>
+    <div class="ai-pill">AI ready &mdash; Nudges</div>
   </div>
 </section>
 
-<section class="oppty-ai-summary">
+<section class="pursuit-ai-summary">
   <h3>Oracle GenAI Guidance</h3>
-  <p id="pursuitAiSummaryText">Select a mode to summarize progress, risks, or recommended Smart Actions.</p>
+  <div id="pursuitAiSummaryText" class="ai-copy">Select a mode to summarize progress, risks, or recommended Smart Actions.</div>
   <div class="ai-actions">
     <button class="btn brand" onclick="return runPursuitAISummary('overview');">Overview</button>
     <button class="btn" onclick="return runPursuitAISummary('risk');">Risks & Signals</button>
@@ -90,52 +90,83 @@
   </div>
 </section>
 
-<div class="grid">
-  <div class="card"><h2>PPM Pursuit</h2><div class="body">
-    <form id="purForm">
-      <div class="row">
-        <div><label>Project Name<input name="name" id="purName"></label></div>
-        <div><label>Estimate (USD)<input name="estimate" id="purEstimate" type="number"></label></div>
+<div class="pursuit-layout">
+  <div class="pursuit-main">
+    <section class="pursuit-board">
+      <div class="board-column">
+        <header><h3>Guidance</h3><a href="#" class="panel-link">View All</a></header>
+        <ul>
+          <li><strong>Research & Accept</strong><div>Kick off estimating workflow with Skyline team.</div></li>
+          <li><strong>Stage Objectives</strong><div>Complete costing, align resources, prep Doc Review.</div></li>
+          <li><strong>AI Suggestion</strong><div>Share pursuit state with Sales to keep forecast accurate.</div></li>
+        </ul>
+      </div>
+      <div class="board-column">
+        <header><h3>Activities</h3><a href="#" class="panel-link">View Activities</a></header>
+        <ul>
+          <li><strong>Assign Estimator</strong><div class="meta">Pending &middot; Due tomorrow</div></li>
+          <li><strong>Sync to CX</strong><div class="meta">Push latest estimate back to Sales.</div></li>
+          <li><strong>Summarize Pursuit</strong><div class="meta">GenAI can craft exec-ready notes.</div></li>
+        </ul>
+      </div>
+      <div class="board-column">
+        <header><h3>Team & Contacts</h3><a href="#" class="panel-link">Add Member</a></header>
+        <ul>
+          <li><strong>Gurmeet Singh</strong><div>Executive Sponsor</div></li>
+          <li><strong>Subash Nagarajan</strong><div>Pursuit Architect</div></li>
+          <li><strong>Bob Flanders</strong><div>Customer Contact</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="card pursuit-form-card"><h2>PPM Pursuit</h2><div class="body">
+      <form id="purForm">
+        <div class="row">
+          <div><label>Project Name<input name="name" id="purName"></label></div>
+          <div><label>Estimate (USD)<input name="estimate" id="purEstimate" type="number"></label></div>
+        </div>
+        <div class="actions">
+          <button class="btn ok" id="btnAward">Award / Create Construction (OIC)</button>
+          <a class="btn" href="cx_opportunity.html">Back</a>
+        </div>
+      </form>
+    </div></div>
+  </div>
+  <div class="pursuit-side">
+    <div class="card pursuit-status-card"><h2>Status</h2><div class="body">
+      <div class="kv"><div class="k">State</div><div class="v" id="purState">Draft</div></div>
+      <div class="kv"><div class="k">Last Update</div><div class="v" id="purStateDetail">Draft</div></div>
+      <div class="progress"><div class="bar" id="purProg"></div></div>
+    </div></div>
+    <section class="smart-banner" id="pursuit-smart-banner">
+      <div>
+        <p class="eyebrow">Smart Actions</p>
+        <h3>Keep pursuit tasks moving</h3>
+        <p>Trigger estimating, resource requests, and integration syncs for <strong id="pursuit-smart-name">this pursuit</strong>.</p>
       </div>
       <div class="actions">
-        <button class="btn ok" id="btnAward">Award / Create Construction (OIC)</button>
-        <a class="btn" href="cx_opportunity.html">Back</a>
+        <div class="pill-row">
+          <button type="button" class="btn" data-pursuit-action="Request Estimate">Request Estimate</button>
+          <button type="button" class="btn" data-pursuit-action="Assign Resources">Assign Resources</button>
+          <button type="button" class="btn" data-pursuit-action="Sync to CX">Sync to CX</button>
+          <button type="button" class="btn" data-pursuit-action="Share Status">Share Status</button>
+        </div>
+        <div class="action-block">
+          <label class="visually-hidden" for="pursuit-smart-select">Smart Actions</label>
+          <select id="pursuit-smart-select">
+            <option value="">- Select Smart Action -</option>
+            <option value="Request Estimate">Request Estimate</option>
+            <option value="Assign Resources">Assign Resources</option>
+            <option value="Sync to CX">Sync to CX</option>
+            <option value="Share Status">Share Status</option>
+            <option value="Trigger Doc Review">Trigger Doc Review</option>
+          </select>
+          <button type="button" class="btn" id="pursuit-smart-apply">Apply</button>
+        </div>
       </div>
-    </form>
-  </div></div>
-  <div class="card"><h2>Status</h2><div class="body">
-    <div class="kv"><div class="k">State</div><div class="v" id="purState">Draft</div></div>
-    <div class="progress"><div class="bar" id="purProg"></div></div>
-  </div></div>
-</div>
-<section class="smart-banner" id="pursuit-smart-banner">
-  <div>
-    <p class="eyebrow">Smart Actions</p>
-    <h3>Keep pursuit tasks moving</h3>
-    <p>Trigger estimating, resource requests, and integration syncs for <strong id="pursuit-smart-name">this pursuit</strong>.</p>
-  </div>
-  <div class="actions">
-    <div class="pill-row">
-      <button type="button" class="btn" data-pursuit-action="Request Estimate">Request Estimate</button>
-      <button type="button" class="btn" data-pursuit-action="Assign Resources">Assign Resources</button>
-      <button type="button" class="btn" data-pursuit-action="Sync to CX">Sync to CX</button>
-      <button type="button" class="btn" data-pursuit-action="Share Status">Share Status</button>
-    </div>
-    <div class="action-block">
-      <label class="visually-hidden" for="pursuit-smart-select">Smart Actions</label>
-      <select id="pursuit-smart-select">
-        <option value="">- Select Smart Action -</option>
-        <option value="Request Estimate">Request Estimate</option>
-        <option value="Assign Resources">Assign Resources</option>
-        <option value="Sync to CX">Sync to CX</option>
-        <option value="Share Status">Share Status</option>
-        <option value="Trigger Doc Review">Trigger Doc Review</option>
-      </select>
-      <button type="button" class="btn" id="pursuit-smart-apply">Apply</button>
+    </section>
   </div>
 </div>
-</section>
-
 <div id="pursuit-action-modal" class="lead-overlay" aria-hidden="true">
   <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="pursuitActionTitle" tabindex="-1">
     <div class="lead-modal-header">
@@ -221,33 +252,66 @@
 </style>
 
 <script>
- function getPursuitState(){
-   var fallback={pursuit:{name:'Demo Pursuit', estimate:0, status:'Draft'}};
-   if(window.RWD && typeof RWD.get==='function'){
+function getPursuitState(){
+  var fallback={pursuit:{name:'Demo Pursuit', estimate:0, status:'Draft'}};
+  if(window.RWD && typeof RWD.get==='function'){
      try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('pursuit state fetch failed', e); }
    }
    return fallback;
- }
+}
+function formatCurrencyValue(val){
+  var num=Number(val);
+  if(isNaN(num)){
+    var parsed=parseFloat(String(val||'0').replace(/[^0-9.-]/g,''))||0;
+    num=parsed;
+  }
+  return '$'+num.toLocaleString();
+}
  window.addEventListener('DOMContentLoaded', function(){
   var d=getPursuitState();
-  document.getElementById('purName').value=d.pursuit.name||'';
-  document.getElementById('purEstimate').value=d.pursuit.estimate||0;
-  var smartLabel=document.getElementById('pursuit-smart-name'); if(smartLabel) smartLabel.textContent=d.pursuit.name||'this pursuit';
-  document.getElementById('purState').textContent=d.pursuit.status || 'Draft';
-  document.getElementById('purProg').style.width=(d.pursuit.status==='Awarded'? '100%' : '40%');
+  var pursuit=d.pursuit||{};
+  var formattedEstimate=formatCurrencyValue(pursuit.estimate||0);
+  var nameField=document.getElementById('purName'); if(nameField) nameField.value=pursuit.name||'';
+  var estimateField=document.getElementById('purEstimate'); if(estimateField) estimateField.value=pursuit.estimate||0;
+  var heroName=document.getElementById('purNameDisplay'); if(heroName) heroName.textContent=pursuit.name||'Skyline Renewables Microgrid';
+  var statusPill=document.getElementById('purStatusPill'); if(statusPill) statusPill.textContent=pursuit.status||'Draft';
+  var estimatePill=document.getElementById('purEstimatePill'); if(estimatePill) estimatePill.textContent=formattedEstimate;
+  var lastUpdate=document.getElementById('purLastUpdate'); if(lastUpdate) lastUpdate.textContent=pursuit.status||'Draft';
+  var detailUpdate=document.getElementById('purStateDetail'); if(detailUpdate) detailUpdate.textContent=pursuit.status||'Draft';
+  var stateLabel=document.getElementById('purState'); if(stateLabel) stateLabel.textContent=pursuit.status||'Draft';
+  var progressBar=document.getElementById('purProg');
+  if(progressBar){
+    var width='40%';
+    if(pursuit.status==='Submitted') width='70%';
+    if(pursuit.status==='Awarded') width='100%';
+    progressBar.style.width=width;
+  }
+  var smartLabel=document.getElementById('pursuit-smart-name'); if(smartLabel) smartLabel.textContent=pursuit.name||'this pursuit';
   initPursuitSmartBanner();
-  document.getElementById('btnAward').addEventListener('click', function(e){
-     e.preventDefault();
-     RWD.savePursuit(document.getElementById('purForm'));
-     document.getElementById('purState').textContent='Award in progress…';
-     document.getElementById('purProg').style.width='60%';
-     RWD.awardToConstruction(function(){
-       document.getElementById('purState').textContent='Awarded';
-       document.getElementById('purProg').style.width='100%';
-       setTimeout(function(){ window.location='ppm_construction.html'; }, 600);
-     });
+  runPursuitAISummary('overview');
+  var awardButton=document.getElementById('btnAward');
+  if(awardButton){
+    awardButton.addEventListener('click', function(e){
+      e.preventDefault();
+      var form=document.getElementById('purForm');
+      if(window.RWD && typeof RWD.savePursuit==='function' && form){ RWD.savePursuit(form); }
+      if(stateLabel) stateLabel.textContent='Award in progress...';
+      if(detailUpdate) detailUpdate.textContent='Award in progress...';
+      if(progressBar) progressBar.style.width='60%';
+      var finalize=function(){
+        if(stateLabel) stateLabel.textContent='Awarded';
+        if(detailUpdate) detailUpdate.textContent='Awarded';
+        if(progressBar) progressBar.style.width='100%';
+        setTimeout(function(){ window.location='ppm_construction.html'; }, 600);
+      };
+      if(window.RWD && typeof RWD.awardToConstruction==='function'){
+        RWD.awardToConstruction(finalize);
+      }else{
+        setTimeout(finalize, 400);
+      }
+    });
+  }
  });
-});
 function initPursuitSmartBanner(){
   var buttons=document.querySelectorAll('[data-pursuit-action]');
   buttons.forEach(function(btn){
@@ -349,14 +413,16 @@ function runPursuitAISummary(mode){
   var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
   var pursuit=state.pursuit || {name:'Demo Pursuit', estimate:0, status:'Draft'};
   var message='';
+  var estimate=formatCurrencyValue(pursuit.estimate||0);
+  var status=pursuit.status||'Draft';
   if(mode==='risk'){
-    message='Risks: estimate still draft and integration approvals pending. Recommend assigning estimator + nudging integration agent.';
+    message='<strong>Risk watch:</strong> '+pursuit.name+' is still '+status.toLowerCase()+' with approvals pending.<ul><li>Confidence dips until estimate is finalized ('+estimate+').</li><li>Integration dependencies waiting on CX sync.</li><li>Need estimating and legal reviewers assigned.</li></ul>';
   }else if(mode==='action'){
-    message='Smart Actions: Request Estimate, assign resources, sync updates to CX, and trigger Doc Review before award.';
+    message='<strong>Recommended Smart Actions:</strong><ul><li>Request estimate update and share with Sales.</li><li>Assign scheduler + commercial lead to prep Doc Review.</li><li>Trigger Doc Review so award hand-off is clean.</li><li>Sync pursuit updates back to CX/Forecast.</li></ul>';
   }else{
-    message='Summary: '+pursuit.name+' valued at $'+Number(pursuit.estimate||0).toLocaleString()+' currently '+(pursuit.status||'Draft')+'. Keep cadence with sales and prep for construction award.';
+    message='<strong>Overview:</strong> '+pursuit.name+' at '+estimate+' is currently '+status+'.<ul><li>PPM owner is ready to award once estimating hits 100% confidence.</li><li>Share a concise summary with execs via GenAI.</li><li>Prep construction kickoff checklist so downstream teams can start immediately.</li></ul>';
   }
-  el.textContent=message;
+  el.innerHTML=message;
   return false;
 }
 </script>

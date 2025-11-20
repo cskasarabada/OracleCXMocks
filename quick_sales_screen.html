@@ -61,14 +61,47 @@
 
 <div id="aria-live" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
 
-<div class="header"><span class="product">Oracle CX &amp; PPM</span><span class="trail">/ Quick Sales Screen</span></div>
-<div class="shell">
-  <div style="max-width:980px;margin:18px auto">
+<div class="shell qs-shell">
+  <section class="qs-hero">
+    <p class="eyebrow">Quick Sales</p>
     <h1>Quick Sales Screen for Existing Customers</h1>
-    <p>Show the streamlined experience tailored for short-cycle expansions. For existing customers with established relationships and pre-approved terms, the Quick Sales screen enables a condensed three-stage progression that dramatically reduces cycle time while maintaining controls and documentation.</p>
-  </div>
+    <p class="qs-hero-sub">Show the streamlined experience tailored for short-cycle expansions. For existing customers with established relationships and pre-approved terms, the Quick Sales screen enables a condensed three-stage progression that keeps controls intact while moving fast.</p>
+    <div class="qs-hero-metrics">
+      <div class="metric">
+        <span class="metric-label">Active Accounts</span>
+        <strong id="qsAccountCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Ready Quotes</span>
+        <strong id="qsQuoteCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Cycle Target</span>
+        <strong id="qsCycleTime">3-stage fast lane</strong>
+      </div>
+    </div>
+    <div class="hero-search">
+      <input type="search" placeholder="Search existing accounts &amp; needs" aria-label="Search existing accounts for Quick Sales"/>
+      <button type="button" class="btn primary" onclick="openPreview()">Launch Flow Builder</button>
+      <button type="button" class="btn" onclick="startInteractiveFlow()">Interactive Demo</button>
+    </div>
+    <div class="qs-hero-actions">
+      <button type="button" class="btn" onclick="openQuickSalesMobile()">Mobile Preview</button>
+      <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
+    </div>
+  </section>
 
-  <div class="card" style="max-width:980px;margin:0 auto 18px;">
+  <section class="qs-ai-summary">
+    <h3>Oracle GenAI Quick Path Guidance</h3>
+    <div id="qsAiSummaryText" class="ai-copy">Use GenAI to recap the three-stage process, highlight signals, and suggest the next Quick Sales actions.</div>
+    <div class="ai-actions">
+      <button type="button" class="btn brand" onclick="return runQuickSalesAISummary('overview');">Overview</button>
+      <button type="button" class="btn" onclick="return runQuickSalesAISummary('risk');">Risks &amp; Signals</button>
+      <button type="button" class="btn" onclick="return runQuickSalesAISummary('action');">Smart Actions</button>
+    </div>
+  </section>
+
+  <section class="card qs-highlights">
     <div class="body">
       <div class="quick-grid">
         <div>
@@ -99,27 +132,63 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div style="max-width:980px;margin:6px auto 24px;text-align:center">
-    <button class="btn primary" onclick="presetQuickSales()" style="font-size:1.05em;padding:12px 20px;">Launch Quick Sales Flow</button>
-    <button type="button" class="btn" onclick="startInteractiveFlow()" style="font-size:1.05em;padding:12px 20px;margin-left:8px;">Start Interactive Flow</button>
-    <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
-  </div>
-
-  <div style="max-width:980px;margin:6px auto 24px;">
-    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-bottom:8px">
-      <button type="button" class="btn" id="show-sample-data" onclick="toggleSampleData()">Show Sample Leads & Quotes</button>
+  <section class="card qs-sample-card">
+    <div class="body">
+      <div class="qs-sample-header">
+        <div>
+          <p class="eyebrow">Data Sandbox</p>
+          <h3>Sample Leads &amp; Quotes</h3>
+        </div>
+        <button type="button" class="btn" id="show-sample-data" onclick="toggleSampleData()">Show Sample Leads &amp; Quotes</button>
+      </div>
+      <div id="sample-data-panel" class="qs-sample-panel" style="display:none">
+        <h4>Sample Leads</h4>
+        <div class="qs-sample-table" id="sample-leads"></div>
+        <h4>Sample Quotes</h4>
+        <div class="qs-sample-table" id="sample-quotes"></div>
+      </div>
     </div>
-    <div id="sample-data-panel" style="display:none;border:1px solid var(--rw-border);padding:12px;border-radius:8px;background:var(--rw-surface)">
-      <h3>Sample Leads</h3>
-      <div style="overflow:auto;max-height:200px;margin-bottom:12px" id="sample-leads"></div>
-      <h3>Sample Quotes</h3>
-      <div style="overflow:auto;max-height:240px" id="sample-quotes"></div>
-    </div>
-  </div>
+  </section>
 
     <script>
+    document.addEventListener('DOMContentLoaded', initQuickSalesHero);
+
+    function initQuickSalesHero(){
+      var data = window.QUICK_SALES_DATA || {};
+      var leads = data.leads || [];
+      var quotes = data.quotes || [];
+      var acct = document.getElementById('qsAccountCount');
+      if(acct) acct.textContent = leads.length ? leads.length : '—';
+      var quoteCount = document.getElementById('qsQuoteCount');
+      if(quoteCount) quoteCount.textContent = quotes.length ? quotes.length : '—';
+      var cycle = document.getElementById('qsCycleTime');
+      if(cycle){
+        var metaCycle = (data.meta && data.meta.cycleTarget) || '3-stage fast lane';
+        cycle.textContent = metaCycle;
+      }
+      runQuickSalesAISummary('overview');
+    }
+
+    function runQuickSalesAISummary(mode){
+      var target = document.getElementById('qsAiSummaryText');
+      if(!target) return false;
+      var data = window.QUICK_SALES_DATA || {};
+      var leads = data.leads || [];
+      var quotes = data.quotes || [];
+      var summary = '';
+      if(mode==='risk'){
+        summary = '<strong>Risk watch:</strong> Ensure account confirmation is logged before skipping to pricing.<ul><li>'+leads.length+' active needs require validation.</li><li>Accelerated quotes still need approvals + documentation.</li><li>Prep PPM handoff artifacts so execution never rekeys.</li></ul>';
+      }else if(mode==='action'){
+        summary = '<strong>Smart Actions:</strong><ul><li>Launch Flow Builder to auto-fill account + quote context.</li><li>Use Interactive Demo for live narration of the 3 stages.</li><li>Trigger Mobile Preview to show field-ready approvals.</li></ul>';
+      }else{
+        summary = '<strong>Overview:</strong> '+leads.length+' existing customers with '+quotes.length+' ready-to-go quotes sit in the Quick Sales lane. Highlight how GenAI condenses Account Confirmation, Quote Approval, and Execution into one seamless story.';
+      }
+      target.innerHTML = summary;
+      return false;
+    }
+
     function toggleSampleData(){
       var panel = document.getElementById('sample-data-panel');
       if(!panel) return;
@@ -219,8 +288,7 @@
           } else if(window.RWD && typeof RWD.get==='function'){ var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] QS Flow: Push to Pursuit simulated'); if(typeof RWD.set==='function') RWD.set(s); }
         }
         if(typeof showToast==='function') showToast('Quick Sales flow state applied'); else alert('Quick Sales flow state applied');
-        // close modal
-        if(window.ModalManager && typeof ModalManager.closeModal === 'function') ModalManager.closeModal('qs-modal-preview');
+        closeQuickPreview();
       }catch(e){ console.error('applyPreviewAll', e); if(typeof showToast==='function') showToast('Flow apply failed: '+(e && e.message)); }
     }
   </script>
@@ -305,39 +373,70 @@
     </div>
     
     <div id="qs-modal-preview" class="qs-overlay" style="display:none" aria-hidden="true">
-      <div class="qs-modal" role="dialog" aria-modal="true" aria-labelledby="qs-preview-title" tabindex="-1">
-        <h2 id="qs-preview-title">Quick Sales Flow Builder</h2>
-        <div>
-          <h4>1. Account + Need Confirmation</h4>
-          <label for="preview-lead">Pick a lead</label>
-          <select id="preview-lead" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a lead --</option></select>
-          <label for="preview-lead-notes">Notes</label>
-          <textarea id="preview-lead-notes" rows="2" style="width:100%;margin:6px 0;padding:6px"></textarea>
-          <div style="margin-bottom:8px"><label><input type="checkbox" id="preview-lead-confirm"> Confirm account & need</label></div>
-
-          <h4>2. Pre-Built Quote + Approval</h4>
-          <label for="preview-quote">Pick a quote</label>
-          <select id="preview-quote" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a quote --</option></select>
-          <div style="margin:6px 0">Approval: <label><input type="radio" name="preview-quote-approve" value="yes"> Yes</label> <label style="margin-left:8px"><input type="radio" name="preview-quote-approve" value="no"> No</label></div>
-
-          <h4>3. Execution & Handoff</h4>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <label><input type="checkbox" id="preview-convert"> Convert to Opportunity</label>
-            <label><input type="checkbox" id="preview-cpq"> Push to CPQ</label>
-            <label><input type="checkbox" id="preview-pursuit"> Push to Pursuit</label>
+      <div class="qs-modal qs-preview-modal" role="dialog" aria-modal="true" aria-labelledby="qs-preview-title" tabindex="-1">
+        <div class="qs-preview-header">
+          <div>
+            <p class="eyebrow">Quick Sales Builder</p>
+            <h2 id="qs-preview-title">Quick Sales Flow Builder</h2>
+            <p class="muted">Mix and match sample data to narrate the 3-stage Quick Sales journey.</p>
+          </div>
+          <button type="button" class="ghost-btn small" onclick="closeQuickPreview()">Close &times;</button>
+        </div>
+        <div class="qs-preview-grid">
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 1</span>
+              <h3>Account + Need</h3>
+            </div>
+            <label class="qs-field-label">Pick a lead
+              <select id="preview-lead" class="qs-field"><option value="">-- pick a lead --</option></select>
+            </label>
+            <label class="qs-field-label">Notes
+              <textarea id="preview-lead-notes" rows="2" class="qs-field"></textarea>
+            </label>
+            <label class="qs-checkbox"><input type="checkbox" id="preview-lead-confirm"> Confirm account &amp; need</label>
+          </div>
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 2</span>
+              <h3>Pre-Built Quote</h3>
+            </div>
+            <label class="qs-field-label">Pick a quote
+              <select id="preview-quote" class="qs-field"><option value="">-- pick a quote --</option></select>
+            </label>
+            <div class="qs-radio-group">
+              <span>Approval</span>
+              <label><input type="radio" name="preview-quote-approve" value="yes"> Yes</label>
+              <label><input type="radio" name="preview-quote-approve" value="no"> No</label>
+            </div>
+            <p class="qs-stage-note">Fast-lane approvals auto-attach artifacts for compliance.</p>
+          </div>
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 3</span>
+              <h3>Execution &amp; Handoff</h3>
+            </div>
+            <div class="qs-checkbox-group">
+              <label class="qs-checkbox"><input type="checkbox" id="preview-convert"> Convert to Opportunity</label>
+              <label class="qs-checkbox"><input type="checkbox" id="preview-cpq"> Push to CPQ</label>
+              <label class="qs-checkbox"><input type="checkbox" id="preview-pursuit"> Push to Pursuit</label>
+            </div>
+            <p class="qs-stage-note">GenAI preps the PPM handoff package with artifacts &amp; notifications.</p>
           </div>
         </div>
-        <div class="qs-actions" style="margin-top:12px">
-          <button class="btn" onclick="closePreviewModal()">Close</button>
-          <button class="btn primary" onclick="applyPreviewAll()">Apply Flow</button>
+        <div class="qs-preview-actions">
+          <button type="button" class="btn" onclick="closeQuickPreview()">Cancel</button>
+          <button type="button" class="btn primary" onclick="applyPreviewAll()">Apply Flow Updates</button>
         </div>
       </div>
     </div>
+
+  </div>
   </div>
 
     <script defer src="assets/modal.js"></script>
     <script>
-      function closePreviewModal(){
+      function closeQuickPreview(){
         var handled=false;
         if(window.ModalManager && typeof ModalManager.closeModal==='function'){
           try{ ModalManager.closeModal('qs-modal-preview'); handled=true; }catch(e){ console.warn('close preview modalManager', e); }
@@ -347,6 +446,10 @@
           if(ov){
             ov.style.display='none';
             ov.setAttribute('aria-hidden','true');
+            if(ov._escHandler){
+              try{ document.removeEventListener('keydown', ov._escHandler); }catch(err){}
+              ov._escHandler=null;
+            }
           }
         }
       }
