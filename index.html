@@ -414,6 +414,9 @@
       panel.innerHTML='<h4>Search Results</h4><ul>'+hits.map(function(hit){ return '<li><strong>'+hit.label+':</strong> '+hit.desc+'</li>'; }).join('')+'</ul>';
       return false;
     }
+    function escapeHtml(str){
+      return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
     // Periodically refresh agent status display
     const lastActionCache={};
     function pushFeed(agent,action){
