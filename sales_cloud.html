@@ -1,382 +1,534 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Oracle Sales Cloud Flow</title>
-<link rel="stylesheet" href="assets/redwood.css"/>
-<script defer src="assets/app.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Oracle Sales Cloud Flow</title>
+  <link rel="stylesheet" href="assets/redwood.css" />
+  <script defer src="assets/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-<header class="miconnex-bar">
-  <div class="logo-mark">
-    <span class="logo-icon argano">A</span>
-    <div>
-      <div class="logo-text">Argano</div>
-      <div class="logo-sub">Connected Cloud</div>
-    </div>
-  </div>
-  <div class="bar-actions">
-    <button class="ghost-btn small">Help</button>
-    <button class="ghost-btn small">Support</button>
-    <div class="avatar-chip">CK</div>
-  </div>
-</header>
-<nav class="quick-nav auto-nav">
-  <div class="nav-group">
-    <div class="nav-label">Sales &amp; Delivery Journey</div>
-    <div class="nav-items">
-      <a href="index.html">Overview</a>
-      <a href="Easy_Start_Flows.html">Easy Start</a>
-      <a class="active" href="sales_cloud.html">Sales Flow</a>
-      <a href="sales_tools.html">Sales Tools</a>
-      <a href="cx_lead.html">Lead</a>
-      <a href="cx_opportunity.html">Opportunity</a>
-      <a href="ppm_pursuit.html">PPM Pursuit</a>
-      <a href="ppm_construction.html">PPM Construction</a>
-      <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
-    </div>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Insights &amp; Toolkit</div>
-    <div class="nav-items">
-      <a href="analytics.html">Analytics</a>
-      <a href="forecasting_pipeline.html">Forecasting</a>
-      <a href="integration_features.html">Integration</a>
-      <a href="sales_process_visualization.html">Process Visualization</a>
-      <a href="results_driven.html">Results Driven</a>
-      <a href="executive_command_center.html">Exec Command</a>
-      <a href="account_360.html">Account 360</a>
-      <a href="partner_hub.html">Partner Hub</a>
-      <a href="revenue_intelligence.html">Revenue Intelligence</a>
-      <a href="field_mobile_snapshot.html">Field Mobile</a>
-      <a href="sales_ppm_sync.html">Sales-PPM</a>
-      <a href="quote_to_docusign.html">Quote to DocuSign</a>
-      <a href="pursuit_project.html">Pursuit Project</a>
-    </div>
-  </div>
-</nav>
-
-
-
-<div class="shell sales-shell">
-
-<section class="sales-hero">
-  <p class="eyebrow">Oracle Sales Cloud</p>
-  <h1>Sales & Delivery Journey Control Center</h1>
-  <div class="meta-row">
-    <span class="pill">Stages <strong id="salesStageCount">5</strong></span>
-    <span class="pill">Connected Apps <strong>Lead &rarr; Project</strong></span>
-    <span class="pill">AI Assist <strong>Enabled</strong></span>
-  </div>
-  <div class="hero-details">
-    <div>Scenario <strong id="salesScenarioName">Skyline Renewables</strong></div>
-    <div>Owner <strong>Sales & Delivery Squad</strong></div>
-  </div>
-  <div class="hero-search">
-    <input type="search" placeholder="Ask GenAI to brief the current sales journey"/>
-    <button class="btn primary" onclick="return runSalesAISummary('overview');">Summarize</button>
-    <div class="ai-pill">AI ready &mdash; Sales Signals</div>
-  </div>
-</section>
-
-<section class="sales-ai-summary">
-  <h3>Oracle GenAI Journey Guidance</h3>
-  <div id="salesAiSummaryText" class="ai-copy">Let GenAI narrate the state of the sales-to-delivery journey, highlight risks, and recommend smart actions.</div>
-  <div class="ai-actions">
-    <button class="btn brand" onclick="return runSalesAISummary('overview');">Overview</button>
-    <button class="btn" onclick="return runSalesAISummary('risk');">Risks &amp; Signals</button>
-    <button class="btn" onclick="return runSalesAISummary('action');">Smart Actions</button>
-  </div>
-</section>
-
-<section class="sales-stage-overview">
-  <div class="sales-overview-copy">
-    <h2>Oracle Sales Cloud Process</h2>
-    <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through downstream PPM project delivery. Each tile pulls context from the mock CX data set so you can narrate the flow in seconds.</p>
-    <ul>
-      <li><strong>Lead</strong> capture interest, qualify, and convert.</li>
-      <li><strong>Opportunity</strong> orchestrate discovery and value engineering.</li>
-      <li><strong>Quote</strong> configure, price, and publish proposals.</li>
-      <li><strong>Pursuit</strong> leverage OIC to stand up a PPM pursuit for cost modeling.</li>
-      <li><strong>Project</strong> award the pursuit, execute delivery, and mark substantial completion.</li>
-    </ul>
-  </div>
-  <div class="sales-stage-grid flow-grid" id="flowSummary"></div>
-</section>
-
-<div class="grid">
-  <div class="card" style="grid-column:1/2">
-    <h2>Stage Console</h2>
-    <div class="body">
-      <form id="flowForm">
-        <div class="row">
-          <div><label>Stage<select id="flowStage"></select></label></div>
-          <div><label>Status<select id="flowStatus"></select></label></div>
-        </div>
-        <label>Notes / Callouts<textarea id="flowNote" rows="4" placeholder="Highlight customer intent, blockers, or next steps"></textarea></label>
-        <div class="actions">
-          <button class="btn primary" type="submit">Update Stage</button>
-          <button class="btn" type="button" onclick="RWD.reset(); window.location.reload();">Reset Flow</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="card" style="grid-column:2/3">
-    <h2>Latest Updates</h2>
-    <div class="body flow-timeline" id="flowTimeline"></div>
-  </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>Stage 5: Closure – 100% Won or 0% Lost</h2>
-    <div class="body">
-      <p>Closeout moments are where CX Sales Cloud hands the baton to downstream delivery teams. Use this view to reinforce how the combined Lead → Opportunity → Quote → Pursuit → Project experience captures every lesson learned.</p>
-      <div class="split">
-        <div class="panel">
-          <h3>Closed Won</h3>
-          <ul>
-            <li>Contract is signed, automation springs into action to generate orders and downstream PPM projects.</li>
-            <li>Automatic order creation for processing, project management kickoff, and customer handoffs.</li>
-            <li>Project templates instantiated for delivery teams with resource notifications already queued.</li>
-            <li>Revenue recognition workflows initiated and tied to proposal commitments.</li>
-            <li>Customer onboarding assistants triggered to capture success criteria and warranty expectations.</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Closed Lost</h3>
-          <ul>
-            <li>Capture detailed win/loss intelligence to refine approach and strengthen future proposals.</li>
-            <li>Log competitor analysis, positioning gaps, and pricing or terms concerns.</li>
-            <li>Track product fit requirements or unmet milestones across pursuits.</li>
-            <li>Document timing or budget constraints that blocked advancement.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="analytics-callout">
-        <div class="icon">AI</div>
-        <div><strong>Analytics Power:</strong> Win/loss data feeds predictive models that improve qualification criteria, pricing strategies, and competitive positioning over time.</div>
+  <header class="miconnex-bar">
+    <div class="logo-mark">
+      <span class="logo-icon argano">A</span>
+      <div>
+        <div class="logo-text">Argano</div>
+        <div class="logo-sub">Connected Cloud</div>
       </div>
     </div>
-  </div>
+    <div class="bar-actions">
+      <button class="ghost-btn small">Help</button>
+      <button class="ghost-btn small">Support</button>
+      <div class="avatar-chip">CK</div>
+    </div>
+  </header>
+  <nav class="quick-nav auto-nav">
+    <div class="nav-group">
+      <div class="nav-label">Sales &amp; Delivery Journey</div>
+      <div class="nav-items">
+        <a href="index.html">Overview</a>
+        <a href="Easy_Start_Flows.html">Easy Start</a>
+        <a class="active" href="sales_cloud.html">Sales Flow</a>
+        <a href="sales_tools.html">Sales Tools</a>
+        <a href="cx_lead.html">Lead</a>
+        <a href="cx_opportunity.html">Opportunity</a>
+        <a href="ppm_pursuit.html">PPM Pursuit</a>
+        <a href="ppm_construction.html">PPM Construction</a>
+        <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Insights &amp; Toolkit</div>
+      <div class="nav-items">
+        <a href="analytics.html">Analytics</a>
+        <a href="forecasting_pipeline.html">Forecasting</a>
+        <a href="integration_features.html">Integration</a>
+        <a href="sales_process_visualization.html">Process Visualization</a>
+        <a href="results_driven.html">Results Driven</a>
+        <a href="executive_command_center.html">Exec Command</a>
+        <a href="account_360.html">Account 360</a>
+        <a href="partner_hub.html">Partner Hub</a>
+        <a href="revenue_intelligence.html">Revenue Intelligence</a>
+        <a href="field_mobile_snapshot.html">Field Mobile</a>
+        <a href="sales_ppm_sync.html">Sales-PPM</a>
+        <a href="quote_to_docusign.html">Quote to DocuSign</a>
+        <a href="pursuit_project.html">Pursuit Project</a>
+      </div>
+    </div>
+  </nav>
 
-  <div class="card" style="grid-column:1/-1">
-    <h2>Customized Sales Method Blueprint & Stage Matrix</h2>
-    <div class="body">
-      <p>A comprehensive framework built for capital project pursuits: a structured 10-stage method, probability-weighted stage matrix, and an optimized Quick Sales screen for expansion plays. Highlight how the blueprint keeps sales, delivery, and finance aligned.</p>
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Why it Matters</h3>
-          <ul><li>Long-cycle projects demand predictable hand-offs from CX to PPM.</li><li>Probability gates protect forecast accuracy.</li><li>Guided fields ensure downstream delivery has the full context.</li></ul>
+
+
+  <div class="shell sales-shell">
+
+    <section class="sales-hero">
+      <p class="eyebrow">Oracle Sales Cloud</p>
+      <h1>Sales & Delivery Journey Control Center</h1>
+      <div class="meta-row">
+        <span class="pill">Stages <strong id="salesStageCount">5</strong></span>
+        <span class="pill">Connected Apps <strong>Lead &rarr; Project</strong></span>
+        <span class="pill">AI Assist <strong>Enabled</strong></span>
+      </div>
+      <div class="sales-charts-row" style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+        <div class="chart-card"
+          style="background:rgba(255,255,255,0.6); padding:15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
+          <canvas id="salesFunnelChart"></canvas>
         </div>
-        <div class="panel">
-          <h3>Presenter Tips</h3>
-          <ul><li>Showcase how Smart Actions auto-fill required fields.</li><li>Use the stage console above to narrate the method live.</li><li>Reference the Quick Sales screen below for existing customer accelerators.</li></ul>
+        <div class="chart-card"
+          style="background:rgba(255,255,255,0.6); padding:15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
+          <canvas id="salesTrendChart"></canvas>
+        </div>
+      </div>
+      <div class="hero-details">
+        <div>Scenario <strong id="salesScenarioName">Skyline Renewables</strong></div>
+        <div>Owner <strong>Sales & Delivery Squad</strong></div>
+      </div>
+      <div class="hero-search">
+        <input type="search" placeholder="Ask GenAI to brief the current sales journey" />
+        <button class="btn primary" onclick="return runSalesAISummary('overview');">Summarize</button>
+        <div class="ai-pill">AI ready &mdash; Sales Signals</div>
+      </div>
+    </section>
+
+    <section class="sales-ai-summary">
+      <h3>Oracle GenAI Journey Guidance</h3>
+      <div id="salesAiSummaryText" class="ai-copy">Let GenAI narrate the state of the sales-to-delivery journey,
+        highlight risks, and recommend smart actions.</div>
+      <div class="ai-actions">
+        <button class="btn brand" onclick="return runSalesAISummary('overview');">Overview</button>
+        <button class="btn" onclick="return runSalesAISummary('risk');">Risks &amp; Signals</button>
+        <button class="btn" onclick="return runSalesAISummary('action');">Smart Actions</button>
+      </div>
+    </section>
+
+    <section class="sales-stage-overview">
+      <div class="sales-overview-copy">
+        <h2>Oracle Sales Cloud Process</h2>
+        <p>Simulate the end-to-end Oracle CX Sales Cloud progression from inbound lead qualification through downstream
+          PPM project delivery. Each tile pulls context from the mock CX data set so you can narrate the flow in
+          seconds.</p>
+        <ul>
+          <li><strong>Lead</strong> capture interest, qualify, and convert.</li>
+          <li><strong>Opportunity</strong> orchestrate discovery and value engineering.</li>
+          <li><strong>Quote</strong> configure, price, and publish proposals.</li>
+          <li><strong>Pursuit</strong> leverage OIC to stand up a PPM pursuit for cost modeling.</li>
+          <li><strong>Project</strong> award the pursuit, execute delivery, and mark substantial completion.</li>
+        </ul>
+      </div>
+      <div class="sales-stage-grid flow-grid" id="flowSummary"></div>
+    </section>
+
+    <div class="grid">
+      <div class="card" style="grid-column:1/2">
+        <h2>Stage Console</h2>
+        <div class="body">
+          <form id="flowForm">
+            <div class="row">
+              <div><label>Stage<select id="flowStage"></select></label></div>
+              <div><label>Status<select id="flowStatus"></select></label></div>
+            </div>
+            <label>Notes / Callouts<textarea id="flowNote" rows="4"
+                placeholder="Highlight customer intent, blockers, or next steps"></textarea></label>
+            <div class="actions">
+              <button class="btn primary" type="submit">Update Stage</button>
+              <button class="btn" type="button" onclick="RWD.reset(); window.location.reload();">Reset Flow</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:2/3">
+        <h2>Latest Updates</h2>
+        <div class="body flow-timeline" id="flowTimeline"></div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Stage 5: Closure – 100% Won or 0% Lost</h2>
+        <div class="body">
+          <p>Closeout moments are where CX Sales Cloud hands the baton to downstream delivery teams. Use this view to
+            reinforce how the combined Lead → Opportunity → Quote → Pursuit → Project experience captures every lesson
+            learned.</p>
+          <div class="split">
+            <div class="panel">
+              <h3>Closed Won</h3>
+              <ul>
+                <li>Contract is signed, automation springs into action to generate orders and downstream PPM projects.
+                </li>
+                <li>Automatic order creation for processing, project management kickoff, and customer handoffs.</li>
+                <li>Project templates instantiated for delivery teams with resource notifications already queued.</li>
+                <li>Revenue recognition workflows initiated and tied to proposal commitments.</li>
+                <li>Customer onboarding assistants triggered to capture success criteria and warranty expectations.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Closed Lost</h3>
+              <ul>
+                <li>Capture detailed win/loss intelligence to refine approach and strengthen future proposals.</li>
+                <li>Log competitor analysis, positioning gaps, and pricing or terms concerns.</li>
+                <li>Track product fit requirements or unmet milestones across pursuits.</li>
+                <li>Document timing or budget constraints that blocked advancement.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="analytics-callout">
+            <div class="icon">AI</div>
+            <div><strong>Analytics Power:</strong> Win/loss data feeds predictive models that improve qualification
+              criteria, pricing strategies, and competitive positioning over time.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Customized Sales Method Blueprint & Stage Matrix</h2>
+        <div class="body">
+          <p>A comprehensive framework built for capital project pursuits: a structured 10-stage method,
+            probability-weighted stage matrix, and an optimized Quick Sales screen for expansion plays. Highlight how
+            the blueprint keeps sales, delivery, and finance aligned.</p>
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Why it Matters</h3>
+              <ul>
+                <li>Long-cycle projects demand predictable hand-offs from CX to PPM.</li>
+                <li>Probability gates protect forecast accuracy.</li>
+                <li>Guided fields ensure downstream delivery has the full context.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Presenter Tips</h3>
+              <ul>
+                <li>Showcase how Smart Actions auto-fill required fields.</li>
+                <li>Use the stage console above to narrate the method live.</li>
+                <li>Reference the Quick Sales screen below for existing customer accelerators.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Capital Project Sales Method Overview</h2>
+        <div class="body">
+          <div class="content-grid">
+            <div class="panel">
+              <h3>Long-Cycle Focus</h3>
+              <p>Multi-year relationship building plus development timelines spanning planning, permitting, and
+                construction.</p>
+            </div>
+            <div class="panel">
+              <h3>Engineered Solutions</h3>
+              <p>Custom accommodations that demand technical expertise, detailed scoping, and engineering reviews.</p>
+            </div>
+            <div class="panel">
+              <h3>Cross-Functional Alignment</h3>
+              <p>Coordinate finance, operations, legal, safety, and engineering to keep every pursuit compliant.</p>
+            </div>
+            <div class="panel">
+              <h3>Project Integration</h3>
+              <p>Seamless handover to Fusion Projects once contracts execute so execution teams inherit full context.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>10-Stage Sales Journey</h2>
+        <div class="body">
+          <p>Use these narrative-ready callouts while moving across Lead, Opportunity, Quote, and Pursuit demos.</p>
+          <div style="margin:8px 0"><a class="btn" href="10-Stage Sales Journey.html">Open 10-Stage Sales Journey</a>
+          </div>
+          <div class="journey-grid">
+            <div class="journey-card">
+              <div class="step">01</div>
+              <div>
+                <h3>Relationship Development</h3>
+                <p>Capture informal history, document influencers, and build trust with stakeholders.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">02</div>
+              <div>
+                <h3>Qualification & Requirements Intake</h3>
+                <p>Confirm project needs, validate expectations, and align budget constraints.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">03</div>
+              <div>
+                <h3>Concept & Feasibility Review</h3>
+                <p>Engage SMEs to vet capacity assumptions and early designs.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">04</div>
+              <div>
+                <h3>Scope Definition</h3>
+                <p>Define camp size requirements, infrastructure needs, and delivery logistics.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">05</div>
+              <div>
+                <h3>Internal Review & Pre-Bid Approval</h3>
+                <p>Cross-functional review of models, risk mitigation, legal compliance, and margin targets.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">06</div>
+              <div>
+                <h3>Proposal Development</h3>
+                <p>Create engineering drawings, pricing models, and commercial milestones.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">07</div>
+              <div>
+                <h3>Client Review & Iterations</h3>
+                <p>Incorporate customer feedback, manage revisions, and sharpen value statements.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">08</div>
+              <div>
+                <h3>Negotiation & Alignment</h3>
+                <p>Finalize commercial terms, mitigate risks, and agree on contracting path.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">09</div>
+              <div>
+                <h3>Award & Execution</h3>
+                <p>Convert the opportunity, execute contracts, and initiate Fusion Projects handoff.</p>
+              </div>
+            </div>
+            <div class="journey-card">
+              <div class="step">10</div>
+              <div>
+                <h3>Final Disposition</h3>
+                <p>Record win/loss outcomes, capture competitive insights, and push learnings to analytics.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Sales Stage Matrix – Probability & Requirements</h2>
+        <div class="body">
+          <p>Forecast accuracy improves when every stage enforces required data and ties to a probability gate.</p>
+          <table class="matrix">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Probability</th>
+                <th>Required Fields</th>
+                <th>Forecast Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Relationship Development</td>
+                <td>5%</td>
+                <td>Account, primary contact</td>
+                <td>Concept</td>
+              </tr>
+              <tr>
+                <td>Qualification</td>
+                <td>10%</td>
+                <td>Opportunity type, stage value</td>
+                <td>Pipeline</td>
+              </tr>
+              <tr>
+                <td>Feasibility Review</td>
+                <td>20%</td>
+                <td>Site details, capacity assumptions</td>
+                <td>Pipeline</td>
+              </tr>
+              <tr>
+                <td>Scope Definition</td>
+                <td>40%</td>
+                <td>Scope summary, WBS alignment</td>
+                <td>Best Case</td>
+              </tr>
+              <tr>
+                <td>Pre-Bid Approval</td>
+                <td>55%</td>
+                <td>Finance &amp; ops alignment confirmed</td>
+                <td>Best Case</td>
+              </tr>
+              <tr>
+                <td>Proposal Development</td>
+                <td>65%</td>
+                <td>Price model, proposal files</td>
+                <td>Best Case</td>
+              </tr>
+              <tr>
+                <td>Client Review</td>
+                <td>75%</td>
+                <td>Revision tracking, complete data</td>
+                <td>Commit</td>
+              </tr>
+              <tr>
+                <td>Negotiation</td>
+                <td>85%</td>
+                <td>Commercial readiness, term sheet</td>
+                <td>Commit</td>
+              </tr>
+              <tr>
+                <td>Award / Contracting</td>
+                <td>95%</td>
+                <td>Contract deadlines, terms confirmed</td>
+                <td>Commit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Gate Criteria – Quality Checkpoints</h2>
+        <div class="body">
+          <p>Each stage requires specific gate criteria before progression, minimizing risk and increasing forecast
+            accuracy.</p>
+          <div class="gate-grid">
+            <div>
+              <h3>Early-Stage Gates</h3>
+              <ul>
+                <li>Customer interest validated and relationship strengthened.</li>
+                <li>Budget &amp; timeline confirmed during Qualification.</li>
+                <li>SME review completed for Feasibility.</li>
+                <li>Ops / engineering checkpoint complete for Scope Definition.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Mid-Stage Gates</h3>
+              <ul>
+                <li>Finance + Ops approval finalized prior to Pre-Bid.</li>
+                <li>Proposal submitted with disposition plan.</li>
+                <li>Customer feedback received during Client Review.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Late-Stage Gates</h3>
+              <ul>
+                <li>Commercial alignment confirmed in Negotiation.</li>
+                <li>Contract finalized for Award/Contracting.</li>
+                <li>Disposition confirmed (Closed Won or Closed Lost).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h2>Quick Sales Screen</h2>
+        <div class="body">
+          <p>This page has been moved to its own focused demo. Use the big button below to open the Quick Sales Screen
+            for Existing Customers.</p>
+          <div style="text-align:center; margin:18px 0;">
+            <a class="btn primary" href="quick_sales_screen.html"
+              style="font-size:1.2em; padding:14px 24px; display:inline-block;">Open Quick Sales Screen for Existing
+              Customers</a>
+          </div>
+          <p style="color:#666; font-size:0.95em;">(The detailed quick-sales demo is now a separate page for clearer
+            presentation.)</p>
         </div>
       </div>
     </div>
+    <script>
+      window.addEventListener('DOMContentLoaded', function () {
+        var stageDefs = RWD.flowStages;
+        var d = RWD.get();
+        var summary = document.getElementById('flowSummary');
+        var timeline = document.getElementById('flowTimeline');
+        var stageSelect = document.getElementById('flowStage');
+        var statusSelect = document.getElementById('flowStatus');
+        var noteInput = document.getElementById('flowNote');
+
+        stageDefs.forEach(function (def) { var opt = document.createElement('option'); opt.value = def.key; opt.textContent = def.label; stageSelect.appendChild(opt); });
+        var stageCountEl = document.getElementById('salesStageCount'); if (stageCountEl) stageCountEl.textContent = stageDefs.length + ' stages';
+        var scenarioNameEl = document.getElementById('salesScenarioName'); if (scenarioNameEl) scenarioNameEl.textContent = (d.lead && d.lead.company) || scenarioNameEl.textContent;
+
+        function render() {
+          d = RWD.get();
+          summary.innerHTML = '';
+          stageDefs.forEach(function (def) {
+            var state = d.salesFlow[def.key] || {};
+            var card = document.createElement('div');
+            card.className = 'stagecard';
+            var meta = state.updated ? 'Updated ' + state.updated : 'Awaiting update';
+            card.innerHTML = '<div class="label">' + def.label + '</div>' +
+              '<div class="value">' + (state.status || def.statuses[0]) + '</div>' +
+              '<div class="status">' + meta + '</div>' +
+              '<div class="owner">Owner: ' + (state.owner || def.owner) + '</div>' +
+              '<div class="label">' + def.description + '</div>';
+            summary.appendChild(card);
+          });
+
+          timeline.innerHTML = '';
+          stageDefs.forEach(function (def) {
+            var state = d.salesFlow[def.key] || {};
+            var row = document.createElement('div');
+            row.className = 'entry';
+            row.innerHTML = '<div class="title">' + def.label + ' → ' + (state.status || def.statuses[0]) + '</div>' +
+              '<div class="meta"><span>Owner: ' + (state.owner || def.owner) + '</span><span>' + (state.updated ? 'Updated ' + state.updated : 'No updates yet') + '</span></div>';
+            if (state.note) { var note = document.createElement('div'); note.className = 'note'; note.textContent = state.note; row.appendChild(note); }
+            timeline.appendChild(row);
+          });
+        }
+
+        function populateStatus(stageKey) {
+          var def = stageDefs.find(function (item) { return item.key === stageKey; }) || stageDefs[0];
+          var state = d.salesFlow[stageKey] || {};
+          statusSelect.innerHTML = '';
+          (def.statuses || ['New']).forEach(function (s) { var opt = document.createElement('option'); opt.value = s; opt.textContent = s; statusSelect.appendChild(opt); });
+          if (state.status && !(def.statuses || []).includes(state.status)) { var extra = document.createElement('option'); extra.value = state.status; extra.textContent = state.status; statusSelect.appendChild(extra); }
+          statusSelect.value = state.status || def.statuses[0];
+          noteInput.value = state.note || '';
+        }
+
+        document.getElementById('flowForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          RWD.updateSalesFlow(stageSelect.value, statusSelect.value, noteInput.value);
+          render();
+          populateStatus(stageSelect.value);
+        });
+
+        stageSelect.addEventListener('change', function () { populateStatus(this.value); });
+
+        stageSelect.value = stageDefs[0].key;
+        populateStatus(stageSelect.value);
+        render();
+        runSalesAISummary('overview');
+      });
+      function runSalesAISummary(mode) {
+        var el = document.getElementById('salesAiSummaryText');
+        if (!el) return false;
+        var data = RWD.get();
+        var flow = data.salesFlow || {};
+        var leadStatus = (flow.lead && flow.lead.status) || 'Working';
+        var opptyStatus = (flow.opportunity && flow.opportunity.status) || 'Qualification';
+        var quoteStatus = (flow.quote && flow.quote.status) || 'Config';
+        var pursuitStatus = (flow.pursuit && flow.pursuit.status) || 'Draft';
+        var projectStatus = (flow.project && flow.project.status) || 'Planning';
+        var scenario = (data.lead && data.lead.company) || 'this account';
+        var message = '';
+        if (mode === 'risk') {
+          message = '<strong>Risk watch:</strong><ul><li>Opportunity currently in ' + opptyStatus + ' needs exec alignment.</li><li>Quote stage is ' + quoteStatus + ' — pricing approvals could slip dates.</li><li>Pursuit sits at ' + pursuitStatus + ', so prep estimating + legal to avoid downstream delays.</li></ul>';
+        } else if (mode === 'action') {
+          message = '<strong>Recommended Smart Actions:</strong><ul><li>Update lead notes with latest intent and share AI summary to leadership.</li><li>Trigger quote review + push status into CX/forecast.</li><li>Sync pursuit updates and ready project kickoff so ' + projectStatus.toLowerCase() + ' teams stay engaged.</li></ul>';
+        } else {
+          message = '<strong>Overview:</strong> ' + scenario + ' is moving through ' + (RWD.flowStages ? RWD.flowStages.length : 5) + ' stages — Lead ' + leadStatus + ', Opportunity ' + opptyStatus + ', Quote ' + quoteStatus + '.<ul><li>Pursuit is ' + pursuitStatus + ' and delivery is tracking ' + projectStatus + '.</li><li>Keep AE + pursuit manager aligned so downstream teams stay ready.</li><li>Leverage Smart Actions to push updates into CX + PPM.</li></ul>';
+        }
+        el.innerHTML = message;
+        return false;
+      }
+    </script>
+    <div class="footer">© Demo – Redwood-inspired mockup</div>
   </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>Capital Project Sales Method Overview</h2>
-    <div class="body">
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Long-Cycle Focus</h3>
-          <p>Multi-year relationship building plus development timelines spanning planning, permitting, and construction.</p>
-        </div>
-        <div class="panel">
-          <h3>Engineered Solutions</h3>
-          <p>Custom accommodations that demand technical expertise, detailed scoping, and engineering reviews.</p>
-        </div>
-        <div class="panel">
-          <h3>Cross-Functional Alignment</h3>
-          <p>Coordinate finance, operations, legal, safety, and engineering to keep every pursuit compliant.</p>
-        </div>
-        <div class="panel">
-          <h3>Project Integration</h3>
-          <p>Seamless handover to Fusion Projects once contracts execute so execution teams inherit full context.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>10-Stage Sales Journey</h2>
-    <div class="body">
-      <p>Use these narrative-ready callouts while moving across Lead, Opportunity, Quote, and Pursuit demos.</p>
-      <div style="margin:8px 0"><a class="btn" href="10-Stage Sales Journey.html">Open 10-Stage Sales Journey</a></div>
-      <div class="journey-grid">
-        <div class="journey-card"><div class="step">01</div><div><h3>Relationship Development</h3><p>Capture informal history, document influencers, and build trust with stakeholders.</p></div></div>
-        <div class="journey-card"><div class="step">02</div><div><h3>Qualification & Requirements Intake</h3><p>Confirm project needs, validate expectations, and align budget constraints.</p></div></div>
-        <div class="journey-card"><div class="step">03</div><div><h3>Concept & Feasibility Review</h3><p>Engage SMEs to vet capacity assumptions and early designs.</p></div></div>
-        <div class="journey-card"><div class="step">04</div><div><h3>Scope Definition</h3><p>Define camp size requirements, infrastructure needs, and delivery logistics.</p></div></div>
-        <div class="journey-card"><div class="step">05</div><div><h3>Internal Review & Pre-Bid Approval</h3><p>Cross-functional review of models, risk mitigation, legal compliance, and margin targets.</p></div></div>
-        <div class="journey-card"><div class="step">06</div><div><h3>Proposal Development</h3><p>Create engineering drawings, pricing models, and commercial milestones.</p></div></div>
-        <div class="journey-card"><div class="step">07</div><div><h3>Client Review & Iterations</h3><p>Incorporate customer feedback, manage revisions, and sharpen value statements.</p></div></div>
-        <div class="journey-card"><div class="step">08</div><div><h3>Negotiation & Alignment</h3><p>Finalize commercial terms, mitigate risks, and agree on contracting path.</p></div></div>
-        <div class="journey-card"><div class="step">09</div><div><h3>Award & Execution</h3><p>Convert the opportunity, execute contracts, and initiate Fusion Projects handoff.</p></div></div>
-        <div class="journey-card"><div class="step">10</div><div><h3>Final Disposition</h3><p>Record win/loss outcomes, capture competitive insights, and push learnings to analytics.</p></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>Sales Stage Matrix – Probability & Requirements</h2>
-    <div class="body">
-      <p>Forecast accuracy improves when every stage enforces required data and ties to a probability gate.</p>
-      <table class="matrix">
-        <thead><tr><th>Stage</th><th>Probability</th><th>Required Fields</th><th>Forecast Category</th></tr></thead>
-        <tbody>
-          <tr><td>Relationship Development</td><td>5%</td><td>Account, primary contact</td><td>Concept</td></tr>
-          <tr><td>Qualification</td><td>10%</td><td>Opportunity type, stage value</td><td>Pipeline</td></tr>
-          <tr><td>Feasibility Review</td><td>20%</td><td>Site details, capacity assumptions</td><td>Pipeline</td></tr>
-          <tr><td>Scope Definition</td><td>40%</td><td>Scope summary, WBS alignment</td><td>Best Case</td></tr>
-          <tr><td>Pre-Bid Approval</td><td>55%</td><td>Finance &amp; ops alignment confirmed</td><td>Best Case</td></tr>
-          <tr><td>Proposal Development</td><td>65%</td><td>Price model, proposal files</td><td>Best Case</td></tr>
-          <tr><td>Client Review</td><td>75%</td><td>Revision tracking, complete data</td><td>Commit</td></tr>
-          <tr><td>Negotiation</td><td>85%</td><td>Commercial readiness, term sheet</td><td>Commit</td></tr>
-          <tr><td>Award / Contracting</td><td>95%</td><td>Contract deadlines, terms confirmed</td><td>Commit</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>Gate Criteria – Quality Checkpoints</h2>
-    <div class="body">
-      <p>Each stage requires specific gate criteria before progression, minimizing risk and increasing forecast accuracy.</p>
-      <div class="gate-grid">
-        <div>
-          <h3>Early-Stage Gates</h3>
-          <ul>
-            <li>Customer interest validated and relationship strengthened.</li>
-            <li>Budget &amp; timeline confirmed during Qualification.</li>
-            <li>SME review completed for Feasibility.</li>
-            <li>Ops / engineering checkpoint complete for Scope Definition.</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Mid-Stage Gates</h3>
-          <ul>
-            <li>Finance + Ops approval finalized prior to Pre-Bid.</li>
-            <li>Proposal submitted with disposition plan.</li>
-            <li>Customer feedback received during Client Review.</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Late-Stage Gates</h3>
-          <ul>
-            <li>Commercial alignment confirmed in Negotiation.</li>
-            <li>Contract finalized for Award/Contracting.</li>
-            <li>Disposition confirmed (Closed Won or Closed Lost).</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="grid-column:1/-1">
-    <h2>Quick Sales Screen</h2>
-    <div class="body">
-      <p>This page has been moved to its own focused demo. Use the big button below to open the Quick Sales Screen for Existing Customers.</p>
-      <div style="text-align:center; margin:18px 0;">
-        <a class="btn primary" href="quick_sales_screen.html" style="font-size:1.2em; padding:14px 24px; display:inline-block;">Open Quick Sales Screen for Existing Customers</a>
-      </div>
-      <p style="color:#666; font-size:0.95em;">(The detailed quick-sales demo is now a separate page for clearer presentation.)</p>
-    </div>
-  </div>
-</div>
-<script>
- window.addEventListener('DOMContentLoaded', function(){
-  var stageDefs=RWD.flowStages;
-  var d=RWD.get();
-  var summary=document.getElementById('flowSummary');
-  var timeline=document.getElementById('flowTimeline');
-   var stageSelect=document.getElementById('flowStage');
-   var statusSelect=document.getElementById('flowStatus');
-   var noteInput=document.getElementById('flowNote');
-
-   stageDefs.forEach(function(def){ var opt=document.createElement('option'); opt.value=def.key; opt.textContent=def.label; stageSelect.appendChild(opt); });
-   var stageCountEl=document.getElementById('salesStageCount'); if(stageCountEl) stageCountEl.textContent=stageDefs.length+' stages';
-   var scenarioNameEl=document.getElementById('salesScenarioName'); if(scenarioNameEl) scenarioNameEl.textContent=(d.lead && d.lead.company) || scenarioNameEl.textContent;
-
-   function render(){
-     d=RWD.get();
-     summary.innerHTML='';
-     stageDefs.forEach(function(def){
-       var state=d.salesFlow[def.key]||{};
-       var card=document.createElement('div');
-       card.className='stagecard';
-       var meta=state.updated ? 'Updated '+state.updated : 'Awaiting update';
-       card.innerHTML='<div class="label">'+def.label+'</div>'+
-         '<div class="value">'+(state.status||def.statuses[0])+'</div>'+
-         '<div class="status">'+meta+'</div>'+
-         '<div class="owner">Owner: '+(state.owner||def.owner)+'</div>'+
-         '<div class="label">'+def.description+'</div>';
-       summary.appendChild(card);
-     });
-
-     timeline.innerHTML='';
-      stageDefs.forEach(function(def){
-        var state=d.salesFlow[def.key]||{};
-        var row=document.createElement('div');
-        row.className='entry';
-       row.innerHTML='<div class="title">'+def.label+' → '+(state.status||def.statuses[0])+'</div>'+
-         '<div class="meta"><span>Owner: '+(state.owner||def.owner)+'</span><span>'+(state.updated ? 'Updated '+state.updated : 'No updates yet')+'</span></div>';
-       if(state.note){ var note=document.createElement('div'); note.className='note'; note.textContent=state.note; row.appendChild(note); }
-       timeline.appendChild(row);
-     });
-   }
-
-   function populateStatus(stageKey){
-     var def=stageDefs.find(function(item){ return item.key===stageKey; })||stageDefs[0];
-     var state=d.salesFlow[stageKey]||{};
-     statusSelect.innerHTML='';
-     (def.statuses||['New']).forEach(function(s){ var opt=document.createElement('option'); opt.value=s; opt.textContent=s; statusSelect.appendChild(opt); });
-     if(state.status && !(def.statuses||[]).includes(state.status)){ var extra=document.createElement('option'); extra.value=state.status; extra.textContent=state.status; statusSelect.appendChild(extra); }
-     statusSelect.value=state.status||def.statuses[0];
-     noteInput.value=state.note||'';
-   }
-
-   document.getElementById('flowForm').addEventListener('submit', function(e){
-     e.preventDefault();
-     RWD.updateSalesFlow(stageSelect.value,statusSelect.value,noteInput.value);
-     render();
-     populateStatus(stageSelect.value);
-   });
-
-   stageSelect.addEventListener('change', function(){ populateStatus(this.value); });
-
-   stageSelect.value=stageDefs[0].key;
-   populateStatus(stageSelect.value);
-   render();
-   runSalesAISummary('overview');
- });
- function runSalesAISummary(mode){
-   var el=document.getElementById('salesAiSummaryText');
-   if(!el) return false;
-   var data=RWD.get();
-   var flow=data.salesFlow||{};
-   var leadStatus=(flow.lead && flow.lead.status)||'Working';
-   var opptyStatus=(flow.opportunity && flow.opportunity.status)||'Qualification';
-   var quoteStatus=(flow.quote && flow.quote.status)||'Config';
-   var pursuitStatus=(flow.pursuit && flow.pursuit.status)||'Draft';
-   var projectStatus=(flow.project && flow.project.status)||'Planning';
-   var scenario=(data.lead && data.lead.company)||'this account';
-   var message='';
-   if(mode==='risk'){
-     message='<strong>Risk watch:</strong><ul><li>Opportunity currently in '+opptyStatus+' needs exec alignment.</li><li>Quote stage is '+quoteStatus+' — pricing approvals could slip dates.</li><li>Pursuit sits at '+pursuitStatus+', so prep estimating + legal to avoid downstream delays.</li></ul>';
-   }else if(mode==='action'){
-     message='<strong>Recommended Smart Actions:</strong><ul><li>Update lead notes with latest intent and share AI summary to leadership.</li><li>Trigger quote review + push status into CX/forecast.</li><li>Sync pursuit updates and ready project kickoff so '+projectStatus.toLowerCase()+' teams stay engaged.</li></ul>';
-   }else{
-     message='<strong>Overview:</strong> '+scenario+' is moving through '+(RWD.flowStages?RWD.flowStages.length:5)+' stages — Lead '+leadStatus+', Opportunity '+opptyStatus+', Quote '+quoteStatus+'.<ul><li>Pursuit is '+pursuitStatus+' and delivery is tracking '+projectStatus+'.</li><li>Keep AE + pursuit manager aligned so downstream teams stay ready.</li><li>Leverage Smart Actions to push updates into CX + PPM.</li></ul>';
-   }
-   el.innerHTML=message;
-   return false;
- }
-</script>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
 </body>
-</html>
 
+</html>
