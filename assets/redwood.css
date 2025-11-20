@@ -1861,6 +1861,75 @@ body.oppty-landing {
   border-color: #ff7a18;
 }
 
+/* Lead Selector Sidebar */
+.lead-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.lead-sidebar {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid rgba(27, 38, 56, .1);
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(12, 18, 32, .05);
+  position: sticky;
+  top: 20px;
+}
+
+.lead-sidebar h3 {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c7898;
+}
+
+.lead-selector-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.lead-selector-item {
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 8px;
+  background: #fff;
+  list-style: none !important;
+}
+
+.lead-selector-item:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+.lead-selector-item.active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.lead-selector-item .company {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1e293b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.lead-selector-item .detail {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+}
+
 .oppty-hero-slim {
   background: #fff;
   border-radius: 26px;
