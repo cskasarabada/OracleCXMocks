@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Redwood CXâ†’PPM Demo</title>
+  <title>Redwood CX&rarr;PPM Demo</title>
   <link rel="stylesheet" href="assets/redwood.css" />
   <script defer src="assets/app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -707,19 +707,6 @@
         try {
           var s = (window.RWD && typeof RWD.getAgentStates === 'function') ? RWD.getAgentStates() : {};
           var sales = s.sales || s['sales agent'] || {};
-          var fc = s.forecast || s['forecasting agent'] || {};
-          var integ = s.integration || s['integration agent'] || {};
-          var elSales = document.getElementById('agent-sales-status');
-          var elFc = document.getElementById('agent-forecast-status');
-          var elInt = document.getElementById('agent-integration-status');
-          if (elSales) elSales.textContent = (sales.running ? 'running' : 'stopped') + (sales.lastAction ? ' â€” ' + sales.lastAction : '');
-          if (elFc) elFc.textContent = (fc.running ? 'running' : 'stopped') + (fc.lastAction ? ' â€” ' + fc.lastAction : '');
-          if (elInt) elInt.textContent = (integ.running ? 'running' : 'stopped') + (integ.lastAction ? ' â€” ' + integ.lastAction : '');
-          updateChip('sales', sales);
-          updateChip('forecast', fc);
-          updateChip('integration', integ);
-          pushFeed('sales', sales.lastAction);
-          pushFeed('forecast', fc.lastAction);
           pushFeed('integration', integ.lastAction);
         } catch (e) { console.log('refreshAgentStatus', e); }
       }
@@ -728,7 +715,7 @@
       const scenarioSelect = document.getElementById('simScenario');
       const timelineList = document.getElementById('timelineList');
       function fallbackScenarios() {
-        return [{ key: 'demo', label: 'Demo CXâ†’PPM Story' }];
+        return [{ key: 'demo', label: 'Demo CX&rarr;PPM Story' }];
       }
       function populateScenarios() {
         if (!scenarioSelect) return;
@@ -1129,7 +1116,7 @@
       font-size: 14px;
     }
   </style>
-  <div class="footer">Â© Demo â€“ Redwood-inspired mockup</div>
+  <div class="footer">&copy; Demo &ndash; Redwood-inspired mockup</div>
   </div>
 </body>
 

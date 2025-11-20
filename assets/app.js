@@ -36,18 +36,10 @@
   const SCENARIOS = {
     skyline: {
       label: 'Skyline Renewables Microgrid',
-      lead: { company: 'Skyline Renewables', contact: 'Lena Ortiz', score: 78, status: 'Working' },
+      lead: { company: 'Skyline Renewables', contact: 'Lena Ortiz', score: 78, status: 'Working', product: 'Solar Power Generation' },
       oppty: { name: 'Skyline Microgrid Modernization', amount: 1250000, stage: 'Qualification' },
       pursuit: { name: 'Skyline Microgrid Modernization - Pursuit', estimate: 1250000, status: 'Draft' },
       project: { name: 'Skyline Microgrid Modernization - Construction', budget: 1287500, status: 'Planning' },
-      leadsList: [
-        { company: 'Skyline Renewables', name: 'Microgrid Expansion Lead', contact: 'Lena Ortiz', owner: 'Chandra Kasarabada' },
-        { company: 'BrightGrid Solar', name: 'Battery Storage Upgrade', contact: 'Daniel Reese', owner: 'Subash Nagarajan' }
-      ],
-      opptyList: [
-        { name: 'Skyline Microgrid Modernization', company: 'Skyline Renewables', stage: 'Qualification', amount: 1250000, owner: 'Jessica Brooks' },
-        { name: 'BrightGrid Battery Upgrade', company: 'BrightGrid Solar', stage: 'Evaluation', amount: 620000, owner: 'Subash Nagarajan' }
-      ],
       storyline: [
         { stage: 'Lead', event: 'Inbound Signal', detail: 'Captured during Sustainability Summit registration.' },
         { stage: 'Opportunity', event: 'AE Assigned', detail: 'Jessica Brooks engages value engineering team.' },
@@ -55,23 +47,51 @@
       ]
     },
     apex: {
-      label: 'Apex Healthcare Tower',
-      lead: { company: 'Apex Healthcare', contact: 'Marcus Lee', score: 84, status: 'New' },
+      label: 'Apex Healthcare Expansion',
+      lead: { company: 'Apex Healthcare', contact: 'Marcus Lee', score: 84, status: 'Qualified', product: 'Clinical Wing Expansion' },
       oppty: { name: 'Apex Tower CX/PPM Rollout', amount: 1860000, stage: 'Evaluation' },
       pursuit: { name: 'Apex Tower CX/PPM Pursuit', estimate: 1860000, status: 'Costing' },
-      project: { name: 'Apex Tower Delivery', budget: 1915000, status: 'Planning' },
-      leadsList: [
-        { company: 'Apex Healthcare', name: 'Tower CX Modernization', contact: 'Marcus Lee', owner: 'Chandra Kasarabada' },
-        { company: 'Trinity Medical', name: 'Clinic Expansion', contact: 'Sarah Cole', owner: 'Subash Nagarajan' }
-      ],
-      opptyList: [
-        { name: 'Apex Tower CX/PPM Rollout', company: 'Apex Healthcare', stage: 'Evaluation', amount: 1860000, owner: 'Jessica Brooks' },
-        { name: 'Trinity Clinic Expansion', company: 'Trinity Medical', stage: 'Proposal', amount: 920000, owner: 'Subash Nagarajan' }
-      ],
+      project: { name: 'Apex Tower Delivery', budget: 1915000, status: 'Execution' },
       storyline: [
         { stage: 'Lead', event: 'Referral', detail: 'Partner referred Apex expansion to Argano.' },
         { stage: 'Opportunity', event: 'Discovery', detail: 'Hybrid sales + services bundle framed with Smart Actions.' },
         { stage: 'Pursuit', event: 'Resource Request', detail: 'PPM resource manager flagged estimating gap.' }
+      ]
+    },
+    metro: {
+      label: 'Metro City Rail Upgrade',
+      lead: { company: 'Metro City Rail', contact: 'Sarah Jenkins', score: 92, status: 'Qualified', product: 'Signaling Infrastructure' },
+      oppty: { name: 'Metro Rail Signaling Upgrade', amount: 4500000, stage: 'Proposal' },
+      pursuit: { name: 'Metro Rail Signaling Pursuit', estimate: 4200000, status: 'Submitted' },
+      project: { name: 'Metro Rail Signaling Delivery', budget: 4500000, status: 'Planning' },
+      storyline: [
+        { stage: 'Lead', event: 'RFP Issued', detail: 'Public tender for signaling modernization.' },
+        { stage: 'Opportunity', event: 'Bid Prep', detail: 'Engineering team reviewing technical requirements.' },
+        { stage: 'Pursuit', event: 'Review', detail: 'Legal and Finance approving bid terms.' }
+      ]
+    },
+    global: {
+      label: 'Global Data Systems HQ',
+      lead: { company: 'Global Data Systems', contact: 'David Chen', score: 65, status: 'New', product: 'Data Center HVAC' },
+      oppty: { name: 'GDS Data Center Cooling', amount: 850000, stage: 'Qualification' },
+      pursuit: { name: 'GDS Cooling Pursuit', estimate: 800000, status: 'Draft' },
+      project: { name: 'GDS Cooling Install', budget: 850000, status: 'Planned' },
+      storyline: [
+        { stage: 'Lead', event: 'Web Inquiry', detail: 'Downloaded whitepaper on efficient cooling.' },
+        { stage: 'Opportunity', event: 'Outreach', detail: 'SDR scheduling initial discovery call.' },
+        { stage: 'Pursuit', event: 'Pending', detail: 'Awaiting qualification.' }
+      ]
+    },
+    oceanic: {
+      label: 'Oceanic Logistics Port',
+      lead: { company: 'Oceanic Logistics', contact: 'Fiona Gallagher', score: 88, status: 'Working', product: 'Port Automation' },
+      oppty: { name: 'Port Automation Phase 1', amount: 3200000, stage: 'Negotiation' },
+      pursuit: { name: 'Port Automation Pursuit', estimate: 3100000, status: 'Awarded' },
+      project: { name: 'Port Automation Delivery', budget: 3200000, status: 'Execution' },
+      storyline: [
+        { stage: 'Lead', event: 'Trade Show', detail: 'Met at Logistics World conference.' },
+        { stage: 'Opportunity', event: 'Demo', detail: 'On-site demo of automation software.' },
+        { stage: 'Pursuit', event: 'Contracting', detail: 'Finalizing MSA and SOW.' }
       ]
     }
   };
@@ -114,7 +134,18 @@
     broadcast();
   }
   function ensure() {
-    const d = read();
+    let d = read();
+    // Auto-seed with Skyline scenario if state is empty
+    if ((!d.lead || !d.lead.company) && (!d.oppty || !d.oppty.name)) {
+      if (SCENARIOS && SCENARIOS.skyline) {
+        const seed = JSON.parse(JSON.stringify(SCENARIOS.skyline));
+        d = Object.assign(d, seed);
+        d.logs = d.logs || [];
+        d.timeline = d.timeline || [];
+        d.logs.unshift('[' + now() + '] System initialized with Skyline Renewables scenario');
+      }
+    }
+
     d.lead = d.lead || { company: '', contact: '', score: 60, status: 'Unqualified', activities: [] };
     d.oppty = d.oppty || { name: '', amount: 0, stage: 'Qualification', activities: [] };
     d.pursuit = d.pursuit || { name: '', estimate: 0, status: 'Draft' };
@@ -250,7 +281,7 @@
       d.leads = d.leads || [];
       upsert(d.leads, function (row) { return row && row.company === d.lead.company && row.name === d.lead.name; }, {
         company: d.lead.company,
-        name=d.lead.name,
+        name: d.lead.name,
         contact: d.lead.contact,
         owner: d.lead.owner,
         leadStatus: d.lead.status
@@ -293,9 +324,9 @@
       d.opportunities = d.opportunities || [];
       upsert(d.opportunities, function (item) { return item && item.name === d.oppty.name; }, {
         name: d.oppty.name,
-        company=d.oppty.account,
+        company: d.oppty.account,
         stage: d.oppty.stage,
-        amount=d.oppty.amount,
+        amount: d.oppty.amount,
         owner: f.owner && f.owner.value ? f.owner.value : 'Jessica Brooks'
       });
       d.opportunities = d.opportunities.slice(0, 10);
@@ -611,146 +642,113 @@
     } else {
       nav.innerHTML = renderNavLinks(current);
     }
-    var footerNav = document.querySelector('.app-nav-rail');
-    if (footerNav) {
-      var header = document.querySelector('.miconnex-bar');
-      var headerMarkup = '<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
-      if (!header) {
-        header = document.createElement('header');
-        header.className = 'miconnex-bar';
-        header.innerHTML = headerMarkup;
-        body.insertBefore(header, body.firstChild);
-      } else {
-        header.innerHTML = headerMarkup;
-      }
-      document.querySelectorAll('.header, .tabs').forEach(function (el) { el.parentNode && el.parentNode.removeChild(el); });
-      var nav = document.querySelector('nav.quick-nav');
-      var current = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-      if (!nav) {
-        nav = document.createElement('nav');
-        nav.className = 'quick-nav auto-nav';
-        nav.innerHTML = renderNavLinks(current);
-        if (header && header.nextSibling) {
-          body.insertBefore(nav, header.nextSibling);
-        } else {
-          body.appendChild(nav);
-        }
-      } else {
-        nav.innerHTML = renderNavLinks(current);
-      }
-      var footerNav = document.querySelector('.app-nav-rail');
-      if (footerNav) {
-        var inner = footerNav.querySelector('.app-nav-items');
-        if (!inner) { inner = document.createElement('div'); inner.className = 'app-nav-items'; inner.innerHTML = renderNavLinks(current); footerNav.innerHTML = ''; footerNav.appendChild(inner); }
-        else inner.innerHTML = renderNavLinks(current);
-      }
+
+  }
+
+  function initCharts() {
+    // Index Charts
+    const ctxPipeline = document.getElementById('pipelineChart');
+    if (ctxPipeline) {
+      new Chart(ctxPipeline, {
+        type: 'doughnut',
+        data: {
+          labels: ['Qualified', 'Proposal', 'Negotiation', 'Closed'],
+          datasets: [{
+            data: [12, 8, 5, 15],
+            backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
+            borderWidth: 0
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
+      });
+    }
+
+    const ctxLeadSource = document.getElementById('leadSourceChart');
+    if (ctxLeadSource) {
+      new Chart(ctxLeadSource, {
+        type: 'bar',
+        data: {
+          labels: ['Web', 'Referral', 'Event', 'Outbound'],
+          datasets: [{
+            label: 'Leads',
+            data: [45, 25, 20, 10],
+            backgroundColor: '#f97316',
+            borderRadius: 4
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } } }
+      });
+    }
+
+    // Sales Cloud Charts
+    const ctxFunnel = document.getElementById('salesFunnelChart');
+    if (ctxFunnel) {
+      new Chart(ctxFunnel, {
+        type: 'bar',
+        data: {
+          labels: ['Lead', 'Opportunity', 'Quote', 'Pursuit', 'Project'],
+          datasets: [{
+            label: 'Conversion Count',
+            data: [120, 80, 60, 45, 30],
+            backgroundColor: ['#94a3b8', '#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
+            borderRadius: 4
+          }]
+        },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Conversion Funnel' } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } }
+      });
+    }
+
+    const ctxTrend = document.getElementById('salesTrendChart');
+    if (ctxTrend) {
+      new Chart(ctxTrend, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Revenue (M)',
+            data: [1.2, 1.5, 1.4, 1.8, 2.2, 2.5],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Revenue Trend' } }, scales: { y: { beginAtZero: true } } }
+      });
     }
   }
-}
-      function initCharts() {
-  // Index Charts
-  const ctxPipeline = document.getElementById('pipelineChart');
-  if (ctxPipeline) {
-    new Chart(ctxPipeline, {
-      type: 'doughnut',
-      data: {
-        labels: ['Qualified', 'Proposal', 'Negotiation', 'Closed'],
-        datasets: [{
-          data: [12, 8, 5, 15],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
-          borderWidth: 0
-        }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
-    });
-  }
 
-  const ctxLeadSource = document.getElementById('leadSourceChart');
-  if (ctxLeadSource) {
-    new Chart(ctxLeadSource, {
-      type: 'bar',
-      data: {
-        labels: ['Web', 'Referral', 'Event', 'Outbound'],
-        datasets: [{
-          label: 'Leads',
-          data: [45, 25, 20, 10],
-          backgroundColor: '#f97316',
-          borderRadius: 4
-        }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } } }
-    });
-  }
-
-  // Sales Cloud Charts
-  const ctxFunnel = document.getElementById('salesFunnelChart');
-  if (ctxFunnel) {
-    new Chart(ctxFunnel, {
-      type: 'bar',
-      data: {
-        labels: ['Lead', 'Opportunity', 'Quote', 'Pursuit', 'Project'],
-        datasets: [{
-          label: 'Conversion Count',
-          data: [120, 80, 60, 45, 30],
-          backgroundColor: ['#94a3b8', '#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
-          borderRadius: 4
-        }]
-      },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Conversion Funnel' } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } }
-    });
-  }
-
-  const ctxTrend = document.getElementById('salesTrendChart');
-  if (ctxTrend) {
-    new Chart(ctxTrend, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{
-          label: 'Revenue (M)',
-          data: [1.2, 1.5, 1.4, 1.8, 2.2, 2.5],
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          fill: true,
-          tension: 0.4
-        }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Revenue Trend' } }, scales: { y: { beginAtZero: true } } }
-    });
-  }
-}
-
-function streamText(element, text, speed = 30) {
-  if (!element) return;
-  element.innerHTML = '';
-  let i = 0;
-  function type() {
-    if (i < text.length) {
-      element.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(type, speed);
+  function streamText(element, text, speed = 30) {
+    if (!element) return;
+    element.innerHTML = '';
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      }
     }
+    type();
   }
-  type();
-}
 
-function initGenAIChat() {
-  const body = document.body;
-  if (document.getElementById('genai-chat-fab')) return;
+  function initGenAIChat() {
+    const body = document.body;
+    if (document.getElementById('genai-chat-fab')) return;
 
-  // FAB
-  const fab = document.createElement('button');
-  fab.id = 'genai-chat-fab';
-  fab.className = 'genai-fab';
-  fab.innerHTML = '<span class="genai-icon">âœ¨</span>';
-  fab.onclick = toggleChat;
-  body.appendChild(fab);
+    // FAB
+    const fab = document.createElement('button');
+    fab.id = 'genai-chat-fab';
+    fab.className = 'genai-fab';
+    fab.innerHTML = '<span class="genai-icon">&#10024;</span>';
+    fab.onclick = toggleChat;
+    body.appendChild(fab);
 
-  // Chat Window
-  const chat = document.createElement('div');
-  chat.id = 'genai-chat-window';
-  chat.className = 'genai-chat-window hidden';
-  chat.innerHTML = `
+    // Chat Window
+    const chat = document.createElement('div');
+    chat.id = 'genai-chat-window';
+    chat.className = 'genai-chat-window hidden';
+    chat.innerHTML = `
       <div class="genai-chat-header">
         <span>Oracle GenAI Assistant</span>
         <button onclick="toggleChat()" class="close-btn">&times;</button>
@@ -760,133 +758,133 @@ function initGenAIChat() {
       </div>
       <div class="genai-chat-input">
         <input type="text" id="genai-input" placeholder="Ask a question..." onkeypress="if(event.key==='Enter') sendGenAIMsg()">
-        <button onclick="sendGenAIMsg()">âž¤</button>
+        <button onclick="sendGenAIMsg()">&#10148;</button>
       </div>
     `;
-  body.appendChild(chat);
-}
-
-window.toggleChat = function () {
-  const chat = document.getElementById('genai-chat-window');
-  chat.classList.toggle('hidden');
-  if (!chat.classList.contains('hidden')) {
-    document.getElementById('genai-input').focus();
+    body.appendChild(chat);
   }
-};
 
-window.sendGenAIMsg = function () {
-  const input = document.getElementById('genai-input');
-  const body = document.getElementById('genai-chat-body');
-  const txt = input.value.trim();
-  if (!txt) return;
-
-  // User Msg
-  const uDiv = document.createElement('div');
-  uDiv.className = 'genai-msg user';
-  uDiv.innerText = txt;
-  body.appendChild(uDiv);
-  input.value = '';
-  body.scrollTop = body.scrollHeight;
-
-  // Simulated AI Response
-  setTimeout(() => {
-    const aDiv = document.createElement('div');
-    aDiv.className = 'genai-msg system';
-    body.appendChild(aDiv);
-
-    let response = "I'm analyzing the current context...";
-    const lower = txt.toLowerCase();
-    const d = RWD.get();
-
-    if (lower.includes('revenue') || lower.includes('pipeline')) {
-      response = `Current pipeline health is strong. You have ${d.opportunities ? d.opportunities.length : 0} active opportunities with a total value of $${d.oppty ? d.oppty.amount : '1.2M'}.`;
-    } else if (lower.includes('risk')) {
-      response = "I've detected a potential risk in the 'Skyline Microgrid' project due to supply chain delays. Recommended action: Schedule a review with the procurement team.";
-    } else if (lower.includes('summary')) {
-      response = `You are currently viewing the ${document.title}. The active scenario is '${d.lead ? d.lead.company : 'Demo'}'. Key focus: Closing Q4 deals.`;
-    } else if (lower.includes('action') || lower.includes('next')) {
-      response = "Based on recent activity, your next best action is to follow up with 'Lena Ortiz' regarding the revised quote.";
-    } else {
-      response = "I can help you with pipeline analysis, risk assessment, and deal acceleration. Try asking about 'revenue', 'risks', or 'next actions'.";
+  window.toggleChat = function () {
+    const chat = document.getElementById('genai-chat-window');
+    chat.classList.toggle('hidden');
+    if (!chat.classList.contains('hidden')) {
+      document.getElementById('genai-input').focus();
     }
+  };
 
-    streamText(aDiv, response, 20);
+  window.sendGenAIMsg = function () {
+    const input = document.getElementById('genai-input');
+    const body = document.getElementById('genai-chat-body');
+    const txt = input.value.trim();
+    if (!txt) return;
+
+    // User Msg
+    const uDiv = document.createElement('div');
+    uDiv.className = 'genai-msg user';
+    uDiv.innerText = txt;
+    body.appendChild(uDiv);
+    input.value = '';
     body.scrollTop = body.scrollHeight;
-  }, 600);
-};
 
-function initCommandPalette() {
-  if (document.getElementById('cmd-palette')) return;
-  const body = document.body;
-  const overlay = document.createElement('div');
-  overlay.id = 'cmd-palette-overlay';
-  overlay.className = 'cmd-palette-overlay';
-  overlay.innerHTML = `
+    // Simulated AI Response
+    setTimeout(() => {
+      const aDiv = document.createElement('div');
+      aDiv.className = 'genai-msg system';
+      body.appendChild(aDiv);
+
+      let response = "I'm analyzing the current context...";
+      const lower = txt.toLowerCase();
+      const d = RWD.get();
+
+      if (lower.includes('revenue') || lower.includes('pipeline')) {
+        response = `Current pipeline health is strong. You have ${d.opportunities ? d.opportunities.length : 0} active opportunities with a total value of $${d.oppty ? d.oppty.amount : '1.2M'}.`;
+      } else if (lower.includes('risk')) {
+        response = "I've detected a potential risk in the 'Skyline Microgrid' project due to supply chain delays. Recommended action: Schedule a review with the procurement team.";
+      } else if (lower.includes('summary')) {
+        response = `You are currently viewing the ${document.title}. The active scenario is '${d.lead ? d.lead.company : 'Demo'}'. Key focus: Closing Q4 deals.`;
+      } else if (lower.includes('action') || lower.includes('next')) {
+        response = "Based on recent activity, your next best action is to follow up with 'Lena Ortiz' regarding the revised quote.";
+      } else {
+        response = "I can help you with pipeline analysis, risk assessment, and deal acceleration. Try asking about 'revenue', 'risks', or 'next actions'.";
+      }
+
+      streamText(aDiv, response, 20);
+      body.scrollTop = body.scrollHeight;
+    }, 600);
+  };
+
+  function initCommandPalette() {
+    if (document.getElementById('cmd-palette')) return;
+    const body = document.body;
+    const overlay = document.createElement('div');
+    overlay.id = 'cmd-palette-overlay';
+    overlay.className = 'cmd-palette-overlay';
+    overlay.innerHTML = `
       <div class="cmd-palette" id="cmd-palette">
         <input type="text" class="cmd-input" id="cmd-input" placeholder="Type a command or search..." autocomplete="off">
         <div class="cmd-results" id="cmd-results"></div>
       </div>
     `;
-  body.appendChild(overlay);
+    body.appendChild(overlay);
 
-  const input = document.getElementById('cmd-input');
-  const results = document.getElementById('cmd-results');
+    const input = document.getElementById('cmd-input');
+    const results = document.getElementById('cmd-results');
 
-  // Commands
-  const commands = [
-    { label: 'Go to Dashboard', action: () => window.location.href = 'index.html', type: 'Navigation' },
-    { label: 'Go to Sales Flow', action: () => window.location.href = 'sales_cloud.html', type: 'Navigation' },
-    { label: 'Go to Lead Workspace', action: () => window.location.href = 'cx_lead.html', type: 'Navigation' },
-    { label: 'Create New Lead', action: () => { toggleCmd(); setTimeout(() => RWD.saveLead({ company: { value: 'New Lead' } }), 200); }, type: 'Action' },
-    { label: 'Run AI Simulation', action: () => { toggleCmd(); RWD.startAgent('sales'); }, type: 'Action' },
-    { label: 'Reset Demo State', action: () => { toggleCmd(); RWD.reset(); window.location.reload(); }, type: 'Action' }
-  ];
+    // Commands
+    const commands = [
+      { label: 'Go to Dashboard', action: () => window.location.href = 'index.html', type: 'Navigation' },
+      { label: 'Go to Sales Flow', action: () => window.location.href = 'sales_cloud.html', type: 'Navigation' },
+      { label: 'Go to Lead Workspace', action: () => window.location.href = 'cx_lead.html', type: 'Navigation' },
+      { label: 'Create New Lead', action: () => { toggleCmd(); setTimeout(() => RWD.saveLead({ company: { value: 'New Lead' } }), 200); }, type: 'Action' },
+      { label: 'Run AI Simulation', action: () => { toggleCmd(); RWD.startAgent('sales'); }, type: 'Action' },
+      { label: 'Reset Demo State', action: () => { toggleCmd(); RWD.reset(); window.location.reload(); }, type: 'Action' }
+    ];
 
-  function renderResults(filter = '') {
-    const filtered = commands.filter(c => c.label.toLowerCase().includes(filter.toLowerCase()));
-    results.innerHTML = filtered.map((c, i) => `
+    function renderResults(filter = '') {
+      const filtered = commands.filter(c => c.label.toLowerCase().includes(filter.toLowerCase()));
+      results.innerHTML = filtered.map((c, i) => `
         <div class="cmd-item ${i === 0 ? 'selected' : ''}" onclick="window.cmdRun(${i})">
           <span>${c.label}</span>
           <span class="shortcut">${c.type}</span>
         </div>
       `).join('');
-    window.cmdMatches = filtered;
+      window.cmdMatches = filtered;
+    }
+
+    window.cmdRun = (index) => {
+      const match = window.cmdMatches[index];
+      if (match) {
+        match.action();
+        toggleCmd();
+      }
+    };
+
+    window.toggleCmd = () => {
+      overlay.classList.toggle('open');
+      if (overlay.classList.contains('open')) {
+        input.value = '';
+        renderResults();
+        input.focus();
+      }
+    };
+
+    input.addEventListener('input', (e) => renderResults(e.target.value));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const selected = results.querySelector('.selected');
+        if (selected) selected.click();
+      }
+      if (e.key === 'Escape') toggleCmd();
+    });
+
+    // Global Shortcut
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        toggleCmd();
+      }
+    });
   }
 
-  window.cmdRun = (index) => {
-    const match = window.cmdMatches[index];
-    if (match) {
-      match.action();
-      toggleCmd();
-    }
-  };
-
-  window.toggleCmd = () => {
-    overlay.classList.toggle('open');
-    if (overlay.classList.contains('open')) {
-      input.value = '';
-      renderResults();
-      input.focus();
-    }
-  };
-
-  input.addEventListener('input', (e) => renderResults(e.target.value));
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const selected = results.querySelector('.selected');
-      if (selected) selected.click();
-    }
-    if (e.key === 'Escape') toggleCmd();
-  });
-
-  // Global Shortcut
-  document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      toggleCmd();
-    }
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function () { try { ensureGlobalChrome(); initCharts(); initGenAIChat(); initCommandPalette(); } catch (e) { console.warn('chrome init failed', e); } });
-    }) ();
+  document.addEventListener('DOMContentLoaded', function () { try { ensureGlobalChrome(); initCharts(); initGenAIChat(); initCommandPalette(); } catch (e) { console.warn('chrome init failed', e); } });
+})();
