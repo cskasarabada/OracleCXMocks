@@ -1,0 +1,47 @@
+.persona-ribbon {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a0f46;
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 18px;
+  box-shadow: 0 32px 60px rgba(32, 10, 64, 0.35);
+  z-index: 4000;
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  min-width: 280px;
+  max-width: 90vw;
+  pointer-events: auto;
+}
+.persona-ribbon button {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  border-radius: 18px;
+  padding: 12px 16px;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.persona-ribbon button.active {
+  background: #f97316;
+  border-color: #fcbf9b;
+  color: #0b1324;
+  box-shadow: 0 10px 20px rgba(249, 115, 22, 0.25);
+}
+@media (max-width: 720px) {
+  .persona-ribbon {
+    bottom: 12px;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .persona-ribbon button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}

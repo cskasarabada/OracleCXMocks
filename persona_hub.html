@@ -6,6 +6,8 @@
   <title>Persona Hub</title>
   <link rel="stylesheet" href="assets/redwood.css"/>
   <script defer src="assets/app.js"></script>
+  <link rel="stylesheet" href="assets/vbcs-shared.css"/>
+  <script defer src="assets/vbcs-shared.js"></script>
   <style>
     :root {
       --persona-bg: linear-gradient(125deg, #0f172a 0%, #0b2745 55%, #0b3b63 100%);
@@ -379,6 +381,7 @@
         btn.addEventListener('click', function () { setPersona(btn.dataset.personaToggle); });
       });
       setPersona('all');
+      if (window.initVBCSPersonaRibbon) { window.initVBCSPersonaRibbon(); }
     })();
   </script>
 </body>

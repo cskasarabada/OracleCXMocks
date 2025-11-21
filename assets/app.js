@@ -710,9 +710,15 @@
       a.classList.toggle('active', a.dataset.personaToggle === personaKey);
     });
     try { sessionStorage.setItem('rw_persona', personaKey); } catch (e) { }
+    try {
+      var evt = new CustomEvent('rw_persona_change', { detail: { persona: personaKey } });
+      window.dispatchEvent(evt);
+      document.dispatchEvent(evt);
+    } catch (e) { }
   }
   window.applyPersonaSelection = applyPersonaSelection;
   function injectPersonaRibbon() {
+    if (window.disableRibbonAuto) return;
     if (document.getElementById('persona-ribbon')) return;
     var style = document.createElement('style');
     style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 12px 18px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        min-width: 280px;\n        max-width: 90vw;\n        pointer-events: auto;\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";

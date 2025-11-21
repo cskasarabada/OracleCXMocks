@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Argano Lead Workspace</title>
   <link rel="stylesheet" href="assets/redwood.css" />
+  <link rel="stylesheet" href="assets/vbcs-shared.css" />
   <script defer src="assets/app.js"></script>
+  <script defer src="assets/vbcs-shared.js"></script>
   <style>
     .lead-oracle-hero {
       background: #fff;
@@ -1102,6 +1104,11 @@
 
     function saveDraft() { if (typeof showToast === 'function') showToast('Draft saved (demo)'); }
     function removeDraft() { if (typeof showToast === 'function') showToast('Draft canceled'); }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.initVBCSPersonaRibbon) { window.initVBCSPersonaRibbon(); }
+    });
   </script>
   <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
