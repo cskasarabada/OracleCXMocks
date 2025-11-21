@@ -1,5 +1,6 @@
 (function () {
   const NAV_LINKS = [
+    { href: 'persona_hub.html', label: 'Persona Hub', group: 'persona', accent: true },
     { href: 'index.html', label: 'Overview', group: 'journey' },
     { href: 'Easy_Start_Flows.html', label: 'Easy Start', group: 'journey' },
     { href: 'sales_cloud.html', label: 'Sales Flow', group: 'journey' },
@@ -19,11 +20,15 @@
     { href: 'partner_hub.html', label: 'Partner Hub', group: 'toolkit' },
     { href: 'revenue_intelligence.html', label: 'Revenue Intelligence', group: 'toolkit' },
     { href: 'field_mobile_snapshot.html', label: 'Field Mobile', group: 'toolkit' },
-    { href: 'sales_ppm_sync.html', label: 'Sales↔PPM', group: 'toolkit' },
-    { href: 'quote_to_docusign.html', label: 'Quote → DocuSign', group: 'toolkit' },
+    { href: 'sales_ppm_sync.html', label: 'Sales-PPM', group: 'toolkit' },
+    { href: 'quote_to_docusign.html', label: 'Quote to DocuSign', group: 'toolkit' },
     { href: 'pursuit_project.html', label: 'Pursuit Project', group: 'toolkit' }
   ];
-  const NAV_GROUP_LABELS = { journey: 'Sales & Delivery Journey', toolkit: 'Insights & Toolkit' };
+  const NAV_GROUP_LABELS = {
+    persona: 'Persona Views',
+    journey: 'Sales & Delivery Journey',
+    toolkit: 'Insights & Toolkit'
+  };
 
   const KEY = 'rw_demo_v2';
   const FLOW_STAGES = [
