@@ -59,47 +59,116 @@
 
 
 
-<div class="shell">
+<div class="shell project-shell">
 
-<div class="grid">
-  <div class="card"><h2>Construction Project</h2><div class="body">
-    <div class="kv"><div class="k">Project</div><div class="v" id="cName">—</div></div>
-    <div class="kv"><div class="k">Budget</div><div class="v" id="cBudget">—</div></div>
-    <table class="table"><thead><tr><th>WBS Code</th><th>Work Package</th></tr></thead><tbody id="wbs"></tbody></table>
-    <div class="actions"><button class="btn warn" id="btnComplete">Mark Substantial Completion</button><a class="btn" href="ppm_pursuit.html">Back</a></div>
-  </div></div>
-  <div class="card"><h2>Warranty</h2><div class="body">
-    <div class="kv"><div class="k">Start</div><div class="v" id="wStart">—</div></div>
-    <div class="kv"><div class="k">End</div><div class="v" id="wEnd">—</div></div>
-  </div></div>
-</div>
-<section class="smart-banner" id="project-smart-banner">
-  <div>
-    <p class="eyebrow">Smart Actions</p>
-    <h3>Field + back-office collaboration</h3>
-    <p>Coordinate updates, punch lists, and warranty prep for <strong id="project-smart-name">this project</strong>.</p>
+<section class="project-hero">
+  <p class="eyebrow">PPM Construction</p>
+  <h1 id="projectNameDisplay">Skyline Microgrid Delivery</h1>
+  <div class="meta-row">
+    <span class="pill">Status <strong id="projectStatusPill">Execution</strong></span>
+    <span class="pill">Budget <strong id="projectBudgetPill">$0</strong></span>
+    <span class="pill">Project Manager <strong>Maria Lopez</strong></span>
   </div>
-  <div class="actions">
-    <div class="pill-row">
-      <button type="button" class="btn" data-project-action="Send Progress Update">Send Progress Update</button>
-      <button type="button" class="btn" data-project-action="Request Change Order">Request Change Order</button>
-      <button type="button" class="btn" data-project-action="Notify Warranty Team">Notify Warranty Team</button>
-      <button type="button" class="btn" data-project-action="Sync Actuals">Sync Actuals</button>
-    </div>
-    <div class="action-block">
-      <label class="visually-hidden" for="project-smart-select">Smart Actions</label>
-      <select id="project-smart-select">
-        <option value="">- Select Smart Action -</option>
-        <option>Send Progress Update</option>
-        <option>Request Change Order</option>
-        <option>Notify Warranty Team</option>
-        <option>Sync Actuals</option>
-        <option>Share Lessons Learned</option>
-      </select>
-      <button type="button" class="btn" id="project-smart-apply">Apply</button>
-    </div>
+  <div class="hero-details">
+    <div>Pursuit <strong>Skyline Renewables</strong></div>
+    <div>Last Update <strong id="projectLastUpdate">Today</strong></div>
+  </div>
+  <div class="hero-search">
+    <input type="search" placeholder="Ask GenAI for a construction update"/>
+    <button class="btn primary" onclick="return runConstructionAISummary('overview');">Summarize</button>
+    <div class="ai-pill">AI ready &mdash; Site insights</div>
   </div>
 </section>
+
+<section class="project-ai-summary">
+  <h3>Oracle GenAI Construction Briefing</h3>
+  <div id="constructionAiSummaryText" class="ai-copy">Select a mode to summarize execution status, jobsite risks, or recommended Smart Actions.</div>
+  <div class="ai-actions">
+    <button class="btn brand" onclick="return runConstructionAISummary('overview');">Overview</button>
+    <button class="btn" onclick="return runConstructionAISummary('risk');">Risks & Field Alerts</button>
+    <button class="btn" onclick="return runConstructionAISummary('action');">Smart Actions</button>
+  </div>
+</section>
+
+<div class="project-layout">
+  <div class="project-main">
+    <section class="project-board">
+      <div class="board-column">
+        <header><h3>Execution Focus</h3><a href="#" class="panel-link">View Schedule</a></header>
+        <ul>
+          <li><strong>Site Utilities</strong><div>Trenches inspected, await power tie-in.</div></li>
+          <li><strong>Structural</strong><div>Steel set for modules 3 &amp; 4.</div></li>
+          <li><strong>Commissioning</strong><div>QA punch prep for inverter testing.</div></li>
+        </ul>
+      </div>
+      <div class="board-column">
+        <header><h3>Field Insights</h3><a href="#" class="panel-link">View Notes</a></header>
+        <ul>
+          <li><strong>Weather Window</strong><div class="meta">48 hrs favorable &middot; accelerate roofing.</div></li>
+          <li><strong>Subcontractor</strong><div class="meta">Electrical crew at 90% capacity.</div></li>
+          <li><strong>Safety</strong><div class="meta">Zero incidents last 14 days.</div></li>
+        </ul>
+      </div>
+      <div class="board-column">
+        <header><h3>Closeout & Warranty</h3><a href="#" class="panel-link">Prep Checklist</a></header>
+        <ul>
+          <li><strong>Punch List</strong><div>92% resolved &mdash; finish glazing fixes.</div></li>
+          <li><strong>Docs &amp; O&amp;M</strong><div>Upload manuals for client portal.</div></li>
+          <li><strong>Warranty Intake</strong><div>Notify service desk and confirm contacts.</div></li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="card project-wbs-card"><h2>Construction Project</h2><div class="body">
+      <div class="kv"><div class="k">Project</div><div class="v" id="cName">-</div></div>
+      <div class="kv"><div class="k">Budget</div><div class="v" id="cBudget">-</div></div>
+      <table class="table"><thead><tr><th>WBS Code</th><th>Work Package</th></tr></thead><tbody id="wbs"></tbody></table>
+      <div class="actions">
+        <button class="btn warn" id="btnComplete">Mark Substantial Completion</button>
+        <a class="btn" href="ppm_pursuit.html">Back</a>
+      </div>
+    </div></div>
+  </div>
+  <div class="project-side">
+    <div class="card project-status-card"><h2>Project Health</h2><div class="body">
+      <div class="kv"><div class="k">State</div><div class="v" id="projectStateLabel">Execution</div></div>
+      <div class="kv"><div class="k">Progress</div><div class="v" id="projectProgressLabel">65%</div></div>
+      <div class="progress"><div class="bar" id="projectProgressBar"></div></div>
+      <div class="kv"><div class="k">Last Update</div><div class="v" id="projectStateDetail">Today</div></div>
+    </div></div>
+    <div class="card project-warranty-card"><h2>Warranty</h2><div class="body">
+      <div class="kv"><div class="k">Start</div><div class="v" id="wStart">-</div></div>
+      <div class="kv"><div class="k">End</div><div class="v" id="wEnd">-</div></div>
+    </div></div>
+    <section class="smart-banner" id="project-smart-banner">
+      <div>
+        <p class="eyebrow">Smart Actions</p>
+        <h3>Field + back-office collaboration</h3>
+        <p>Coordinate updates, punch lists, and warranty prep for <strong id="project-smart-name">this project</strong>.</p>
+      </div>
+      <div class="actions">
+        <div class="pill-row">
+          <button type="button" class="btn" data-project-action="Send Progress Update">Send Progress Update</button>
+          <button type="button" class="btn" data-project-action="Request Change Order">Request Change Order</button>
+          <button type="button" class="btn" data-project-action="Notify Warranty Team">Notify Warranty Team</button>
+          <button type="button" class="btn" data-project-action="Sync Actuals">Sync Actuals</button>
+        </div>
+        <div class="action-block">
+          <label class="visually-hidden" for="project-smart-select">Smart Actions</label>
+          <select id="project-smart-select">
+            <option value="">- Select Smart Action -</option>
+            <option>Send Progress Update</option>
+            <option>Request Change Order</option>
+            <option>Notify Warranty Team</option>
+            <option>Sync Actuals</option>
+            <option>Share Lessons Learned</option>
+          </select>
+          <button type="button" class="btn" id="project-smart-apply">Apply</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 
 <div id="project-action-modal" class="lead-overlay" aria-hidden="true">
   <div class="lead-modal-card" role="dialog" aria-modal="true" aria-labelledby="projectActionTitle" tabindex="-1">
@@ -261,36 +330,78 @@
 </style>
 
 <script>
+ var projectSnapshot=null;
  function getProjectState(){
-   var fallback={const:{name:'Demo Project', budget:0}};
+   var fallback={const:{name:'Demo Project', budget:0, status:'Execution', progress:65, lastUpdate:'Today', warrantyStart:'-', warrantyEnd:'-'}};
    if(window.RWD && typeof RWD.get==='function'){
      try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('project state fetch failed', e); }
    }
    return fallback;
  }
+ function formatCurrencyValue(val){
+   var num=Number(val);
+   if(isNaN(num)){
+     var parsed=parseFloat(String(val||'0').replace(/[^0-9.-]/g,''))||0;
+     num=parsed;
+   }
+   return '$'+num.toLocaleString();
+ }
  window.addEventListener('DOMContentLoaded', function(){
-   var d=getProjectState();
-   document.getElementById('cName').textContent=d.const.name||'-';
-   document.getElementById('cBudget').textContent='$'+Number(d.const.budget||0).toLocaleString();
-   var smartLabel=document.getElementById('project-smart-name'); if(smartLabel) smartLabel.textContent=d.const.name||'this project';
+   var data=getProjectState();
+   var project=data.const||{};
+   projectSnapshot=project;
+   var formattedBudget=formatCurrencyValue(project.budget||0);
+   var heroName=document.getElementById('projectNameDisplay'); if(heroName) heroName.textContent=project.name||'Skyline Microgrid Delivery';
+   var status=project.status || 'Execution';
+   var lastUpdate=document.getElementById('projectLastUpdate'); if(lastUpdate) lastUpdate.textContent=project.lastUpdate || status;
+   var statusPill=document.getElementById('projectStatusPill'); if(statusPill) statusPill.textContent=status;
+   var budgetPill=document.getElementById('projectBudgetPill'); if(budgetPill) budgetPill.textContent=formattedBudget;
+   var smartLabel=document.getElementById('project-smart-name'); if(smartLabel) smartLabel.textContent=project.name||'this project';
+   var stateLabel=document.getElementById('projectStateLabel'); if(stateLabel) stateLabel.textContent=status;
+   var stateDetail=document.getElementById('projectStateDetail'); if(stateDetail) stateDetail.textContent=project.lastUpdate || status;
+   var progressValue=typeof project.progress==='number'? project.progress : 65;
+   progressValue=Math.max(0, Math.min(100, progressValue));
+   var progressLabel=document.getElementById('projectProgressLabel'); if(progressLabel) progressLabel.textContent=progressValue+'%';
+   var progressBar=document.getElementById('projectProgressBar'); if(progressBar) progressBar.style.width=progressValue+'%';
+   var nameField=document.getElementById('cName'); if(nameField) nameField.textContent=project.name||'-';
+   var budgetField=document.getElementById('cBudget'); if(budgetField) budgetField.textContent=formattedBudget;
+   var warrantyStart=document.getElementById('wStart'); if(warrantyStart) warrantyStart.textContent=project.warrantyStart || '-';
+   var warrantyEnd=document.getElementById('wEnd'); if(warrantyEnd) warrantyEnd.textContent=project.warrantyEnd || '-';
    initProjectSmartBanner();
+   runConstructionAISummary('overview');
    var body=document.getElementById('wbs');
-   ['1.0 Mobilization','2.0 Site Work','3.0 Structure'].forEach(function(row){
-     var parts=row.split(' ');
-     var tr=document.createElement('tr');
-     tr.innerHTML='<td>'+parts[0]+'</td><td>'+parts.slice(1).join(' ')+'</td>';
-     body.appendChild(tr);
-   });
-   document.getElementById('btnComplete').addEventListener('click', function(){
-     var finish=function(){
-       var s=new Date();
-       var e=new Date(s.getFullYear()+1,s.getMonth(),s.getDate());
-       document.getElementById('wStart').textContent=s.toLocaleDateString();
-       document.getElementById('wEnd').textContent=e.toLocaleDateString();
-     };
-     if(window.RWD && typeof RWD.completeSubstantial==='function'){ RWD.completeSubstantial(finish); }
-     else{ finish(); }
-   });
+   if(body){
+     body.innerHTML='';
+     ['1.0 Mobilization','2.0 Site Work','3.0 Structure'].forEach(function(row){
+       var parts=row.split(' ');
+       var tr=document.createElement('tr');
+       tr.innerHTML='<td>'+parts[0]+'</td><td>'+parts.slice(1).join(' ')+'</td>';
+       body.appendChild(tr);
+     });
+   }
+   var completeBtn=document.getElementById('btnComplete');
+   if(completeBtn){
+     completeBtn.addEventListener('click', function(){
+       var finish=function(){
+         var s=new Date();
+         var e=new Date(s.getFullYear()+1,s.getMonth(),s.getDate());
+         if(warrantyStart) warrantyStart.textContent=s.toLocaleDateString();
+         if(warrantyEnd) warrantyEnd.textContent=e.toLocaleDateString();
+         var finalState='Substantial Completion';
+         if(statusPill) statusPill.textContent=finalState;
+         if(stateLabel) stateLabel.textContent=finalState;
+         if(stateDetail) stateDetail.textContent='Warranty prep in progress';
+         if(progressLabel) progressLabel.textContent='100%';
+         if(progressBar) progressBar.style.width='100%';
+         if(typeof showToast==='function') showToast('Substantial completion captured');
+       };
+       if(window.RWD && typeof RWD.completeSubstantial==='function'){
+         try{ RWD.completeSubstantial(finish); }catch(e){ finish(); }
+       }else{
+         finish();
+       }
+     });
+   }
  });
 function initProjectSmartBanner(){
   var buttons=document.querySelectorAll('[data-project-action]');
@@ -377,6 +488,25 @@ function submitProjectAction(ev){
   }
   form.reset();
   closeProjectAction();
+  return false;
+}
+
+function runConstructionAISummary(mode){
+  var el=document.getElementById('constructionAiSummaryText');
+  if(!el) return false;
+  var state=projectSnapshot || (getProjectState().const||{});
+  var budget=formatCurrencyValue(state.budget||0);
+  var status=state.status||'Execution';
+  var progress=typeof state.progress==='number'? state.progress : 65;
+  var message='';
+  if(mode==='risk'){
+    message='<strong>Field risks:</strong><ul><li>Weather shift could impact roofing pace &mdash; prep contingency.</li><li>Change order pending for elevator upgrade ($85K).</li><li>Need QA eyes on inverter commissioning before warranty handoff.</li></ul>';
+  }else if(mode==='action'){
+    message='<strong>Recommended Smart Actions:</strong><ul><li>Send progress update summarizing '+progress+'% completion.</li><li>Trigger change-order workflow and sync actuals to CX/ERP.</li><li>Notify warranty desk so start '+(state.warrantyStart||'TBD')+' intake.</li><li>Publish lessons learned for future pursuits.</li></ul>';
+  }else{
+    message='<strong>Overview:</strong> '+(state.name||'Construction project')+' running at '+progress+'% completion with budget '+budget+' and status '+status+'.<ul><li>Field crews are closing punch items &amp; prepping commissioning.</li><li>AI recommends keeping execs aligned with a concise briefing.</li><li>Warranty intake is next milestone once substantial completion is certified.</li></ul>';
+  }
+  el.innerHTML=message;
   return false;
 }
 </script>

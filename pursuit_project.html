@@ -7,18 +7,31 @@
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 <style>
+.pursuit-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 26px 42px rgba(12,18,32,.12);padding:26px;margin-bottom:26px;}
+.pursuit-hero h1{margin:0;font-size:1.9rem;}
+.pursuit-hero .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.pursuit-hero .hero-details{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:#5c6378;margin-top:12px;}
+.pursuit-hero .hero-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:18px;}
+.pursuit-hero .summary-card{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:16px;box-shadow:0 14px 26px rgba(15,23,42,.08);padding:14px;}
+.pursuit-hero .summary-card .label{text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:#6c7894;}
+.pursuit-hero .summary-card .value{font-size:1.6rem;font-weight:700;margin:4px 0;}
+.pursuit-hero .eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:#6b7280;}
+
 .pursuit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:22px;}
 .pursuit-card{border:1px solid var(--rw-border);border-radius:16px;padding:18px;background:#fff;box-shadow:0 12px 20px rgba(15,23,42,.08);}
 .pursuit-card h3{margin:0 0 8px;font-size:18px;}
 .pursuit-card ul{margin:0;padding-left:18px;color:var(--rw-ink);}
+
 .benefit-boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:26px;}
 .benefit-box{border:1px solid var(--rw-border);border-radius:14px;padding:14px;background:#fff;}
 .benefit-box strong{display:block;margin-bottom:6px;}
+
 .why-table{margin-top:28px;border:1px solid var(--rw-border);border-radius:16px;overflow:hidden;}
 .why-table table{width:100%;border-collapse:collapse;}
 .why-table th,.why-table td{padding:12px;border-bottom:1px solid var(--rw-border);text-align:left;}
 .why-table th{background:#f8fafc;font-size:13px;text-transform:uppercase;letter-spacing:.04em;}
 .why-table tr:last-child td{border-bottom:none;}
+
 .ppm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
 .ppm-card{border:1px dashed #cbd5f5;border-radius:16px;padding:16px;background:rgba(203,213,245,.25);box-shadow:0 10px 18px rgba(15,23,42,.08);}
 .ppm-card h4{margin:0 0 6px;font-size:16px;}
@@ -79,10 +92,36 @@
 
 
 <main class="lead-shell">
-  <section class="card">
+  <section class="pursuit-hero">
     <p class="eyebrow">Pursuit Project</p>
-    <h1 style="margin:6px 0 10px">The connected preconstruction workspace</h1>
-    <p style="color:var(--rw-muted);max-width:720px">In Oracle PPM, Pursuit Projects capture preconstruction effort, resource scheduling, and decision data before work is awarded. Paired with CX Sales, they allow Argano clients to pass intelligence cleanly into construction delivery.</p>
+    <h1>Connected Preconstruction Workspace</h1>
+    <div class="meta-row">
+      <span class="pill">Program Warner Campus Build</span>
+      <span class="pill">Linked Opportunity Skyline Microgrid Modernization</span>
+      <span class="pill">Owner PMO Team</span>
+    </div>
+    <div class="hero-details">
+      <div>Status <strong>Active</strong></div>
+      <div>Type <strong>Overhead / Preconstruction</strong></div>
+      <div>Stage <strong>Value Engineering</strong></div>
+    </div>
+    <div class="hero-summary">
+      <div class="summary-card">
+        <div class="label">Budget</div>
+        <div class="value">$420,000</div>
+        <p>Cost-only pursuit budget.</p>
+      </div>
+      <div class="summary-card">
+        <div class="label">Spend to Date</div>
+        <div class="value">$96,200</div>
+        <p>Labor + preconstruction tasks logged.</p>
+      </div>
+      <div class="summary-card">
+        <div class="label">Resource Load</div>
+        <div class="value">6 / 2</div>
+        <p>Booked vs open roles.</p>
+      </div>
+    </div>
   </section>
 
   <div class="pursuit-grid">
@@ -119,7 +158,7 @@
     </div>
     <div class="benefit-box">
       <strong>Decision Engine</strong>
-      Opportunity stages trigger Pursuit creation, feeding a “thinking → doing” handoff with structured WBS tasks.
+      Opportunity stages trigger Pursuit creation, feeding a "thinking · doing" handoff with structured WBS tasks.
     </div>
     <div class="benefit-box">
       <strong>Lifecycle Link</strong>
@@ -185,8 +224,8 @@
       <thead><tr><th>Common Need</th><th>How Pursuit Project Helps</th></tr></thead>
       <tbody>
         <tr><td>Non-sales teams pulled into deals</td><td>PPM project provides scheduling, assignment, and cost tracking for estimators/engineers.</td></tr>
-        <tr><td>“Thinking → Doing” stage</td><td>Opportunity stage change auto-creates Pursuit Project with tasks, templates, and approvals.</td></tr>
-        <tr><td>Capacity management (8 people, 6 booked…)</td><td>PPM resource management exposes role-based availability and skill matching.</td></tr>
+        <tr><td>"Thinking · Doing" stage</td><td>Opportunity stage change auto-creates Pursuit Project with tasks, templates, and approvals.</td></tr>
+        <tr><td>Capacity management (8 people, 6 booked.)</td><td>PPM resource management exposes role-based availability and skill matching.</td></tr>
         <tr><td>Connect pursuit & construction</td><td>PPM Program ties Pursuit and Construction projects under one umbrella.</td></tr>
         <tr><td>Structured preconstruction tasks</td><td>WBS enforces standard steps: estimating, engineering review, schedule analysis, etc.</td></tr>
       </tbody>

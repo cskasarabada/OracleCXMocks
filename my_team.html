@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>My Team</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    .team-shell { max-width: 1100px; margin: 0 auto; padding: 18px 20px 60px; display: flex; flex-direction: column; gap: 16px; }
+    .team-hero { background: linear-gradient(135deg,#0f172a,#16385c); color:#e5edff; border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 20px 48px rgba(12,18,30,.25); }
+    .team-hero h1 { margin: 4px 0 6px; }
+    .team-hero p { margin: 0; max-width: 760px; color:#c9d6ec; }
+    .team-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 14px; align-items: stretch; }
+    .team-card { background:#fff; border:1px solid rgba(27,38,56,.1); border-radius: 14px; padding: 14px; box-shadow:0 14px 26px rgba(15,23,42,.08); display:flex; flex-direction:column; gap: 8px; min-height: 200px; }
+    .team-card h3 { margin: 4px 0 6px; }
+    .team-card p { margin: 0; color:#4b5565; }
+    .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+    .chip { background:#0f172a; color:#fff; padding:6px 8px; border-radius:999px; font-size:11px; letter-spacing:.05em; text-transform:uppercase; }
+    .metric { font-size:1.4rem; font-weight:700; }
+    .dual { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .action-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:auto; }
+    .action-row .btn { text-decoration:none; border-radius:10px; padding:9px 12px; }
+    @media (max-width:640px){ .team-shell { padding:14px 14px 50px; } }
+  </style>
+</head>
+<body>
+  <main class="team-shell">
+    <section class="team-hero">
+      <p class="eyebrow" style="color:#c9d6ec">Sales Manager</p>
+      <h1>My Team</h1>
+      <p>Track workload, approvals, and coaching cues across your sellers. Jump to Quick Sales or the Opportunity view while keeping manager filters applied.</p>
+    </section>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="chip-row">
+          <span class="chip">Readiness</span>
+        </div>
+        <h3>Coaching Queue</h3>
+        <p>Flagged deals needing guidance this week.</p>
+        <div class="metric">5 reps / 12 deals</div>
+        <div class="action-row">
+          <a class="btn brand" href="forecasting_pipeline.html">Open Forecasting</a>
+          <a class="btn outline" href="revenue_intelligence.html">Risk signals</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="chip-row">
+          <span class="chip">Approvals</span>
+        </div>
+        <h3>Pending Approvals</h3>
+        <p>Discounts, DocuSign, and partner reviews waiting on you.</p>
+        <div class="metric">7 open</div>
+        <div class="action-row">
+          <a class="btn brand" href="quote_to_docusign.html">Review queue</a>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="chip-row">
+          <span class="chip">Coverage</span>
+        </div>
+        <h3>Team Allocation</h3>
+        <p>Balance lead volume and opportunity load across reps.</p>
+        <div class="metric">Balanced</div>
+        <div class="action-row">
+          <a class="btn brand" href="quick_sales_screen.html">Quick Sales</a>
+          <a class="btn outline" href="cx_opportunity.html">Open Opportunity</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

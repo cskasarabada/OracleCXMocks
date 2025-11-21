@@ -6,6 +6,42 @@
 <title>Argano Opportunity</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
+<style>
+.oppty-oracle-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 28px 40px rgba(12,18,30,.14);padding:26px;margin-bottom:26px;}
+.oppty-oracle-hero h1{margin:0;font-size:1.9rem;}
+.oppty-oracle-hero .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.oppty-oracle-hero .hero-details{display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:#5a6478;margin-top:12px;}
+.oppty-oracle-hero .hero-search{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
+.oppty-oracle-hero input[type="search"]{flex:1;min-width:260px;border-radius:10px;border:1px solid rgba(27,38,56,.18);padding:11px;font-size:15px;}
+.oppty-ai-summary{background:#fff;border-radius:18px;border:1px solid rgba(27,38,56,.08);box-shadow:0 18px 32px rgba(10,15,24,.12);padding:20px;margin-bottom:28px;}
+.oppty-ai-summary h3{margin:0 0 8px;font-size:1.1rem;}
+.oppty-ai-summary p{margin:0;font-size:14px;color:#475467;}
+.oppty-ai-summary .ai-actions{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
+.oppty-ai-summary .ai-pill{background:#f5f0e7;border-radius:10px;padding:6px 12px;border:1px solid rgba(34,45,60,.2);font-size:12px;font-weight:600;}
+.oppty-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:18px;}
+.oppty-summary-card{background:#fff;border-radius:16px;border:1px solid rgba(27,38,56,.1);padding:14px;box-shadow:0 14px 26px rgba(15,23,42,.08);}
+.oppty-summary-card .label{text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:#6c7894;}
+.oppty-summary-card .value{font-size:1.7rem;font-weight:700;margin:4px 0;}
+.oppty-summary-card p{margin:0;font-size:13px;color:#5d6478;}
+.analytics-deck{background:linear-gradient(135deg,#0d1b2e,#0f2438 58%,#12324d);color:#e8eef7;border-radius:18px;padding:22px;box-shadow:0 20px 38px rgba(6,16,36,.28);margin-bottom:26px;border:1px solid rgba(255,255,255,.08);}
+.analytics-deck h2{margin:4px 0 6px;font-size:1.6rem;}
+.analytics-deck .deck-desc{margin:0;color:#c6d4eb;max-width:680px;font-size:14px;}
+.analytics-deck .deck-header{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start;}
+.analytics-deck .deck-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px;}
+.analytics-tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;box-shadow:0 10px 20px rgba(0,0,0,.16);}
+.analytics-tile .label{color:#9fb8d8;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
+.analytics-tile .value{font-size:1.5rem;font-weight:700;margin:6px 0;}
+.analytics-tile .meta{margin:0;color:#dfe7f4;font-size:13px;}
+.story-anchors{margin-top:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;}
+.story-anchors .anchor-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.story-anchors .chips{display:flex;gap:8px;flex-wrap:wrap;}
+.story-anchors .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:6px 10px;border-radius:999px;font-size:12px;color:#f1f6ff;}
+.story-anchors .anchor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px;}
+.anchor-card{background:#0a182b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px;box-shadow:0 12px 18px rgba(0,0,0,.22);}
+.anchor-card .label{color:#9fb8d8;font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
+.anchor-card .name{margin:4px 0;font-size:1rem;font-weight:700;}
+.anchor-card .detail{margin:0;color:#dce6f3;font-size:13px;}
+</style>
 </head>
 <body class="oppty-landing">
 <header class="miconnex-bar">
@@ -57,6 +93,131 @@
   </div>
 </nav>
 <main class="oppty-shell">
+  <section class="oppty-oracle-hero">
+    <p class="eyebrow">Opportunity</p>
+    <h1 id="opptyHeroTitle">TT1 eea</h1>
+    <div class="meta-row">
+      <span class="pill">Account Warner Design Associates</span>
+      <span class="pill">Owner Chandra Kasarabada</span>
+      <span class="pill">Stage Qualification</span>
+      <span class="pill">ARR Target $1.2M</span>
+    </div>
+    <div class="hero-details">
+      <div>Primary Contact <strong id="opptyHeroSub">Account • Primary Contact</strong></div>
+      <div>Close Date <strong>Nov 30, 2024</strong></div>
+      <div>Win Probability <strong>40%</strong></div>
+    </div>
+    <div class="hero-search">
+      <input type="search" placeholder="Ask Oracle GenAI to summarize this opportunity" id="opptyAiInput"/>
+      <button class="btn primary" onclick="return runOpptyAISummary('overview');">Summarize Opportunity</button>
+      <div class="ai-pill">AI ready · Nudges available</div>
+    </div>
+    <div class="oppty-search-results" id="opptySearchResults" aria-live="polite" aria-atomic="true" hidden></div>
+    <div class="oppty-summary-grid">
+      <div class="oppty-summary-card">
+        <div class="label">Amount</div>
+        <div class="value" id="opptyAmountCard">$1,200,000</div>
+        <p>Includes services and subscription uplift.</p>
+      </div>
+      <div class="oppty-summary-card">
+        <div class="label">Next Milestone</div>
+        <div class="value">DocuSign</div>
+        <p>Needs executive approval + partner review.</p>
+      </div>
+      <div class="oppty-summary-card">
+        <div class="label">Last Touch</div>
+        <div class="value">Oct 18</div>
+        <p>Email prep with solution architect.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oppty-ai-summary">
+    <h3>Oracle GenAI Guidance</h3>
+    <p id="opptyAiSummaryText">Use AI to highlight opportunity context, risks, or clever Smart Actions.</p>
+    <div class="ai-actions">
+      <button class="btn brand" onclick="return runOpptyAISummary('overview');">Overview</button>
+      <button class="btn" onclick="return runOpptyAISummary('risk');">Risks & Signals</button>
+      <button class="btn" onclick="return runOpptyAISummary('action');">Smart Actions</button>
+    </div>
+  </section>
+  <section class="analytics-deck" id="analytics-command-deck">
+    <div class="deck-header">
+      <div>
+        <p class="eyebrow" style="color:#c6d4eb">Oracle CX Sales Cloud</p>
+        <h2>Analytics Command Deck</h2>
+        <p class="deck-desc">Bring the Argano storytelling layer to life with dashboards that span Leads, Opportunities, Quotes, Pursuits, Projects, Accounts, and Customers—each curated to show how CX Sales, CPQ, and PPM tie together.</p>
+      </div>
+    </div>
+    <div class="deck-grid">
+      <div class="analytics-tile">
+        <div class="label">Leads Velocity</div>
+        <div class="value">+18%</div>
+        <p class="meta">Cycle time shortening across nurtured leads.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Opportunity Health</div>
+        <div class="value">72%</div>
+        <p class="meta">Risk-adjusted win score across open pipeline.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Quote Controls</div>
+        <div class="value">6 in-flight</div>
+        <p class="meta">Active approvals + DocuSign tracking.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Pursuit Burn</div>
+        <div class="value">$325K</div>
+        <p class="meta">Spend versus budget with OIC sync.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Project Pulse</div>
+        <div class="value">On-track</div>
+        <p class="meta">Delivery health fed from PPM projects.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Customer Signals</div>
+        <div class="value">9 alerts</div>
+        <p class="meta">Renewal + adoption cues surfaced by AI.</p>
+      </div>
+    </div>
+    <div class="story-anchors">
+      <div class="anchor-head">
+        <div>
+          <p class="label" style="color:#9fb8d8">Live Story Anchors</p>
+          <div class="chips">
+            <span class="chip">Lead</span>
+            <span class="chip">Opportunity</span>
+            <span class="chip">Pursuit</span>
+            <span class="chip">Project</span>
+            <span class="chip">Customer</span>
+          </div>
+        </div>
+      </div>
+      <div class="anchor-grid">
+        <div class="anchor-card">
+          <div class="label">Lead</div>
+          <div class="name">Skyline Renewables</div>
+          <p class="detail">Score 78 · GenAI nudges ready</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Opportunity</div>
+          <div class="name">Skyline Microgrid Modernization</div>
+          <p class="detail">$1,250,000 · DocuSign next</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Pursuit</div>
+          <div class="name">Skyline Microgrid Modernization - Pursuit</div>
+          <p class="detail">Draft · OIC handoff in-flight</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Project</div>
+          <div class="name">Skyline Microgrid Modernization - Construction</div>
+          <p class="detail">$1,287,500 · Tracking burn vs. plan</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="smart-banner" id="oppty-smart-banner">
     <div>
       <p class="eyebrow">Smart Actions</p>
@@ -293,18 +454,44 @@
 </div>
 
 <div id="add-oppty-modal" class="qs-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:120" aria-hidden="true">
-  <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(760px,94%)">
+  <div class="qs-modal lead-modal" role="dialog" aria-modal="true" aria-labelledby="addOpptyTitle" tabindex="-1" style="width:min(820px,95%)">
     <h2 id="addOpptyTitle">Create Opportunity</h2>
-    <form id="addOpptyForm">
-      <div class="field"><label>Name</label><input name="name" required></div>
-      <div class="field"><label>Account</label><input name="account"></div>
-      <div class="two-col">
-        <div class="field" style="grid-template-columns:1fr"><label>Amount</label><input name="amount" type="number"></div>
-        <div class="field" style="grid-template-columns:1fr"><label>Owner</label><input name="owner"></div>
-      </div>
-      <div class="field"><label>Stage</label><select name="stage"><option>Qualification</option><option>Evaluation</option><option>Proposal</option><option>Negotiation</option><option>Closed Won</option></select></div>
-      <div class="field"><label>Notes</label><textarea name="notes" rows="3"></textarea></div>
-      <div class="actions">
+    <form id="addOpptyForm" class="oppty-create-grid">
+      <label>Opportunity Name
+        <input name="name" placeholder="Skyline Expansion" required>
+      </label>
+      <label>Account
+        <input name="account" placeholder="Customer name">
+      </label>
+      <label>Amount
+        <input name="amount" type="number" placeholder="1250000">
+      </label>
+      <label>Owner
+        <input name="owner" placeholder="Opportunity owner">
+      </label>
+      <label>Stage
+        <select name="stage">
+          <option>Qualification</option>
+          <option>Evaluation</option>
+          <option>Proposal</option>
+          <option>Negotiation</option>
+          <option>Closed Won</option>
+          <option>Closed Lost</option>
+        </select>
+      </label>
+      <label>Primary Contact
+        <input name="contact" placeholder="Primary contact">
+      </label>
+      <label>Close Date
+        <input name="closeDate" type="date">
+      </label>
+      <label>Probability (%)
+        <input name="probability" type="number" min="0" max="100" placeholder="65">
+      </label>
+      <label>Notes
+        <textarea name="notes" rows="3" placeholder="Add context or next steps"></textarea>
+      </label>
+      <div class="actions" style="grid-column:1/-1;display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
         <button type="button" class="btn" onclick="closeAddOppty()">Cancel</button>
         <button type="submit" class="btn primary">Save Opportunity</button>
       </div>
@@ -412,6 +599,11 @@
     }, 800);
   }
   try{ renderOppsPreview(); }catch(e){}
+    var input=document.getElementById('opptyAiInput');
+    if(input){
+      input.addEventListener('keypress', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); runOpptyAISummary('overview'); } });
+      input.addEventListener('blur', function(){ if(input.value.trim()){ runOpptyAISummary('overview'); } });
+    }
 });
 // Add New Opportunity modal handlers
 function openAddOppty(){
@@ -650,6 +842,31 @@ function pushPursuitFromOppty(form){
     try{ RWD.createPursuitViaOIC(go); return; }catch(e){ console.warn('createPursuitViaOIC failed', e); }
   }
   go();
+}
+
+function runOpptyAISummary(mode){
+  var target=document.getElementById('opptyAiSummaryText');
+  if(!target) return false;
+  var input=document.getElementById('opptyAiInput');
+  var query=(input && input.value.trim())||'';
+  var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
+  var opp=state.oppty || {name:'Sample Opportunity', account:'Warner Design', stage:'Qualification', amount:1200000};
+  var msg='';
+  if(mode==='risk'){
+    msg='Risks: approval pending for '+(opp.name||'deal')+', DocuSign stalled, and invoice aged 30 days. Recommend escalating pricing + partner review.';
+  }else if(mode==='action'){
+    msg='Smart Actions: Launch DocuSign for proposal, request executive approval, and push pursuit handoff to PPM.';
+  }else{
+    msg='Summary: '+(opp.name||'Opportunity')+' with '+(opp.account||'customer')+' at '+(opp.stage||'Qualification')+' worth $'+Number(opp.amount||0).toLocaleString()+'. Next milestone is DocuSign + partner validation.';
+  }
+  target.textContent=msg;
+  var panel=document.getElementById('opptySearchResults');
+  if(panel){
+    panel.hidden=false;
+    var focus=query?('Focus: '+escapeHtml(query)):'Latest AI insight';
+    panel.innerHTML='<h4>Opportunity Insights</h4><p>'+focus+'</p><p>'+escapeHtml(msg)+'</p>';
+  }
+  return false;
 }
 
 function escalateOppty(form){

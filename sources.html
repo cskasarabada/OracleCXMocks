@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>3rd Party Sources</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    .sources-shell { max-width: 1100px; margin: 0 auto; padding: 18px 20px 60px; display: flex; flex-direction: column; gap: 16px; }
+    .sources-hero { background: #0f172a; color:#e5edff; border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 24px 50px rgba(12,18,30,.27); }
+    .sources-hero h1 { margin: 4px 0 6px; }
+    .sources-hero p { margin: 0; max-width: 760px; color:#c9d6ec; }
+    .source-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 12px; }
+    .source-card { background:#fff; border:1px solid rgba(27,38,56,.1); border-radius: 14px; padding: 14px; box-shadow:0 14px 26px rgba(15,23,42,.08); }
+    .source-card h3 { margin: 6px 0 6px; }
+    .source-card p { margin: 0 0 10px; color:#4b5565; }
+    .chip-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+    .chip { background:#0f172a; color:#fff; padding:6px 8px; border-radius:999px; font-size:11px; letter-spacing:.05em; text-transform:uppercase; }
+    .action-row { display:flex; flex-wrap:wrap; gap:8px; }
+    .action-row .btn { text-decoration:none; border-radius:10px; padding:9px 12px; }
+    @media (max-width:640px){ .sources-shell { padding:14px 14px 50px; } }
+  </style>
+</head>
+<body>
+  <main class="sources-shell">
+    <section class="sources-hero">
+      <p class="eyebrow" style="color:#c9d6ec">Lead Sources</p>
+      <h1>3rd Party Signals & Capture</h1>
+      <p>Blend Eloqua, HubSpot, ZoomInfo, and Sales Navigator signals into Oracle CX. Capture, score, and route leads before they land in Quick Sales or the Opportunity view.</p>
+    </section>
+    <div class="source-grid">
+      <div class="source-card">
+        <div class="chip-row"><span class="chip">Marketing</span></div>
+        <h3>Eloqua</h3>
+        <p>Forms, campaigns, and scoring sync into CX; enrich with Smart Actions.</p>
+        <div class="action-row">
+          <a class="btn brand" href="quick_sales_screen.html">Capture in Quick Sales</a>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="chip-row"><span class="chip">Marketing</span></div>
+        <h3>HubSpot</h3>
+        <p>Inbound forms and workflows drop straight into the lead queue; surfaced in Account 360.</p>
+        <div class="action-row">
+          <a class="btn brand" href="cx_lead.html">View Leads</a>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="chip-row"><span class="chip">Data</span></div>
+        <h3>ZoomInfo</h3>
+        <p>Company and contact enrichment, intent signals, and suppression controls.</p>
+        <div class="action-row">
+          <a class="btn brand" href="cx_lead.html">Route to Lead</a>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="chip-row"><span class="chip">Prospecting</span></div>
+        <h3>Sales Navigator</h3>
+        <p>Targeted prospect lists and InMail replies rolled into lead capture.</p>
+        <div class="action-row">
+          <a class="btn brand" href="cx_lead.html">Sync to Lead</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

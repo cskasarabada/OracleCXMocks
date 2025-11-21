@@ -3,15 +3,44 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Argano Quote → DocuSign</title>
+<title>Opportunity to Quote &middot; DocuSign</title>
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 <style>
-.doc-preview{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px;align-items:start;}
+.oq-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 26px 42px rgba(12,18,32,.12);padding:26px;margin-bottom:26px;}
+.oq-hero h1{margin:0;font-size:1.9rem;}
+.oq-hero .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.oq-hero .hero-details{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:#5c6378;margin-top:12px;}
+.oq-hero .hero-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:18px;}
+.oq-hero .summary-card{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:16px;box-shadow:0 14px 26px rgba(15,23,42,.08);padding:14px;}
+.oq-hero .summary-card .label{text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:#6c7894;}
+.oq-hero .summary-card .value{font-size:1.6rem;font-weight:700;margin:4px 0;}
+
+.oq-integration{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:18px;box-shadow:0 14px 26px rgba(15,23,42,.08);padding:16px;margin-bottom:18px;}
+.oq-integration h3{margin:0 0 6px;}
+.oq-integration p{margin:0 0 10px;color:#475569;font-size:13px;}
+.oq-integration .actions{display:flex;gap:10px;flex-wrap:wrap;}
+.oq-integration .status{margin-top:10px;font-size:13px;color:#0f172a;}
+.oq-integration .status span{display:inline-block;padding:6px 10px;border-radius:10px;border:1px solid var(--rw-border);background:#f8fafc;}
+
+.doc-preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:24px;align-items:start;}
 .doc-frame{border:1px solid var(--rw-border);border-radius:18px;background:#fff;padding:18px;box-shadow:0 10px 22px rgba(15,23,42,.1);height:100%;}
 .doc-frame header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .doc-frame header h2{margin:0;font-size:18px;}
 .signature-block{border:1px dashed var(--rw-border);border-radius:10px;padding:10px;margin-top:12px;background:#f8fafc;}
+
+.oq-preview-overlay{position:fixed;inset:0;background:rgba(12,18,30,.55);display:none;align-items:center;justify-content:center;z-index:2000;}
+.oq-preview-card{background:#fff;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.35);width:min(800px,94vw);max-height:88vh;overflow:auto;padding:18px;border:1px solid rgba(27,38,56,.1);}
+.oq-preview-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.oq-preview-doc{border:1px solid var(--rw-border);border-radius:12px;padding:14px;background:#f8fafc;}
+.oq-preview-doc h4{margin:0 0 8px;}
+.oq-preview-doc p{margin:0 0 8px;color:#475569;font-size:13px;}
+.oq-sign-lines{margin-top:10px;display:grid;gap:10px;}
+.oq-sign-line{border:1px dashed rgba(15,23,42,.25);border-radius:10px;padding:10px;background:#fff;}
+.oq-sign-line strong{display:block;margin-bottom:4px;}
+.oq-opp-detail{display:grid;gap:6px;margin:10px 0;}
+.oq-opp-detail div{font-size:13px;color:#0f172a;}
+.oq-opp-detail strong{color:#111827;}
 </style>
 </head>
 <body class="lead-landing">
@@ -58,7 +87,7 @@
       <a href="revenue_intelligence.html">Revenue Intelligence</a>
       <a href="field_mobile_snapshot.html">Field Mobile</a>
       <a href="sales_ppm_sync.html">Sales-PPM</a>
-      <a class="active" href="quote_to_docusign.html">Quote to DocuSign</a>
+      <a class="active" href="quote_to_docusign.html">Opportunity to Quote</a>
       <a href="pursuit_project.html">Pursuit Project</a>
     </div>
   </div>
@@ -66,52 +95,261 @@
 
 
 <main class="lead-shell">
-  <section class="card">
-    <p class="eyebrow">Quote → DocuSign Integration</p>
-    <h1 style="margin:4px 0 8px">One-click contract orchestration</h1>
-    <p style="color:var(--rw-muted)">Show Oracle CPQ publishing quotes to DocuSign with Argano templates, approvals, and automatic CX/PPM updates when envelopes complete.</p>
+  <section class="oq-hero">
+    <p class="eyebrow">Opportunity to Quote</p>
+    <h1>Contract orchestration with DocuSign</h1>
+    <div class="meta-row">
+      <span class="pill">Opportunity Skyline Microgrid Modernization</span>
+      <span class="pill">Owner Chandra Kasarabada</span>
+      <span class="pill">Stage Contracting</span>
+    </div>
+    <div class="hero-details">
+      <div>Doc Packet <strong>SOW + Exhibit A</strong></div>
+      <div>Primary Signer <strong>Warner CFO</strong></div>
+      <div>Envelope Status <strong id="oqEnvelopeStatus">Draft</strong></div>
+    </div>
+    <div class="hero-summary">
+      <div class="summary-card">
+        <div class="label">Contract Value</div>
+        <div class="value" id="oqContractValue">$1,250,000</div>
+        <p>Opportunity amount synced from CX Sales.</p>
+      </div>
+      <div class="summary-card">
+        <div class="label">Approval Path</div>
+        <div class="value">Discount < 15%</div>
+        <p>No exec approval required at current terms.</p>
+      </div>
+      <div class="summary-card">
+        <div class="label">Envelope</div>
+        <div class="value">DocuSign</div>
+        <p>Ready to send once recipients confirmed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="oq-integration">
+    <h3>Opportunity · CPQ Integration (Demo)</h3>
+    <p>Fire mock OIC calls to push the opportunity into CPQ, refresh pricing, and sync back to CX.</p>
+    <div class="actions">
+      <button class="btn brand" onclick="return pushOpportunityToCPQ();">Push to CPQ</button>
+      <button class="btn" onclick="return refreshCpqPricing();">Refresh Pricing</button>
+      <button class="btn outline" onclick="return syncCpqBackToCX();">Sync Back to CX</button>
+    </div>
+    <div class="status" id="oq-integration-status"><span>Idle · waiting for action</span></div>
   </section>
 
   <div class="doc-preview">
     <div class="doc-frame">
       <header>
-        <h2>Quote #QS-2048</h2>
-        <span class="pill dark">DocuSign Draft</span>
+        <h2>Contract Packet</h2>
+        <span class="pill dark" id="docStatusPill">DocuSign Draft</span>
       </header>
-      <p style="font-size:13px;color:var(--rw-muted)">Prepared for Warner Design Associates · Generated via Quick Sales screen.</p>
+      <p style="font-size:13px;color:var(--rw-muted)">Prepared for Warner Design Associates · Generated from Opportunity handoff.</p>
       <div class="signature-block">
-        <strong>Recipient 1</strong>
-        <div>Gurmeet Singh – Executive Sponsor</div>
-        <div style="font-size:12px;color:var(--rw-muted)">Status: Pending signature</div>
+        <strong>Signer 1</strong>
+        <div>Gurmeet Singh - Executive Sponsor</div>
+        <div style="font-size:12px;color:var(--rw-muted)" id="signer1Status">Status: Pending signature</div>
       </div>
       <div class="signature-block">
-        <strong>Recipient 2</strong>
-        <div>Argano Legal – Counter sign</div>
-        <div style="font-size:12px;color:var(--rw-muted)">Waiting on Recipient 1</div>
+        <strong>Signer 2</strong>
+        <div>Argano Legal - Counter sign</div>
+        <div style="font-size:12px;color:var(--rw-muted)" id="signer2Status">Waiting on Signer 1</div>
       </div>
       <div style="margin-top:14px;display:flex;gap:10px">
-        <button class="btn primary" style="flex:1">Send with DocuSign</button>
-        <button class="btn" style="flex:1">Preview Envelope</button>
+        <button class="btn primary" style="flex:1" onclick="sendDocuSignEnvelope()">Send with DocuSign</button>
+        <button class="btn" style="flex:1" onclick="previewDocuSignEnvelope()">Preview Envelope</button>
       </div>
     </div>
     <div class="doc-frame">
       <header>
-        <h2>Automation Highlights</h2>
+      <h2>Opportunity-Centric Automations</h2>
       </header>
       <ul class="results-list">
-        <li>Auto-attached Quick Sales SOW, Exhibit A, pricing cover letter.</li>
-        <li>Route for approval if discount >15% or payment terms change.</li>
-        <li>OIC monitors envelope → updates opportunity & pushes pursuit to PPM.</li>
+        <li>Auto-attached SOW + Exhibit A from the opportunity workspace.</li>
+        <li>Route approvals if pricing deviates or payment terms shift.</li>
+        <li>OIC watches DocuSign and writes back stage, amount, and pursuit handoff.</li>
       </ul>
       <div class="timeline centered" style="margin-top:16px">
-        <div class="item"><div class="who">CPQ</div><div class="what">Quote recalculated – triggered DocuSign refresh.</div><div class="t">2 min ago</div></div>
-        <div class="item"><div class="who">DocuSign</div><div class="what">Envelope viewed by Warner CFO.</div><div class="t">Just now</div></div>
-        <div class="item"><div class="who">CX Sales</div><div class="what">Opportunity stage auto-advanced to “Contracting”.</div><div class="t">Just now</div></div>
+        <div class="item"><div class="who">CPQ</div><div class="what">Quote refreshed from opportunity pricing & partner terms.</div><div class="t">2 min ago</div></div>
+        <div class="item"><div class="who">DocuSign</div><div class="what">Envelope viewed · signer verified · status returned to CX.</div><div class="t">Just now</div></div>
+        <div class="item"><div class="who">CX Sales</div><div class="what">Opportunity stage moved to Contracting; pursuit sync queued.</div><div class="t">Just now</div></div>
       </div>
     </div>
   </div>
 </main>
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+<div class="oq-preview-overlay" id="oq-preview-modal" aria-hidden="true">
+  <div class="oq-preview-card" role="dialog" aria-modal="true" aria-labelledby="oqPreviewTitle" tabindex="-1">
+    <header>
+      <div>
+        <p class="eyebrow">DocuSign Preview</p>
+        <h3 id="oqPreviewTitle">SOW Package</h3>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closePreview()">Close</button>
+    </header>
+    <div class="oq-preview-doc">
+      <h4>Statement of Work</h4>
+      <p>Customer: Warner Design Associates</p>
+      <p>Project: Skyline Microgrid Modernization</p>
+      <p>Scope: Design, build, and commission microgrid cluster with resiliency analytics.</p>
+      <p>Commercials: Total $1,250,000 · Payment terms Net 30 · Travel at cost.</p>
+      <p style="font-size:12px;color:#64748b;">Auto-generated from Opportunity handoff. Edits allowed in CPQ before send.</p>
+      <div class="oq-sign-lines">
+        <div class="oq-sign-line">
+          <strong>Signer 1 · Customer Executive</strong>
+          <div>Name: Gurmeet Singh</div>
+          <div>Status: Pending signature</div>
+        </div>
+        <div class="oq-sign-line">
+          <strong>Signer 2 · Argano Legal</strong>
+          <div>Name: Counsel</div>
+          <div>Status: Waiting on Signer 1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="oq-preview-overlay" id="oq-integration-modal" aria-hidden="true">
+  <div class="oq-preview-card" role="dialog" aria-modal="true" aria-labelledby="oqIntegrationTitle" tabindex="-1">
+    <header>
+      <div>
+        <p class="eyebrow">Opportunity Detail</p>
+        <h3 id="oqIntegrationTitle">Skyline Microgrid Modernization</h3>
+      </div>
+      <button class="ghost-btn small" type="button" onclick="closeIntegrationModal()">Close</button>
+    </header>
+    <div class="oq-opp-detail">
+      <div><strong>Amount:</strong> <span id="oqModalAmount">$1,250,000</span></div>
+      <div><strong>Stage:</strong> <span id="oqModalStage">Contracting</span></div>
+      <div><strong>Owner:</strong> Chandra Kasarabada</div>
+      <div><strong>Envelope:</strong> DocuSign Draft</div>
+    </div>
+    <div class="actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      <button class="btn brand" id="oqIntegrationActionBtn" onclick="return confirmIntegrationAction();">Send to CPQ</button>
+      <button class="btn outline" type="button" onclick="closeIntegrationModal()">Cancel</button>
+    </div>
+    <div class="status" id="oq-integration-status-modal"><span>Ready to send</span></div>
+  </div>
+</div>
+<script>
+function sendDocuSignEnvelope(){
+  if(typeof showToast==='function'){ showToast('Sending envelope via DocuSign...'); }
+  var pill=document.getElementById('docStatusPill');
+  if(pill){ pill.textContent='Sent to DocuSign'; pill.classList.add('brand'); }
+  var s1=document.getElementById('signer1Status'); if(s1){ s1.textContent='Sent to signer'; }
+  var s2=document.getElementById('signer2Status'); if(s2){ s2.textContent='Waiting on signer 1'; }
+  if(window.RWD && typeof RWD.runOICJob==='function'){
+    try{ RWD.runOICJob('Send DocuSign Envelope'); }catch(e){ console.warn('runOICJob failed', e); }
+  }
+}
+function previewDocuSignEnvelope(){
+  var modal=document.getElementById('oq-preview-modal');
+  if(modal){
+    modal.style.display='flex';
+    modal.setAttribute('aria-hidden','false');
+    if(typeof showToast==='function'){ showToast('Showing DocuSign mock preview'); }
+    var card=modal.querySelector('.oq-preview-card'); if(card) card.focus();
+  }
+  return false;
+}
+function closePreview(){
+  var modal=document.getElementById('oq-preview-modal');
+  if(modal){
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+  }
+}
+
+function setIntegrationStatus(msg){
+  var el=document.getElementById('oq-integration-status');
+  if(el){ el.innerHTML='<span>'+msg+'</span>'; }
+  var el2=document.getElementById('oq-integration-status-modal');
+  if(el2){ el2.innerHTML='<span>'+msg+'</span>'; }
+}
+
+function openIntegrationModal(mode){
+  var modal=document.getElementById('oq-integration-modal');
+  if(!modal) return false;
+  modal.dataset.mode=mode||'push';
+  var title=document.getElementById('oqIntegrationTitle');
+  var actionBtn=document.getElementById('oqIntegrationActionBtn');
+  var status=document.getElementById('oq-integration-status-modal');
+  var stage=document.getElementById('oqModalStage');
+  var amount=document.getElementById('oqModalAmount');
+  if(title){
+    title.textContent = 'Skyline Microgrid Modernization';
+  }
+  if(stage){
+    var stageText = document.getElementById('oqEnvelopeStatus') ? document.getElementById('oqEnvelopeStatus').textContent : 'Contracting';
+    stage.textContent = stageText;
+  }
+  if(amount){
+    var amtEl=document.getElementById('oqContractValue');
+    amount.textContent = amtEl ? amtEl.textContent : '$1,250,000';
+  }
+  if(actionBtn){
+    if(mode==='push'){ actionBtn.textContent='Send to CPQ'; }
+    else if(mode==='price'){ actionBtn.textContent='Refresh Pricing'; }
+    else { actionBtn.textContent='Sync Back to CX'; }
+  }
+  if(status){ status.innerHTML='<span>Review and confirm action</span>'; }
+  modal.style.display='flex';
+  modal.setAttribute('aria-hidden','false');
+  var card=modal.querySelector('.oq-preview-card'); if(card) card.focus();
+  return false;
+}
+function closeIntegrationModal(){
+  var modal=document.getElementById('oq-integration-modal');
+  if(modal){
+    modal.style.display='none';
+    modal.setAttribute('aria-hidden','true');
+  }
+}
+
+function confirmIntegrationAction(){
+  var modal=document.getElementById('oq-integration-modal');
+  var mode = modal ? modal.dataset.mode : 'push';
+  if(mode==='push'){
+    setIntegrationStatus('CPQ shell created with pricing context.');
+    if(typeof showToast==='function'){ showToast('Pushed to CPQ (demo)'); }
+    if(window.RWD && typeof RWD.runOICJob==='function'){
+      try{ RWD.runOICJob('Push Opportunity to CPQ'); }catch(e){ console.warn('runOICJob failed', e); }
+    }
+  } else if(mode==='price'){
+    setIntegrationStatus('Pricing refreshed · discount within guardrails.');
+    if(typeof showToast==='function'){ showToast('Pricing refreshed (demo)'); }
+    var amount=document.getElementById('oqContractValue');
+    if(amount){ amount.textContent='$1,255,000'; }
+    var modalAmt=document.getElementById('oqModalAmount');
+    if(modalAmt){ modalAmt.textContent='$1,255,000'; }
+  } else {
+    setIntegrationStatus('CX updated · stage Contracting · pursuit handoff queued.');
+    if(typeof showToast==='function'){ showToast('Synced back to CX (demo)'); }
+    var stage=document.getElementById('oqModalStage');
+    if(stage){ stage.textContent='Contracting'; }
+    var pill=document.getElementById('oqEnvelopeStatus');
+    if(pill){ pill.textContent='Contracting'; }
+  }
+  closeIntegrationModal();
+  return false;
+}
+
+function pushOpportunityToCPQ(){
+  return openIntegrationModal('push');
+}
+
+function refreshCpqPricing(){
+  return openIntegrationModal('price');
+}
+
+function syncCpqBackToCX(){
+  return openIntegrationModal('sync');
+}
+</script>
 </body>
 </html>
+
+
+
+
 

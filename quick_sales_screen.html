@@ -61,14 +61,249 @@
 
 <div id="aria-live" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
 
-<div class="header"><span class="product">Oracle CX &amp; PPM</span><span class="trail">/ Quick Sales Screen</span></div>
-<div class="shell">
-  <div style="max-width:980px;margin:18px auto">
+<div class="shell qs-shell">
+  <section class="qs-hero">
+    <p class="eyebrow">Quick Sales</p>
     <h1>Quick Sales Screen for Existing Customers</h1>
-    <p>Show the streamlined experience tailored for short-cycle expansions. For existing customers with established relationships and pre-approved terms, the Quick Sales screen enables a condensed three-stage progression that dramatically reduces cycle time while maintaining controls and documentation.</p>
-  </div>
+    <p class="qs-hero-sub">Show the streamlined experience tailored for short-cycle expansions. For existing customers with established relationships and pre-approved terms, the Quick Sales screen enables a condensed three-stage progression that keeps controls intact while moving fast.</p>
+    <div class="qs-hero-metrics">
+      <div class="metric">
+        <span class="metric-label">Active Accounts</span>
+        <strong id="qsAccountCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Ready Quotes</span>
+        <strong id="qsQuoteCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Cycle Target</span>
+        <strong id="qsCycleTime">3-stage fast lane</strong>
+      </div>
+    </div>
+    <div class="hero-search">
+      <input type="search" placeholder="Search existing accounts &amp; needs" aria-label="Search existing accounts for Quick Sales" id="qsHeroSearch"/>
+      <button type="button" class="btn primary" onclick="openPreview()">Launch Flow Builder</button>
+      <button type="button" class="btn" onclick="startInteractiveFlow()">Interactive Demo</button>
+    </div>
+    <div class="qs-search-results" id="qsSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
+    <div class="qs-hero-actions">
+      <button type="button" class="btn" onclick="openQuickSalesMobile()">Mobile Preview</button>
+      <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
+    </div>
+  </section>
 
-  <div class="card" style="max-width:980px;margin:0 auto 18px;">
+  <section class="qs-ai-summary">
+    <h3>Oracle GenAI Quick Path Guidance</h3>
+    <div id="qsAiSummaryText" class="ai-copy">Use GenAI to recap the three-stage process, highlight signals, and suggest the next Quick Sales actions.</div>
+    <div class="ai-actions">
+      <button type="button" class="btn brand" onclick="return runQuickSalesAISummary('overview');">Overview</button>
+      <button type="button" class="btn" onclick="return runQuickSalesAISummary('risk');">Risks &amp; Signals</button>
+      <button type="button" class="btn" onclick="return runQuickSalesAISummary('action');">Smart Actions</button>
+    </div>
+  </section>
+
+  <section class="card qs-workspace">
+    <div class="body">
+      <div class="qs-deal-header">
+        <div>
+          <p class="eyebrow">Active Opportunity</p>
+          <h2>Skyline Microgrid Expansion</h2>
+          <p>Account <strong>Skyline Renewables</strong> &middot; Owner <strong>Jessica Brooks</strong> &middot; Deal Type <strong>Expansion</strong></p>
+        </div>
+        <div class="qs-header-actions">
+          <button class="btn primary" id="qsHeroLog">Log Activity</button>
+          <button class="btn" id="qsHeroSend">Send Update</button>
+          <button class="btn" id="qsHeroSalesFlow">Open in Sales Flow</button>
+        </div>
+      </div>
+      <div class="qs-header-grid">
+        <label>Stage
+          <select>
+            <option>Evaluation</option>
+            <option>Proposal</option>
+            <option>Negotiation</option>
+          </select>
+        </label>
+        <label>Probability
+          <input type="number" value="65"/>
+        </label>
+        <label>Close Date
+          <input type="date" value="2024-07-31"/>
+        </label>
+        <label>Amount
+          <input type="text" value="$1,250,000"/>
+        </label>
+        <label>Team
+          <input type="text" value="AE, SC, Delivery Prep"/>
+        </label>
+      </div>
+      <div class="qs-deal-metrics">
+        <div>
+          <span class="label">Deal Health</span>
+          <strong>High</strong>
+          <p>AI Confidence 82%</p>
+        </div>
+        <div>
+          <span class="label">Engagement</span>
+          <strong>Active</strong>
+          <p>Last touch 2h ago</p>
+        </div>
+        <div>
+          <span class="label">Compliance</span>
+          <strong>Pass</strong>
+          <p>All required fields captured</p>
+        </div>
+        <div>
+          <span class="label">Forecast</span>
+          <strong>Best Case</strong>
+          <p>Submit toggle enabled</p>
+        </div>
+      </div>
+      <div class="qs-workspace-columns">
+        <div class="qs-column primary">
+          <div class="qs-insights">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Sales Insights &amp; Deal Health</p>
+              <h3>AI Recommendations</h3>
+            </div>
+            <button class="btn" id="qsInsightsRefresh">Refresh</button>
+          </div>
+            <ul>
+              <li><strong>Stage aging:</strong> Evaluation for 9 days. Prep proposal to stay on forecast.</li>
+              <li><strong>Stakeholder gap:</strong> No finance contact logged &mdash; add approver before pricing review.</li>
+              <li><strong>Next Action:</strong> Send summarized scope + pricing recap before Friday.</li>
+              <li><strong>Risk:</strong> Activity gap on influencer &ldquo;G. Singh&rdquo; &mdash; log touchpoint.</li>
+            </ul>
+          </div>
+      <div class="qs-activity">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Activity &amp; Task Management</p>
+            <h3>Timeline</h3>
+          </div>
+          <button class="btn" id="qsViewAllActivity">View All</button>
+        </div>
+      <ul class="qs-activity-feed" id="qs-activity-feed">
+        <li><span class="time">09:24</span><div><strong>Email</strong> Sent follow-up with updated BOM.</div></li>
+        <li><span class="time">Yesterday</span><div><strong>Meeting</strong> Executive briefing with Skyline board.</div></li>
+        <li><span class="time">Mon</span><div><strong>Note</strong> AI flagged missing finance approver.</div></li>
+      </ul>
+      <form class="qs-activity-form" id="qs-activity-form">
+        <label>Log activity
+          <select id="qs-activity-type">
+            <option>Call</option>
+            <option>Email</option>
+            <option>Meeting</option>
+            <option>Internal Note</option>
+          </select>
+        </label>
+        <textarea rows="2" placeholder="Summarize outcome or next step" id="qs-activity-notes"></textarea>
+        <div class="qs-activity-actions">
+          <label><input type="checkbox" id="qs-follow-task"/> Create follow-up task</label>
+          <button class="btn primary" type="button" id="qsLogActivityBtn">Save Activity</button>
+        </div>
+      </form>
+    </div>
+        </div>
+        <div class="qs-column secondary">
+      <div class="qs-validation">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Compliance &amp; Validation</p>
+            <h3>Checks</h3>
+          </div>
+        </div>
+            <ul>
+              <li class="pass">All mandatory fields completed</li>
+              <li class="pass">Contract value within approval threshold</li>
+              <li class="review">Contact validation required &mdash; missing Finance approver</li>
+        </ul>
+        <button class="btn" id="qsRequestReview">Request Review</button>
+          </div>
+          <div class="qs-stakeholder">
+            <div class="section-head">
+              <p class="eyebrow">Stakeholder View</p>
+              <h3>Contacts &amp; Roles</h3>
+            </div>
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Lena Ortiz</td><td>Decision Maker</td><td>Last touch 2h ago</td></tr>
+                <tr><td>Gurmeet Singh</td><td>Coach</td><td>Last touch 5d ago</td></tr>
+                <tr><td>David Chan</td><td>Finance</td><td>Not engaged</td></tr>
+              </tbody>
+            </table>
+            <button class="btn" id="qsAddStakeholder">Add Stakeholder</button>
+          </div>
+          <div class="qs-revenue">
+            <div class="section-head">
+              <p class="eyebrow">Revenue &amp; Forecast</p>
+              <h3>Forecast Planning</h3>
+            </div>
+            <table>
+              <thead><tr><th>Period</th><th>Amount</th><th>Probability</th></tr></thead>
+              <tbody>
+                <tr><td>Q3</td><td>$850,000</td><td>65%</td></tr>
+                <tr><td>Q4</td><td>$400,000</td><td>35%</td></tr>
+              </tbody>
+            </table>
+            <label class="qs-checkbox"><input type="checkbox" id="qsSubmitForecast" checked/> Submit to Forecast</label>
+          </div>
+          <div class="qs-docs">
+            <div class="section-head">
+              <p class="eyebrow">Documents &amp; Templates</p>
+              <h3>Assets</h3>
+            </div>
+            <ul>
+              <li>Executive Summary.pdf <button class="btn" type="button" data-doc-action="view" data-doc-name="Executive Summary.pdf">View</button></li>
+              <li>Proposal Template.docx <button class="btn" type="button" data-doc-action="generate" data-doc-name="Proposal Template.docx">Generate</button></li>
+              <li>SOW Draft.docx <button class="btn" type="button" data-doc-action="docusign" data-doc-name="SOW Draft.docx">Send to DocuSign</button></li>
+            </ul>
+          </div>
+          <div class="qs-manager">
+            <div class="section-head">
+              <p class="eyebrow">Manager Review Mode</p>
+              <h3>Coaching &amp; Overrides</h3>
+            </div>
+            <label>Manager notes<textarea rows="2" placeholder="Drop coaching notes or approvals here"></textarea></label>
+            <label class="qs-checkbox"><input type="checkbox"/> Override rep confidence (set to 70%)</label>
+            <label class="qs-checkbox"><input type="checkbox"/> Approve for forecast commit</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card qs-purpose-card">
+    <div class="body">
+      <div class="qs-purpose-grid">
+        <div>
+          <p class="eyebrow">Why Quick Sales</p>
+          <h3>Purpose</h3>
+          <p>The Quick Sales Screen is a consolidated workspace that keeps reps, managers, and AI assistants aligned without hopping between CX pages.</p>
+          <ul class="qs-purpose-list">
+            <li>Single canvas for every opportunity action.</li>
+            <li>Reduces clicks + navigation while improving data quality.</li>
+            <li>Embeds sales intelligence and next-step guidance inline.</li>
+            <li>Supports compliance, forecasting, and customer engagement in one view.</li>
+          </ul>
+        </div>
+        <div class="qs-callout">
+          <h4>Ideal Outcomes</h4>
+          <p>Faster pipeline hygiene, better forecast accuracy, and a modern workspace that mirrors Oracle Fusion UX.</p>
+          <div class="qs-callout-points">
+            <span>Inline editing</span>
+            <span>Compliance-ready</span>
+            <span>AI insights</span>
+            <span>Manager review</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card qs-highlights">
     <div class="body">
       <div class="quick-grid">
         <div>
@@ -99,27 +334,305 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div style="max-width:980px;margin:6px auto 24px;text-align:center">
-    <button class="btn primary" onclick="presetQuickSales()" style="font-size:1.05em;padding:12px 20px;">Launch Quick Sales Flow</button>
-    <button type="button" class="btn" onclick="startInteractiveFlow()" style="font-size:1.05em;padding:12px 20px;margin-left:8px;">Start Interactive Flow</button>
-    <a class="btn" href="sales_cloud.html">Back to Sales Flow</a>
-  </div>
+  <section class="card qs-feature-blueprint">
+    <div class="body">
+      <p class="eyebrow">Quick Sales Screen &mdash; Ideal Feature Set &amp; Workflow Blueprint</p>
+      <div class="qs-feature-grid">
+        <div class="qs-feature-card">
+          <h3>Deal Header &amp; Key Fields</h3>
+          <p>Top ribbon shows Opportunity &amp; Account names, stage, probability, amount, team, and deal type. All fields support inline editing with auto-save.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Compliance &amp; Validation</h3>
+          <p>Automated checks (Pass / Review / Fail), alerts for missing contacts, and request-review workflows that keep data trustworthy.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Sales Insights &amp; Deal Health</h3>
+          <p>AI health scores, activity gaps, risk alerts, and recommended Smart Actions tell the story at a glance.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Activity &amp; Task Management</h3>
+          <p>Unified timeline for meetings, emails, notes, plus quick buttons to log a call, add follow-ups, or assign reps.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Stakeholder View</h3>
+          <p>Internal + external contacts with role chips, last-touch info, and quick-add capability to capture missing influencers.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Revenue &amp; Forecast Panel</h3>
+          <p>Inline revenue lines, multi-period planning, probability-based forecast, and a “Submit to Forecast” toggle.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Documents &amp; Templates</h3>
+          <p>Attachment viewer, proposal/quote template launcher, version tracking, and hooks into DocuSign or other services.</p>
+        </div>
+        <div class="qs-feature-card">
+          <h3>Manager Review Mode</h3>
+          <p>Confidence comparisons, coaching notes, approvals, and forecast overrides &mdash; perfect for pipeline inspection meetings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <div style="max-width:980px;margin:6px auto 24px;">
-    <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-bottom:8px">
-      <button type="button" class="btn" id="show-sample-data" onclick="toggleSampleData()">Show Sample Leads & Quotes</button>
+  <section class="card qs-flows-card">
+    <div class="body">
+      <p class="eyebrow">Quick Flows</p>
+      <h3>Demo-ready click paths</h3>
+      <div class="qs-flows-grid">
+        <div>
+          <h4>Flow 1 &ndash; Fast Opportunity Creation</h4>
+          <p>Use minimal fields to spin up a deal, hit validations instantly, and jump directly into the Quick Sales view.</p>
+        </div>
+        <div>
+          <h4>Flow 2 &ndash; Daily Pipeline Update</h4>
+          <p>Update stage, amount, close date, review AI insights, clear risks, and submit for manager review.</p>
+        </div>
+        <div>
+          <h4>Flow 3 &ndash; Deal Health Review</h4>
+          <p>Open a deal, inspect health scores and activity gaps, then create tasks straight from the insights panel.</p>
+        </div>
+        <div>
+          <h4>Flow 4 &ndash; Forecast Submission</h4>
+          <p>Edit revenue lines, confirm probability, submit to forecast, and let managers override/approve when needed.</p>
+        </div>
+        <div>
+          <h4>Flow 5 &ndash; Document Prep</h4>
+          <p>Generate proposals, quotes, or SOWs from the documents panel and push them into DocuSign or CPQ.</p>
+        </div>
+      </div>
     </div>
-    <div id="sample-data-panel" style="display:none;border:1px solid var(--rw-border);padding:12px;border-radius:8px;background:var(--rw-surface)">
-      <h3>Sample Leads</h3>
-      <div style="overflow:auto;max-height:200px;margin-bottom:12px" id="sample-leads"></div>
-      <h3>Sample Quotes</h3>
-      <div style="overflow:auto;max-height:240px" id="sample-quotes"></div>
+  </section>
+
+  <section class="card qs-sample-card">
+    <div class="body">
+      <div class="qs-sample-header">
+        <div>
+          <p class="eyebrow">Data Sandbox</p>
+          <h3>Sample Leads &amp; Quotes</h3>
+        </div>
+        <button type="button" class="btn" id="show-sample-data" onclick="toggleSampleData()">Show Sample Leads &amp; Quotes</button>
+      </div>
+      <div id="sample-data-panel" class="qs-sample-panel" style="display:none">
+        <h4>Sample Leads</h4>
+        <div class="qs-sample-table" id="sample-leads"></div>
+        <h4>Sample Quotes</h4>
+        <div class="qs-sample-table" id="sample-quotes"></div>
+      </div>
     </div>
-  </div>
+  </section>
 
     <script>
+    var qsSearchContext={};
+    document.addEventListener('DOMContentLoaded', function(){
+      initQuickSalesHero();
+      initQuickSalesWorkspace();
+    });
+
+    function initQuickSalesHero(){
+      var data = window.QUICK_SALES_DATA || {};
+      var leads = data.leads || [];
+      var quotes = data.quotes || [];
+      var acct = document.getElementById('qsAccountCount');
+      if(acct) acct.textContent = leads.length ? leads.length : '—';
+      var quoteCount = document.getElementById('qsQuoteCount');
+      if(quoteCount) quoteCount.textContent = quotes.length ? quotes.length : '—';
+      var cycle = document.getElementById('qsCycleTime');
+      if(cycle){
+        var metaCycle = (data.meta && data.meta.cycleTarget) || '3-stage fast lane';
+        cycle.textContent = metaCycle;
+      }
+      runQuickSalesAISummary('overview');
+    }
+
+    function runQuickSalesAISummary(mode){
+      var target = document.getElementById('qsAiSummaryText');
+      if(!target) return false;
+      var data = window.QUICK_SALES_DATA || {};
+      var leads = data.leads || [];
+      var quotes = data.quotes || [];
+      var summary = '';
+      if(mode==='risk'){
+        summary = '<strong>Risk watch:</strong> Ensure account confirmation is logged before skipping to pricing.<ul><li>'+leads.length+' active needs require validation.</li><li>Accelerated quotes still need approvals + documentation.</li><li>Prep PPM handoff artifacts so execution never rekeys.</li></ul>';
+      }else if(mode==='action'){
+        summary = '<strong>Smart Actions:</strong><ul><li>Launch Flow Builder to auto-fill account + quote context.</li><li>Use Interactive Demo for live narration of the 3 stages.</li><li>Trigger Mobile Preview to show field-ready approvals.</li></ul>';
+      }else{
+        summary = '<strong>Overview:</strong> '+leads.length+' existing customers with '+quotes.length+' ready-to-go quotes sit in the Quick Sales lane. Highlight how GenAI condenses Account Confirmation, Quote Approval, and Execution into one seamless story.';
+      }
+      target.innerHTML = summary;
+      return false;
+    }
+
+    function initQuickSalesWorkspace(){
+      var heroLog=document.getElementById('qsHeroLog');
+      if(heroLog){
+        heroLog.addEventListener('click', function(e){
+          e.preventDefault();
+          var form=document.getElementById('qs-activity-form');
+          if(form){ form.scrollIntoView({behavior:'smooth',block:'center'}); var notes=document.getElementById('qs-activity-notes'); if(notes){ setTimeout(function(){ notes.focus(); }, 400); } }
+        });
+      }
+      var heroSend=document.getElementById('qsHeroSend');
+      if(heroSend){
+        heroSend.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Update sent to Skyline stakeholders with latest summary.');
+        });
+      }
+      var heroSalesFlow=document.getElementById('qsHeroSalesFlow');
+      if(heroSalesFlow){
+        heroSalesFlow.addEventListener('click', function(e){
+          e.preventDefault();
+          window.open('sales_cloud.html','_blank');
+        });
+      }
+      var heroSearch=document.getElementById('qsHeroSearch');
+      if(heroSearch){
+        heroSearch.addEventListener('keypress', function(ev){
+          if(ev.key==='Enter'){ ev.preventDefault(); runHeroSearch(heroSearch.value); }
+        });
+        heroSearch.addEventListener('blur', function(){
+          if(heroSearch.value.trim()){ runHeroSearch(heroSearch.value); }
+        });
+      }
+      var logBtn=document.getElementById('qsLogActivityBtn');
+      if(logBtn){
+        logBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          handleActivitySubmit();
+        });
+      }
+      var refreshBtn=document.getElementById('qsInsightsRefresh');
+      if(refreshBtn){
+        refreshBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Insights refreshed using latest AI context.');
+        });
+      }
+      var viewAll=document.getElementById('qsViewAllActivity');
+      if(viewAll){
+        viewAll.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Full activity stream opens in Oracle CX Sales list view.');
+        });
+      }
+      var requestBtn=document.getElementById('qsRequestReview');
+      if(requestBtn){
+        requestBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Compliance review requested &mdash; legal will respond shortly.');
+        });
+      }
+      var addStake=document.getElementById('qsAddStakeholder');
+      if(addStake){
+        addStake.addEventListener('click', function(e){
+          e.preventDefault();
+          notifyQuickSales('Stakeholder placeholder added. Use Sales Flow to capture full details.');
+        });
+      }
+      var submitForecast=document.getElementById('qsSubmitForecast');
+      if(submitForecast){
+        submitForecast.addEventListener('change', function(){
+          var msg=this.checked?'Submitted to forecast.':'Removed from forecast.';
+          notifyQuickSales(msg);
+        });
+      }
+      document.querySelectorAll('[data-doc-action]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          var action=btn.dataset.docAction;
+          var name=btn.dataset.docName || 'document';
+          var message='';
+          switch(action){
+            case 'view':
+              message='Opening '+name+'...';
+              break;
+            case 'generate':
+              message='Generating '+name+' via Quick Sales templates.';
+              break;
+            case 'docusign':
+              message='Sending '+name+' to DocuSign.';
+              break;
+            default:
+              message='Processing '+name;
+          }
+          notifyQuickSales(message);
+        });
+      });
+    }
+
+    function handleActivitySubmit(){
+      var type=document.getElementById('qs-activity-type');
+      var notes=document.getElementById('qs-activity-notes');
+      var follow=document.getElementById('qs-follow-task');
+      var feed=document.getElementById('qs-activity-feed');
+      if(!feed || !type || !notes) return;
+      var text=notes.value.trim() || 'Activity logged via Quick Sales workspace.';
+      var li=document.createElement('li');
+      li.innerHTML='<span class="time">'+new Date().toLocaleTimeString()+'</span><div><strong>'+type.value+'</strong> '+text+(follow && follow.checked?' &ndash; follow-up task added.':'')+'</div>';
+      feed.insertBefore(li, feed.firstChild);
+      while(feed.children.length>5){ feed.removeChild(feed.lastChild); }
+      notes.value='';
+      if(follow) follow.checked=false;
+      notifyQuickSales('Activity captured on the Quick Sales timeline.');
+    }
+
+    function notifyQuickSales(message){
+      if(typeof showToast==='function'){ showToast(message); }
+      else alert(message.replace(/&mdash;/g,'—'));
+    }
+
+    function runHeroSearch(query){
+      var trimmed=(query||'').trim();
+      var heroInput=document.getElementById('qsHeroSearch'); if(heroInput) heroInput.value=trimmed;
+      var panel=document.getElementById('qsSearchResults');
+      if(panel){ panel.hidden=true; panel.innerHTML=''; }
+      if(!trimmed){
+        notifyQuickSales('Enter an account or need to search.');
+        return;
+      }
+      var matches=(window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.leads||[]).filter(function(lead){
+        return (lead.accountName||'').toLowerCase().includes(trimmed.toLowerCase()) || (lead.customer||'').toLowerCase().includes(trimmed.toLowerCase());
+      });
+      if(matches.length){
+        notifyQuickSales('Showing needs for '+matches[0].accountName+'. Scoped Quick Sales to that account.');
+        qsSearchContext.leadId=matches[0].id;
+        qsSearchContext.leadName=matches[0].accountName;
+        if(quote){ qsSearchContext.quoteId=quote.id; } else { qsSearchContext.quoteId=''; }
+        if(panel){
+          var lead=matches[0];
+          var quote=(window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.quotes||[]).find(function(q){ return (q.accountName||'').toLowerCase().includes(trimmed.toLowerCase()); });
+          panel.innerHTML='';
+          var h=document.createElement('h4'); h.textContent='Search Results'; panel.appendChild(h);
+          var summary=document.createElement('p'); summary.innerHTML='<strong>'+lead.accountName+'</strong> &mdash; Contacts: '+(lead.contact||'Unknown'); panel.appendChild(summary);
+          if(quote){
+            var list=document.createElement('ul');
+            list.innerHTML='<li>Quote '+quote.id+' &middot; $'+(quote.amount||0).toLocaleString()+'</li><li>Status '+(quote.status||'Draft')+'</li>';
+            panel.appendChild(list);
+          }else{
+            var empty=document.createElement('p'); empty.innerHTML='No quotes found &mdash; use Flow Builder to create one.'; panel.appendChild(empty);
+          }
+          var btn=document.createElement('button'); btn.type='button'; btn.className='btn'; btn.textContent='Open in Flow Builder';
+          btn.addEventListener('click', function(){ openPreview(); });
+          panel.appendChild(btn);
+          panel.hidden=false;
+        }
+      }else{
+        notifyQuickSales('No existing account found for "'+trimmed+'". Use Sales Flow to create one.');
+        qsSearchContext={};
+        if(panel){
+          panel.innerHTML='';
+          var title=document.createElement('h4'); title.textContent='No Results'; panel.appendChild(title);
+          var body=document.createElement('p'); body.innerHTML='Could not locate an existing account named <strong>'+trimmed+'</strong>. Jump to Sales Flow to create it.'; panel.appendChild(body);
+          var btn=document.createElement('button'); btn.type='button'; btn.className='btn'; btn.textContent='Open Sales Flow';
+          btn.addEventListener('click', function(){ window.open('sales_cloud.html','_blank'); });
+          panel.appendChild(btn);
+          panel.hidden=false;
+        }
+      }
+    }
+
     function toggleSampleData(){
       var panel = document.getElementById('sample-data-panel');
       if(!panel) return;
@@ -182,11 +695,13 @@
       var quotes = (window.QUICK_SALES_DATA && window.QUICK_SALES_DATA.quotes) || [];
       var leadSel = document.getElementById('preview-lead');
       var quoteSel = document.getElementById('preview-quote');
-      if(leadSel && leadSel.options.length<=1){
-        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ var acct = l.accountName || l.account || l.customer || ''; return '<option value="'+l.id+'">'+l.id+' — '+acct+' ('+(l.contact||'')+')'+'</option>'; }).join('');
+      if(leadSel){
+        leadSel.innerHTML = '<option value="">-- pick a lead --</option>' + leads.map(function(l){ var acct = l.accountName || l.account || l.customer || ''; return '<option value="'+l.id+'">'+l.id+' - '+acct+' ('+(l.contact||'')+')'+'</option>'; }).join('');
+        if(qsSearchContext.leadId){ leadSel.value=qsSearchContext.leadId; }
       }
-      if(quoteSel && quoteSel.options.length<=1){
-        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ var acct = q.accountName || q.account || q.customer || ''; return '<option value="'+q.id+'">'+q.id+' — '+acct+' — $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+      if(quoteSel){
+        quoteSel.innerHTML = '<option value="">-- pick a quote --</option>' + quotes.map(function(q){ var acct = q.accountName || q.account || q.customer || ''; return '<option value="'+q.id+'">'+q.id+' - '+acct+' - $'+(q.amount||0).toLocaleString()+'</option>'; }).join('');
+        if(qsSearchContext.quoteId){ quoteSel.value=qsSearchContext.quoteId; }
       }
     }
 
@@ -219,8 +734,7 @@
           } else if(window.RWD && typeof RWD.get==='function'){ var s=RWD.get(); s.logs=s.logs||[]; s.logs.unshift('['+new Date().toLocaleString()+'] QS Flow: Push to Pursuit simulated'); if(typeof RWD.set==='function') RWD.set(s); }
         }
         if(typeof showToast==='function') showToast('Quick Sales flow state applied'); else alert('Quick Sales flow state applied');
-        // close modal
-        if(window.ModalManager && typeof ModalManager.closeModal === 'function') ModalManager.closeModal('qs-modal-preview');
+        closeQuickPreview();
       }catch(e){ console.error('applyPreviewAll', e); if(typeof showToast==='function') showToast('Flow apply failed: '+(e && e.message)); }
     }
   </script>
@@ -305,39 +819,70 @@
     </div>
     
     <div id="qs-modal-preview" class="qs-overlay" style="display:none" aria-hidden="true">
-      <div class="qs-modal" role="dialog" aria-modal="true" aria-labelledby="qs-preview-title" tabindex="-1">
-        <h2 id="qs-preview-title">Quick Sales Flow Builder</h2>
-        <div>
-          <h4>1. Account + Need Confirmation</h4>
-          <label for="preview-lead">Pick a lead</label>
-          <select id="preview-lead" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a lead --</option></select>
-          <label for="preview-lead-notes">Notes</label>
-          <textarea id="preview-lead-notes" rows="2" style="width:100%;margin:6px 0;padding:6px"></textarea>
-          <div style="margin-bottom:8px"><label><input type="checkbox" id="preview-lead-confirm"> Confirm account & need</label></div>
-
-          <h4>2. Pre-Built Quote + Approval</h4>
-          <label for="preview-quote">Pick a quote</label>
-          <select id="preview-quote" style="width:100%;margin:6px 0;padding:6px"><option value="">-- pick a quote --</option></select>
-          <div style="margin:6px 0">Approval: <label><input type="radio" name="preview-quote-approve" value="yes"> Yes</label> <label style="margin-left:8px"><input type="radio" name="preview-quote-approve" value="no"> No</label></div>
-
-          <h4>3. Execution & Handoff</h4>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <label><input type="checkbox" id="preview-convert"> Convert to Opportunity</label>
-            <label><input type="checkbox" id="preview-cpq"> Push to CPQ</label>
-            <label><input type="checkbox" id="preview-pursuit"> Push to Pursuit</label>
+      <div class="qs-modal qs-preview-modal" role="dialog" aria-modal="true" aria-labelledby="qs-preview-title" tabindex="-1">
+        <div class="qs-preview-header">
+          <div>
+            <p class="eyebrow">Quick Sales Builder</p>
+            <h2 id="qs-preview-title">Quick Sales Flow Builder</h2>
+            <p class="muted">Mix and match sample data to narrate the 3-stage Quick Sales journey.</p>
+          </div>
+          <button type="button" class="ghost-btn small" onclick="closeQuickPreview()">Close &times;</button>
+        </div>
+        <div class="qs-preview-grid">
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 1</span>
+              <h3>Account + Need</h3>
+            </div>
+            <label class="qs-field-label">Pick a lead
+              <select id="preview-lead" class="qs-field"><option value="">-- pick a lead --</option></select>
+            </label>
+            <label class="qs-field-label">Notes
+              <textarea id="preview-lead-notes" rows="2" class="qs-field"></textarea>
+            </label>
+            <label class="qs-checkbox"><input type="checkbox" id="preview-lead-confirm"> Confirm account &amp; need</label>
+          </div>
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 2</span>
+              <h3>Pre-Built Quote</h3>
+            </div>
+            <label class="qs-field-label">Pick a quote
+              <select id="preview-quote" class="qs-field"><option value="">-- pick a quote --</option></select>
+            </label>
+            <div class="qs-radio-group">
+              <span>Approval</span>
+              <label><input type="radio" name="preview-quote-approve" value="yes"> Yes</label>
+              <label><input type="radio" name="preview-quote-approve" value="no"> No</label>
+            </div>
+            <p class="qs-stage-note">Fast-lane approvals auto-attach artifacts for compliance.</p>
+          </div>
+          <div class="qs-preview-stage">
+            <div class="qs-stage-head">
+              <span class="qs-stage-label">Stage 3</span>
+              <h3>Execution &amp; Handoff</h3>
+            </div>
+            <div class="qs-checkbox-group">
+              <label class="qs-checkbox"><input type="checkbox" id="preview-convert"> Convert to Opportunity</label>
+              <label class="qs-checkbox"><input type="checkbox" id="preview-cpq"> Push to CPQ</label>
+              <label class="qs-checkbox"><input type="checkbox" id="preview-pursuit"> Push to Pursuit</label>
+            </div>
+            <p class="qs-stage-note">GenAI preps the PPM handoff package with artifacts &amp; notifications.</p>
           </div>
         </div>
-        <div class="qs-actions" style="margin-top:12px">
-          <button class="btn" onclick="closePreviewModal()">Close</button>
-          <button class="btn primary" onclick="applyPreviewAll()">Apply Flow</button>
+        <div class="qs-preview-actions">
+          <button type="button" class="btn" onclick="closeQuickPreview()">Cancel</button>
+          <button type="button" class="btn primary" onclick="applyPreviewAll()">Apply Flow Updates</button>
         </div>
       </div>
     </div>
+
+  </div>
   </div>
 
     <script defer src="assets/modal.js"></script>
     <script>
-      function closePreviewModal(){
+      function closeQuickPreview(){
         var handled=false;
         if(window.ModalManager && typeof ModalManager.closeModal==='function'){
           try{ ModalManager.closeModal('qs-modal-preview'); handled=true; }catch(e){ console.warn('close preview modalManager', e); }
@@ -347,6 +892,10 @@
           if(ov){
             ov.style.display='none';
             ov.setAttribute('aria-hidden','true');
+            if(ov._escHandler){
+              try{ document.removeEventListener('keydown', ov._escHandler); }catch(err){}
+              ov._escHandler=null;
+            }
           }
         }
       }
