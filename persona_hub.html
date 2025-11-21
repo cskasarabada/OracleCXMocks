@@ -17,10 +17,10 @@
     .persona-shell {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 22px 22px 60px;
+      padding: 12px 22px 60px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 14px;
     }
     .persona-hero {
       background: var(--persona-bg);
@@ -246,50 +246,6 @@
       </div>
     </section>
 
-    <div class="persona-layout">
-      <div class="persona-card">
-        <p class="eyebrow">Sales Rep Flow</p>
-        <h3>Minimal path to close</h3>
-        <p>Stay in 3–4 screens: Account 360, Quick Sales Screen, Lead → Opportunity, and in-line Smart Actions.</p>
-        <div class="tag-row">
-          <span class="tag">Account 360</span>
-          <span class="tag">Quick Sales</span>
-          <span class="tag">Lead / Opportunity</span>
-        </div>
-      </div>
-      <div class="persona-card">
-        <p class="eyebrow">Sales Manager Flow</p>
-        <h3>Coach and course-correct</h3>
-        <p>Live in analytics + forecasting, glide into the same Account 360 for context when needed.</p>
-        <div class="tag-row">
-          <span class="tag">Analytics</span>
-          <span class="tag">Forecasting</span>
-          <span class="tag">Revenue Intelligence</span>
-        </div>
-      </div>
-      <div class="persona-card">
-        <p class="eyebrow">All Persona</p>
-        <h3>Full deck (current)</h3>
-        <p>The existing navigation for any persona. Use this if you want the complete CX + PPM storyline.</p>
-        <div class="tag-row">
-          <a class="btn outline" href="index.html" style="text-decoration:none;">Open current view</a>
-        </div>
-      </div>
-    </div>
-
-    <section class="persona-card">
-      <p class="eyebrow">Compact stack (6–7 screens)</p>
-      <div class="mini-grid">
-        <div class="mini-chip">Account 360 <span>core</span></div>
-        <div class="mini-chip">Quick Sales Screen <span>core</span></div>
-        <div class="mini-chip">Lead → Opportunity <span>rep</span></div>
-        <div class="mini-chip">Analytics <span>mgr</span></div>
-        <div class="mini-chip">Forecasting <span>mgr</span></div>
-        <div class="mini-chip">Revenue Intelligence <span>mgr</span></div>
-        <div class="mini-chip">Exec snapshot <span>all</span></div>
-      </div>
-    </section>
-
     <section class="persona-card">
       <p class="eyebrow">Flows by persona</p>
       <div class="flow-grid" id="flowGrid">
@@ -353,6 +309,18 @@
             <a class="btn-ghost" href="revenue_intelligence.html">Rev Intelligence</a>
           </div>
         </div>
+        <div class="flow-card" data-personas="manager">
+          <div class="flow-meta">
+            <span class="persona-pill">Manager</span>
+            <span class="tag">Team</span>
+          </div>
+          <h4>My Team</h4>
+          <p class="flow-sub">Workload, coaching cues, and approvals to keep deals moving across your team.</p>
+          <div class="flow-actions">
+            <a class="btn-outline" href="my_team.html">Open My Team</a>
+            <a class="btn-ghost" href="sales_cloud.html">Sales Flow</a>
+          </div>
+        </div>
         <div class="flow-card" data-personas="manager,rep">
           <div class="flow-meta">
             <span class="persona-pill">Both</span>
@@ -371,6 +339,28 @@
 
   <script>
     (function () {
+      var navAllow = {
+        all: null,
+        rep: [
+          'account_360.html',
+          'quick_sales_screen.html',
+          'cx_lead.html',
+          'cx_opportunity.html',
+          'sales_cloud.html',
+          'sales_tools.html',
+          'quote_to_docusign.html'
+        ],
+        manager: [
+          'analytics.html',
+          'forecasting_pipeline.html',
+          'revenue_intelligence.html',
+          'executive_command_center.html',
+          'account_360.html',
+          'sales_process_visualization.html',
+          'sales_cloud.html',
+          'my_team.html'
+        ]
+      };
       var buttons = document.querySelectorAll('[data-persona-toggle]');
       var cards = document.querySelectorAll('[data-personas]');
       function setPersona(key) {
@@ -382,6 +372,8 @@
           var show = key === 'all' || personas.indexOf(key) > -1;
           card.style.display = show ? 'flex' : 'none';
         });
+        if (window.applyPersonaSelection) { window.applyPersonaSelection(key); }
+        else if (window.filterNavLinks) { window.filterNavLinks(key, navAllow[key]); }
       }
       buttons.forEach(function (btn) {
         btn.addEventListener('click', function () { setPersona(btn.dataset.personaToggle); });

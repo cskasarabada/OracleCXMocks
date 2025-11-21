@@ -1,9 +1,13 @@
 (function () {
   const NAV_LINKS = [
-    { href: 'persona_hub.html', label: 'Persona Hub', group: 'persona', accent: true },
+    { href: '#', label: 'All Persona', group: 'persona', personaKey: 'all' },
+    { href: '#', label: 'Sales Rep', group: 'persona', personaKey: 'rep' },
+    { href: '#', label: 'Sales Manager', group: 'persona', personaKey: 'manager' },
     { href: 'index.html', label: 'Overview', group: 'journey' },
     { href: 'Easy_Start_Flows.html', label: 'Easy Start', group: 'journey' },
     { href: 'sales_cloud.html', label: 'Sales Flow', group: 'journey' },
+    { href: 'sources.html', label: '3rd Party Sources', group: 'journey' },
+    { href: 'my_team.html', label: 'My Team', group: 'journey' },
     { href: 'sales_tools.html', label: 'Sales Tools', group: 'journey' },
     { href: 'cx_lead.html', label: 'Lead', group: 'journey' },
     { href: 'cx_opportunity.html', label: 'Opportunity', group: 'journey' },
@@ -28,6 +32,30 @@
     persona: 'Persona Views',
     journey: 'Sales & Delivery Journey',
     toolkit: 'Insights & Toolkit'
+  };
+  const PERSONA_FILTERS = {
+    all: null,
+    rep: [
+      'account_360.html',
+      'quick_sales_screen.html',
+      'sources.html',
+      'cx_lead.html',
+      'cx_opportunity.html',
+      'sales_cloud.html',
+      'sales_tools.html',
+      'quote_to_docusign.html'
+    ],
+    manager: [
+      'analytics.html',
+      'forecasting_pipeline.html',
+      'revenue_intelligence.html',
+      'executive_command_center.html',
+      'account_360.html',
+      'sales_process_visualization.html',
+      'sales_cloud.html',
+      'sources.html',
+      'my_team.html'
+    ]
   };
   function injectAssistantChrome() {
     if (document.getElementById('ai-assist-launch')) return;
@@ -649,10 +677,60 @@
         var currentPath = current.split('?')[0].split('#')[0].toLowerCase();
         if (currentPath === linkPath || (currentPath === '' && linkPath === 'index.html')) cls.push('active');
         var classAttr = cls.length ? (' class="' + cls.join(' ') + '"') : '';
-        return '<a' + classAttr + ' href="' + link.href + '">' + link.label + '</a>';
+        var personaAttr = link.allowedFor ? (' data-personas="' + link.allowedFor.join(',') + '"') : '';
+        var toggleAttr = link.personaKey ? (' data-persona-toggle="' + link.personaKey + '"') : '';
+        return '<a' + classAttr + personaAttr + toggleAttr + ' href="' + link.href + '">' + link.label + '</a>';
       }).join('');
       return '<div class="nav-group"><div class="nav-label">' + (NAV_GROUP_LABELS[groupKey] || groupKey) + '</div><div class="nav-items">' + items + '</div></div>';
     }).join('');
+  }
+  window.filterNavLinks = function (personaKey, allowedList) {
+    var nav = document.querySelector('nav.quick-nav');
+    if (!nav) return;
+    var allowed = allowedList && allowedList.length ? allowedList.map(function (h) { return h.toLowerCase(); }) : null;
+    var anchors = nav.querySelectorAll('a');
+    anchors.forEach(function (a) {
+      var href = (a.getAttribute('href') || '').toLowerCase();
+      var personas = (a.dataset.personas || '').split(',').map(function (p) { return p.trim(); }).filter(Boolean);
+      var personaMatch = !personas.length || !personaKey || personas.indexOf(personaKey) > -1;
+      var isPersonaToggle = !!a.dataset.personaToggle;
+      var allowMatch = isPersonaToggle || !allowed || allowed.indexOf(href) > -1;
+      a.style.display = personaMatch && allowMatch ? '' : 'none';
+    });
+    nav.querySelectorAll('.nav-group').forEach(function (group) {
+      var visibleLinks = Array.from(group.querySelectorAll('a')).filter(function (a) { return a.style.display !== 'none'; });
+      group.style.display = visibleLinks.length ? '' : 'none';
+    });
+  };
+  function applyPersonaSelection(key) {
+    var personaKey = key || 'all';
+    window.filterNavLinks(personaKey, PERSONA_FILTERS[personaKey]);
+    var toggles = document.querySelectorAll('nav.quick-nav a[data-persona-toggle]');
+    toggles.forEach(function (a) {
+      a.classList.toggle('active', a.dataset.personaToggle === personaKey);
+    });
+    try { sessionStorage.setItem('rw_persona', personaKey); } catch (e) { }
+  }
+  window.applyPersonaSelection = applyPersonaSelection;
+  function injectPersonaRibbon() {
+    if (document.getElementById('persona-ribbon')) return;
+    var style = document.createElement('style');
+    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 12px 18px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        min-width: 280px;\n        max-width: 90vw;\n        pointer-events: auto;\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
+    document.head.appendChild(style);
+    var bar = document.createElement('div');
+    bar.id = 'persona-ribbon';
+    bar.className = 'persona-ribbon';
+    ['all', 'rep', 'manager'].forEach(function (key) {
+      var btn = document.createElement('button');
+      btn.textContent = key === 'all' ? 'All Persona' : (key === 'rep' ? 'Sales Rep' : 'Sales Manager');
+      btn.dataset.personaToggle = key;
+      btn.addEventListener('click', function () { applyPersonaSelection(key); bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === key); }); });
+      bar.appendChild(btn);
+    });
+    document.body.appendChild(bar);
+    var storedPersona = 'all';
+    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { }
+    bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === storedPersona); });
   }
   function ensureGlobalChrome() {
     var body = document.body;
@@ -685,7 +763,23 @@
     } else {
       nav.innerHTML = renderNavLinks(current);
     }
+    if (!nav.dataset.personaWired) {
+      nav.dataset.personaWired = '1';
+      nav.addEventListener('click', function (e) {
+        var target = e.target.closest('a[data-persona-toggle]');
+        if (!target) return;
+        e.preventDefault();
+        applyPersonaSelection(target.dataset.personaToggle || 'all');
+      });
+    }
+    var storedPersona = 'all';
+    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { storedPersona = 'all'; }
+    applyPersonaSelection(storedPersona);
     injectAssistantChrome();
+    injectPersonaRibbon();
+    window.addEventListener('scroll', function () {
+      if (!document.getElementById('persona-ribbon')) { injectPersonaRibbon(); }
+    });
 
   }
 
