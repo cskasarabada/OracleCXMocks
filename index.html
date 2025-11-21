@@ -5,6 +5,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Redwood CX&rarr;PPM Demo</title>
+  <script>
+    // Redirect to the Persona Hub for the default landing; add ?classic=1 to stay here.
+    if (!location.search.includes('classic=1')) {
+      location.replace('persona_hub.html');
+    }
+  </script>
   <link rel="stylesheet" href="assets/redwood.css" />
   <script defer src="assets/app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

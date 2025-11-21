@@ -29,6 +29,44 @@
     journey: 'Sales & Delivery Journey',
     toolkit: 'Insights & Toolkit'
   };
+  function injectAssistantChrome() {
+    if (document.getElementById('ai-assist-launch')) return;
+    var style = document.createElement('style');
+    style.textContent = "\n      .ai-assist-launch {\n        position: fixed;\n        bottom: 22px;\n        right: 20px;\n        z-index: 902;\n        background: #0f172a;\n        color: #fff;\n        border: 1px solid rgba(255,255,255,.16);\n        border-radius: 12px;\n        padding: 12px 14px;\n        font-weight: 700;\n        box-shadow: 0 18px 30px rgba(12,18,30,.32);\n        cursor: pointer;\n      }\n      .ai-assist-pop {\n        position: fixed;\n        top: 86px;\n        right: 18px;\n        width: min(360px, 92vw);\n        max-height: calc(100vh - 120px);\n        background: #fff;\n        border-radius: 16px;\n        border: 1px solid rgba(15,23,42,.14);\n        box-shadow: 0 30px 70px rgba(0,0,0,.25);\n        display: none;\n        flex-direction: column;\n        overflow: hidden;\n        z-index: 901;\n      }\n      .ai-assist-pop.open { display: flex; }\n      .ai-assist-head {\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        padding: 12px 14px;\n        border-bottom: 1px solid rgba(15,23,42,.08);\n      }\n      .ai-assist-head h4 { margin: 0; font-size: 1rem; }\n      .ai-assist-head p { margin: 0; color: #475467; }\n      .ai-assist-feed {\n        list-style: none;\n        margin: 0;\n        padding: 12px;\n        display: flex;\n        flex-direction: column;\n        gap: 10px;\n        overflow: auto;\n        max-height: 320px;\n        background: #f8fafc;\n      }\n      .ai-assist-feed .msg { display: flex; }\n      .ai-assist-feed .msg span {\n        padding: 9px 11px;\n        border-radius: 12px;\n        font-size: 13px;\n        line-height: 1.35;\n        max-width: 92%;\n      }\n      .ai-assist-feed .msg.user { justify-content: flex-end; }\n      .ai-assist-feed .msg.user span { background: #ffeadb; color: #7c2d12; }\n      .ai-assist-feed .msg.assistant span { background: #0f172a; color: #fff; }\n      .ai-assist-compose { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid rgba(15,23,42,.08); background:#fff; }\n      .ai-assist-compose input {\n        flex: 1;\n        border: 1px solid rgba(15,23,42,.12);\n        border-radius: 10px;\n        padding: 9px 10px;\n      }\n      .ai-assist-compose button {\n        border: 1px solid #0f172a;\n        background: #0f172a;\n        color: #fff;\n        border-radius: 10px;\n        padding: 9px 12px;\n        font-weight: 700;\n        cursor: pointer;\n      }\n      @media (max-width: 640px) {\n        .ai-assist-launch { right: 12px; bottom: 16px; }\n        .ai-assist-pop { right: 10px; left: 10px; width: auto; top: 78px; }\n      }\n    ";
+    document.head.appendChild(style);
+    var launch = document.createElement('button');
+    launch.id = 'ai-assist-launch';
+    launch.className = 'ai-assist-launch';
+    launch.textContent = 'Oracle GenAI Assistant';
+    var panel = document.createElement('div');
+    panel.id = 'ai-assist-panel';
+    panel.className = 'ai-assist-pop';
+    panel.innerHTML = '<div class="ai-assist-head"><div><p class="eyebrow">GenAI</p><h4>Oracle Assistant</h4></div><button class="ghost-btn small" data-close>Close</button></div><ul class="ai-assist-feed" id="ai-assist-feed"></ul><div class="ai-assist-compose"><input type="text" id="ai-assist-input" placeholder="Ask about leads, opportunities, quotes..." autocomplete="off" /><button type="button" id="ai-assist-send">Send</button></div>';
+    function appendMsg(text, who) {
+      var feed = panel.querySelector('#ai-assist-feed');
+      if (!feed) return;
+      var li = document.createElement('li');
+      li.className = 'msg ' + who;
+      li.innerHTML = '<span>' + text + '</span>';
+      feed.appendChild(li);
+      feed.scrollTop = feed.scrollHeight;
+    }
+    function sendMessage() {
+      var input = panel.querySelector('#ai-assist-input');
+      if (!input || !input.value.trim()) return;
+      appendMsg(input.value.trim(), 'user');
+      appendMsg('On it. I will surface risks, smart actions, and quote status for this record.', 'assistant');
+      input.value = '';
+    }
+    function closePanel() { panel.classList.remove('open'); }
+    launch.addEventListener('click', function () { panel.classList.toggle('open'); });
+    panel.querySelector('[data-close]').addEventListener('click', closePanel);
+    panel.querySelector('#ai-assist-send').addEventListener('click', sendMessage);
+    panel.querySelector('#ai-assist-input').addEventListener('keypress', function (e) { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
+    document.body.appendChild(panel);
+    document.body.appendChild(launch);
+    appendMsg('Hi there. I can summarize Account 360, Opportunity, Quick Sales, or Analytics on this page.', 'assistant');
+  }
 
   const KEY = 'rw_demo_v2';
   const FLOW_STAGES = [
@@ -647,6 +685,7 @@
     } else {
       nav.innerHTML = renderNavLinks(current);
     }
+    injectAssistantChrome();
 
   }
 
