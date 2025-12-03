@@ -45,3 +45,245 @@
     font-size: 13px;
   }
 }
+
+/* Oracle baseline utility layer
+   Scope with .oracle-baseline on <body> to retrofit mockups to Redwood-like tokens */
+.oracle-baseline {
+  --ojb-surface: #ffffff;
+  --ojb-surface-muted: #f6f7fa;
+  --ojb-border: rgba(27, 38, 56, 0.12);
+  --ojb-shadow-md: 0 12px 28px rgba(13, 24, 46, 0.12);
+  --ojb-shadow-lg: 0 20px 40px rgba(13, 24, 46, 0.16);
+  --ojb-radius-md: 12px;
+  --ojb-radius-lg: 18px;
+  --ojb-text-1: #1f2937;
+  --ojb-text-2: #475467;
+  --ojb-text-3: #6b7280;
+  --ojb-accent: #e23d28;
+  --ojb-accent-strong: #b52414;
+  --ojb-pill-bg: #f5f0e7;
+  --ojb-pill-border: rgba(27, 38, 56, 0.16);
+  --ojb-page-bg: #f1f3f7;
+  font-family: "Oracle Sans", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  background: var(--ojb-page-bg);
+  color: var(--ojb-text-1);
+}
+
+.oracle-baseline a {
+  color: var(--ojb-accent);
+  text-decoration: none;
+}
+.oracle-baseline a:hover {
+  text-decoration: underline;
+}
+
+.oracle-baseline .rw-shell {
+  min-height: 100vh;
+  padding: 18px 20px 36px;
+  background: var(--ojb-page-bg);
+}
+
+.oracle-baseline .rw-card {
+  background: var(--ojb-surface);
+  border: 1px solid var(--ojb-border);
+  border-radius: var(--ojb-radius-lg);
+  box-shadow: var(--ojb-shadow-md);
+  padding: 16px 18px;
+}
+
+.oracle-baseline .rw-card.elevated {
+  box-shadow: var(--ojb-shadow-lg);
+}
+
+.oracle-baseline .rw-section {
+  margin-bottom: 22px;
+}
+.oracle-baseline .rw-section h2,
+.oracle-baseline .rw-section h3 {
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: var(--ojb-text-1);
+}
+.oracle-baseline .rw-section .subhead {
+  margin: 0 0 12px;
+  color: var(--ojb-text-2);
+  font-size: 14px;
+}
+
+.oracle-baseline .rw-grid {
+  display: grid;
+  gap: 14px;
+}
+.oracle-baseline .rw-grid.autofit-200 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.oracle-baseline .rw-grid.autofit-240 {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.oracle-baseline .rw-pill,
+.oracle-baseline .rw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--ojb-pill-bg);
+  border: 1px solid var(--ojb-pill-border);
+  color: var(--ojb-text-2);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.oracle-baseline .rw-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: rgba(226, 61, 40, 0.08);
+  color: var(--ojb-accent-strong);
+  border: 1px solid rgba(226, 61, 40, 0.3);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.oracle-baseline .rw-btn {
+  border-radius: 12px;
+  border: 1px solid var(--ojb-border);
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--ojb-surface);
+  color: var(--ojb-text-1);
+  transition: box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease;
+}
+.oracle-baseline .rw-btn:hover {
+  box-shadow: var(--ojb-shadow-md);
+}
+.oracle-baseline .rw-btn:active {
+  transform: translateY(1px);
+}
+.oracle-baseline .rw-btn.primary {
+  background: linear-gradient(120deg, var(--ojb-accent) 0%, var(--ojb-accent-strong) 80%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 14px 26px rgba(226, 61, 40, 0.28);
+}
+.oracle-baseline .rw-btn.ghost {
+  background: rgba(27, 38, 56, 0.04);
+  border-color: rgba(27, 38, 56, 0.08);
+  color: var(--ojb-text-1);
+}
+.oracle-baseline .rw-btn.small {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.oracle-baseline .rw-input {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(27, 38, 56, 0.16);
+  background: var(--ojb-surface);
+  color: var(--ojb-text-1);
+  font-size: 14px;
+}
+.oracle-baseline .rw-input:focus {
+  outline: 2px solid rgba(226, 61, 40, 0.35);
+  border-color: rgba(226, 61, 40, 0.55);
+}
+
+.oracle-baseline .rw-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  background: var(--ojb-surface);
+  border: 1px solid var(--ojb-border);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: var(--ojb-shadow-md);
+}
+
+.oracle-baseline .rw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--ojb-surface);
+  border: 1px solid var(--ojb-border);
+  border-radius: var(--ojb-radius-md);
+  overflow: hidden;
+  box-shadow: var(--ojb-shadow-md);
+}
+.oracle-baseline .rw-table th,
+.oracle-baseline .rw-table td {
+  padding: 10px 12px;
+  text-align: left;
+}
+.oracle-baseline .rw-table thead {
+  background: var(--ojb-surface-muted);
+  color: var(--ojb-text-2);
+}
+.oracle-baseline .rw-table tbody tr + tr {
+  border-top: 1px solid var(--ojb-border);
+}
+.oracle-baseline .rw-table tbody tr:hover {
+  background: rgba(27, 38, 56, 0.03);
+}
+
+/* Oracle Fusion / Redwood shim (from inspected Sales Cloud lead page) */
+body.oracle-fusion-skin {
+  margin: 0;
+  font-family: "Oracle Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+  background: var(--oj-body-bg-color, rgb(247, 249, 252));
+  color: var(--oj-core-text-color-primary, #111827);
+  scrollbar-width: thin;
+}
+
+body.oracle-fusion-skin.lead-landing {
+  background: var(--oj-body-bg-color, rgb(247, 249, 252));
+}
+
+body.oracle-fusion-skin ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body.oracle-fusion-skin ::-webkit-scrollbar-thumb {
+  background-color: var(--oj-scrollbar-thumb-color-hover, rgba(27, 38, 56, 0.15));
+  border-radius: 10px;
+}
+body.oracle-fusion-skin ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.oracle-fusion-skin .lead-shell {
+  max-width: 1056px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+body.oracle-fusion-skin .lead-oracle-hero,
+body.oracle-fusion-skin .lead-ai-summary,
+body.oracle-fusion-skin .lead-summary-card,
+body.oracle-fusion-skin .lead-list-card,
+body.oracle-fusion-skin .lead-activity-card,
+body.oracle-fusion-skin .lead-panel {
+  background: #fff;
+  border: 1px solid rgba(27, 38, 56, 0.1);
+  box-shadow: 0 12px 24px rgba(13, 24, 46, 0.12);
+}
+
+body.oracle-fusion-skin .lead-summary-card {
+  box-shadow: 0 8px 16px rgba(13, 24, 46, 0.12);
+}
+
+body.oracle-fusion-skin .badge,
+body.oracle-fusion-skin .pill,
+body.oracle-fusion-skin .ai-pill {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+}
