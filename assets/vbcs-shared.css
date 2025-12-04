@@ -76,6 +76,19 @@ body {
   color: #0b1324;
   border-color: #f97316;
 }
+.vision-footer a::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-right: 8px;
+}
+.vision-footer a[href*="sales_cloud.html"]::before { content: "\f0e4"; } /* dashboard */
+.vision-footer a[href*="account_360.html"]::before { content: "\f1ad"; } /* buildings */
+.vision-footer a[href*="analytics.html"]::before,
+.vision-footer a[href*="analytics"]::before { content: "\f080"; } /* chart */
+.vision-footer a[href*="forecasting"]::before { content: "\f201"; } /* chart-line */
+.vision-footer a[href*="cx_lead.html"]::before { content: "\f2b9"; } /* id-badge */
+.vision-footer a[href*="cx_opportunity.html"]::before { content: "\f508"; } /* briefcase */
+.vision-footer a[href*="quote_to_docusign.html"]::before { content: "\f571"; } /* file-signature */
 
 /* Persona dropdown (header) */
 .persona-dropdown {
