@@ -231,6 +231,84 @@
   background: rgba(27, 38, 56, 0.03);
 }
 
+/* Persona grouping rail + badge */
+.persona-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #0f172a;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.05);
+}
+
+.persona-rail {
+  position: fixed;
+  left: 14px;
+  top: 110px;
+  width: 230px;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 18px 36px rgba(12, 18, 32, 0.12);
+  padding: 12px 12px 10px;
+  z-index: 120;
+}
+
+.persona-rail .persona-chip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.persona-rail button {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #f8fafc;
+  cursor: pointer;
+  text-align: left;
+  transition: box-shadow 120ms ease, border-color 120ms ease, transform 120ms ease;
+}
+
+.persona-rail button .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+.persona-rail button .label {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.persona-rail button .desc {
+  font-size: 12px;
+  color: #475467;
+  line-height: 1.35;
+}
+
+.persona-rail button.active {
+  border-color: rgba(15, 23, 42, 0.35);
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(12, 18, 32, 0.16);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1100px) {
+  .persona-rail {
+    display: none;
+  }
+}
+
 /* Oracle Fusion / Redwood shim (from inspected Sales Cloud lead page) */
 body.oracle-fusion-skin {
   margin: 0;

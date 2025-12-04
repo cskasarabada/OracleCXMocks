@@ -5,8 +5,31 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Integration Features</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
-
-  <link rel="stylesheet" href="assets/redwood.css" />  <link rel="stylesheet" href="assets/vbcs-shared.css" />`n`n<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/redwood.css" />
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
+<style>
+  .integration-hero {
+    background: linear-gradient(135deg, #0f172a, #2d3748);
+    color: #f8fafc;
+    padding: 24px 26px;
+    border-radius: 20px;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, .18);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    align-items: center;
+  }
+  .integration-hero h1 { margin: 4px 0 10px; font-size: 2rem; }
+  .integration-hero p { margin: 0 0 12px; color: #cbd5e1; }
+  .integration-hero ul { margin: 0; padding-left: 18px; color: #e2e8f0; }
+  .integration-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .integration-card { background: #fff; border: 1px solid rgba(27,38,56,.1); border-radius: 14px; padding: 14px; box-shadow: 0 12px 22px rgba(15,23,42,.08); }
+  .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .panel { background: #fff; border: 1px solid rgba(27,38,56,.12); border-radius: 14px; padding: 14px; box-shadow: 0 10px 18px rgba(15,23,42,.06); }
+  .edge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  @media(max-width:900px){ .integration-hero { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
 <header class="miconnex-bar">
@@ -18,6 +41,7 @@
     </div>
   </div>
   <div class="bar-actions">
+    <div id="persona-badge" class="persona-badge">All Persona</div>
     <button class="ghost-btn small">Help</button>
     <button class="ghost-btn small">Support</button>
     <div class="avatar-chip">CK</div>
@@ -58,33 +82,29 @@
   </div>
 </nav>
 
+<main class="lead-shell">
+  <section class="card integration-hero">
+    <div>
+      <p class="eyebrow" style="color:#cbd5e1">Integration &amp; Controls</p>
+      <h1>Intelligent selling with connected CX, CPQ, and PPM</h1>
+      <p>Show how Oracle CX Sales exchanges data with ERP, HCM, Projects, and Marketing—backed by OIC automations, events, and controls-first logging.</p>
+      <ul>
+        <li>Composable services to mix CX, CPQ, and PPM based on customer maturity.</li>
+        <li>Controls-first mindset with auditable logs for every touchpoint.</li>
+        <li>DocuSign/Teams approvals and SLA gates orchestrated in one flow.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="panel" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#e2e8f0">
+        <h3 style="margin:0 0 8px;color:#fff">Signal-to-Delivery Blueprint</h3>
+        <p style="margin:0 0 8px">Lead conversion → Pursuit creation → Project activation</p>
+        <p style="margin:0">Events trigger CPQ updates, provisioning, and delivery handoffs without code.</p>
+      </div>
+    </div>
+  </section>
 
-
-<div class="header"><span class="product">Oracle CX & PPM</span><span class="trail">/ Integration Features</span></div>
-<div class="shell">
-  <div class="tabs">
-    <a class="tab" href="index.html">Overview</a>
-    <a class="tab" href="sales_cloud.html">Sales Flow</a>
-    <a class="tab" href="cx_lead.html">Lead</a>
-    <a class="tab" href="cx_opportunity.html">Opportunity</a>
-    <a class="tab" href="ppm_pursuit.html">PPM Pursuit</a>
-    <a class="tab" href="ppm_construction.html">PPM Construction</a>
-    <a class="tab" href="analytics.html">Analytics</a>
-    <a class="tab" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="tab" href="integration_features.html">Integration</a>
-    <a class="tab" href="sales_process_visualization.html">Process Visualization</a>
-    <a class="tab" href="results_driven.html">Results Driven</a>
-  </div>
-
-<div class="grid">
-  <div class="card"><h2>Pipeline</h2><div class="body" id="sum"></div></div>
-  <div class="card"><h2>Log</h2><div class="body" id="log"></div></div>
-</div>
-
-<div class="card" style="margin-top:16px">
-  <h2>Integration Across the Enterprise</h2>
-  <div class="body">
-    <p>Centralize the end-to-end story about how Oracle CX Sales Cloud exchanges data with ERP, HCM, Projects, and Marketing.</p>
+  <section class="card">
+    <h2>Integration Across the Enterprise</h2>
     <div class="integration-grid">
       <div class="integration-card">
         <h3>ERP Synchronization</h3>
@@ -103,67 +123,52 @@
         <p>Return closed-loop attribution to Eloqua and third-party campaign tools.</p>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="card" style="margin-top:16px">
-  <h2>Integration Blueprint</h2>
-  <div class="body">
+  <section class="card">
+    <h2>Integration Blueprint</h2>
     <div class="content-grid">
       <div class="panel">
         <h3>OIC Automations</h3>
-        <p>Reusable integration recipes handle lead conversion, pursuit creation, and project activation.</p>
+        <p>Reusable recipes handle lead conversion, pursuit creation, and project activation.</p>
       </div>
       <div class="panel">
         <h3>Event Streams</h3>
         <p>Sales actions publish events that trigger provisioning, CPQ updates, and hand-offs.</p>
       </div>
       <div class="panel">
-        <h3>Security &amp; Governance</h3>
-        <p>Identity federation ensures the same personas work across CX, ERP, and PPM.</p>
+        <h3>API Gateway</h3>
+        <p>Secure API layer enforces throttling and tenancy policies for partner integrations.</p>
       </div>
       <div class="panel">
-        <h3>Data Foundation</h3>
-        <p>Shared customer, product, and project catalogs keep every KPI aligned.</p>
+        <h3>Logging &amp; Observability</h3>
+        <p>Central log pipeline with auditable touchpoints across CX, CPQ, and PPM.</p>
       </div>
     </div>
-    <div class="output-note">Tie this story back to the Pursuit and Construction pages to reinforce downstream execution.</div>
-  </div>
-</div>
+  </section>
 
-<div class="card" style="margin-top:16px">
-  <h2>Integration Talking Points</h2>
-  <div class="body">
-    <ul class="icon-list">
-      <li><span class="icon">🔌</span><div><strong>Prebuilt accelerators</strong> get you from sales to delivery without custom code.</div></li>
-      <li><span class="icon">🔄</span><div><strong>Bi-directional updates</strong> keep data clean when ERP or Projects own the system of record.</div></li>
-      <li><span class="icon">🧩</span><div><strong>Composable services</strong> let you mix CX, CPQ, and PPM capabilities based on customer maturity.</div></li>
-      <li><span class="icon">🛡️</span><div><strong>Controls-first mindset</strong> provides auditable logs for every integration touchpoint.</div></li>
-    </ul>
-  </div>
-</div>
-
-<script>
- window.addEventListener('DOMContentLoaded', function(){
-   var d=RWD.get();
-   var sum=document.getElementById('sum');
-   sum.innerHTML = '<div class="kv"><div class="k">Lead</div><div class="v">'+ (d.lead.company||'-') +' / '+ (d.lead.contact||'-') +' (score '+ (d.lead.score||'-') +')</div></div>' +
-     '<div class="kv"><div class="k">Opportunity</div><div class="v">'+ (d.oppty.name||'-') +' — $'+ (d.oppty.amount||0).toLocaleString() +' ['+ (d.oppty.stage||'-') +']</div></div>' +
-     '<div class="kv"><div class="k">Pursuit</div><div class="v">'+ (d.pursuit.name||'-') +' — $'+ (d.pursuit.estimate||0).toLocaleString() +' ['+ (d.pursuit.status||'-') +']</div></div>' +
-     '<div class="kv"><div class="k">Construction</div><div class="v">'+ (d.const.name||'-') +' — $'+ (d.const.budget||0).toLocaleString() +' ['+ (d.const.status||'-') +']</div></div>';
-   var log=document.getElementById('log');
-   (d.logs||[]).forEach(function(m){
-     var p=document.createElement('div');
-     p.textContent=m;
-     log.appendChild(p);
-   });
- });
-</script>
-<div class="footer">© Demo – Redwood-inspired mockup</div></div>
+  <section class="card">
+    <h2>Smart Controls</h2>
+    <div class="edge-grid">
+      <div class="panel">
+        <h3>Composable services</h3>
+        <p>Mix CX, CPQ, and PPM capabilities based on customer maturity.</p>
+      </div>
+      <div class="panel">
+        <h3>Controls-first mindset</h3>
+        <p>Provides auditable logs for every integration touchpoint.</p>
+      </div>
+      <div class="panel">
+        <h3>Approvals &amp; Checklists</h3>
+        <p>Orchestrate DocuSign, Teams approvals, and SLA gates for every integration.</p>
+      </div>
+      <div class="panel">
+        <h3>Partner APIs</h3>
+        <p>Connect partner feeds (ZoomInfo, ServiceNow, Jira) directly into CX.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 </body>
 </html>
-
-
-
-
-

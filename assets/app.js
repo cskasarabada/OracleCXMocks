@@ -3,6 +3,9 @@
     { href: '#', label: 'All Persona', group: 'persona', personaKey: 'all' },
     { href: '#', label: 'Sales Rep', group: 'persona', personaKey: 'rep' },
     { href: '#', label: 'Sales Manager', group: 'persona', personaKey: 'manager' },
+    { href: '#', label: 'Executive', group: 'persona', personaKey: 'exec' },
+    { href: '#', label: 'Delivery', group: 'persona', personaKey: 'delivery' },
+    { href: '#', label: 'Partner', group: 'persona', personaKey: 'partner' },
     { href: 'index.html', label: 'Overview', group: 'journey' },
     { href: 'Easy_Start_Flows.html', label: 'Easy Start', group: 'journey' },
     { href: 'sales_cloud.html', label: 'Sales Flow', group: 'journey' },
@@ -55,8 +58,41 @@
       'sales_cloud.html',
       'sources.html',
       'my_team.html'
+    ],
+    exec: [
+      'executive_command_center.html',
+      'analytics.html',
+      'revenue_intelligence.html',
+      'forecasting_pipeline.html',
+      'results_driven.html',
+      'sales_process_visualization.html',
+      'account_360.html',
+      'sales_cloud.html'
+    ],
+    delivery: [
+      'ppm_pursuit.html',
+      'ppm_construction.html',
+      'pursuit_project.html',
+      'sales_ppm_sync.html',
+      'quote_to_docusign.html',
+      'integration_features.html'
+    ],
+    partner: [
+      'partner_hub.html',
+      'integration_features.html',
+      'sales_tools.html',
+      'sales_cloud.html'
     ]
   };
+
+  const PERSONA_META = [
+    { key: 'all', label: 'All Persona', desc: 'Show every mockup', accent: '#334155' },
+    { key: 'rep', label: 'Sales Rep', desc: 'Leads, quotes, quick sales', accent: '#ef4444' },
+    { key: 'manager', label: 'Sales Manager', desc: 'Forecasting, team, analytics', accent: '#0ea5e9' },
+    { key: 'exec', label: 'Executive', desc: 'Exec command, revenue, results', accent: '#8b5cf6' },
+    { key: 'delivery', label: 'Delivery', desc: 'PPM pursuits, projects, handoff', accent: '#10b981' },
+    { key: 'partner', label: 'Partner', desc: 'Partner hub, integrations', accent: '#f59e0b' }
+  ];
   function injectAssistantChrome() {
     if (document.getElementById('ai-assist-launch')) return;
     var style = document.createElement('style');
@@ -702,6 +738,41 @@
       group.style.display = visibleLinks.length ? '' : 'none';
     });
   };
+  function getPersonaMeta(key) {
+    return PERSONA_META.find(function (p) { return p.key === key; }) || PERSONA_META[0];
+  }
+  function updatePersonaUI(personaKey) {
+    var meta = getPersonaMeta(personaKey);
+    document.body.dataset.persona = personaKey;
+    var badge = document.getElementById('persona-badge');
+    if (badge) {
+      badge.textContent = meta.label;
+      badge.style.borderColor = meta.accent;
+      badge.style.color = meta.accent;
+    }
+    var rail = document.getElementById('persona-rail');
+    if (rail) {
+      rail.querySelectorAll('[data-persona]').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.persona === personaKey);
+      });
+    }
+  }
+  function ensurePersonaRail() {
+    if (document.getElementById('persona-rail')) return;
+    var rail = document.createElement('aside');
+    rail.id = 'persona-rail';
+    rail.className = 'persona-rail';
+    var chips = PERSONA_META.map(function (p) {
+      return '<button type="button" data-persona="' + p.key + '"><span class="dot" style="background:' + p.accent + '"></span><div><div class="label">' + p.label + '</div><div class="desc">' + p.desc + '</div></div></button>';
+    }).join('');
+    rail.innerHTML = '<p class="eyebrow">Personas</p><div class="persona-chip-list">' + chips + '</div>';
+    rail.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-persona]');
+      if (!btn) return;
+      applyPersonaSelection(btn.dataset.persona);
+    });
+    document.body.appendChild(rail);
+  }
   function applyPersonaSelection(key) {
     var personaKey = key || 'all';
     window.filterNavLinks(personaKey, PERSONA_FILTERS[personaKey]);
@@ -709,6 +780,7 @@
     toggles.forEach(function (a) {
       a.classList.toggle('active', a.dataset.personaToggle === personaKey);
     });
+    updatePersonaUI(personaKey);
     try { sessionStorage.setItem('rw_persona', personaKey); } catch (e) { }
     try {
       var evt = new CustomEvent('rw_persona_change', { detail: { persona: personaKey } });
@@ -745,7 +817,7 @@
     body.classList.add('miconnex-theme');
     body.classList.add('oracle-fusion-skin');
     var header = document.querySelector('.miconnex-bar');
-    var headerMarkup = '<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
+    var headerMarkup = '<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><div id="persona-badge" class="persona-badge">All Persona</div><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     if (!header) {
       header = document.createElement('header');
       header.className = 'miconnex-bar';
@@ -778,6 +850,7 @@
         applyPersonaSelection(target.dataset.personaToggle || 'all');
       });
     }
+    ensurePersonaRail();
     var storedPersona = 'all';
     try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { storedPersona = 'all'; }
     applyPersonaSelection(storedPersona);

@@ -3,16 +3,39 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Argano Sales ↔ PPM Sync Map</title>
+<title>Argano Sales <> PPM Sync Map</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
-
-  <link rel="stylesheet" href="assets/redwood.css" />  <link rel="stylesheet" href="assets/vbcs-shared.css" />`n`n<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/redwood.css" />
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
 <style>
-.sync-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:18px;align-items:stretch;}
+.sync-hero{
+  background: linear-gradient(135deg,#111827,#1f2937);
+  color:#f8fafc;
+  padding:24px 26px;
+  border-radius:20px;
+  box-shadow:0 16px 36px rgba(12,18,32,.22);
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:18px;
+  align-items:start;
+}
+.sync-hero h1{margin:6px 0 12px;color:#f8fafc;}
+.sync-hero p{margin:0 0 12px;color:#e5e7eb;}
+.sync-hero ul{margin:0;padding-left:18px;color:#e2e8f0;}
+.sync-hero .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.12);color:#f8fafc;font-weight:700;}
+.sync-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px;}
+.sync-stat{border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px;background:rgba(255,255,255,.06);color:#e5e7eb;}
+.sync-stat .label{font-size:12px;text-transform:uppercase;letter-spacing:.18em;display:block;margin-bottom:4px;color:#cbd5e1;}
+.sync-roadmap{padding:18px;border-radius:18px;border:1px solid var(--rw-border);box-shadow:0 14px 30px rgba(15,23,42,.08);background:#fff;}
+.sync-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px;align-items:stretch;}
 .sync-step{border:1px solid var(--rw-border);border-radius:16px;padding:16px;background:#fff;box-shadow:0 8px 20px rgba(15,23,42,.07);position:relative;height:100%;}
 .sync-step::before{content:attr(data-step);position:absolute;top:-12px;left:16px;background:#111827;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;}
 .sync-connector{display:flex;align-items:center;justify-content:center;color:#2563eb;font-weight:600;font-size:13px;min-height:120px;border-radius:12px;border:1px dashed rgba(37,99,235,.3);background:rgba(37,99,235,.05);}
 .sync-tag{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#111827;color:#fff;font-size:12px;margin-top:12px;width:max-content}
+.integration-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.integration-card{border:1px solid var(--rw-border);border-radius:14px;padding:14px;background:#fff;box-shadow:0 10px 20px rgba(15,23,42,.06);}
+@media(max-width:960px){.sync-hero{grid-template-columns:1fr;}}
 </style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
@@ -67,76 +90,95 @@
 
 
 <main class="lead-shell">
-  <section class="card">
-    <p class="eyebrow">Sales ↔ PPM Integration</p>
-    <h1 style="margin:4px 0 8px">Connected delivery from lead to warranty</h1>
-    <p style="color:var(--rw-muted)">Visualize OIC orchestrations that push Oracle CX Sales opportunities into PPM pursuits, projects, and DocuSign packages while feeding status back to sellers.</p>
+  <section class="card sync-hero">
+    <div>
+      <p class="eyebrow" style="color:#cbd5e1">Sales <> PPM Integration</p>
+      <h1>Connected delivery from lead to warranty</h1>
+      <p>Visualize OIC orchestrations that push Oracle CX Sales opportunities into PPM pursuits, projects, and DocuSign packages while feeding status back to sellers.</p>
+      <ul>
+        <li>Launch Pursuit via Quick Sales, sync approvals, and mirror status to sellers.</li>
+        <li>Auto-create projects with inherited WBS, budgets, and attachments.</li>
+        <li>Bidirectional updates keep CX, CPQ, and PPM aligned in one story.</li>
+      </ul>
+      <span class="pill" style="margin-top:12px">OIC + CPQ + DocuSign + PPM</span>
+    </div>
+    <div>
+      <div class="sync-meta-grid">
+        <div class="sync-stat"><span class="label">Orchestrations</span><strong>6 flows</strong><div>Lead → Pursuit → Project</div></div>
+        <div class="sync-stat"><span class="label">Approvals</span><strong>Teams + DocuSign</strong><div>Smart gates + SLA</div></div>
+        <div class="sync-stat"><span class="label">Handoff</span><strong>3.5 days avg</strong><div>Automated artifacts + logs</div></div>
+      </div>
+    </div>
   </section>
 
-  <div class="sync-flow">
-    <div class="sync-step" data-step="1">
-      <h3>Opportunity Qualified</h3>
-      <p>Argano Quick Sales + CX Sales capture estimate, key contacts, and risk flags.</p>
-      <span class="sync-tag">Trigger: Create Pursuit</span>
-    </div>
-    <div class="sync-connector">
-      <div>
-        <div style="font-weight:600">OIC Flow</div>
-        <div style="font-size:12px;color:#475569">Validates data, maps opportunity fields, and posts payload to PPM.</div>
+  <section class="card sync-roadmap">
+    <p class="eyebrow">Orchestration</p>
+    <h2 style="margin:0 0 10px">Sales → CPQ → PPM flow</h2>
+    <div class="sync-flow">
+      <div class="sync-step" data-step="1">
+        <h3>Opportunity Qualified</h3>
+        <p>Argano Quick Sales + CX Sales capture estimate, key contacts, and risk flags.</p>
+        <span class="sync-tag">Trigger: Create Pursuit</span>
+      </div>
+      <div class="sync-connector">
+        <div>
+          <div style="font-weight:600">OIC Flow</div>
+          <div style="font-size:12px;color:#475569">Validates data, maps opportunity fields, and posts payload to PPM.</div>
+        </div>
+      </div>
+      <div class="sync-step" data-step="2">
+        <h3>PPM Pursuit Draft</h3>
+        <p>Pursuit manager receives auto-built shell with WBS, budget, and attachments.</p>
+        <span class="sync-tag">Status mirrored to sellers</span>
+      </div>
+      <div class="sync-connector">
+        <div>
+          <div style="font-weight:600">CPQ + DocuSign</div>
+          <div style="font-size:12px;color:#475569">Attaches pricing bundle, routes signature packet, and updates PPM on completion.</div>
+        </div>
+      </div>
+      <div class="sync-step" data-step="3">
+        <h3>Quote + Contract</h3>
+        <p>CPQ pushes pricing to DocuSign; once executed, OIC updates PPM cost sheets.</p>
+      </div>
+      <div class="sync-connector">
+        <div>
+          <div style="font-weight:600">Auto Convert</div>
+          <div style="font-size:12px;color:#475569">Approved pursuit automatically creates the Construction project with inherited WBS.</div>
+        </div>
+      </div>
+      <div class="sync-step" data-step="4">
+        <h3>Project Kickoff</h3>
+        <p>Approved pursuit converts to active PPM project with Argano pods assigned.</p>
+        <span class="sync-tag">Status: Execution</span>
       </div>
     </div>
-    <div class="sync-step" data-step="2">
-      <h3>PPM Pursuit Draft</h3>
-      <p>Pursuit manager receives auto-built shell with WBS, budget, and attachments.</p>
-      <span class="sync-tag">Status mirrored to sellers</span>
-    </div>
-    <div class="sync-connector">
-      <div>
-        <div style="font-weight:600">CPQ + DocuSign</div>
-        <div style="font-size:12px;color:#475569">Attaches pricing bundle, routes signature packet, and updates PPM on completion.</div>
-      </div>
-    </div>
-    <div class="sync-step" data-step="3">
-      <h3>Quote + Contract</h3>
-      <p>CPQ pushes pricing to DocuSign; once executed, OIC updates PPM cost sheets.</p>
-    </div>
-    <div class="sync-connector">
-      <div>
-        <div style="font-weight:600">Auto Convert</div>
-        <div style="font-size:12px;color:#475569">Approved pursuit automatically creates the Construction project with inherited WBS.</div>
-      </div>
-    </div>
-    <div class="sync-step" data-step="4">
-      <h3>Project Kickoff</h3>
-      <p>Approved pursuit converts to active PPM project with Argano pods assigned.</p>
-      <span class="sync-tag">Status: Execution</span>
-    </div>
-  </div>
+  </section>
 
-  <div class="integration-grid" style="margin-top:24px">
-    <div class="integration-card">
-      <h3>Bidirectional Updates</h3>
-      <p>Milestones, budgets, and staffing levels sync back to CX Sales so reps see delivery reality.</p>
+  <section class="card">
+    <p class="eyebrow">Insights</p>
+    <h2 style="margin:0 0 10px">Controls &amp; telemetry</h2>
+    <div class="integration-grid">
+      <div class="integration-card">
+        <h3>Bidirectional Updates</h3>
+        <p>Milestones, budgets, and staffing levels sync back to CX Sales so reps see delivery reality.</p>
+      </div>
+      <div class="integration-card">
+        <h3>Exception Handling</h3>
+        <p>Errors from PPM or DocuSign appear in the exec command center for rapid triage.</p>
+      </div>
+      <div class="integration-card">
+        <h3>KPIs</h3>
+        <ul style="margin:0;padding-left:18px;color:var(--rw-ink)">
+          <li>Average handoff time: 3.5 days</li>
+          <li>Automation coverage: 92%</li>
+          <li>Revenue leakage prevented: $1.1M</li>
+        </ul>
+      </div>
     </div>
-    <div class="integration-card">
-      <h3>Exception Handling</h3>
-      <p>Any errors from PPM or DocuSign appear in the executive command center for rapid triage.</p>
-    </div>
-    <div class="integration-card">
-      <h3>KPIs</h3>
-      <ul style="margin:0;padding-left:18px;color:var(--rw-ink)">
-        <li>Average handoff time: 3.5 days</li>
-        <li>Automation coverage: 92%</li>
-        <li>Revenue leakage prevented: $1.1M</li>
-      </ul>
-    </div>
-  </div>
+  </section>
 </main>
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 </body>
 </html>
-
-
-
-
 

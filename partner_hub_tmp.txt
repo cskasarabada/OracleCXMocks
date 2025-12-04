@@ -6,8 +6,7 @@
 <title>Argano Partner Hub</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
 <link rel="stylesheet" href="assets/redwood.css" />
-<link rel="stylesheet" href="assets/vbcs-shared.css" />
-<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/vbcs-shared.css" />`n`n<script defer src="assets/app.js"></script>
 <style>
 .partner-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:24px;align-items:start;}
 .partner-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;}
@@ -117,7 +116,7 @@
     <div class="card">
       <h2 style="margin:0;padding:0 0 12px;border-bottom:1px solid var(--rw-border)">Shared Assets</h2>
       <div class="icon-list">
-        <li><div class="icon">QS</div><div><strong>Quick Sales Playbook</strong><div>v3 &middot; Sent to 12 partners</div></div></li>
+        <li><div class="icon">QS</div><div><strong>Quick Sales Playbook</strong><div>v3 · Sent to 12 partners</div></div></li>
         <li><div class="icon">PPM</div><div><strong>Pursuit Cost Template</strong><div>Auto-sync from PPM</div></div></li>
         <li><div class="icon">DS</div><div><strong>DocuSign Bundles</strong><div>MSA + Attachment pack</div></div></li>
       </div>
@@ -134,12 +133,6 @@
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 </body>
 </html>
-
-
-
-
-
-
 
 
 
