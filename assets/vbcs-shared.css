@@ -3,27 +3,25 @@
 }
 
 .persona-ribbon {
-  display: none !important;
-}
-
-.persona-ribbon {
   position: fixed;
   bottom: 24px;
-  left: 260px;
-  transform: none;
+  left: 50%;
+  transform: translateX(-50%);
   background: #2a0f46;
   color: #fff;
   border-radius: 999px;
-  padding: 12px 18px;
+  padding: 14px 22px;
   box-shadow: 0 32px 60px rgba(32, 10, 64, 0.35);
   z-index: 4000;
   display: inline-flex;
   gap: 12px;
   align-items: center;
   justify-content: center;
-  min-width: 280px;
-  max-width: 90vw;
+  width: min(1250px, 95vw);
   pointer-events: auto;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 .persona-ribbon button {
   background: rgba(255, 255, 255, 0.12);

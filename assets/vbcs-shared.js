@@ -1,5 +1,9 @@
 (function () {
+  // Prevent the older persona ribbon from auto-rendering; app.js owns the new quick-jump ribbon.
+  window.disableSharedRibbon = true;
+
   function ensureRibbonStyle() {
+    if (window.disableSharedRibbon) return;
     if (document.querySelector('style[data-ribbon-inline]')) return;
     if (!document.querySelector('link[href*="vbcs-shared.css"]')) {
       var s = document.createElement('style');
@@ -9,6 +13,7 @@
     }
   }
   function ensureRibbon() {
+    if (window.disableSharedRibbon) return;
     ensureRibbonStyle();
     if (document.getElementById('persona-ribbon')) return;
     var bar = document.createElement('div');
@@ -37,17 +42,19 @@
     });
   }
   function refreshRibbonOnChange() {
+    if (window.disableSharedRibbon) return;
     ensureRibbon();
     syncActive();
   }
   window.initVBCSPersonaRibbon = function () {
+    if (window.disableSharedRibbon) return;
     ensureRibbon();
     setInterval(ensureRibbon, 1200);
     document.addEventListener('scroll', ensureRibbon, { passive: true });
     document.addEventListener('rw_persona_change', refreshRibbonOnChange);
   };
   document.addEventListener('DOMContentLoaded', function () {
-    if (window.disableRibbonAuto) return;
+    if (window.disableRibbonAuto || window.disableSharedRibbon) return;
     window.initVBCSPersonaRibbon && window.initVBCSPersonaRibbon();
   });
 })();

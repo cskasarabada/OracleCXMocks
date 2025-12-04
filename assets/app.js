@@ -789,26 +789,48 @@
     } catch (e) { }
   }
   window.applyPersonaSelection = applyPersonaSelection;
+  function sweepRibbons() {
+    var ribbons = document.querySelectorAll('.persona-ribbon');
+    if (!ribbons || !ribbons.length) return;
+    // Keep the first ribbon that has children; remove the rest/empties.
+    var keep = null;
+    ribbons.forEach(function (r) {
+      var hasButtons = r.querySelector('button');
+      if (!keep && hasButtons) {
+        keep = r;
+        return;
+      }
+      r.remove();
+    });
+  }
+
   function injectPersonaRibbon() {
     if (window.disableRibbonAuto) return;
-    if (document.getElementById('persona-ribbon')) return;
+    // Remove any previously injected ribbons (from legacy scripts) so we render a single bar.
+    document.querySelectorAll('.persona-ribbon').forEach(function (el) { el.remove(); });
     var style = document.createElement('style');
-    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 12px 18px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        min-width: 280px;\n        max-width: 90vw;\n        pointer-events: auto;\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
+    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 14px 22px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        width: min(1250px, 95vw);\n        pointer-events: auto;\n        flex-wrap: wrap;\n        row-gap: 8px;\n        border: 1px solid rgba(255,255,255,0.1);\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; width: 95vw; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
     document.head.appendChild(style);
     var bar = document.createElement('div');
     bar.id = 'persona-ribbon';
     bar.className = 'persona-ribbon';
-    ['all', 'rep', 'manager'].forEach(function (key) {
+    var links = [
+      { label: 'Lead', href: 'cx_lead.html' },
+      { label: 'Opportunity', href: 'cx_opportunity.html' },
+      { label: 'Quick Sales Screen', href: 'quick_sales_screen.html' },
+      { label: 'Account 360', href: 'account_360.html' },
+      { label: 'Field Mobile', href: 'field_mobile_snapshot.html' }
+    ];
+    var currentPath = (window.location.pathname.split('/').pop() || '').toLowerCase();
+    links.forEach(function (link) {
       var btn = document.createElement('button');
-      btn.textContent = key === 'all' ? 'All Persona' : (key === 'rep' ? 'Sales Rep' : 'Sales Manager');
-      btn.dataset.personaToggle = key;
-      btn.addEventListener('click', function () { applyPersonaSelection(key); bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === key); }); });
+      btn.textContent = link.label;
+      btn.addEventListener('click', function () { window.location.href = link.href; });
+      if (currentPath === link.href.toLowerCase()) btn.classList.add('active');
       bar.appendChild(btn);
     });
     document.body.appendChild(bar);
-    var storedPersona = 'all';
-    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { }
-    bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === storedPersona); });
+    sweepRibbons();
   }
   function ensureGlobalChrome() {
     var body = document.body;
@@ -856,8 +878,10 @@
     applyPersonaSelection(storedPersona);
     injectAssistantChrome();
     injectPersonaRibbon();
+    sweepRibbons();
     window.addEventListener('scroll', function () {
       if (!document.getElementById('persona-ribbon')) { injectPersonaRibbon(); }
+      sweepRibbons();
     });
 
   }
