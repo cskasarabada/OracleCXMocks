@@ -10,10 +10,27 @@
 
 <script defer src="assets/app.js"></script>
 <style>
+.card.rev-hero{
+  background: linear-gradient(135deg,#0f172a,#1f2937) !important;
+  color:#f8fafc !important;
+  border-radius:20px;
+  padding:22px 24px;
+  box-shadow:0 18px 36px rgba(12,18,32,.22);
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:18px;
+  align-items:center;
+  border:1px solid rgba(255,255,255,.12);
+}
+.card.rev-hero h1{margin:6px 0 10px;color:#f8fafc !important;}
+.card.rev-hero p{color:#e5e7eb !important;margin:0 0 12px;}
+.card.rev-hero .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);color:#f8fafc;font-weight:700;}
+.card.rev-hero .eyebrow{color:#cbd5e1 !important;}
 .revenue-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px;align-items:start;}
 .scenario-card{background:#fff;border-radius:20px;border:1px solid var(--rw-border);box-shadow:0 12px 24px rgba(15,23,42,.08);padding:18px;}
 .scenario-card input[type=range]{accent-color:#2563eb;}
 .scenario-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px;}
+@media(max-width:960px){.rev-hero{grid-template-columns:1fr;}}
 </style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
@@ -68,16 +85,17 @@
 
 
 <main class="lead-shell">
-  <section class="card" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between">
+  <section class="card rev-hero">
     <div>
-      <p class="eyebrow">Revenue Intelligence</p>
-      <h1 style="margin:4px 0 8px">AI Forecast + Scenario Board</h1>
-      <p style="max-width:560px;color:var(--rw-muted)">Blend human judgment with Oracle AI forecasts, pipeline quality, and scenario sliders to coach teams and commit the number with confidence.</p>
+      <p class="eyebrow" style="color:#cbd5e1">Revenue Intelligence</p>
+      <h1>AI Forecast + Scenario Board</h1>
+      <p>Blend human judgment with Oracle AI forecasts, pipeline quality, and scenario sliders to coach teams and commit the number with confidence.</p>
+      <span class="pill">AI uplift + Scenario sliders</span>
     </div>
     <div class="stat-card" style="min-width:220px">
       <div class="label">Committed vs Target</div>
       <div class="value">$52.1M / $50M</div>
-      <p style="margin:4px 0 0;font-size:13px;color:var(--rw-muted)">+4% upside possible</p>
+      <p style="margin:4px 0 0;font-size:13px;color:#cbd5e1">+4% upside possible</p>
     </div>
   </section>
 
@@ -150,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 

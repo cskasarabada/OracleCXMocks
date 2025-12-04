@@ -66,9 +66,11 @@
       <a href="index.html">Overview</a>
       <a href="Easy_Start_Flows.html">Easy Start</a>
       <a href="sales_cloud.html">Sales Flow</a>
-      <a href="sales_tools.html">Sales Tools</a>
+      <a href="sources.html">Lead Gen (3rd Party Sources)</a>
       <a href="cx_lead.html">Lead</a>
       <a href="cx_opportunity.html" class="active">Opportunity</a>
+      <a href="my_team.html">My Team</a>
+      <a href="sales_tools.html">Sales Tools</a>
       <a href="ppm_pursuit.html">PPM Pursuit</a>
       <a href="ppm_construction.html">PPM Construction</a>
       <a href="quick_sales_screen.html" class="accent">Quick Sales Screen</a>
@@ -95,8 +97,8 @@
 </nav>
 <main class="oppty-shell">
   <section class="oppty-oracle-hero">
-    <p class="eyebrow">Opportunity</p>
-    <h1 id="opptyHeroTitle">TT1 eea</h1>
+    <p class="eyebrow">Lead Gen &rarr; Lead &rarr; Opportunity</p>
+    <h1 id="opptyHeroTitle">Opportunity Workspace</h1>
     <div class="meta-row">
       <span class="pill">Account Warner Design Associates</span>
       <span class="pill">Owner Chandra Kasarabada</span>
@@ -104,14 +106,14 @@
       <span class="pill">ARR Target $1.2M</span>
     </div>
     <div class="hero-details">
-      <div>Primary Contact <strong id="opptyHeroSub">Account • Primary Contact</strong></div>
+      <div>Primary Contact <strong id="opptyHeroSub">Account &middot; Primary Contact</strong></div>
       <div>Close Date <strong>Nov 30, 2024</strong></div>
       <div>Win Probability <strong>40%</strong></div>
     </div>
     <div class="hero-search">
       <input type="search" placeholder="Ask Oracle GenAI to summarize this opportunity" id="opptyAiInput"/>
       <button class="btn primary" onclick="return runOpptyAISummary('overview');">Summarize Opportunity</button>
-      <div class="ai-pill">AI ready · Nudges available</div>
+      <div class="ai-pill">AI ready &middot; Nudges available</div>
     </div>
     <div class="oppty-search-results" id="opptySearchResults" aria-live="polite" aria-atomic="true" hidden></div>
     <div class="oppty-summary-grid">
@@ -270,8 +272,8 @@
   <section class="oppty-hero-slim">
     <div class="oppty-header-row">
       <div>
-        <h1 id="opptyHeroTitle">TT1 eea</h1>
-        <div class="hero-sub" id="opptyHeroSub">Account &bull; Primary Contact</div>
+        <h1 id="opptyHeroTitle">Opportunity Workspace</h1>
+        <div class="hero-sub" id="opptyHeroSub">Account &middot; Primary Contact</div>
       </div>
       <div class="hero-actions">
         <button class="ghost-icon">Share</button>
@@ -537,7 +539,7 @@
       var hero = document.getElementById('opptyHeroTitle');
       if(hero) hero.textContent = data.oppty.name || 'Sample Opportunity';
       var sub = document.getElementById('opptyHeroSub');
-      if(sub) sub.textContent = (data.oppty.account || data.oppty.company || data.lead.company || 'Account') + ' \u2022 ' + (data.lead.contact || 'Primary Contact');
+      if(sub) sub.textContent = (data.oppty.Account &middot; Primary Contact');
       var smart=document.getElementById('oppty-smart-name');
       if(smart) smart.textContent = data.oppty.name || 'this opportunity';
     }catch(e){}
@@ -888,6 +890,7 @@ function escalateOppty(form){
 <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 </html>
+
 
 
 

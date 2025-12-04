@@ -6,12 +6,14 @@
   <title>My Team</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
 <link rel="stylesheet" href="assets/redwood.css" />
-<link rel="stylesheet" href="assets/vbcs-shared.css" />`n`n<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
   <style>
     .team-shell { max-width: 1100px; margin: 0 auto; padding: 18px 20px 60px; display: flex; flex-direction: column; gap: 16px; }
-    .team-hero { background: linear-gradient(135deg,#0f172a,#16385c); color:#e5edff; border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 20px 48px rgba(12,18,30,.25); }
-    .team-hero h1 { margin: 4px 0 6px; }
-    .team-hero p { margin: 0; max-width: 760px; color:#c9d6ec; }
+    .card.team-hero { background: linear-gradient(135deg,#0f172a,#16385c) !important; color:#e5edff !important; border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 20px 48px rgba(12,18,30,.25); border:1px solid rgba(255,255,255,.12); opacity:1 !important; }
+    .card.team-hero h1 { margin: 4px 0 6px; color:#f8fafc !important; }
+    .card.team-hero p { margin: 0; max-width: 760px; color:#c9d6ec !important; }
+    .card.team-hero * { color: inherit !important; text-shadow: 0 1px 4px rgba(0,0,0,.28); }
     .team-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 14px; align-items: stretch; }
     .team-card { background:#fff; border:1px solid rgba(27,38,56,.1); border-radius: 14px; padding: 14px; box-shadow:0 14px 26px rgba(15,23,42,.08); display:flex; flex-direction:column; gap: 8px; min-height: 200px; }
     .team-card h3 { margin: 4px 0 6px; }
@@ -26,8 +28,60 @@
   </style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
+  <header class="miconnex-bar">
+    <div class="logo-mark">
+      <span class="logo-icon argano">A</span>
+      <div>
+        <div class="logo-text">Argano</div>
+        <div class="logo-sub">Connected Cloud</div>
+      </div>
+    </div>
+    <div class="bar-actions">
+      <div id="persona-badge" class="persona-badge">All Persona</div>
+      <button class="ghost-btn small">Help</button>
+      <button class="ghost-btn small">Support</button>
+      <div class="avatar-chip">CK</div>
+    </div>
+  </header>
+  <nav class="quick-nav auto-nav">
+    <div class="nav-group">
+      <div class="nav-label">Sales &amp; Delivery Journey</div>
+      <div class="nav-items">
+        <a href="index.html">Overview</a>
+        <a href="Easy_Start_Flows.html">Easy Start</a>
+        <a href="sales_cloud.html">Sales Flow</a>
+        <a href="sources.html">Lead Gen (3rd Party Sources)</a>
+        <a href="cx_lead.html">Lead</a>
+        <a href="cx_opportunity.html">Opportunity</a>
+        <a class="active" href="my_team.html">My Team</a>
+        <a href="sales_tools.html">Sales Tools</a>
+        <a href="ppm_pursuit.html">PPM Pursuit</a>
+        <a href="ppm_construction.html">PPM Construction</a>
+        <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-label">Insights &amp; Toolkit</div>
+      <div class="nav-items">
+        <a href="analytics.html">Analytics</a>
+        <a href="forecasting_pipeline.html">Forecasting</a>
+        <a href="integration_features.html">Integration</a>
+        <a href="sales_process_visualization.html">Process Visualization</a>
+        <a href="results_driven.html">Results Driven</a>
+        <a href="executive_command_center.html">Exec Command</a>
+        <a href="account_360.html">Account 360</a>
+        <a href="partner_hub.html">Partner Hub</a>
+        <a href="revenue_intelligence.html">Revenue Intelligence</a>
+        <a href="field_mobile_snapshot.html">Field Mobile</a>
+        <a href="sales_ppm_sync.html">Sales-PPM</a>
+        <a href="quote_to_docusign.html">Quote to DocuSign</a>
+        <a href="pursuit_project.html">Pursuit Project</a>
+      </div>
+    </div>
+  </nav>
+
   <main class="team-shell">
-    <section class="team-hero">
+    <section class="card team-hero">
       <p class="eyebrow" style="color:#c9d6ec">Sales Manager</p>
       <h1>My Team</h1>
       <p>Track workload, approvals, and coaching cues across your sellers. Jump to Quick Sales or the Opportunity view while keeping manager filters applied.</p>
@@ -70,6 +124,7 @@
       </div>
     </div>
   </main>
+  <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
 </body>
 </html>
 

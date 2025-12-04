@@ -9,21 +9,23 @@
 <link rel="stylesheet" href="assets/vbcs-shared.css" />
 <script defer src="assets/app.js"></script>
 <style>
-.sync-hero{
-  background: linear-gradient(135deg,#111827,#1f2937);
+.card.sync-hero{
+  background: linear-gradient(135deg,#0f172a,#1f2937) !important;
   color:#f8fafc;
   padding:24px 26px;
   border-radius:20px;
-  box-shadow:0 16px 36px rgba(12,18,32,.22);
+  box-shadow:0 22px 44px rgba(12,18,32,.28);
   display:grid;
   grid-template-columns:1.1fr 0.9fr;
   gap:18px;
   align-items:start;
+  border:1px solid rgba(255,255,255,.14);
 }
-.sync-hero h1{margin:6px 0 12px;color:#f8fafc;}
-.sync-hero p{margin:0 0 12px;color:#e5e7eb;}
-.sync-hero ul{margin:0;padding-left:18px;color:#e2e8f0;}
-.sync-hero .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.12);color:#f8fafc;font-weight:700;}
+.card.sync-hero h1{margin:6px 0 12px;color:#f8fafc;}
+.card.sync-hero p{margin:0 0 12px;color:#e5e7eb;}
+.card.sync-hero ul{margin:0;padding-left:18px;color:#e2e8f0;}
+.card.sync-hero .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.12);color:#f8fafc;font-weight:700;}
+.card.sync-hero li{color:#e5e7eb;}
 .sync-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px;}
 .sync-stat{border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px;background:rgba(255,255,255,.06);color:#e5e7eb;}
 .sync-stat .label{font-size:12px;text-transform:uppercase;letter-spacing:.18em;display:block;margin-bottom:4px;color:#cbd5e1;}
@@ -35,7 +37,10 @@
 .sync-tag{display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;background:#111827;color:#fff;font-size:12px;margin-top:12px;width:max-content}
 .integration-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
 .integration-card{border:1px solid var(--rw-border);border-radius:14px;padding:14px;background:#fff;box-shadow:0 10px 20px rgba(15,23,42,.06);}
-@media(max-width:960px){.sync-hero{grid-template-columns:1fr;}}
+.lead-shell{color:#0f172a;}
+.sync-roadmap h2,.sync-roadmap p,.integration-card h3,.integration-card p,.integration-card li{color:#0f172a;}
+.lead-shell{padding-top:24px;}
+@media(max-width:960px){.card.sync-hero{grid-template-columns:1fr;}}
 </style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
