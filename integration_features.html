@@ -10,8 +10,8 @@
 <script defer src="assets/app.js"></script>
 <style>
   .integration-hero {
-    background: linear-gradient(135deg, #0f172a, #2d3748);
-    color: #f8fafc;
+    background: linear-gradient(135deg, #0f172a, #2d3748) !important;
+    color: #f8fafc !important;
     padding: 24px 26px;
     border-radius: 20px;
     box-shadow: 0 16px 32px rgba(15, 23, 42, .18);
@@ -19,9 +19,10 @@
     grid-template-columns: 1.1fr 0.9fr;
     gap: 18px;
     align-items: center;
+    border: none;
   }
-  .integration-hero h1 { margin: 4px 0 10px; font-size: 2rem; }
-  .integration-hero p { margin: 0 0 12px; color: #cbd5e1; }
+  .integration-hero h1 { margin: 4px 0 10px; font-size: 2rem; color: #f8fafc; }
+  .integration-hero p { margin: 0 0 12px; color: #dce7f5; }
   .integration-hero ul { margin: 0; padding-left: 18px; color: #e2e8f0; }
   .integration-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
   .integration-card { background: #fff; border: 1px solid rgba(27,38,56,.1); border-radius: 14px; padding: 14px; box-shadow: 0 12px 22px rgba(15,23,42,.08); }
@@ -50,34 +51,14 @@
 <nav class="quick-nav auto-nav">
   <div class="nav-group">
     <div class="nav-label">Sales &amp; Delivery Journey</div>
-    <div class="nav-items">
-      <a href="index.html">Overview</a>
-      <a href="Easy_Start_Flows.html">Easy Start</a>
-      <a href="sales_cloud.html">Sales Flow</a>
-      <a href="sales_tools.html">Sales Tools</a>
-      <a href="cx_lead.html">Lead</a>
-      <a href="cx_opportunity.html">Opportunity</a>
-      <a href="ppm_pursuit.html">PPM Pursuit</a>
-      <a href="ppm_construction.html">PPM Construction</a>
+    <div class="nav-items">    <a href="index.html">Overview</a>    <a href="Easy_Start_Flows.html">Easy Start</a>    <a href="sales_cloud.html">Sales Flow</a>    <a href="sales_tools.html">Sales Tools</a>    <a href="cx_lead.html">Lead</a>    <a href="cx_opportunity.html">Opportunity</a>    <a href="ppm_pursuit.html">PPM Pursuit</a>    <a href="ppm_construction.html">PPM Construction</a>
       <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
     </div>
   </div>
   <div class="nav-group">
     <div class="nav-label">Insights &amp; Toolkit</div>
-    <div class="nav-items">
-      <a href="analytics.html">Analytics</a>
-      <a href="forecasting_pipeline.html">Forecasting</a>
-      <a class="active" href="integration_features.html">Integration</a>
-      <a href="sales_process_visualization.html">Process Visualization</a>
-      <a href="results_driven.html">Results Driven</a>
-      <a href="executive_command_center.html">Exec Command</a>
-      <a href="account_360.html">Account 360</a>
-      <a href="partner_hub.html">Partner Hub</a>
-      <a href="revenue_intelligence.html">Revenue Intelligence</a>
-      <a href="field_mobile_snapshot.html">Field Mobile</a>
-      <a href="sales_ppm_sync.html">Sales-PPM</a>
-      <a href="quote_to_docusign.html">Quote to DocuSign</a>
-      <a href="pursuit_project.html">Pursuit Project</a>
+    <div class="nav-items">    <a href="analytics.html">Analytics</a>    <a href="forecasting_pipeline.html">Forecasting</a>
+      <a class="active" href="integration_features.html">Integration</a>    <a href="sales_process_visualization.html">Process Visualization</a>    <a href="results_driven.html">Results Driven</a>    <a href="executive_command_center.html">Exec Command</a>    <a href="account_360.html">Account 360</a>    <a href="partner_hub.html">Partner Hub</a>    <a href="revenue_intelligence.html">Revenue Intelligence</a>    <a href="field_mobile_snapshot.html">Field Mobile</a>    <a href="sales_ppm_sync.html">Sales-PPM</a>    <a href="quote_to_docusign.html">Quote to DocuSign</a>    <a href="pursuit_project.html">Pursuit Project</a>
     </div>
   </div>
 </nav>
@@ -170,5 +151,7 @@
   </section>
 </main>
 <nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+  <nav class="vision-footer" aria-label="Global navigation">    <a href="sales_cloud.html">Sales Dashboard</a>    <a href="account_360.html">Accounts</a>    <a href="cx_lead.html">Leads</a>    <a href="cx_opportunity.html">Opportunities</a>    <a href="quote_to_docusign.html">Quotes</a>
+  </nav>
 </body>
 </html>

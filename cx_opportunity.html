@@ -6,7 +6,8 @@
 <title>Argano Opportunity</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
 <link rel="stylesheet" href="assets/redwood.css" />
-<link rel="stylesheet" href="assets/vbcs-shared.css" />`n<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
 <style>
 .oppty-oracle-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 28px 40px rgba(12,18,30,.14);padding:26px;margin-bottom:26px;}
 .oppty-oracle-hero h1{margin:0;font-size:1.9rem;}
@@ -42,6 +43,10 @@
 .anchor-card .label{color:#9fb8d8;font-size:12px;text-transform:uppercase;letter-spacing:.08em;}
 .anchor-card .name{margin:4px 0;font-size:1rem;font-weight:700;}
 .anchor-card .detail{margin:0;color:#dce6f3;font-size:13px;}
+.vision-footer{position:fixed;bottom:0;left:0;right:0;background:#241a37;color:#fff;display:flex;justify-content:center;gap:16px;padding:10px 12px;box-shadow:0 -8px 24px rgba(12,18,32,.24);z-index:3800;border-top:1px solid rgba(255,255,255,.08);}
+.vision-footer a{color:#e5e7eb;text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;transition:background 120ms ease,color 120ms ease;}
+.vision-footer a:hover{background:rgba(255,255,255,.08);}
+.vision-footer a.active{background:#f97316;color:#0b1324;}
 </style>
 </head>
 <body class="lead-landing oracle-fusion-skin">
@@ -54,6 +59,18 @@
     </div>
   </div>
   <div class="bar-actions">
+    <div class="persona-dropdown">
+      <label>Persona</label>
+      <select class="persona-select">
+        <option value="all">All Persona</option>
+        <option value="rep">Sales Rep</option>
+        <option value="manager">Sales Manager</option>
+        <option value="exec">Executive</option>
+        <option value="delivery">Delivery</option>
+        <option value="partner">Partner</option>
+      </select>
+    </div>
+
     <button class="ghost-btn small">Help</button>
     <button class="ghost-btn small">Support</button>
     <div class="avatar-chip">CK</div>
@@ -62,36 +79,14 @@
 <nav class="quick-nav auto-nav">
   <div class="nav-group">
     <div class="nav-label">Sales &amp; Delivery Journey</div>
-    <div class="nav-items">
-      <a href="index.html">Overview</a>
-      <a href="Easy_Start_Flows.html">Easy Start</a>
-      <a href="sales_cloud.html">Sales Flow</a>
-      <a href="sources.html">Lead Gen (3rd Party Sources)</a>
-      <a href="cx_lead.html">Lead</a>
-      <a href="cx_opportunity.html" class="active">Opportunity</a>
-      <a href="my_team.html">My Team</a>
-      <a href="sales_tools.html">Sales Tools</a>
-      <a href="ppm_pursuit.html">PPM Pursuit</a>
-      <a href="ppm_construction.html">PPM Construction</a>
+    <div class="nav-items">    <a href="index.html">Overview</a>    <a href="Easy_Start_Flows.html">Easy Start</a>    <a href="sales_cloud.html">Sales Flow</a>    <a href="sources.html">Lead Gen (3rd Party Sources)</a>    <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html" class="active">Opportunity</a>    <a href="my_team.html">My Team</a>    <a href="sales_tools.html">Sales Tools</a>    <a href="ppm_pursuit.html">PPM Pursuit</a>    <a href="ppm_construction.html">PPM Construction</a>
       <a href="quick_sales_screen.html" class="accent">Quick Sales Screen</a>
     </div>
   </div>
   <div class="nav-group">
     <div class="nav-label">Insights &amp; Toolkit</div>
-    <div class="nav-items">
-      <a href="analytics.html">Analytics</a>
-      <a href="forecasting_pipeline.html">Forecasting</a>
-      <a href="integration_features.html">Integration</a>
-      <a href="sales_process_visualization.html">Process Visualization</a>
-      <a href="results_driven.html">Results Driven</a>
-      <a href="executive_command_center.html">Exec Command</a>
-      <a href="account_360.html">Account 360</a>
-      <a href="partner_hub.html">Partner Hub</a>
-      <a href="revenue_intelligence.html">Revenue Intelligence</a>
-      <a href="field_mobile_snapshot.html">Field Mobile</a>
-      <a href="sales_ppm_sync.html">Sales-PPM</a>
-      <a href="quote_to_docusign.html">Quote to DocuSign</a>
-      <a href="pursuit_project.html">Pursuit Project</a>
+    <div class="nav-items">    <a href="analytics.html">Analytics</a>    <a href="forecasting_pipeline.html">Forecasting</a>    <a href="integration_features.html">Integration</a>    <a href="sales_process_visualization.html">Process Visualization</a>    <a href="results_driven.html">Results Driven</a>    <a href="executive_command_center.html">Exec Command</a>    <a href="account_360.html">Account 360</a>    <a href="partner_hub.html">Partner Hub</a>    <a href="revenue_intelligence.html">Revenue Intelligence</a>    <a href="field_mobile_snapshot.html">Field Mobile</a>    <a href="sales_ppm_sync.html">Sales-PPM</a>    <a href="quote_to_docusign.html">Quote to DocuSign</a>    <a href="pursuit_project.html">Pursuit Project</a>
     </div>
   </div>
 </nav>
@@ -887,6 +882,9 @@ function escalateOppty(form){
   if(typeof showToast==='function') showToast('Escalation sent to '+target);
 }
 </script>
+<nav class="vision-footer" aria-label="Global navigation">    <a href="sales_cloud.html">Sales Dashboard</a>    <a href="account_360.html">Accounts</a>    <a href="cx_lead.html">Leads</a>
+  <a href="cx_opportunity.html" class="active">Opportunities</a>    <a href="quote_to_docusign.html">Quotes</a>
+</nav>
 <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 </html>

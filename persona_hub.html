@@ -6,7 +6,8 @@
   <title>Persona Hub</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
 <link rel="stylesheet" href="assets/redwood.css" />
-<link rel="stylesheet" href="assets/vbcs-shared.css" />`n<script defer src="assets/app.js"></script>
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
 <script defer src="assets/vbcs-shared.js"></script>
   <style>
     :root {
@@ -229,6 +230,18 @@
       </div>
     </div>
     <div class="bar-actions">
+    <div class="persona-dropdown">
+      <label>Persona</label>
+      <select class="persona-select">
+        <option value="all">All Persona</option>
+        <option value="rep">Sales Rep</option>
+        <option value="manager">Sales Manager</option>
+        <option value="exec">Executive</option>
+        <option value="delivery">Delivery</option>
+        <option value="partner">Partner</option>
+      </select>
+    </div>
+
       <button class="ghost-btn small">Help</button>
       <button class="ghost-btn small">Support</button>
       <div class="avatar-chip">CK</div>
@@ -384,6 +397,9 @@
       if (window.initVBCSPersonaRibbon) { window.initVBCSPersonaRibbon(); }
     })();
   </script>
+
+  <nav class="vision-footer" aria-label="Global navigation">    <a href="sales_cloud.html">Sales Dashboard</a>    <a href="account_360.html">Accounts</a>    <a href="cx_lead.html">Leads</a>    <a href="cx_opportunity.html">Opportunities</a>    <a href="quote_to_docusign.html">Quotes</a>
+  </nav>
 </body>
 </html>
 

@@ -744,6 +744,11 @@
   function updatePersonaUI(personaKey) {
     var meta = getPersonaMeta(personaKey);
     document.body.dataset.persona = personaKey;
+    document.querySelectorAll('.persona-select').forEach(function (select) {
+      if (select.value !== personaKey) {
+        select.value = personaKey;
+      }
+    });
     var badge = document.getElementById('persona-badge');
     if (badge) {
       badge.textContent = meta.label;
@@ -804,12 +809,61 @@
     });
   }
 
+  function ensurePersonaDropdown() {
+    var bars = document.querySelectorAll('.bar-actions');
+    if (!bars.length) {
+      var header = document.querySelector('.miconnex-bar');
+      if (header) {
+        var bar = document.createElement('div');
+        bar.className = 'bar-actions';
+        header.appendChild(bar);
+        bars = document.querySelectorAll('.bar-actions');
+      }
+    }
+
+    if (bars.length) {
+      bars.forEach(function (bar) {
+        if (bar.querySelector('.persona-dropdown')) return;
+        var wrap = document.createElement('div');
+        wrap.className = 'persona-dropdown';
+        wrap.innerHTML = '<label>Persona</label>' +
+          '<select class="persona-select">' +
+          PERSONA_META.map(function (p) { return '<option value="' + p.key + '">' + p.label + '</option>'; }).join('') +
+          '</select>';
+        bar.prepend(wrap);
+      });
+    } else {
+      if (!document.getElementById('persona-fab')) {
+        var fab = document.createElement('div');
+        fab.id = 'persona-fab';
+        fab.className = 'persona-fab';
+        fab.innerHTML = '<div style="font-weight:700;margin-bottom:6px;">Persona</div>' +
+          '<select class="persona-select">' +
+          PERSONA_META.map(function (p) { return '<option value="' + p.key + '">' + p.label + '</option>'; }).join('') +
+          '</select>';
+        document.body.appendChild(fab);
+      }
+    }
+
+    document.querySelectorAll('.persona-select').forEach(function (select) {
+      if (select.dataset.personaWired === '1') return;
+      select.dataset.personaWired = '1';
+      select.addEventListener('change', function () { applyPersonaSelection(select.value); });
+      var stored = 'all';
+      try { stored = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { stored = 'all'; }
+      select.value = stored;
+    });
+  }
+  function killRibbons() {
+    document.querySelectorAll('.persona-ribbon').forEach(function (el) { el.remove(); });
+  }
+
   function injectPersonaRibbon() {
     if (window.disableRibbonAuto) return;
     // Remove any previously injected ribbons (from legacy scripts) so we render a single bar.
     document.querySelectorAll('.persona-ribbon').forEach(function (el) { el.remove(); });
     var style = document.createElement('style');
-    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 14px 22px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        width: min(1250px, 95vw);\n        pointer-events: auto;\n        flex-wrap: wrap;\n        row-gap: 8px;\n        border: 1px solid rgba(255,255,255,0.1);\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; width: 95vw; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
+    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 80px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 14px 22px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        width: min(1250px, 95vw);\n        pointer-events: auto;\n        flex-wrap: wrap;\n        row-gap: 8px;\n        border: 1px solid rgba(255,255,255,0.1);\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 70px; padding: 10px 14px; gap: 10px; width: 95vw; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
     document.head.appendChild(style);
     var bar = document.createElement('div');
     bar.id = 'persona-ribbon';
@@ -873,93 +927,146 @@
       });
     }
     ensurePersonaRail();
+    ensurePersonaDropdown();
     var storedPersona = 'all';
     try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { storedPersona = 'all'; }
     applyPersonaSelection(storedPersona);
     injectAssistantChrome();
-    injectPersonaRibbon();
-    sweepRibbons();
-    window.addEventListener('scroll', function () {
-      if (!document.getElementById('persona-ribbon')) { injectPersonaRibbon(); }
-      sweepRibbons();
-    });
+    injectVisionFooter();
+    killRibbons();
+    setInterval(killRibbons, 1500);
 
   }
 
-  function initCharts() {
-    // Index Charts
-    const ctxPipeline = document.getElementById('pipelineChart');
-    if (ctxPipeline) {
-      new Chart(ctxPipeline, {
-        type: 'doughnut',
-        data: {
-          labels: ['Qualified', 'Proposal', 'Negotiation', 'Closed'],
-          datasets: [{
-            data: [12, 8, 5, 15],
-            backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
-            borderWidth: 0
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } } }
-      });
-    }
-
-    const ctxLeadSource = document.getElementById('leadSourceChart');
-    if (ctxLeadSource) {
-      new Chart(ctxLeadSource, {
-        type: 'bar',
-        data: {
-          labels: ['Web', 'Referral', 'Event', 'Outbound'],
-          datasets: [{
-            label: 'Leads',
-            data: [45, 25, 20, 10],
-            backgroundColor: '#f97316',
-            borderRadius: 4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } } }
-      });
-    }
-
-    // Sales Cloud Charts
-    const ctxFunnel = document.getElementById('salesFunnelChart');
-    if (ctxFunnel) {
-      new Chart(ctxFunnel, {
-        type: 'bar',
-        data: {
-          labels: ['Lead', 'Opportunity', 'Quote', 'Pursuit', 'Project'],
-          datasets: [{
-            label: 'Conversion Count',
-            data: [120, 80, 60, 45, 30],
-            backgroundColor: ['#94a3b8', '#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
-            borderRadius: 4
-          }]
-        },
-        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Conversion Funnel' } }, scales: { x: { grid: { display: false } }, y: { grid: { display: false } } } }
-      });
-    }
-
-    const ctxTrend = document.getElementById('salesTrendChart');
-    if (ctxTrend) {
-      new Chart(ctxTrend, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Revenue (M)',
-            data: [1.2, 1.5, 1.4, 1.8, 2.2, 2.5],
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            fill: true,
-            tension: 0.4
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Revenue Trend' } }, scales: { y: { beginAtZero: true } } }
-      });
-    }
+  function renderFallback(canvasEl, title, items) {
+    if (!canvasEl || !canvasEl.parentElement) return;
+    var host = canvasEl.parentElement;
+    host.innerHTML = '<div style="padding:12px;min-height:220px;display:flex;flex-direction:column;gap:8px;">' +
+      '<div style="font-weight:700;color:#0f172a;">' + title + '</div>' +
+      items.map(function (t) { return '<div style="display:flex;align-items:center;gap:8px;color:#334155;font-weight:600;"><span style="width:10px;height:10px;border-radius:999px;background:#f97316;display:inline-block;"></span>' + t + '</div>'; }).join('') +
+      '</div>';
   }
 
-  function streamText(element, text, speed = 30) {
+  function renderSalesFunnelFallback() {
+    const canvas = document.getElementById('salesFunnelChart');
+    if (!canvas || !canvas.parentElement) return;
+    const host = canvas.parentElement;
+    const steps = ["Lead → Opportunity","Opportunity → Quote","Quote → Pursuit","Pursuit → Project"];
+    const widths = [90,75,55,40];
+    host.innerHTML = '<div style="padding:12px;min-height:240px;display:flex;flex-direction:column;gap:8px;">' +
+      '<div style="font-weight:700;color:#0f172a;">Conversion Funnel</div>' +
+      steps.map(function(label,i){ return '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<span style="width:10px;height:10px;border-radius:999px;background:#f97316;display:inline-block;"></span>' +
+        '<div style="flex:1;background:#f1f5f9;border-radius:10px;height:10px;overflow:hidden;"><div style="height:100%;width:' + widths[i] + '%;background:linear-gradient(90deg,#f97316,#fb923c);border-radius:10px;"></div></div>' +
+        '<span style="min-width:160px;font-weight:700;color:#334155;">' + label + '</span>' +
+      '</div>'; }).join('') +
+      '</div>';
+  }
+
+function renderSalesTrendFallback() {
+    const canvas = document.getElementById('salesTrendChart');
+    if (!canvas || !canvas.parentElement) return;
+    const host = canvas.parentElement;
+    const points = [["Jan",70,"$1.2M"],["Feb",90,"$1.5M"],["Mar",82,"$1.4M"],["Apr",110,"$1.8M"],["May",135,"$2.2M"],["Jun",150,"$2.5M"]];
+    host.innerHTML = '<div style="padding:12px;min-height:240px;display:flex;flex-direction:column;gap:12px;">' +
+      '<div style="font-weight:700;color:#0f172a;">Revenue Trend</div>' +
+      '<div style="display:flex;align-items:flex-end;gap:10px;min-height:140px;">' +
+        points.map(function(p){ return '<div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;">' +
+          '<div style="font-weight:700;color:#0f172a;">' + p[2] + '</div>' +
+          '<div style="width:100%;background:linear-gradient(180deg,#10b981,#34d399);border-radius:12px;min-height:40px;height:' + p[1] + 'px;"></div>' +
+          '<div style="color:#475467;font-weight:600;">' + p[0] + '</div>' +
+        '</div>'; }).join('') +
+      '</div></div>';
+  }
+function initCharts() {
+    // Index charts (only if Chart.js is available)
+    if (typeof Chart === "function") {
+      const ctxPipeline = document.getElementById("pipelineChart");
+      if (ctxPipeline) {
+        new Chart(ctxPipeline, {
+          type: "doughnut",
+          data: {
+            labels: ["Qualified", "Proposal", "Negotiation", "Closed"],
+            datasets: [{
+              data: [12, 8, 5, 15],
+              backgroundColor: ["#3b82f6", "#f59e0b", "#8b5cf6", "#10b981"],
+              borderWidth: 0
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "right", labels: { boxWidth: 10, font: { size: 10 } } } } }
+        });
+      }
+
+      const ctxLeadSource = document.getElementById("leadSourceChart");
+      if (ctxLeadSource) {
+        new Chart(ctxLeadSource, {
+          type: "bar",
+          data: {
+            labels: ["Web", "Referral", "Event", "Outbound"],
+            datasets: [{
+              label: "Leads",
+              data: [45, 25, 20, 10],
+              backgroundColor: "#f97316",
+              borderRadius: 4
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } } }
+        });
+      }
+    }
+
+    // Sales Flow charts: try interactive, else fallback
+    try {
+      if (typeof Chart !== "function") throw new Error("Chart.js missing");
+      const ctxFunnel = document.getElementById("salesFunnelChart");
+      if (ctxFunnel) {
+        new Chart(ctxFunnel, {
+          type: "bar",
+          data: {
+            labels: ["Lead", "Opportunity", "Quote", "Pursuit", "Project"],
+            datasets: [{
+              label: "Volume",
+              data: [35, 24, 18, 9, 4],
+              backgroundColor: ["#f97316", "#fb923c", "#fdba74", "#4f46e5", "#22c55e"],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }
+          }
+        });
+      }
+
+      const ctxTrend = document.getElementById("salesTrendChart");
+      if (ctxTrend) {
+        new Chart(ctxTrend, {
+          type: "line",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [{
+              label: "Revenue (M)",
+              data: [1.2, 1.5, 1.4, 1.8, 2.2, 2.5],
+              borderColor: "#10b981",
+              backgroundColor: "rgba(16, 185, 129, 0.1)",
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointBorderWidth: 2
+            }]
+          },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: true } }, scales: { y: { beginAtZero: false } } }
+        });
+      }
+    } catch (err) {
+      console.warn("Sales charts fallback", err.message);
+      renderSalesFunnelFallback();
+      renderSalesTrendFallback();
+    }
+  }
+function streamText(element, text, speed = 30) {
     if (!element) return;
     element.innerHTML = '';
     let i = 0;
@@ -1129,3 +1236,10 @@
 
   document.addEventListener('DOMContentLoaded', function () { try { ensureGlobalChrome(); initCharts(); initGenAIChat(); initCommandPalette(); } catch (e) { console.warn('chrome init failed', e); } });
 })();
+
+
+
+
+
+
+

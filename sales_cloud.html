@@ -7,8 +7,10 @@
   <title>Oracle Sales Cloud Flow</title>
 <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.1.0-2510.4/default/css/redwood/oj-redwood-min.css" id="oj-redwood-cdn" type="text/css" />
 <link rel="stylesheet" href="assets/redwood.css" />
-<link rel="stylesheet" href="assets/vbcs-shared.css" />`n`n<script defer src="assets/app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="assets/vbcs-shared.css" />
+<script defer src="assets/app.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
 </head>
 
 <body class="lead-landing oracle-fusion-skin">
@@ -21,7 +23,17 @@
       </div>
     </div>
     <div class="bar-actions">
-      <button class="ghost-btn small">Help</button>
+      <div class="persona-dropdown">
+        <label for="personaSelect">Persona</label>
+        <select id="personaSelect">
+          <option value="all">All Persona</option>
+          <option value="rep">Sales Rep</option>
+          <option value="manager">Sales Manager</option>
+          <option value="exec">Executive</option>
+          <option value="delivery">Delivery</option>
+          <option value="partner">Partner</option>
+        </select>
+      </div>
       <button class="ghost-btn small">Support</button>
       <div class="avatar-chip">CK</div>
     </div>
@@ -29,34 +41,14 @@
   <nav class="quick-nav auto-nav">
     <div class="nav-group">
       <div class="nav-label">Sales &amp; Delivery Journey</div>
-      <div class="nav-items">
-        <a href="index.html">Overview</a>
-        <a href="Easy_Start_Flows.html">Easy Start</a>
-        <a class="active" href="sales_cloud.html">Sales Flow</a>
-        <a href="sales_tools.html">Sales Tools</a>
-        <a href="cx_lead.html">Lead</a>
-        <a href="cx_opportunity.html">Opportunity</a>
-        <a href="ppm_pursuit.html">PPM Pursuit</a>
-        <a href="ppm_construction.html">PPM Construction</a>
+      <div class="nav-items">    <a href="index.html">Overview</a>    <a href="Easy_Start_Flows.html">Easy Start</a>
+        <a class="active" href="sales_cloud.html">Sales Flow</a>    <a href="sales_tools.html">Sales Tools</a>    <a href="cx_lead.html">Lead</a>    <a href="cx_opportunity.html">Opportunity</a>    <a href="ppm_pursuit.html">PPM Pursuit</a>    <a href="ppm_construction.html">PPM Construction</a>
         <a class="accent" href="quick_sales_screen.html">Quick Sales Screen</a>
       </div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Insights &amp; Toolkit</div>
-      <div class="nav-items">
-        <a href="analytics.html">Analytics</a>
-        <a href="forecasting_pipeline.html">Forecasting</a>
-        <a href="integration_features.html">Integration</a>
-        <a href="sales_process_visualization.html">Process Visualization</a>
-        <a href="results_driven.html">Results Driven</a>
-        <a href="executive_command_center.html">Exec Command</a>
-        <a href="account_360.html">Account 360</a>
-        <a href="partner_hub.html">Partner Hub</a>
-        <a href="revenue_intelligence.html">Revenue Intelligence</a>
-        <a href="field_mobile_snapshot.html">Field Mobile</a>
-        <a href="sales_ppm_sync.html">Sales-PPM</a>
-        <a href="quote_to_docusign.html">Quote to DocuSign</a>
-        <a href="pursuit_project.html">Pursuit Project</a>
+      <div class="nav-items">    <a href="analytics.html">Analytics</a>    <a href="forecasting_pipeline.html">Forecasting</a>    <a href="integration_features.html">Integration</a>    <a href="sales_process_visualization.html">Process Visualization</a>    <a href="results_driven.html">Results Driven</a>    <a href="executive_command_center.html">Exec Command</a>    <a href="account_360.html">Account 360</a>    <a href="partner_hub.html">Partner Hub</a>    <a href="revenue_intelligence.html">Revenue Intelligence</a>    <a href="field_mobile_snapshot.html">Field Mobile</a>    <a href="sales_ppm_sync.html">Sales-PPM</a>    <a href="quote_to_docusign.html">Quote to DocuSign</a>    <a href="pursuit_project.html">Pursuit Project</a>
       </div>
     </div>
   </nav>
@@ -64,6 +56,60 @@
 
 
   <div class="shell sales-shell">
+    <style>
+      .chart-card { background:rgba(255,255,255,0.6); padding:15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05); min-height:260px; position:relative; }
+      .chart-card canvas { width:100% !important; min-height:260px; }
+      .chart-fallback { display:none; }
+      .chart-card.show-fallback canvas { display:none; }
+      .chart-card.show-fallback .chart-fallback { display:flex; flex-direction:column; gap:10px; height:100%; }
+      .chart-title { font-weight:700; color:#0f172a; }
+      .funnel-rows { display:flex; flex-direction:column; gap:10px; }
+      .funnel-row { display:flex; align-items:center; gap:8px; color:#111827; }
+      .funnel-row .dot { width:10px; height:10px; border-radius:999px; background:#f97316; display:inline-block; }
+      .funnel-row .bar { flex:1; background:#f1f5f9; border-radius:10px; height:10px; overflow:hidden; }
+      .funnel-row .bar > div { height:100%; background:linear-gradient(90deg,#f97316,#fb923c); border-radius:10px; }
+      .funnel-row .label { min-width:140px; font-weight:600; }
+      .trend-bars { display:flex; gap:12px; align-items:flex-end; flex:1; }
+      .trend-bar { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+      .trend-bar .amount { font-weight:700; color:#0f172a; }
+      .trend-bar .bar { width:100%; background:linear-gradient(180deg,#10b981,#34d399); border-radius:10px; min-height:40px; }
+      .trend-bar .label { color:#475467; font-weight:600; }
+      .persona-dropdown { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); padding:6px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.14); }
+      .persona-dropdown label { color:#e5e7eb; font-weight:700; font-size:13px; }
+      .persona-dropdown select { background:#fff; color:#111827; border:1px solid #e5e7eb; border-radius:8px; padding:6px 10px; font-weight:600; }
+      /* Sticky footer nav */
+      body { padding-bottom: 96px; }
+      nav.vision-footer {
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        padding: 14px 22px;
+        background: #1f0f37;
+        box-shadow: 0 -10px 30px rgba(31, 15, 55, 0.35);
+      }
+      nav.vision-footer a {
+        color: #f3e8ff;
+        font-weight: 700;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        transition: all 0.2s ease;
+      }
+      nav.vision-footer a:hover { background: rgba(255,255,255,0.18); }
+      nav.vision-footer a.active {
+        background: #f97316;
+        color: #fff;
+        border-color: #f97316;
+      }
+    </style>
 
     <section class="sales-hero">
       <p class="eyebrow">Oracle Sales Cloud</p>
@@ -74,14 +120,8 @@
         <span class="pill">AI Assist <strong>Enabled</strong></span>
       </div>
       <div class="sales-charts-row" style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-        <div class="chart-card"
-          style="background:rgba(255,255,255,0.6); padding:15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-          <canvas id="salesFunnelChart"></canvas>
-        </div>
-        <div class="chart-card"
-          style="background:rgba(255,255,255,0.6); padding:15px; border-radius:12px; border:1px solid rgba(0,0,0,0.05);">
-          <canvas id="salesTrendChart"></canvas>
-        </div>
+        <div class="chart-card"><div id="salesFunnelChart" style="width:100%;height:300px;"></div></div>
+        <div class="chart-card"><div id="salesTrendChart" style="width:100%;height:300px;"></div></div>
       </div>
       <div class="hero-details">
         <div>Scenario <strong id="salesScenarioName">Skyline Renewables</strong></div>
@@ -518,11 +558,11 @@
         var scenario = (data.lead && data.lead.company) || 'this account';
         var message = '';
         if (mode === 'risk') {
-          message = '<strong>Risk watch:</strong><ul><li>Opportunity currently in ' + opptyStatus + ' needs exec alignment.</li><li>Quote stage is ' + quoteStatus + ' — pricing approvals could slip dates.</li><li>Pursuit sits at ' + pursuitStatus + ', so prep estimating + legal to avoid downstream delays.</li></ul>';
+          message = '<strong>Risk watch:</strong><ul><li>Opportunity → QuoteStatus + ' — pricing approvals could slip dates.</li><li>Pursuit sits at ' + pursuitStatus + ', so prep estimating + legal to avoid downstream delays.</li></ul>';
         } else if (mode === 'action') {
-          message = '<strong>Recommended Smart Actions:</strong><ul><li>Update lead notes with latest intent and share AI summary to leadership.</li><li>Trigger quote review + push status into CX/forecast.</li><li>Sync pursuit updates and ready project kickoff so ' + projectStatus.toLowerCase() + ' teams stay engaged.</li></ul>';
+          message = '<strong>Recommended Smart Actions:</strong><ul><li>Update lead notes with latest intent and share AI summary to leadership.</li><li>Trigger Quote → Pursuit → ProjectStatus.toLowerCase() + ' teams stay engaged.</li></ul>';
         } else {
-          message = '<strong>Overview:</strong> ' + scenario + ' is moving through ' + (RWD.flowStages ? RWD.flowStages.length : 5) + ' stages — Lead ' + leadStatus + ', Opportunity ' + opptyStatus + ', Quote ' + quoteStatus + '.<ul><li>Pursuit is ' + pursuitStatus + ' and delivery is tracking ' + projectStatus + '.</li><li>Keep AE + pursuit manager aligned so downstream teams stay ready.</li><li>Leverage Smart Actions to push updates into CX + PPM.</li></ul>';
+          message = '<strong>Overview:</strong> ' + scenario + ' is moving through ' + (RWD.flowStages ? RWD.flowStages.length : 5) + ' stages — Lead → Opportunity → QuoteStatus + '.<ul><li>Pursuit → ProjectStatus + '.</li><li>Keep AE + pursuit manager aligned so downstream teams stay ready.</li><li>Leverage Smart Actions to push updates into CX + PPM.</li></ul>';
         }
         el.innerHTML = message;
         return false;
@@ -530,13 +570,66 @@
     </script>
     <div class="footer">© Demo – Redwood-inspired mockup</div>
   </div>
+
+  <nav class="vision-footer" aria-label="Global navigation">
+    <a href="sales_cloud.html" class="active">Sales Dashboard</a>    <a href="account_360.html">Accounts</a>    <a href="cx_lead.html">Leads</a>    <a href="cx_opportunity.html">Opportunities</a>    <a href="quote_to_docusign.html">Quotes</a>
+  </nav>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var personaSelect = document.getElementById('personaSelect');
+      if (personaSelect) {
+        personaSelect.addEventListener('change', function () {
+          var val = personaSelect.value;
+          if (window.applyPersonaSelection) {
+            window.applyPersonaSelection(val);
+          } else if (window.filterNavLinks) {
+            var allow = val === 'rep' ? ['account_360.html','quick_sales_screen.html','cx_lead.html','cx_opportunity.html','sales_cloud.html','sales_tools.html','quote_to_docusign.html']
+              : val === 'manager' ? ['analytics.html','forecasting_pipeline.html','revenue_intelligence.html','executive_command_center.html','account_360.html','sales_process_visualization.html','sales_cloud.html','my_team.html']
+              : null;
+            window.filterNavLinks(val, allow);
+          }
+        });
+      }
+      try {
+        Highcharts.chart('salesFunnelChart', {
+          chart: { type: 'funnel', backgroundColor: 'rgba(255,255,255,0.0)' },
+          title: { text: 'Conversion Funnel', align: 'left', style: { fontWeight: '700', color: '#0f172a' } },
+          credits: { enabled: false },
+          legend: { enabled: false },
+          tooltip: { pointFormat: '<b>{point.y}</b>' },
+          series: [{
+            name: 'Volume',
+            data: [
+              ['Lead', 120],
+              ['Opportunity', 80],
+              ['Quote', 60],
+              ['Pursuit', 35],
+              ['Project', 20]
+            ],
+            dataLabels: { enabled: true, style: { fontWeight: '700', color: '#0f172a' } },
+            width: '80%',
+            height: '80%'
+          }]
+        });
+        Highcharts.chart('salesTrendChart', {
+          chart: { type: 'line', backgroundColor: 'rgba(255,255,255,0.0)' },
+          title: { text: 'Revenue Trend', align: 'left', style: { fontWeight: '700', color: '#0f172a' } },
+          credits: { enabled: false },
+          legend: { enabled: false },
+          xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] },
+          yAxis: { title: { text: null } },
+          series: [{
+            name: 'Revenue (M)',
+            data: [1.2, 1.5, 1.4, 1.8, 2.2, 2.5],
+            color: '#10b981',
+            marker: { radius: 4, lineWidth: 2, lineColor: '#0f172a' },
+            fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, 'rgba(16,185,129,0.25)'], [1, 'rgba(16,185,129,0.0)']] }
+          }]
+        });
+      } catch (e) {
+        console.warn('Highcharts failed', e);
+      }
+    });
+  </script>
 </body>
-
 </html>
-
-
-
-
-
-
-

@@ -125,6 +125,200 @@
       font-size: 13px;
       color: #5d6478;
     }
+    .lead-filter-card {
+      background:#fff;
+      border:1px solid rgba(27,38,56,.1);
+      border-radius:16px;
+      box-shadow:0 16px 32px rgba(15,23,42,.12);
+      padding:16px 18px;
+      margin-bottom:18px;
+    }
+    .lead-filter-bar {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .filter-pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:#f5f0e7;
+      border:1px solid rgba(27,38,56,.15);
+      font-weight:600;
+      color:#374151;
+    }
+    .filter-pill .close {
+      background:#fff;
+      border:1px solid rgba(27,38,56,.2);
+      border-radius:8px;
+      width:18px;
+      height:18px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      font-size:11px;
+      line-height:1;
+    }
+    .filter-input {
+      flex:1;
+      min-width:180px;
+      border:1px solid rgba(27,38,56,.16);
+      border-radius:12px;
+      padding:10px;
+      font-size:14px;
+    }
+    .saved-searches {
+      margin:12px 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .saved-searches li {
+      background:#f8fafc;
+      border:1px solid rgba(27,38,56,.08);
+      border-radius:12px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:600;
+      color:#0f172a;
+    }
+    .saved-searches li .dot {
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:#f97316;
+    }
+    .vision-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #241a37;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 10px 12px;
+      box-shadow: 0 -8px 24px rgba(12, 18, 32, 0.24);
+      z-index: 3800;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .vision-footer a {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .vision-footer a:hover {
+      background: rgba(255,255,255,.08);
+    }
+    .vision-footer a.active {
+      background: #f97316;
+      color: #0b1324;
+    }
+    .lead-filter-empty {
+      border:1px dashed rgba(27,38,56,.25);
+      border-radius:12px;
+      padding:12px 14px;
+      color:#475467;
+      font-weight:600;
+      margin-top:10px;
+      background:#f8fafc;
+    }
+    .filter-modal {
+      border:1px solid rgba(27,38,56,.14);
+      border-radius:14px;
+      box-shadow:0 18px 36px rgba(12,18,32,.14);
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns:220px 1fr;
+      gap:12px;
+      background:#fff;
+    }
+    .filter-modal .options {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-size:14px;
+    }
+    .filter-modal .options label {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      cursor:pointer;
+    }
+    .filter-modal .value-box {
+      border:1px solid rgba(27,38,56,.16);
+      border-radius:12px;
+      padding:10px;
+      min-height:92px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:flex-start;
+    }
+    .filter-modal .value-pill {
+      background:#eef2ff;
+      color:#111827;
+      padding:6px 10px;
+      border-radius:10px;
+      border:1px solid rgba(59,130,246,.35);
+      font-weight:600;
+      font-size:13px;
+    }
+    .filter-modal .footer {
+      grid-column:1 / -1;
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      margin-top:4px;
+    }
+    .filter-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12,18,32,0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3600;
+      padding: 20px;
+    }
+    .filter-modal-overlay.open { display: flex; }
+    .filter-modal-wrap {
+      max-width: 900px;
+      width: min(900px, 95vw);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.22);
+      overflow: hidden;
+      border: 1px solid rgba(27,38,56,.12);
+    }
+    .filter-modal-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 16px;
+      border-bottom:1px solid rgba(27,38,56,.08);
+    }
+    .filter-modal-head h4 { margin:0; }
+    .filter-close-btn {
+      border:1px solid rgba(27,38,56,.2);
+      background:#fff;
+      border-radius:8px;
+      padding:6px 10px;
+      cursor:pointer;
+      font-weight:700;
+    }
 
     .badge {
       padding: 4px 12px;
@@ -157,45 +351,33 @@
         <div class="logo-sub">Connected Cloud</div>
       </div>
     </div>
-    <div class="bar-actions">
-      <button class="ghost-btn small">Help</button>
-      <button class="ghost-btn small">Support</button>
-      <div class="avatar-chip">CK</div>
+  <div class="bar-actions">
+    <div class="persona-dropdown">
+      <label for="personaSelect">Persona</label>
+      <select id="personaSelect">
+        <option value="all">All Persona</option>
+        <option value="rep">Sales Rep</option>
+        <option value="manager">Sales Manager</option>
+        <option value="exec">Executive</option>
+        <option value="delivery">Delivery</option>
+        <option value="partner">Partner</option>
+      </select>
     </div>
-  </header>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
   <nav class="quick-nav auto-nav">
     <div class="nav-group">
       <div class="nav-label">Sales &amp; Delivery Journey</div>
-      <div class="nav-items">
-        <a href="index.html">Overview</a>
-        <a href="Easy_Start_Flows.html">Easy Start</a>
-        <a href="sales_cloud.html">Sales Flow</a>
-        <a href="sources.html">Lead Gen (3rd Party Sources)</a>
-        <a href="cx_lead.html" class="active">Lead</a>
-        <a href="cx_opportunity.html">Opportunity</a>
-        <a href="my_team.html">My Team</a>
-        <a href="sales_tools.html">Sales Tools</a>
-        <a href="ppm_pursuit.html">PPM Pursuit</a>
-        <a href="ppm_construction.html">PPM Construction</a>
+      <div class="nav-items">    <a href="index.html">Overview</a>    <a href="Easy_Start_Flows.html">Easy Start</a>    <a href="sales_cloud.html">Sales Flow</a>    <a href="sources.html">Lead Gen (3rd Party Sources)</a>
+        <a href="cx_lead.html" class="active">Lead</a>    <a href="cx_opportunity.html">Opportunity</a>    <a href="my_team.html">My Team</a>    <a href="sales_tools.html">Sales Tools</a>    <a href="ppm_pursuit.html">PPM Pursuit</a>    <a href="ppm_construction.html">PPM Construction</a>
         <a href="quick_sales_screen.html" class="accent">Quick Sales Screen</a>
       </div>
     </div>
     <div class="nav-group">
       <div class="nav-label">Insights &amp; Toolkit</div>
-      <div class="nav-items">
-        <a href="analytics.html">Analytics</a>
-        <a href="forecasting_pipeline.html">Forecasting</a>
-        <a href="integration_features.html">Integration</a>
-        <a href="sales_process_visualization.html">Process Visualization</a>
-        <a href="results_driven.html">Results Driven</a>
-        <a href="executive_command_center.html">Exec Command</a>
-        <a href="account_360.html">Account 360</a>
-        <a href="partner_hub.html">Partner Hub</a>
-        <a href="revenue_intelligence.html">Revenue Intelligence</a>
-        <a href="field_mobile_snapshot.html">Field Mobile</a>
-        <a href="sales_ppm_sync.html">Sales-PPM</a>
-        <a href="quote_to_docusign.html">Quote to DocuSign</a>
-        <a href="pursuit_project.html">Pursuit Project</a>
+      <div class="nav-items">    <a href="analytics.html">Analytics</a>    <a href="forecasting_pipeline.html">Forecasting</a>    <a href="integration_features.html">Integration</a>    <a href="sales_process_visualization.html">Process Visualization</a>    <a href="results_driven.html">Results Driven</a>    <a href="executive_command_center.html">Exec Command</a>    <a href="account_360.html">Account 360</a>    <a href="partner_hub.html">Partner Hub</a>    <a href="revenue_intelligence.html">Revenue Intelligence</a>    <a href="field_mobile_snapshot.html">Field Mobile</a>    <a href="sales_ppm_sync.html">Sales-PPM</a>    <a href="quote_to_docusign.html">Quote to DocuSign</a>    <a href="pursuit_project.html">Pursuit Project</a>
       </div>
     </div>
   </nav>
@@ -262,6 +444,24 @@
               <p>Email follow-up sent; waiting on scope signoff.</p>
             </div>
           </div>
+        </section>
+        <section class="lead-filter-card">
+          <div class="lead-filter-bar">
+            <span class="filter-pill">Creation Date &ge; 1/1/22 12:00 AM <span class="close">×</span></span>
+            <span class="filter-pill">Status (2) <span class="close">×</span></span>
+            <span class="filter-pill">Record Set I Own <span class="close">×</span></span>
+            <input class="filter-input" type="search" placeholder="Try searching by keyword or add a filter" />
+            <button class="btn primary" id="open-filter">Add Filter</button>
+          </div>
+          <div class="lead-filter-empty">Try searching by keyword or add a filter. Use the saved searches below to jump to a view.</div>
+          <ul class="saved-searches" aria-label="Saved searches">
+            <li><span class="dot"></span> Create Lead</li>
+            <li><span class="dot"></span> My Open Leads</li>
+            <li><span class="dot"></span> My Team's Open Leads</li>
+            <li><span class="dot"></span> Open Leads Where I'm On The Team</li>
+            <li><span class="dot"></span> Recommended Leads</li>
+            <li><span class="dot"></span> Manage Saved Searches</li>
+          </ul>
         </section>
 
         <section class="lead-ai-summary">
@@ -1110,8 +1310,57 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (window.initVBCSPersonaRibbon) { window.initVBCSPersonaRibbon(); }
+      var overlay = document.getElementById('filterOverlay');
+      var openBtn = document.getElementById('open-filter');
+      var closeBtns = document.querySelectorAll('[data-close-filter]');
+      if (openBtn && overlay) {
+        openBtn.addEventListener('click', function () { overlay.classList.add('open'); });
+      }
+      closeBtns.forEach(function (btn) { btn.addEventListener('click', function () { overlay.classList.remove('open'); }); });
+      overlay && overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('open'); });
+      document.querySelectorAll('.filter-pill .close').forEach(function (x) {
+        x.addEventListener('click', function () {
+          var pill = x.closest('.filter-pill');
+          if (pill) pill.remove();
+        });
+      });
     });
   </script>
+  <nav class="vision-footer" aria-label="Global navigation">    <a href="sales_cloud.html">Sales Dashboard</a>    <a href="account_360.html">Accounts</a>
+    <a href="cx_lead.html" class="active">Leads</a>    <a href="cx_opportunity.html">Opportunities</a>    <a href="quote_to_docusign.html">Quotes</a>
+  </nav>
+  <div class="filter-modal-overlay" id="filterOverlay">
+    <div class="filter-modal-wrap">
+      <div class="filter-modal-head">
+        <h4>Advanced Filter</h4>
+        <button class="filter-close-btn" data-close-filter>&times;</button>
+      </div>
+      <div class="filter-modal">
+        <div class="options" aria-label="Filter operators">
+          <label><input type="radio" name="adv-filter" checked /> All of the Words</label>
+          <label><input type="radio" name="adv-filter" /> Any of the Words</label>
+          <label><input type="radio" name="adv-filter" /> Equals</label>
+          <label><input type="radio" name="adv-filter" /> Exists</label>
+          <label><input type="radio" name="adv-filter" /> Fuzzy Match</label>
+          <label><input type="radio" name="adv-filter" /> In</label>
+          <label><input type="radio" name="adv-filter" /> Is Missing</label>
+          <label><input type="radio" name="adv-filter" /> None of the Words</label>
+          <label><input type="radio" name="adv-filter" /> Not Equal to</label>
+          <label><input type="radio" name="adv-filter" /> Not In</label>
+        </div>
+        <div>
+          <div class="value-box">
+            <span class="value-pill">Unqualified</span>
+            <span class="value-pill">Qualified</span>
+          </div>
+          <div class="footer">
+            <button class="btn ghost" data-close-filter>Cancel</button>
+            <button class="btn brand" data-close-filter>Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="footer">Copyright Demo - Redwood-inspired mockup</div>
 </body>
 
