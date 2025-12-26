@@ -1,11 +1,5 @@
 (function () {
   const NAV_LINKS = [
-    { href: '#', label: 'All Persona', group: 'persona', personaKey: 'all' },
-    { href: '#', label: 'Sales Rep', group: 'persona', personaKey: 'rep' },
-    { href: '#', label: 'Sales Manager', group: 'persona', personaKey: 'manager' },
-    { href: '#', label: 'Executive', group: 'persona', personaKey: 'exec' },
-    { href: '#', label: 'Delivery', group: 'persona', personaKey: 'delivery' },
-    { href: '#', label: 'Partner', group: 'persona', personaKey: 'partner' },
     { href: 'index.html', label: 'Overview', group: 'journey' },
     { href: 'Easy_Start_Flows.html', label: 'Easy Start', group: 'journey' },
     { href: 'sales_cloud.html', label: 'Sales Flow', group: 'journey' },
@@ -32,7 +26,6 @@
     { href: 'pursuit_project.html', label: 'Pursuit Project', group: 'toolkit' }
   ];
   const NAV_GROUP_LABELS = {
-    persona: 'Persona Views',
     journey: 'Sales & Delivery Journey',
     toolkit: 'Insights & Toolkit'
   };
@@ -319,6 +312,8 @@
       d.lead.activities = [];
       d.oppty = Object.assign({}, d.oppty, conf.oppty || {});
       d.oppty.activities = [];
+      addAct(d.lead.activities, 'Scenario', 'Loaded ' + (conf.label || 'scenario'));
+      addAct(d.oppty.activities, 'Scenario', conf.oppty && conf.oppty.stage ? ('Stage: ' + conf.oppty.stage) : 'Opportunity refreshed');
       d.pursuit = Object.assign({}, d.pursuit, conf.pursuit || {});
       d.const = Object.assign({}, d.const, conf.project || {});
       if (d.salesFlow.lead) { d.salesFlow.lead.status = d.lead.status || d.salesFlow.lead.status; d.salesFlow.lead.updated = now(); }

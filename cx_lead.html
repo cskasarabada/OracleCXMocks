@@ -899,7 +899,7 @@
           });
         });
       }
-        function updateHero(snapshot) {
+                function updateHero(snapshot) {
           var data = snapshot || state;
           try {
             var hero = document.getElementById('leadHeroTitle');
@@ -909,12 +909,29 @@
             var contact = document.getElementById('leadHeroContact');
             if (contact) {
               var phone = data.lead && (data.lead.contactPhone || data.lead.contactPhoneNumber);
-              contact.textContent = ((data.lead && data.lead.contact) || contact.textContent) + (phone ? ' \u2022 ' + phone : '');
+              contact.textContent = ((data.lead && data.lead.contact) || contact.textContent) + (phone ? ' • ' + phone : '');
             }
             var product = document.getElementById('leadHeroProduct');
             if (product && data.lead && data.lead.product) product.textContent = data.lead.product;
             var val = document.getElementById('leadHeroValue');
-            if (val && data.lead && data.lead.amount) val.textContent = '$' + Number(data.lead.amount).toLocaleString();
+            var amt = (data.oppty && data.oppty.amount) || (data.lead && data.lead.amount);
+            if (val && amt) val.textContent = '$' + Number(amt).toLocaleString();
+            var smartLabel = document.getElementById('lead-smart-company');
+            if (smartLabel) smartLabel.textContent = data.lead.company || 'your lead';
+            var acts = document.getElementById('leadHeroActivities');
+            var actCount = 0;
+            if (data.lead && Array.isArray(data.lead.activities)) actCount += data.lead.activities.length;
+            if (data.oppty && Array.isArray(data.oppty.activities)) actCount += data.oppty.activities.length;
+            if (acts) acts.textContent = actCount;
+            var touch = document.getElementById('leadHeroTouch');
+            var lastTouch = (data.timeline && data.timeline.length && data.timeline[0].ts) || (data.logs && data.logs.length && (data.logs[0].match(/\[(.*?)\]/) || [])[1]);
+            if (touch && lastTouch) touch.textContent = lastTouch;
+          } catch (e) { }
+        }
+            var product = document.getElementById('leadHeroProduct');
+            if (product && data.lead && data.lead.product) product.textContent = data.lead.product;
+            var val = document.getElementById('leadHeroValue');
+            if (val) { var amt = (data.oppty && data.oppty.amount) || (data.lead && data.lead.amount); if (amt) val.textContent = '$' + Number(amt).toLocaleString(); }
             var smartLabel = document.getElementById('lead-smart-company');
             if (smartLabel) smartLabel.textContent = data.lead.company || 'your lead';
           } catch (e) { }

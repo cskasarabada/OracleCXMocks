@@ -1,0 +1,5 @@
+    --oj-sp-theme-global-texture-image-start: url('https://static.oracle.com/cdn/fnd/gallery/2510.0.1/images/background-shell-cx-start.png');
+    --oj-sp-theme-global-texture-image-end: url('https://static.oracle.com/cdn/fnd/gallery/2510.0.1/images/background-shell-cx-end.png');
+	
+	    --oj-sp-theme-global-bkgd: var(--JET_STICKY_HEADER_COLOR, rgb(var(--oj-palette-neutral-rgb-170)));
+    background-color: transparent!important;
