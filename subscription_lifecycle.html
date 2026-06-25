@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Subscription Lifecycle</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    :root {
+      --argano-orange: #ff7a18;
+      --deep-navy: #0f172a;
+      --rw-border: #e2e8f0;
+      --rw-muted: #64748b;
+    }
+
+    /* ── Hero ── */
+    .sub-hero {
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid rgba(27,38,56,.1);
+      box-shadow: 0 28px 44px rgba(10,15,28,.14);
+      padding: 28px;
+      margin-bottom: 26px;
+    }
+    .sub-hero h1 { margin: 0; font-size: 1.9rem; }
+    .sub-hero .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .sub-hero .hero-details {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      font-size: 13px; color: #5a6478; margin-top: 14px;
+    }
+    .sub-hero .hero-details span strong { color: #1a2236; }
+    .sub-hero .hero-search { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+    .sub-hero input[type="search"] {
+      flex: 1; min-width: 260px; border-radius: 10px;
+      border: 1px solid rgba(27,38,56,.18); padding: 11px; font-size: 14px;
+    }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: .1em;
+      font-size: 11px; color: #ff7a18; font-weight: 700; margin: 0 0 6px;
+    }
+    .badge.active { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge.warn { background: #fef9c3; color: #713f12; border: 1px solid #fde68a; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge.low { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .pill {
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      border-radius: 999px; padding: 4px 12px; font-size: 12px; color: #475569; font-weight: 600;
+    }
+
+    /* ── Lifecycle Stepper ── */
+    .lifecycle-card {
+      background: #fff; border-radius: 16px;
+      border: 1px solid var(--rw-border); padding: 22px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08); margin-bottom: 26px;
+    }
+    .lifecycle-card h3 { margin: 0 0 18px; font-size: 1rem; color: #1a2236; }
+    .stepper { display: flex; align-items: flex-start; gap: 0; position: relative; }
+    .step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .step-connector {
+      position: absolute; top: 18px; left: 50%; width: 100%;
+      height: 3px; z-index: 0;
+    }
+    .step-connector.done { background: #16a34a; }
+    .step-connector.current { background: linear-gradient(90deg,#16a34a 50%,#e2e8f0 50%); }
+    .step-connector.future { background: #e2e8f0; }
+    .step:last-child .step-connector { display: none; }
+    .step-circle {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; z-index: 1;
+      border: 3px solid transparent;
+    }
+    .step-circle.done { background: #16a34a; color: #fff; border-color: #16a34a; }
+    .step-circle.current { background: #fff7ed; color: #ff7a18; border-color: #ff7a18; }
+    .step-circle.future { background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; }
+    .step-label { font-size: 12px; font-weight: 600; text-align: center; margin-top: 8px; color: #1a2236; }
+    .step-label.future-label { color: #94a3b8; }
+    .step-date { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 2px; }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 14px; margin-bottom: 26px;
+    }
+    .kpi-card {
+      background: #fff; border-radius: 16px;
+      border: 1px solid var(--rw-border); padding: 16px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .kpi-card .label {
+      text-transform: uppercase; letter-spacing: .12em;
+      font-size: 11px; color: #6c7894; font-weight: 700;
+    }
+    .kpi-card .value { font-size: 1.65rem; font-weight: 700; margin: 6px 0 4px; color: #0f172a; }
+    .kpi-card .value.green { color: #16a34a; }
+    .kpi-card .sub { font-size: 12px; color: #64748b; }
+
+    /* ── Dark Analytics Deck ── */
+    .analytics-deck {
+      background: linear-gradient(135deg,#0d1b2e,#0f2438 58%,#12324d);
+      color: #e8eef7; border-radius: 18px; padding: 24px;
+      box-shadow: 0 20px 38px rgba(6,16,36,.28);
+      margin-bottom: 26px; border: 1px solid rgba(255,255,255,.08);
+    }
+    .analytics-deck .deck-eyebrow { color: #c6d4eb; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; margin: 0 0 4px; }
+    .analytics-deck h2 { margin: 0 0 6px; font-size: 1.5rem; }
+    .analytics-deck .deck-desc { margin: 0 0 18px; color: #c6d4eb; font-size: 14px; }
+    .deck-tile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .deck-tile {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 14px;
+    }
+    .deck-tile .t-label { color: #9fb8d8; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .deck-tile .t-value { font-size: 1.5rem; font-weight: 700; margin: 6px 0; }
+    .deck-tile .t-meta { color: #dfe7f4; font-size: 13px; margin: 0; }
+    .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .scenario-card {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px; padding: 14px;
+    }
+    .scenario-card .s-label { color: #c6d4eb; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; }
+    .scenario-card .s-value { font-size: 1rem; font-weight: 700; color: #fff; margin: 4px 0; }
+    .scenario-card .s-desc { color: #9fb8d8; font-size: 13px; margin: 0; }
+
+    /* ── Tab Bar ── */
+    .tab-bar {
+      display: flex; gap: 4px; border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 22px; flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 10px 18px; border: none; background: none;
+      font-size: 14px; font-weight: 600; color: #64748b;
+      cursor: pointer; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; border-radius: 6px 6px 0 0;
+      transition: color .2s, border-color .2s;
+    }
+    .tab-btn:hover { color: #0f172a; background: #f8fafc; }
+    .tab-btn.active { color: #ff7a18; border-bottom-color: #ff7a18; background: #fff7ed; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Tables ── */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .data-table th {
+      background: #f8fafc; padding: 10px 14px;
+      text-align: left; font-size: 11px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: #64748b;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #1a2236; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr.total td { font-weight: 700; background: #f8fafc; color: #0f172a; }
+    .data-table tr:hover td { background: #fafcff; }
+    .table-card {
+      background: #fff; border-radius: 14px;
+      border: 1px solid var(--rw-border); overflow: hidden;
+      box-shadow: 0 8px 18px rgba(15,23,42,.06); margin-bottom: 18px;
+    }
+    .table-card-header {
+      padding: 14px 18px; border-bottom: 1px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    }
+    .table-card-header h4 { margin: 0; font-size: 1rem; color: #0f172a; }
+
+    /* ── Info Cards ── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .info-card {
+      background: #fff; border-radius: 14px;
+      border: 1px solid var(--rw-border); padding: 18px;
+      box-shadow: 0 8px 18px rgba(15,23,42,.06);
+    }
+    .info-card h4 { margin: 0 0 12px; font-size: .95rem; color: #0f172a; }
+    .info-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; border-bottom: 1px solid #f1f5f9; color: #475569; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row strong { color: #1a2236; }
+
+    /* ── Status badges inline ── */
+    .status-active { color: #16a34a; font-weight: 700; }
+    .status-scheduled { color: #2563eb; font-weight: 700; }
+    .status-paid { color: #16a34a; font-weight: 700; }
+
+    /* ── Amendment ── */
+    .amendment-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 18px 0; }
+    .amendment-type-card {
+      background: #f8fafc; border-radius: 12px;
+      border: 1px solid var(--rw-border); padding: 14px;
+    }
+    .amendment-type-card .at-icon { font-size: 20px; margin-bottom: 6px; }
+    .amendment-type-card .at-title { font-weight: 700; font-size: 14px; color: #0f172a; margin-bottom: 4px; }
+    .amendment-type-card .at-desc { font-size: 12px; color: #64748b; margin: 0; }
+    .empty-state { text-align: center; padding: 30px; color: #94a3b8; font-size: 14px; }
+    .empty-state .empty-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+    .amendment-form {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 12px; padding: 18px; margin-top: 18px;
+    }
+    .amendment-form h4 { margin: 0 0 12px; font-size: .95rem; }
+    .amendment-form .form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .amendment-form input, .amendment-form select {
+      border: 1px solid #e2e8f0; border-radius: 8px;
+      padding: 8px 12px; font-size: 14px; background: #fff;
+    }
+    .amendment-form input[type="number"] { width: 80px; }
+
+    /* ── Renewal Cards ── */
+    .renewal-timeline-card {
+      background: #fff7ed; border: 1px solid #fed7aa;
+      border-radius: 14px; padding: 18px; margin-bottom: 18px;
+    }
+    .renewal-timeline-card h4 { margin: 0 0 12px; color: #92400e; }
+    .renewal-ai-card {
+      background: linear-gradient(135deg,#ecfdf5,#d1fae5);
+      border: 1px solid #6ee7b7; border-radius: 14px; padding: 18px; margin-bottom: 18px;
+    }
+    .renewal-ai-card h4 { margin: 0 0 8px; color: #065f46; }
+    .renewal-ai-card p { margin: 0; font-size: 14px; color: #065f46; }
+    .renewal-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .renewal-option {
+      background: #fff; border-radius: 14px;
+      border: 2px solid #e2e8f0; padding: 16px; cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .renewal-option:hover { border-color: #ff7a18; box-shadow: 0 8px 20px rgba(255,122,24,.12); }
+    .renewal-option.recommended { border-color: #ff7a18; background: #fff7ed; }
+    .renewal-option .ro-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #ff7a18; margin-bottom: 4px; }
+    .renewal-option h4 { margin: 0 0 4px; font-size: 1rem; color: #0f172a; }
+    .renewal-option .ro-value { font-size: 1.3rem; font-weight: 700; color: #0f172a; }
+    .renewal-option .ro-desc { font-size: 12px; color: #64748b; margin: 4px 0 0; }
+    .renewal-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ── Revenue Recognition ── */
+    .policy-card {
+      background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: 14px; padding: 16px; margin-bottom: 18px;
+    }
+    .policy-card h4 { margin: 0 0 6px; color: #1d4ed8; }
+    .policy-card p { margin: 0; font-size: 14px; color: #1e40af; }
+    .waterfall-bar { margin: 20px 0 8px; }
+    .waterfall-bar .wf-label { font-size: 12px; color: #64748b; margin-bottom: 6px; font-weight: 600; }
+    .waterfall-track {
+      background: #e2e8f0; border-radius: 8px; height: 20px;
+      overflow: hidden; display: flex;
+    }
+    .wf-q1 { background: #ff7a18; }
+    .wf-q2 { background: #f59e0b; }
+    .wf-q3 { background: #10b981; }
+    .wf-q4 { background: #6366f1; }
+    .waterfall-legend { display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+    .wf-leg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569; }
+    .wf-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+    /* ── Activity Feed ── */
+    .activity-feed-card {
+      background: #fff; border-radius: 16px;
+      border: 1px solid var(--rw-border); padding: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08); margin-top: 26px;
+    }
+    .activity-feed-card h3 { margin: 0 0 16px; font-size: 1rem; color: #1a2236; }
+    .activity-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+    .activity-item {
+      display: flex; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .activity-icon.note { background: #fff7ed; }
+    .activity-icon.call { background: #eff6ff; }
+    .activity-icon.task { background: #f0fdf4; }
+    .activity-icon.amendment { background: #fdf4ff; }
+    .activity-icon.system { background: #f8fafc; }
+    .activity-body { flex: 1; }
+    .activity-body .act-title { font-size: 14px; font-weight: 600; color: #1a2236; }
+    .activity-body .act-meta { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .activity-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+    /* ── Dunning / Rev Rec note card ── */
+    .note-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 12px 16px; font-size: 13px;
+      color: #475569; margin-bottom: 14px; line-height: 1.6;
+    }
+
+    /* ── Section header ── */
+    .section-header { margin-bottom: 16px; }
+    .section-header h3 { margin: 0 0 4px; font-size: 1.1rem; color: #0f172a; }
+    .section-header p { margin: 0; font-size: 13px; color: #64748b; }
+
+    /* ── Collapse rows ── */
+    .collapsed-row td { color: #94a3b8; font-style: italic; }
+
+    /* ── General ── */
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .section-divider { height: 1px; background: #e2e8f0; margin: 20px 0; }
+    .ghost-btn {
+      background: none; border: 1px solid #e2e8f0; border-radius: 8px;
+      padding: 8px 16px; font-size: 13px; color: #475569; cursor: pointer;
+    }
+    .ghost-btn:hover { border-color: #ff7a18; color: #ff7a18; }
+
+    @media (max-width: 640px) {
+      .stepper { flex-direction: column; align-items: flex-start; }
+      .step { flex-direction: row; align-items: center; width: 100%; gap: 12px; }
+      .step-connector { display: none; }
+    }
+  </style>
+</head>
+<body class="sub-landing">
+
+<!-- ── HEADER ── -->
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+
+<!-- ── NAV ── -->
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="cpq_quote_builder.html">CPQ Quote</a>
+      <a href="subscription_lifecycle.html" class="active">Subscriptions</a>
+      <a href="cx_service_case.html">Service Case</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations &amp; Finance</div>
+    <div class="nav-items">
+      <a href="icm_compensation.html">Compensation (ICM)</a>
+      <a href="marketing_orchestration.html">Marketing</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="account_360.html">Account 360</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main style="max-width:980px;margin:0 auto;padding:24px;">
+
+  <!-- HERO -->
+  <section class="sub-hero">
+    <p class="eyebrow">Subscription Management &middot; Order-to-Cash</p>
+    <h1>Skyline Renewables — Oracle CX Suite Subscription</h1>
+    <div class="meta-row">
+      <span class="badge active">Active</span>
+      <span class="pill">SUB-2024-00892</span>
+      <span class="pill">Annual &middot; Auto-Renew On</span>
+      <span class="pill">Owner Chandra Kasarabada</span>
+    </div>
+    <div class="hero-details">
+      <span><strong>Start Date:</strong> Jan 1, 2025</span>
+      <span><strong>End Date:</strong> Dec 31, 2025</span>
+      <span><strong>Billing Cycle:</strong> Annual (invoiced Jan 1)</span>
+      <span><strong>Total Annual Value:</strong> $1,044,000</span>
+      <span><strong>Products:</strong> Oracle Sales Cloud 250 seats + CPQ 250 seats + Service Cloud 100 seats</span>
+      <span><strong>Payment Terms:</strong> Net 30 &middot; ACH</span>
+    </div>
+    <div class="hero-search">
+      <input type="search" id="subAiInput" placeholder="Ask Oracle AI to summarize subscription health, renewal risk, or amendment options..."/>
+      <button class="btn primary" onclick="showToast('AI analyzing subscription health... Score: 94/100 — Low churn risk. Renewal recommended with seat expansion.')">Renewal Analysis</button>
+      <button class="btn" onclick="showToast('Amendment simulator launched. Select products and dates below.')">Simulate Amendment</button>
+    </div>
+  </section>
+
+  <!-- LIFECYCLE STAGE PROGRESS BAR -->
+  <div class="lifecycle-card">
+    <h3>Subscription Lifecycle Progress</h3>
+    <div class="stepper">
+
+      <div class="step">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-connector done"></div>
+        <div class="step-label">Quote Approved</div>
+        <div class="step-date">Nov 15, 2024</div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-connector done"></div>
+        <div class="step-label">Order Created</div>
+        <div class="step-date">Nov 22, 2024</div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-connector done"></div>
+        <div class="step-label">Subscription Created</div>
+        <div class="step-date">Dec 1, 2024</div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle done">&#10003;</div>
+        <div class="step-connector current"></div>
+        <div class="step-label">Active / Billing</div>
+        <div class="step-date">Jan 1, 2025</div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle current">&#9203;</div>
+        <div class="step-connector future"></div>
+        <div class="step-label">Amendment Window</div>
+        <div class="step-date">Oct 1, 2025</div>
+      </div>
+
+      <div class="step">
+        <div class="step-circle future">&#9633;</div>
+        <div class="step-label future-label">Renewal</div>
+        <div class="step-date">Jan 1, 2026</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Annual Contract Value</div>
+      <div class="value">$1,044,000</div>
+      <div class="sub">FY2025 committed ARR</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Monthly Billing</div>
+      <div class="value">$87,000</div>
+      <div class="sub">Recognized per month</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Billing Invoices Sent</div>
+      <div class="value">0</div>
+      <div class="sub">Starts Jan 1, 2025</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Amendment Requests</div>
+      <div class="value">0</div>
+      <div class="sub">No changes on record</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Auto-Renew</div>
+      <div class="value green">Active &#10003;</div>
+      <div class="sub">Triggers Nov 30, 2025</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Days to Renewal</div>
+      <div class="value">321</div>
+      <div class="sub">Renewal Dec 31, 2025</div>
+    </div>
+  </div>
+
+  <!-- DARK ANALYTICS DECK -->
+  <div class="analytics-deck">
+    <p class="deck-eyebrow">Oracle Subscription Cloud</p>
+    <h2>Revenue Intelligence</h2>
+    <p class="deck-desc">AI-driven revenue analysis across contract lifecycle, expansion signals, and churn risk modeling.</p>
+
+    <div class="deck-tile-grid">
+      <div class="deck-tile">
+        <div class="t-label">Total Contract Value (3-yr projected)</div>
+        <div class="t-value">$3,132,000</div>
+        <p class="t-meta">Based on auto-renewal at current pricing</p>
+      </div>
+      <div class="deck-tile">
+        <div class="t-label">Churn Risk</div>
+        <div class="t-value" style="color:#4ade80;">Low</div>
+        <p class="t-meta">Score 12/100 &mdash; Highly engaged account</p>
+      </div>
+      <div class="deck-tile">
+        <div class="t-label">Expansion Opportunity</div>
+        <div class="t-value" style="color:#fbbf24;">$284,000</div>
+        <p class="t-meta">AI-identified upsell &amp; cross-sell potential</p>
+      </div>
+      <div class="deck-tile">
+        <div class="t-label">Health Score</div>
+        <div class="t-value" style="color:#4ade80;">94/100</div>
+        <p class="t-meta">Usage, engagement, and support signals</p>
+      </div>
+    </div>
+
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <div class="s-label">Upsell Scenario</div>
+        <div class="s-value">Add 50 seats Sales Cloud = +$120,000 ARR</div>
+        <p class="s-desc">Current utilization: 243/250 seats (97%). Expansion likely needed Q2 2026. Prorated at $2,400/seat/yr.</p>
+      </div>
+      <div class="scenario-card">
+        <div class="s-label">Cross-Sell Scenario</div>
+        <div class="s-value">Add Oracle ICM = +$96,000 ARR</div>
+        <p class="s-desc">Incentive Compensation Management module — aligns with Skyline's sales team expansion announced Feb 2025.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchSubTab(this,'tab-details')">Subscription Details</button>
+    <button class="tab-btn" onclick="switchSubTab(this,'tab-billing')">Billing Schedule</button>
+    <button class="tab-btn" onclick="switchSubTab(this,'tab-amendments')">Amendments</button>
+    <button class="tab-btn" onclick="switchSubTab(this,'tab-renewal')">Renewal</button>
+    <button class="tab-btn" onclick="switchSubTab(this,'tab-revrec')">Revenue Recognition</button>
+  </div>
+
+  <!-- ═══ TAB: SUBSCRIPTION DETAILS ═══ -->
+  <div id="tab-details" class="tab-panel active">
+    <div class="section-header">
+      <h3>Subscribed Products &amp; Pricing</h3>
+      <p>Line-item breakdown for SUB-2024-00892. All prices are annual, per seat.</p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h4>Product Line Items</h4>
+        <span class="pill">FY2025 Active</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>SKU</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Annual Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Oracle Sales Cloud Enterprise</strong></td>
+            <td>OCS-ENT</td>
+            <td>250 seats</td>
+            <td>$2,400/seat/yr</td>
+            <td><strong>$600,000</strong></td>
+            <td><span class="status-active">Active</span></td>
+          </tr>
+          <tr>
+            <td><strong>Oracle CPQ Cloud</strong></td>
+            <td>CPQ-STD</td>
+            <td>250 seats</td>
+            <td>$960/seat/yr</td>
+            <td><strong>$240,000</strong></td>
+            <td><span class="status-active">Active</span></td>
+          </tr>
+          <tr>
+            <td><strong>Oracle Service Cloud Professional</strong></td>
+            <td>SVC-PRO</td>
+            <td>100 seats</td>
+            <td>$2,040/seat/yr</td>
+            <td><strong>$204,000</strong></td>
+            <td><span class="status-active">Active</span></td>
+          </tr>
+          <tr class="total">
+            <td colspan="4"><strong>Total</strong></td>
+            <td><strong>$1,044,000</strong></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h4>Subscription Terms</h4>
+        <div class="info-row"><span>Auto-Renew</span><strong>ON</strong></div>
+        <div class="info-row"><span>Cancellation Notice</span><strong>60 days</strong></div>
+        <div class="info-row"><span>Price Lock</span><strong>12 months</strong></div>
+        <div class="info-row"><span>Governing Agreement</span><strong>MSA-2024-009</strong></div>
+        <div class="info-row"><span>Subscription Term</span><strong>Annual (Jan 1 – Dec 31)</strong></div>
+        <div class="info-row"><span>Payment Terms</span><strong>Net 30 &middot; ACH</strong></div>
+      </div>
+      <div class="info-card">
+        <h4>Subscription Contacts</h4>
+        <div class="info-row"><span>Account Admin</span><strong>Lena Ortiz</strong></div>
+        <div class="info-row"><span>Billing Contact</span><strong>Dana Marsh (CFO)</strong></div>
+        <div class="info-row"><span>Technical Contact</span><strong>Ravi Patel</strong></div>
+        <div class="info-row"><span>Account Owner (Argano)</span><strong>Chandra Kasarabada</strong></div>
+        <div class="info-row"><span>Customer Success</span><strong>Maria Delgado</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: BILLING SCHEDULE ═══ -->
+  <div id="tab-billing" class="tab-panel">
+    <div class="section-header">
+      <h3>Billing Schedule — FY2025</h3>
+      <p>Annual billing &mdash; single invoice issued Jan 1. Managed via Oracle Subscription Cloud AR integration.</p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h4>FY2025 Invoice Schedule</h4>
+        <span class="pill">Annual Invoice</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Payment Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>INV-2025-0001</strong></td>
+            <td>Jan 1, 2025</td>
+            <td><strong>$1,044,000</strong></td>
+            <td><span class="status-scheduled">Scheduled</span></td>
+            <td>ACH</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-card">
+      Annual billing &mdash; single invoice issued Jan 1. <strong>Net 30 payment terms.</strong> Late fee: 1.5% per month after due date. Invoices delivered via secure customer portal and email to billing contact Dana Marsh.
+    </div>
+
+    <div class="section-header" style="margin-top:22px;">
+      <h3>Payment History — FY2024 Pilot</h3>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <h4>Prior Period</h4>
+        <span class="badge active">Paid</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Payment Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>INV-2024-0012</strong></td>
+            <td>Dec 1, 2024</td>
+            <td><strong>$87,000</strong></td>
+            <td><span class="status-paid">Paid &#10003;</span></td>
+            <td>ACH</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-card" style="margin-bottom:18px;">
+      <h4>Dunning Workflow</h4>
+      <div class="info-row"><span>Reminder 1</span><strong>T+7 from due date</strong></div>
+      <div class="info-row"><span>Reminder 2</span><strong>T+14 from due date</strong></div>
+      <div class="info-row"><span>Reminder 3</span><strong>T+30 from due date</strong></div>
+      <div class="info-row"><span>Collections Escalation</span><strong>T+60 from due date</strong></div>
+      <div class="info-row"><span>Automated via</span><strong>Oracle AR Dunning Workflow</strong></div>
+    </div>
+
+    <div class="section-header" style="margin-top:22px;">
+      <h3>Revenue Recognition Schedule — FY2025</h3>
+      <p>$87,000 recognized monthly across 12 equal installments per ASC 606.</p>
+    </div>
+    <div class="table-card">
+      <div class="table-card-header">
+        <h4>Monthly Recognition</h4>
+        <span class="pill">Ratable · 12 Months</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Deferred Revenue</th>
+            <th>Recognized</th>
+            <th>Cumulative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Jan 2025</td><td>$957,000</td><td>$87,000</td><td>$87,000</td></tr>
+          <tr><td>Feb 2025</td><td>$870,000</td><td>$87,000</td><td>$174,000</td></tr>
+          <tr><td>Mar 2025</td><td>$783,000</td><td>$87,000</td><td>$261,000</td></tr>
+          <tr class="collapsed-row">
+            <td colspan="4" style="text-align:center;color:#94a3b8;">— Apr through Nov 2025: $87,000/month recognized each period —</td>
+          </tr>
+          <tr><td>Dec 2025</td><td>$87,000</td><td>$87,000</td><td>$1,044,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: AMENDMENTS ═══ -->
+  <div id="tab-amendments" class="tab-panel">
+    <div class="section-header">
+      <h3>Subscription Amendments</h3>
+      <p>Request upgrades, downgrades, add-ons, or early termination for SUB-2024-00892.</p>
+    </div>
+
+    <div class="empty-state">
+      <div style="font-size:36px;margin-bottom:10px;">&#128203;</div>
+      <div style="font-weight:700;font-size:15px;color:#475569;">No amendments on record</div>
+      <div style="margin-top:4px;">No amendments have been submitted for this subscription period.</div>
+      <div class="empty-btns">
+        <button class="btn primary" onclick="showToast('Request Upgrade form launched. Select product and seat count.')">Request Upgrade</button>
+        <button class="btn" onclick="showToast('Request Downgrade — effective at next renewal per contract terms.')">Request Downgrade</button>
+        <button class="btn" onclick="showToast('Add Products — choose Oracle Cloud module to add to subscription.')">Add Products</button>
+        <button class="btn" onclick="showToast('Remove Products — subject to 60-day cancellation notice and terms review.')">Remove Products</button>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section-header">
+      <h3>Amendment Types</h3>
+    </div>
+    <div class="amendment-types">
+      <div class="amendment-type-card">
+        <div class="at-icon">&#128200;</div>
+        <div class="at-title">Seat Expansion</div>
+        <p class="at-desc">Add users mid-term. Prorated billing calculated for the remaining period of the current subscription term.</p>
+      </div>
+      <div class="amendment-type-card">
+        <div class="at-icon">&#10133;</div>
+        <div class="at-title">Product Add-on</div>
+        <p class="at-desc">Add a new Oracle Cloud module to your existing subscription bundle. Effective immediately upon approval.</p>
+      </div>
+      <div class="amendment-type-card">
+        <div class="at-icon">&#128201;</div>
+        <div class="at-title">Downgrade</div>
+        <p class="at-desc">Reduce seats or remove a module. Changes are effective at renewal, not mid-term, per contract terms.</p>
+      </div>
+      <div class="amendment-type-card">
+        <div class="at-icon">&#9888;</div>
+        <div class="at-title">Early Termination</div>
+        <p class="at-desc">Subject to 3-month notice period and Early Termination Fee (ETF) per MSA-2024-009 Section 12.4.</p>
+      </div>
+    </div>
+
+    <div class="amendment-form">
+      <h4>Simulate Amendment — Proration Calculator</h4>
+      <div class="amendment-form form-row">
+        <span>I want to add</span>
+        <input type="number" id="amend-seats" value="50" min="1" max="500"/>
+        <span>seats of</span>
+        <select id="amend-product">
+          <option value="Sales Cloud">Oracle Sales Cloud Enterprise</option>
+          <option value="CPQ">Oracle CPQ Cloud</option>
+          <option value="Service Cloud">Oracle Service Cloud Professional</option>
+          <option value="ICM">Oracle ICM Cloud</option>
+        </select>
+        <span>starting</span>
+        <input type="date" id="amend-date" value="2025-04-01"/>
+        <button class="btn primary" onclick="calcProration()">Calculate Proration</button>
+      </div>
+      <div id="proration-result" style="margin-top:12px;display:none;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;font-size:14px;color:#0f172a;"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: RENEWAL ═══ -->
+  <div id="tab-renewal" class="tab-panel">
+    <div class="section-header">
+      <h3>Renewal Management</h3>
+      <p>Auto-renew is enabled. Manage the renewal strategy for the period beginning Jan 1, 2026.</p>
+    </div>
+
+    <div class="renewal-timeline-card">
+      <h4>&#128197; Renewal Timeline</h4>
+      <div class="info-row"><span>Subscription End</span><strong>Dec 31, 2025</strong></div>
+      <div class="info-row"><span>Renewal Window Opens</span><strong>Oct 1, 2025</strong></div>
+      <div class="info-row"><span>Auto-Renew Trigger</span><strong>Nov 30, 2025</strong> (if no action taken)</div>
+      <div class="info-row"><span>Cancellation Deadline</span><strong>Nov 1, 2025</strong> (60-day notice required)</div>
+    </div>
+
+    <div class="renewal-ai-card">
+      <h4>&#129504; Oracle AI Renewal Recommendation</h4>
+      <p><strong>Recommended:</strong> Renew with 50-seat expansion on Oracle Sales Cloud. Based on usage data: <strong>243/250 seats active (97% utilization)</strong>. Expansion will likely be needed by Q2 2026 based on Skyline's hiring pipeline signals. Churn risk remains low at 12/100. Consider multi-year lock-in for favorable pricing.</p>
+    </div>
+
+    <div class="section-header">
+      <h3>Renewal Options</h3>
+    </div>
+    <div class="renewal-options">
+      <div class="renewal-option">
+        <div class="ro-label">Option 1 &middot; Default</div>
+        <h4>Auto-Renew Same Terms</h4>
+        <div class="ro-value">$1,044,000</div>
+        <p class="ro-desc">12 months &middot; Same products, same seats, same pricing</p>
+      </div>
+      <div class="renewal-option recommended">
+        <div class="ro-label">Option 2 &middot; Recommended</div>
+        <h4>Upgrade + Renew</h4>
+        <div class="ro-value">$1,164,000</div>
+        <p class="ro-desc">12 months &middot; Add 50 Sales Cloud seats &middot; +$120,000 ARR</p>
+      </div>
+      <div class="renewal-option">
+        <div class="ro-label">Option 3 &middot; Best Value</div>
+        <h4>Multi-Year Lock-in</h4>
+        <div class="ro-value">$2,088,000</div>
+        <p class="ro-desc">24 months &middot; 5% discount applied &middot; Save $109,200</p>
+      </div>
+    </div>
+
+    <div class="renewal-actions">
+      <button class="btn primary" onclick="showToast('Initiating renewal quote process... Renewal Quote RQ-2025-0892 created.')">Initiate Renewal Quote</button>
+      <button class="btn" onclick="showToast('Renewal reminder set for Oct 1, 2025. Notification will go to Chandra Kasarabada and Lena Ortiz.')">Set Renewal Reminder</button>
+      <button class="btn" onclick="showToast('Subscription flagged for manual renewal review. Customer Success team notified.')">Flag for Manual Review</button>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: REVENUE RECOGNITION ═══ -->
+  <div id="tab-revrec" class="tab-panel">
+    <div class="section-header">
+      <h3>Revenue Recognition — ASC 606 / IFRS 15</h3>
+      <p>Subscription revenue recognized ratably over the performance period per Oracle RMCS integration.</p>
+    </div>
+
+    <div class="policy-card">
+      <h4>&#128203; Recognition Policy</h4>
+      <p>Subscription revenue is recognized ratably over the contracted performance period (Jan 1 – Dec 31, 2025). Service revenue is recognized on delivery. All recognition schedules are managed via Oracle Revenue Management Cloud Service (RMCS) and synchronized with General Ledger.</p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h4>Monthly Recognition Schedule — FY2025</h4>
+        <span class="pill">$87,000/month &middot; 12 periods</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Deferred Revenue</th>
+            <th>Recognized This Period</th>
+            <th>Cumulative Recognized</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Jan 2025</strong></td>
+            <td>$957,000</td>
+            <td><strong>$87,000</strong></td>
+            <td>$87,000</td>
+          </tr>
+          <tr>
+            <td><strong>Feb 2025</strong></td>
+            <td>$870,000</td>
+            <td><strong>$87,000</strong></td>
+            <td>$174,000</td>
+          </tr>
+          <tr>
+            <td><strong>Mar 2025</strong></td>
+            <td>$783,000</td>
+            <td><strong>$87,000</strong></td>
+            <td>$261,000</td>
+          </tr>
+          <tr>
+            <td><strong>Apr 2025</strong></td>
+            <td>$696,000</td>
+            <td><strong>$87,000</strong></td>
+            <td>$348,000</td>
+          </tr>
+          <tr class="collapsed-row">
+            <td colspan="4" style="text-align:center;padding:10px;color:#94a3b8;font-style:italic;">
+              &mdash; May through Nov 2025: $87,000 recognized each month per ratable schedule &mdash;
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Dec 2025</strong></td>
+            <td>$87,000</td>
+            <td><strong>$87,000</strong></td>
+            <td>$1,044,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="waterfall-bar">
+      <div class="wf-label">Deferred Revenue Waterfall — FY2025 (Quarterly Burn-Down)</div>
+      <div class="waterfall-track">
+        <div class="wf-q1" style="width:25%;"></div>
+        <div class="wf-q2" style="width:25%;"></div>
+        <div class="wf-q3" style="width:25%;"></div>
+        <div class="wf-q4" style="width:25%;"></div>
+      </div>
+      <div class="waterfall-legend">
+        <div class="wf-leg"><div class="wf-dot" style="background:#ff7a18;"></div> Q1 $261,000 recognized</div>
+        <div class="wf-leg"><div class="wf-dot" style="background:#f59e0b;"></div> Q2 $261,000 recognized</div>
+        <div class="wf-leg"><div class="wf-dot" style="background:#10b981;"></div> Q3 $261,000 recognized</div>
+        <div class="wf-leg"><div class="wf-dot" style="background:#6366f1;"></div> Q4 $261,000 recognized</div>
+      </div>
+    </div>
+
+    <div class="info-grid" style="margin-top:18px;">
+      <div class="info-card">
+        <h4>GL Mapping</h4>
+        <div class="info-row"><span>Revenue Account</span><strong>4000-SAAS-REV</strong></div>
+        <div class="info-row"><span>Deferred Revenue Account</span><strong>2400-DEF-REV</strong></div>
+        <div class="info-row"><span>Business Unit</span><strong>Skyline Renewables BU</strong></div>
+        <div class="info-row"><span>Cost Center</span><strong>CC-ENT-1042</strong></div>
+      </div>
+      <div class="info-card">
+        <h4>RMCS Integration Status</h4>
+        <div class="info-row"><span>Sync Status</span><strong style="color:#16a34a;">Active &#10003;</strong></div>
+        <div class="info-row"><span>Last Journal Entry</span><strong>Jan 31, 2025</strong></div>
+        <div class="info-row"><span>Next Journal Entry</span><strong>Feb 28, 2025</strong></div>
+        <div class="info-row"><span>ERP System</span><strong>Oracle Fusion Finance</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY FEED -->
+  <div class="activity-feed-card">
+    <h3>Activity Feed</h3>
+    <ul class="activity-list" id="subActivityList">
+      <li class="activity-item">
+        <div class="activity-icon system">&#128274;</div>
+        <div class="activity-body">
+          <div class="act-title">Subscription Activated</div>
+          <div class="act-meta">System &middot; Jan 1, 2025 at 00:00 UTC &middot; SUB-2024-00892 set to Active status. Billing cycle initiated.</div>
+        </div>
+      </li>
+      <li class="activity-item">
+        <div class="activity-icon note">&#9998;</div>
+        <div class="activity-body">
+          <div class="act-title">Billing Contact Updated</div>
+          <div class="act-meta">Chandra Kasarabada &middot; Jan 5, 2025 &middot; Billing contact updated from James Tarrant to Dana Marsh (CFO) per customer request.</div>
+        </div>
+      </li>
+      <li class="activity-item">
+        <div class="activity-icon task">&#128203;</div>
+        <div class="activity-body">
+          <div class="act-title">Renewal Review Scheduled</div>
+          <div class="act-meta">Maria Delgado (CS) &middot; Jan 10, 2025 &middot; QBR and renewal review scheduled for Oct 1, 2025. Renewal window calendar invite sent to Lena Ortiz.</div>
+        </div>
+      </li>
+    </ul>
+    <div class="activity-actions">
+      <button class="btn" onclick="addSubActivity('call','Call logged with Lena Ortiz. Discussed Q1 seat utilization and upcoming QBR.')">+ Log Call</button>
+      <button class="btn" onclick="addSubActivity('note','Note: Customer expressed interest in adding ICM module for sales comp automation.')">+ Note</button>
+      <button class="btn" onclick="addSubActivity('amendment','Amendment discussion initiated. Customer exploring 50-seat expansion for Sales Cloud.')">+ Amendment</button>
+      <button class="btn" onclick="addSubActivity('task','Task: Follow up with Dana Marsh on payment confirmation for INV-2025-0001.')">+ Task</button>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">Copyright Demo &mdash; Redwood-inspired mockup</div>
+
+<script>
+  function switchSubTab(btn, panelId) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    var panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  function addSubActivity(type, text) {
+    var iconMap = { call:'&#128222;', note:'&#9998;', amendment:'&#128203;', task:'&#128204;', system:'&#128274;' };
+    var classMap = { call:'call', note:'note', amendment:'amendment', task:'task', system:'system' };
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    var timeStr = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    var list = document.getElementById('subActivityList');
+    var item = document.createElement('li');
+    item.className = 'activity-item';
+    item.innerHTML =
+      '<div class="activity-icon ' + (classMap[type] || 'system') + '">' + (iconMap[type] || '&#128274;') + '</div>' +
+      '<div class="activity-body">' +
+        '<div class="act-title">' + text + '</div>' +
+        '<div class="act-meta">Chandra Kasarabada &middot; ' + dateStr + ' at ' + timeStr + '</div>' +
+      '</div>';
+    list.insertBefore(item, list.firstChild);
+    if (typeof showToast === 'function') showToast('Activity logged successfully.');
+  }
+
+  function calcProration() {
+    var seats = parseInt(document.getElementById('amend-seats').value) || 50;
+    var product = document.getElementById('amend-product').value;
+    var dateVal = document.getElementById('amend-date').value;
+
+    var priceMap = {
+      'Sales Cloud': 2400,
+      'CPQ': 960,
+      'Service Cloud': 2040,
+      'ICM': 1920
+    };
+    var unitPrice = priceMap[product] || 2400;
+    var annualAdd = seats * unitPrice;
+
+    var startDate = dateVal ? new Date(dateVal) : new Date('2025-04-01');
+    var endDate = new Date('2025-12-31');
+    var msPerDay = 86400000;
+    var totalDays = 365;
+    var remainingDays = Math.max(0, Math.round((endDate - startDate) / msPerDay));
+    var prorated = Math.round(annualAdd * (remainingDays / totalDays));
+
+    var result = document.getElementById('proration-result');
+    result.style.display = 'block';
+    result.innerHTML =
+      '<strong>Proration Result:</strong> ' + seats + ' seats of ' + product +
+      ' at $' + unitPrice.toLocaleString() + '/seat/yr &mdash; ' +
+      remainingDays + ' days remaining in term &mdash; ' +
+      '<strong style="color:#ff7a18;">Proration charge: $' + prorated.toLocaleString() + '</strong>' +
+      '&nbsp;&nbsp;(Annual impact: +$' + annualAdd.toLocaleString() + ' ARR)';
+
+    if (typeof showToast === 'function') {
+      showToast('Proration calculated: +$' + prorated.toLocaleString() + ' for ' + remainingDays + ' days remaining.');
+    }
+  }
+</script>
+
+</body>
+</html>

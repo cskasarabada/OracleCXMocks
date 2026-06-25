@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Oracle Marketing Orchestration — Q4 2024 Utility Campaign</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+<style>
+:root{--argano-orange:#ff7a18;--deep-navy:#0f172a;}
+body{font-family:"Century Gothic","Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
+
+/* ── Shell ─────────────────────────────────────────── */
+.mkt-shell{max-width:1280px;margin:0 auto;padding:28px 24px 100px;}
+
+/* ── Hero ─────────────────────────────────────────── */
+.mkt-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 28px 44px rgba(10,15,28,.14);padding:28px;margin-bottom:26px;}
+.mkt-hero h1{margin:4px 0 12px;font-size:1.85rem;color:var(--deep-navy);}
+.mkt-hero .eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--argano-orange);font-weight:700;margin:0 0 4px;}
+.mkt-hero .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.mkt-hero .hero-details{display:flex;gap:22px;flex-wrap:wrap;font-size:13px;color:#5a6478;margin-bottom:18px;}
+.mkt-hero .hero-details strong{color:var(--deep-navy);}
+.mkt-hero .hero-ai-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.mkt-hero .hero-ai-row input[type="search"]{flex:1;min-width:240px;border-radius:10px;border:1px solid rgba(27,38,56,.18);padding:11px 14px;font-size:14px;}
+
+/* ── Badges / Pills ─────────────────────────────────── */
+.badge{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;}
+.badge.active{background:#ecfdf3;color:#0f7a4a;border:1px solid #bbf7d0;}
+.badge.mql{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.badge.handed{background:#ecfdf3;color:#047857;border:1px solid #6ee7b7;}
+.pill{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0;}
+
+/* ── KPI Grid ───────────────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:28px;}
+.kpi-card{background:#fff;border-radius:16px;border:1px solid var(--rw-border,#e2e8f0);padding:18px;box-shadow:0 14px 26px rgba(15,23,42,.08);}
+.kpi-card .label{text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--rw-muted,#6c7894);font-weight:700;}
+.kpi-card .value{font-size:1.9rem;font-weight:700;color:var(--deep-navy);margin:4px 0 2px;}
+.kpi-card .sub{font-size:12px;color:#64748b;}
+.kpi-card.accent .value{color:var(--argano-orange);}
+.kpi-card.green .value{color:#0f7a4a;}
+
+/* ── Dark Analytics Deck ────────────────────────────── */
+.analytics-deck{background:linear-gradient(135deg,#0d1b2e,#0f2438 55%,#12314c);color:#e8eef7;border-radius:18px;padding:24px;box-shadow:0 20px 38px rgba(6,16,36,.28);margin-bottom:28px;border:1px solid rgba(255,255,255,.08);}
+.analytics-deck .deck-eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:#c6d4eb;font-weight:700;margin:0 0 4px;}
+.analytics-deck h2{margin:4px 0 4px;font-size:1.5rem;color:#fff;}
+.analytics-deck .deck-sub{margin:0 0 18px;color:#a8bdd8;font-size:13px;}
+.ai-tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;}
+.ai-tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px;}
+.ai-tile .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9fb8d8;margin-bottom:6px;}
+.ai-tile .value{font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:2px;}
+.ai-tile .meta{font-size:13px;color:#c6d4eb;}
+.seg-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+.seg-card{background:#0a1828;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px;}
+.seg-card .seg-name{font-weight:700;font-size:1rem;color:#fff;margin:0 0 4px;}
+.seg-card .seg-meta{font-size:13px;color:#a8c0da;}
+.seg-card .seg-intent{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+.seg-card .seg-intent.high{background:rgba(16,185,129,.18);color:#34d399;}
+.seg-card .seg-intent.medium{background:rgba(251,191,36,.18);color:#fbbf24;}
+.seg-card .seg-intent.low{background:rgba(239,68,68,.18);color:#f87171;}
+
+/* ── Tab Bar ─────────────────────────────────────────── */
+.tab-bar{display:flex;gap:4px;border-bottom:2px solid #e2e8f0;margin-bottom:26px;flex-wrap:wrap;}
+.tab-bar button{background:none;border:none;padding:10px 18px;font-size:14px;font-weight:600;color:#64748b;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s;border-radius:6px 6px 0 0;}
+.tab-bar button:hover{color:var(--deep-navy);}
+.tab-bar button.active{color:var(--argano-orange);border-bottom-color:var(--argano-orange);}
+
+/* ── Tab Panels ─────────────────────────────────────── */
+.tab-panel{display:none;}
+.tab-panel.visible{display:block;}
+
+/* ── Campaign Flow ─────────────────────────────────── */
+.campaign-flow{display:flex;gap:0;align-items:stretch;margin-bottom:24px;flex-wrap:nowrap;overflow-x:auto;}
+.flow-stage{flex:1;min-width:140px;border-radius:14px;padding:14px 12px;color:#fff;position:relative;text-align:center;}
+.flow-stage .stage-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85;margin-bottom:6px;}
+.flow-stage .stage-title{font-size:.95rem;font-weight:700;margin-bottom:8px;}
+.flow-stage .stage-stat{font-size:12px;opacity:.9;}
+.flow-arrow{display:flex;align-items:center;padding:0 6px;color:#94a3b8;font-size:20px;flex-shrink:0;}
+
+/* ── Channel Table / Generic Table ──────────────────── */
+.data-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;}
+.data-table th{text-align:left;padding:10px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;border-bottom:2px solid #e2e8f0;background:#f8fafc;}
+.data-table td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:#fafbff;}
+.data-table .total-row td{font-weight:700;background:#f8fafc;border-top:2px solid #e2e8f0;}
+
+/* ── Content Asset Cards ────────────────────────────── */
+.asset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px;}
+.asset-card{background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:16px;box-shadow:0 8px 18px rgba(15,23,42,.06);}
+.asset-card .asset-type{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--argano-orange);font-weight:700;margin-bottom:4px;}
+.asset-card .asset-title{font-weight:700;font-size:.95rem;color:var(--deep-navy);margin-bottom:4px;}
+.asset-card .asset-meta{font-size:12px;color:#64748b;}
+
+/* ── Audience Tab ───────────────────────────────────── */
+.segment-main{background:#fff;border-radius:16px;border:1px solid var(--rw-border,#e2e8f0);padding:18px;box-shadow:0 14px 26px rgba(15,23,42,.08);margin-bottom:18px;}
+.segment-main p{margin:6px 0 0;font-size:13px;color:#475569;}
+.sub-seg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:20px;}
+.sub-seg{background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:16px;box-shadow:0 8px 18px rgba(15,23,42,.06);}
+.sub-seg .seg-h{font-weight:700;font-size:1rem;color:var(--deep-navy);margin-bottom:4px;}
+.sub-seg .seg-count{font-size:1.4rem;font-weight:700;color:var(--argano-orange);margin:2px 0;}
+.sub-seg .seg-desc{font-size:12px;color:#64748b;}
+.sub-seg.hot{border-top:4px solid #ef4444;}
+.sub-seg.warm{border-top:4px solid var(--argano-orange);}
+.sub-seg.cold{border-top:4px solid #94a3b8;}
+.sub-seg.re{border-top:4px solid #8b5cf6;}
+.segment-builder{background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;padding:16px;margin-bottom:18px;}
+.segment-builder .sb-rule{font-family:"Courier New",monospace;font-size:13px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;color:#334155;margin-bottom:10px;}
+.segment-builder .sb-result{font-size:13px;color:#0f7a4a;font-weight:700;}
+.seg-actions{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* ── Journey Builder Tab ────────────────────────────── */
+.journey-flow{position:relative;padding-left:32px;margin-bottom:24px;}
+.journey-step{background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:16px;box-shadow:0 8px 18px rgba(15,23,42,.06);margin-bottom:0;position:relative;}
+.journey-step .step-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--argano-orange);font-weight:700;margin-bottom:4px;}
+.journey-step .step-title{font-weight:700;font-size:.95rem;color:var(--deep-navy);}
+.journey-step .step-meta{font-size:12px;color:#64748b;margin-top:4px;}
+.journey-connector{width:2px;background:#e2e8f0;margin-left:-1px;height:24px;position:relative;left:0;}
+.journey-connector-label{font-size:11px;color:#94a3b8;margin-left:12px;display:flex;align-items:center;height:24px;}
+.journey-branch{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0;}
+.branch-arm{display:flex;flex-direction:column;gap:0;}
+.branch-label{font-size:11px;color:#64748b;font-weight:600;text-align:center;padding:4px 0;background:#f1f5f9;border-radius:6px;margin-bottom:8px;}
+.journey-merge{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:13px;color:#0f7a4a;font-weight:600;text-align:center;margin-bottom:0;}
+.journey-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:20px;}
+.journey-stat{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:14px;text-align:center;}
+.journey-stat .js-value{font-size:1.5rem;font-weight:700;color:var(--argano-orange);}
+.journey-stat .js-label{font-size:12px;color:#64748b;margin-top:2px;}
+
+/* ── Engagement Analytics Tab ────────────────────────── */
+.eng-section-title{font-weight:700;font-size:1.1rem;color:var(--deep-navy);margin:0 0 12px;}
+.bar-chart-container{margin-bottom:24px;}
+.bar-chart-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.bar-chart-row .bar-label{width:220px;font-size:13px;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.bar-group{flex:1;display:flex;flex-direction:column;gap:3px;}
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar{height:16px;border-radius:4px;min-width:2px;}
+.bar.open{background:var(--argano-orange);}
+.bar.click{background:#1d4ed8;}
+.bar-val{font-size:12px;color:#64748b;width:32px;}
+.bar-legend{display:flex;gap:16px;margin-bottom:12px;}
+.legend-dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;}
+.device-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;}
+.device-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:14px;text-align:center;}
+.device-card .dv{font-size:1.6rem;font-weight:700;color:var(--deep-navy);}
+.device-card .dl{font-size:12px;color:#64748b;margin-top:2px;}
+.health-card{background:#ecfdf3;border:1px solid #bbf7d0;border-radius:12px;padding:14px;font-size:13px;color:#0f7a4a;font-weight:600;}
+
+/* ── Lead Scoring Tab ────────────────────────────────── */
+.scoring-model-card{background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:18px;box-shadow:0 8px 18px rgba(15,23,42,.06);margin-bottom:20px;}
+.scoring-model-card p{margin:4px 0 0;font-size:13px;color:#475569;}
+.top-leads-table .score-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;}
+.score-high{background:#fef3c7;color:#92400e;}
+.score-v-high{background:#ecfdf3;color:#047857;}
+.score-mid{background:#eff6ff;color:#1d4ed8;}
+.mql-handoff-card{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #ddd6fe;border-radius:14px;padding:18px;margin-top:20px;}
+.mql-handoff-card h4{margin:0 0 8px;color:#4c1d95;font-size:1rem;}
+.mql-handoff-card p{margin:0;font-size:13px;color:#5b21b6;}
+
+/* ── Activity Feed ───────────────────────────────────── */
+.activity-shell{background:#fff;border-radius:16px;border:1px solid var(--rw-border,#e2e8f0);padding:20px;box-shadow:0 14px 26px rgba(15,23,42,.08);margin-top:28px;}
+.activity-shell h3{margin:0 0 14px;font-size:1.1rem;color:var(--deep-navy);}
+.activity-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.activity-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.activity-item{display:flex;gap:12px;align-items:flex-start;border:1px solid #f1f5f9;border-radius:10px;padding:12px;}
+.activity-item .act-icon{width:32px;height:32px;border-radius:50%;background:rgba(255,122,24,.12);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.activity-item .act-body{flex:1;}
+.activity-item .act-title{font-weight:600;font-size:13px;color:var(--deep-navy);}
+.activity-item .act-meta{font-size:12px;color:#64748b;margin-top:2px;}
+
+/* ── Section heading ─────────────────────────────────── */
+.section-hd{margin:0 0 16px;}
+.section-hd .eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--argano-orange);font-weight:700;}
+.section-hd h2{margin:4px 0 0;font-size:1.4rem;color:var(--deep-navy);}
+
+/* ── Utility ─────────────────────────────────────────── */
+.card{background:#fff;border-radius:16px;border:1px solid var(--rw-border,#e2e8f0);padding:18px;box-shadow:0 14px 26px rgba(15,23,42,.08);}
+.mt-20{margin-top:20px;}
+.mb-20{margin-bottom:20px;}
+.flex-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.muted{color:var(--rw-muted,#64748b);font-size:13px;}
+</style>
+</head>
+<body class="lead-landing">
+
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="cpq_quote_builder.html">CPQ Quote</a>
+      <a href="subscription_lifecycle.html">Subscriptions</a>
+      <a href="cx_service_case.html">Service Case</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations &amp; Finance</div>
+    <div class="nav-items">
+      <a href="icm_compensation.html">Compensation (ICM)</a>
+      <a href="marketing_orchestration.html" class="active">Marketing</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="account_360.html">Account 360</a>
+    </div>
+  </div>
+</nav>
+
+<main class="mkt-shell">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="mkt-hero">
+    <p class="eyebrow">Oracle Marketing Cloud · Campaign Orchestration</p>
+    <h1>Q4 2024 — Utility &amp; Energy Sector Campaign</h1>
+    <div class="meta-row">
+      <span class="badge active">Active</span>
+      <span class="pill">CMP-2024-Q4-UTL</span>
+      <span class="pill">Eloqua · SMS · Push</span>
+      <span class="pill">Owner: Dana Park</span>
+      <span class="pill">Segment: 4,820 contacts</span>
+    </div>
+    <div class="hero-details">
+      <div>Campaign Type <strong>Multi-Channel Nurture</strong></div>
+      <div>Start Date <strong>Oct 1 2024</strong></div>
+      <div>End Date <strong>Dec 31 2024</strong></div>
+      <div>Target Segment <strong>Utility/Energy CXOs and IT Directors</strong></div>
+      <div>Goal <strong>45 MQLs → 15 SQLs → 3 Deals</strong></div>
+      <div>Budget <strong>$84,000</strong></div>
+      <div>Spent <strong>$31,200 <span style="color:#64748b;font-weight:400">(37%)</span></strong></div>
+    </div>
+    <div class="hero-ai-row">
+      <input type="search" id="mktAiInput" placeholder="Ask Oracle Marketing AI to optimize segments, predict MQL conversion, or recommend next-best action..."/>
+      <button class="btn primary" onclick="runMktAI('optimize')">AI Optimize Segments</button>
+      <button class="btn" onclick="runMktAI('predict')">Predict Conversion</button>
+      <button class="btn" onclick="runMktAI('content')">Generate Content</button>
+    </div>
+    <div id="mktAiResult" style="margin-top:14px;display:none;background:#f5f0e7;border-radius:10px;padding:14px;font-size:14px;color:#334155;border:1px solid rgba(255,122,24,.25);"></div>
+  </section>
+
+  <!-- ═══════════ KPI GRID ═══════════ -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Contacts in Campaign</div>
+      <div class="value">4,820</div>
+      <div class="sub">Oracle CDP segment</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Emails Sent</div>
+      <div class="value">14,460</div>
+      <div class="sub">Across 3 sends</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="label">Open Rate</div>
+      <div class="value">38%</div>
+      <div class="sub">Industry avg: 22%</div>
+    </div>
+    <div class="kpi-card accent">
+      <div class="label">Click Rate</div>
+      <div class="value">12%</div>
+      <div class="sub">Industry avg: 3.5%</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="label">MQLs Generated</div>
+      <div class="value">18</div>
+      <div class="sub">Goal: 45 · 40% to target</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="label">SQLs Converted</div>
+      <div class="value">6</div>
+      <div class="sub">Goal: 15 · 40% to target</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ DARK ANALYTICS DECK ═══════════ -->
+  <section class="analytics-deck">
+    <div class="deck-eyebrow">Campaign Intelligence</div>
+    <h2>AI Marketing Insights</h2>
+    <p class="deck-sub">Predictive signals from engagement data, intent scores, and behavioral patterns</p>
+
+    <div class="ai-tile-grid">
+      <div class="ai-tile">
+        <div class="label">Predicted MQL Total</div>
+        <div class="value">42</div>
+        <p class="meta">AI model confidence: 84%</p>
+      </div>
+      <div class="ai-tile">
+        <div class="label">Best Performing Channel</div>
+        <div class="value">Email</div>
+        <p class="meta">38% open rate via Eloqua</p>
+      </div>
+      <div class="ai-tile">
+        <div class="label">Optimal Send Time</div>
+        <div class="value">Tue 10 AM</div>
+        <p class="meta">Based on engagement cohort</p>
+      </div>
+      <div class="ai-tile">
+        <div class="label">Content Gap</div>
+        <div class="value" style="font-size:1rem;">Missing ROI Calculator</div>
+        <p class="meta">High intent contacts lacking decision asset</p>
+      </div>
+    </div>
+
+    <div style="margin-top:6px;margin-bottom:10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9fb8d8;font-weight:700;">Segment Performance</div>
+    <div class="seg-card-grid">
+      <div class="seg-card">
+        <div class="seg-name">Utility CXOs</div>
+        <div class="seg-meta">1,240 contacts · 44% open rate · 8 MQLs generated</div>
+        <span class="seg-intent high">High Intent</span>
+      </div>
+      <div class="seg-card">
+        <div class="seg-name">IT Directors</div>
+        <div class="seg-meta">1,820 contacts · 36% open rate · 7 MQLs generated</div>
+        <span class="seg-intent medium">Medium Intent</span>
+      </div>
+      <div class="seg-card">
+        <div class="seg-name">Finance / CFO</div>
+        <div class="seg-meta">980 contacts · 28% open rate · 3 MQLs generated</div>
+        <span class="seg-intent low">Low Intent</span>
+      </div>
+      <div class="seg-card">
+        <div class="seg-name">Operations Mgrs</div>
+        <div class="seg-meta">780 contacts · 31% open rate · 0 MQLs yet</div>
+        <span class="seg-intent medium">Medium Intent</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ TAB BAR ═══════════ -->
+  <div class="tab-bar">
+    <button class="active" onclick="switchMktTab(this,'tab-overview')">Campaign Overview</button>
+    <button onclick="switchMktTab(this,'tab-audience')">Audience Segments</button>
+    <button onclick="switchMktTab(this,'tab-journey')">Journey Builder</button>
+    <button onclick="switchMktTab(this,'tab-engagement')">Engagement Analytics</button>
+    <button onclick="switchMktTab(this,'tab-scoring')">Lead Scoring</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB: CAMPAIGN OVERVIEW
+  ════════════════════════════════════════════ -->
+  <div class="tab-panel visible" id="tab-overview">
+
+    <div class="section-hd">
+      <div class="eyebrow">Execution</div>
+      <h2>Campaign Flow</h2>
+    </div>
+
+    <div class="campaign-flow mb-20">
+      <div class="flow-stage" style="background:#7c3aed;">
+        <div class="stage-label">Stage 1</div>
+        <div class="stage-title">Targeting<br><span style="font-size:11px;opacity:.8;">Eloqua CDP</span></div>
+        <div class="stage-stat">1,240 accounts</div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-stage" style="background:#1d4ed8;">
+        <div class="stage-label">Stage 2</div>
+        <div class="stage-title">Build<br><span style="font-size:11px;opacity:.8;">Assemble Content</span></div>
+        <div class="stage-stat">3 email templates</div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-stage" style="background:#ff7a18;">
+        <div class="stage-label">Stage 3</div>
+        <div class="stage-title">Execute<br><span style="font-size:11px;opacity:.8;">Send via Channels</span></div>
+        <div class="stage-stat">14,460 sends</div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-stage" style="background:#0ea5e9;">
+        <div class="stage-label">Stage 4</div>
+        <div class="stage-title">Monitor<br><span style="font-size:11px;opacity:.8;">Track Engagement</span></div>
+        <div class="stage-stat">38% open rate</div>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-stage" style="background:#10b981;">
+        <div class="stage-label">Stage 5</div>
+        <div class="stage-title">Optimize<br><span style="font-size:11px;opacity:.8;">Refine Segments</span></div>
+        <div class="stage-stat">AI tuning active</div>
+      </div>
+    </div>
+
+    <!-- Channel Performance Table -->
+    <div class="section-hd">
+      <div class="eyebrow">Multi-Channel</div>
+      <h2>Channel Performance</h2>
+    </div>
+    <div class="card mb-20" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Sends</th>
+            <th>Open / Click</th>
+            <th>Conversions</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Email (Eloqua)</strong></td>
+            <td>14,460</td>
+            <td>38% open · 12% click</td>
+            <td><span class="badge mql">14 MQLs</span></td>
+            <td>$8,400</td>
+          </tr>
+          <tr>
+            <td><strong>SMS</strong></td>
+            <td>4,820</td>
+            <td>61% open · 8% click</td>
+            <td><span class="badge mql">3 MQLs</span></td>
+            <td>$6,200</td>
+          </tr>
+          <tr>
+            <td><strong>Push Notification</strong></td>
+            <td>3,100</td>
+            <td>22% open · 6% click</td>
+            <td><span class="badge mql">1 MQL</span></td>
+            <td>$1,800</td>
+          </tr>
+          <tr>
+            <td><strong>LinkedIn Ads</strong></td>
+            <td>—</td>
+            <td>4.2% CTR</td>
+            <td>0 MQLs</td>
+            <td>$14,800</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total</strong></td>
+            <td></td>
+            <td></td>
+            <td><strong>18 MQLs</strong></td>
+            <td><strong>$31,200</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Content Assets -->
+    <div class="section-hd">
+      <div class="eyebrow">Assets</div>
+      <h2>Content Assets Used</h2>
+    </div>
+    <div class="asset-grid">
+      <div class="asset-card">
+        <div class="asset-type">Email Template 1</div>
+        <div class="asset-title">"The Future of Utility CX"</div>
+        <div class="asset-meta">Sent Oct 5 · 4,712 delivered · 42% open</div>
+      </div>
+      <div class="asset-card">
+        <div class="asset-type">Email Template 2</div>
+        <div class="asset-title">"Customer Success Story: GreenPath Energy"</div>
+        <div class="asset-meta">Sent Oct 10 · 2,872 delivered · 38% open</div>
+      </div>
+      <div class="asset-card">
+        <div class="asset-type">Email Template 3</div>
+        <div class="asset-title">"Live Demo Invite — Q4 Exclusive"</div>
+        <div class="asset-meta">Sent Oct 18 · 1,940 delivered · 31% open</div>
+      </div>
+      <div class="asset-card">
+        <div class="asset-type">Landing Page 1</div>
+        <div class="asset-title">Utility Modernization Hub</div>
+        <div class="asset-meta">1,240 visits · 18% form submission rate</div>
+      </div>
+      <div class="asset-card">
+        <div class="asset-type">Landing Page 2</div>
+        <div class="asset-title">ROI Calculator (coming soon)</div>
+        <div class="asset-meta" style="color:#ef4444;">AI identified gap · Not yet published</div>
+      </div>
+      <div class="asset-card">
+        <div class="asset-type">Webinar Registration</div>
+        <div class="asset-title">Transforming Utility CX with Oracle Cloud</div>
+        <div class="asset-meta">Nov 14 · 320 registrations · 210 attended</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB: AUDIENCE SEGMENTS
+  ════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-audience">
+
+    <div class="section-hd">
+      <div class="eyebrow">Oracle CDP</div>
+      <h2>Audience Segmentation</h2>
+    </div>
+
+    <div class="segment-main mb-20">
+      <strong style="font-size:1rem;color:var(--deep-navy);">Total Addressable Segment: 4,820 contacts from Oracle CDP</strong>
+      <p>Filtered by: Industry = Utilities/Energy · Title = CXO / Director / Manager · Geography = Southwest US · Intent Score &gt; 60</p>
+    </div>
+
+    <div class="sub-seg-grid">
+      <div class="sub-seg hot">
+        <div class="seg-h">Hot Segment</div>
+        <div class="seg-count">620</div>
+        <div class="seg-desc">Intent Score &gt;80 · Ready for direct sales outreach</div>
+        <div style="margin-top:8px;"><span class="badge mql">MQL Eligible</span></div>
+      </div>
+      <div class="sub-seg warm">
+        <div class="seg-h">Warm Segment</div>
+        <div class="seg-count">1,840</div>
+        <div class="seg-desc">Intent Score 60–80 · Nurture 2 more touches before handoff</div>
+      </div>
+      <div class="sub-seg cold">
+        <div class="seg-h">Cold Segment</div>
+        <div class="seg-count">1,620</div>
+        <div class="seg-desc">Intent Score 40–60 · Awareness content only</div>
+      </div>
+      <div class="sub-seg re">
+        <div class="seg-h">Re-Engagement</div>
+        <div class="seg-count">740</div>
+        <div class="seg-desc">Previously engaged · 60+ days dormant · Win-back sequence active</div>
+      </div>
+    </div>
+
+    <div class="segment-builder mb-20">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#64748b;font-weight:700;margin-bottom:10px;">Segment Builder — Oracle CDP Rules</div>
+      <div class="sb-rule">Industry IN [Utilities, Energy]<br>AND Title CONTAINS [Director, VP, CXO]<br>AND State IN [AZ, CA, NV, NM]<br>AND Last Activity &lt; 90 days</div>
+      <div class="sb-result">→ Segment Size: 4,820 contacts</div>
+    </div>
+
+    <div class="seg-actions">
+      <button class="btn primary" onclick="showToast('Segment refreshed — 200 new contacts added')">Refresh Segment</button>
+      <button class="btn" onclick="showToast('Exporting 4,820 contacts to Oracle Sales Cloud...')">Export to Sales Cloud</button>
+      <button class="btn" onclick="showToast('4,820 contacts added to nurture sequence')">Add to Sequence</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB: JOURNEY BUILDER
+  ════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-journey">
+
+    <div class="section-hd">
+      <div class="eyebrow">Campaign Journey</div>
+      <h2>Multi-Touch Nurture Flow</h2>
+    </div>
+
+    <div class="journey-flow">
+
+      <!-- Step 1 -->
+      <div class="journey-step">
+        <div class="step-label">Step 1 · Entry · Day 0</div>
+        <div class="step-title">Contact Enters Segment</div>
+        <div class="step-meta">4,820 contacts qualify · CDP auto-enroll on intent score trigger</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;margin:0 0 0 16px;">
+        <div style="width:2px;height:28px;background:#e2e8f0;margin-left:-1px;"></div>
+        <span style="font-size:11px;color:#94a3b8;margin-left:12px;">Wait 2 days</span>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="journey-step">
+        <div class="step-label">Step 2 · Email 1 · Day 2 · Eloqua Send</div>
+        <div class="step-title">"The Future of Utility CX"</div>
+        <div class="step-meta">4,712 delivered · <strong style="color:var(--argano-orange)">38% open rate</strong> · 12% click rate</div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;margin:0 0 0 16px;">
+        <div style="width:2px;height:20px;background:#e2e8f0;margin-left:-1px;"></div>
+        <span style="font-size:11px;color:#94a3b8;margin-left:12px;">Branch: Opened?</span>
+      </div>
+
+      <!-- Branch -->
+      <div class="journey-branch">
+        <div class="branch-arm">
+          <div class="branch-label">✓ Yes — Opened</div>
+          <div class="journey-step">
+            <div class="step-label">Step 3a · Email 2 · Day 5</div>
+            <div class="step-title">"Customer Success Story: GreenPath Energy"</div>
+            <div class="step-meta">2,872 delivered · <strong style="color:var(--argano-orange)">38% open</strong> · 13% click</div>
+          </div>
+        </div>
+        <div class="branch-arm">
+          <div class="branch-label">✗ No — Did Not Open</div>
+          <div class="journey-step">
+            <div class="step-label">Step 3b · SMS · Day 5</div>
+            <div class="step-title">"Quick check-in" SMS</div>
+            <div class="step-meta">Sends to non-openers · 61% open rate via SMS</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;margin:0 0 0 16px;margin-top:4px;">
+        <div style="width:2px;height:20px;background:#e2e8f0;margin-left:-1px;"></div>
+        <span style="font-size:11px;color:#94a3b8;margin-left:12px;">Merge → Wait 7 days → Check Intent Score</span>
+      </div>
+
+      <!-- Merge -->
+      <div class="journey-merge mb-20" style="margin-top:0;">
+        Step 4 — All paths merge · Day 7–12 · Intent Score evaluated against threshold
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0;margin:0 0 0 16px;">
+        <div style="width:2px;height:20px;background:#e2e8f0;margin-left:-1px;"></div>
+        <span style="font-size:11px;color:#94a3b8;margin-left:12px;">Branch: Intent Score &gt;80?</span>
+      </div>
+
+      <!-- Branch 2 -->
+      <div class="journey-branch" style="margin-top:4px;">
+        <div class="branch-arm">
+          <div class="branch-label">✓ Yes — Score &gt;80</div>
+          <div class="journey-step" style="border-left:3px solid #10b981;">
+            <div class="step-label">Step 5a · Sales Handoff</div>
+            <div class="step-title">Create MQL in Oracle Sales Cloud</div>
+            <div class="step-meta">620 contacts · Auto-creates Lead record · Territory assign · NBA trigger</div>
+          </div>
+        </div>
+        <div class="branch-arm">
+          <div class="branch-label">✗ No — Score ≤80</div>
+          <div class="journey-step">
+            <div class="step-label">Step 5b · Email 3 · Day 14</div>
+            <div class="step-title">"Live Demo Invite — Q4 Exclusive"</div>
+            <div class="step-meta">1,940 delivered · 31% open · Continue nurture loop</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-hd mt-20">
+      <div class="eyebrow">Journey Performance</div>
+      <h2>Journey Stats</h2>
+    </div>
+    <div class="journey-stats-grid">
+      <div class="journey-stat">
+        <div class="js-value">4,820</div>
+        <div class="js-label">Contacts Entered</div>
+      </div>
+      <div class="journey-stat">
+        <div class="js-value">1,840</div>
+        <div class="js-label">At Email 2 Stage</div>
+      </div>
+      <div class="journey-stat">
+        <div class="js-value">620</div>
+        <div class="js-label">Handed to Sales</div>
+      </div>
+      <div class="journey-stat">
+        <div class="js-value">18</div>
+        <div class="js-label">MQLs Created</div>
+      </div>
+      <div class="journey-stat">
+        <div class="js-value">12 days</div>
+        <div class="js-label">Avg Time to MQL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB: ENGAGEMENT ANALYTICS
+  ════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-engagement">
+
+    <div class="section-hd">
+      <div class="eyebrow">Email Performance</div>
+      <h2>Engagement Analytics</h2>
+    </div>
+
+    <div class="card mb-20" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Send Date</th>
+            <th>Delivered</th>
+            <th>Open Rate</th>
+            <th>Click Rate</th>
+            <th>Unsubscribes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>"Future of Utility CX"</strong></td>
+            <td>Oct 5</td>
+            <td>4,712</td>
+            <td><strong style="color:var(--argano-orange)">42%</strong></td>
+            <td>15%</td>
+            <td>24</td>
+          </tr>
+          <tr>
+            <td><strong>"GreenPath Success Story"</strong></td>
+            <td>Oct 10</td>
+            <td>2,872</td>
+            <td><strong style="color:var(--argano-orange)">38%</strong></td>
+            <td>13%</td>
+            <td>11</td>
+          </tr>
+          <tr>
+            <td><strong>"Live Demo Invite"</strong></td>
+            <td>Oct 18</td>
+            <td>1,940</td>
+            <td>31%</td>
+            <td>8%</td>
+            <td>9</td>
+          </tr>
+          <tr>
+            <td><strong>"Product Innovation Q4"</strong></td>
+            <td>Nov 1</td>
+            <td>4,650</td>
+            <td>35%</td>
+            <td>11%</td>
+            <td>18</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Top Performing Content -->
+    <div class="flex-row mb-20">
+      <div class="card" style="flex:1;min-width:220px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--argano-orange);font-weight:700;margin-bottom:6px;">Top Content</div>
+        <strong style="color:var(--deep-navy);">Customer Success Story</strong> — highest CTR across all sends
+      </div>
+      <div class="card" style="flex:1;min-width:220px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--argano-orange);font-weight:700;margin-bottom:6px;">Best CTA</div>
+        <strong style="color:var(--deep-navy);">"ROI Calculator" CTA</strong> — lowest bounce rate in October sends
+      </div>
+    </div>
+
+    <!-- Bar Chart — Open vs Click -->
+    <div class="section-hd">
+      <div class="eyebrow">Visual</div>
+      <h2>Engagement Trend — Open vs Click Rate</h2>
+    </div>
+    <div class="card mb-20">
+      <div class="bar-legend">
+        <span><span class="legend-dot" style="background:var(--argano-orange);"></span>Open Rate</span>
+        <span><span class="legend-dot" style="background:#1d4ed8;"></span>Click Rate</span>
+      </div>
+      <div class="bar-chart-container">
+        <div class="bar-chart-row">
+          <div class="bar-label">"Future of Utility CX"</div>
+          <div class="bar-group">
+            <div class="bar-wrap"><div class="bar open" style="width:42%"></div><div class="bar-val">42%</div></div>
+            <div class="bar-wrap"><div class="bar click" style="width:15%"></div><div class="bar-val">15%</div></div>
+          </div>
+        </div>
+        <div class="bar-chart-row">
+          <div class="bar-label">"GreenPath Success Story"</div>
+          <div class="bar-group">
+            <div class="bar-wrap"><div class="bar open" style="width:38%"></div><div class="bar-val">38%</div></div>
+            <div class="bar-wrap"><div class="bar click" style="width:13%"></div><div class="bar-val">13%</div></div>
+          </div>
+        </div>
+        <div class="bar-chart-row">
+          <div class="bar-label">"Live Demo Invite"</div>
+          <div class="bar-group">
+            <div class="bar-wrap"><div class="bar open" style="width:31%"></div><div class="bar-val">31%</div></div>
+            <div class="bar-wrap"><div class="bar click" style="width:8%"></div><div class="bar-val">8%</div></div>
+          </div>
+        </div>
+        <div class="bar-chart-row">
+          <div class="bar-label">"Product Innovation Q4"</div>
+          <div class="bar-group">
+            <div class="bar-wrap"><div class="bar open" style="width:35%"></div><div class="bar-val">35%</div></div>
+            <div class="bar-wrap"><div class="bar click" style="width:11%"></div><div class="bar-val">11%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Device Breakdown -->
+    <div class="section-hd">
+      <div class="eyebrow">Device</div>
+      <h2>Device Breakdown</h2>
+    </div>
+    <div class="device-grid mb-20">
+      <div class="device-card">
+        <div class="dv">64%</div>
+        <div class="dl">Desktop</div>
+      </div>
+      <div class="device-card">
+        <div class="dv">29%</div>
+        <div class="dl">Mobile</div>
+      </div>
+      <div class="device-card">
+        <div class="dv">7%</div>
+        <div class="dl">Tablet</div>
+      </div>
+    </div>
+
+    <!-- Unsubscribe Health -->
+    <div class="health-card">
+      Unsubscribe Rate: <strong>0.62%</strong> — Below 1% threshold. List health is excellent.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TAB: LEAD SCORING
+  ════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-scoring">
+
+    <div class="section-hd">
+      <div class="eyebrow">Oracle Eloqua</div>
+      <h2>Lead Scoring Model</h2>
+    </div>
+
+    <div class="scoring-model-card mb-20">
+      <strong style="color:var(--deep-navy);font-size:1rem;">Scoring Overview</strong>
+      <p>Leads scored 0–100 based on <strong>Profile Fit</strong> (40 pts max) + <strong>Behavioral Engagement</strong> (60 pts max). <strong style="color:#0f7a4a;">MQL threshold: 75 points.</strong></p>
+    </div>
+
+    <!-- Profile Scoring -->
+    <div class="section-hd">
+      <div class="eyebrow">Profile Fit · Max 40 Points</div>
+      <h2>Profile Scoring Rules</h2>
+    </div>
+    <div class="card mb-20" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Profile Attribute</th>
+            <th>Max Points</th>
+            <th>Scoring Rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Title (CXO/VP)</strong></td>
+            <td>20</td>
+            <td>+20 if CXO/VP · +10 if Director · +5 if Manager</td>
+          </tr>
+          <tr>
+            <td><strong>Industry Match</strong></td>
+            <td>10</td>
+            <td>+10 if Utilities/Energy</td>
+          </tr>
+          <tr>
+            <td><strong>Company Size</strong></td>
+            <td>5</td>
+            <td>+5 if &gt;1,000 employees</td>
+          </tr>
+          <tr>
+            <td><strong>Geography</strong></td>
+            <td>5</td>
+            <td>+5 if Southwest US (AZ, CA, NV, NM)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Behavioral Scoring -->
+    <div class="section-hd">
+      <div class="eyebrow">Behavioral Engagement · Max 60 Points</div>
+      <h2>Behavioral Scoring Rules</h2>
+    </div>
+    <div class="card mb-20" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Behavior</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Email open</td><td>+2 per open (max 10)</td></tr>
+          <tr><td>Email click</td><td>+5 per click (max 20)</td></tr>
+          <tr><td>Website visit</td><td>+3 per page (max 15)</td></tr>
+          <tr><td>Demo request</td><td>+25</td></tr>
+          <tr><td>Webinar attended</td><td>+15</td></tr>
+          <tr><td>Pricing page visit</td><td>+10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Top Scored Leads -->
+    <div class="section-hd">
+      <div class="eyebrow">Top Contacts</div>
+      <h2>Top Scored Leads</h2>
+    </div>
+    <div class="card mb-20 top-leads-table" style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Score</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Lena Ortiz</strong></td>
+            <td>Skyline Renewables</td>
+            <td><span class="score-chip score-v-high">94</span></td>
+            <td><span class="badge handed">Handed to Sales ✓</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ravi Patel</strong></td>
+            <td>Skyline Renewables</td>
+            <td><span class="score-chip score-v-high">88</span></td>
+            <td><span class="badge handed">Handed to Sales ✓</span></td>
+          </tr>
+          <tr>
+            <td><strong>James Wu</strong></td>
+            <td>NovaTech Industries</td>
+            <td><span class="score-chip score-high">82</span></td>
+            <td><span class="badge mql">MQL — Pending Handoff</span></td>
+          </tr>
+          <tr>
+            <td><strong>Sara Mendez</strong></td>
+            <td>Canyon Materials</td>
+            <td><span class="score-chip score-high">77</span></td>
+            <td><span class="badge mql">MQL — Under Review</span></td>
+          </tr>
+          <tr>
+            <td><strong>Chris Park</strong></td>
+            <td>Apex Logistics</td>
+            <td><span class="score-chip score-mid">71</span></td>
+            <td><span class="pill">Nurture Continues</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MQL Handoff Card -->
+    <div class="mql-handoff-card">
+      <h4>MQL Handoff Process — Automated via Oracle Eloqua + Sales Cloud Integration</h4>
+      <p>When score ≥ 75: Oracle Eloqua automatically creates a Lead record in Oracle Sales Cloud, assigns to territory rep based on geography/segment rules, triggers NBA (Next Best Action) recommendation, and sends rep alert via email + CRM notification. Integration powered by Oracle Integration Cloud (OIC).</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ ACTIVITY FEED ═══════════ -->
+  <section class="activity-shell">
+    <h3>Campaign Activity Feed</h3>
+    <div class="activity-btns">
+      <button class="btn primary" onclick="addMarketingActivity('call','Outbound call logged for hot segment contact')">+ Log Call</button>
+      <button class="btn" onclick="addMarketingActivity('note','Campaign note added')">+ Campaign Note</button>
+      <button class="btn" onclick="addMarketingActivity('meeting','Meeting scheduled with segment lead')">+ Meeting</button>
+      <button class="btn" onclick="addMarketingActivity('task','Task created for follow-up')">+ Task</button>
+    </div>
+    <ul class="activity-list" id="mktActivityList">
+      <li class="activity-item">
+        <div class="act-icon">🔄</div>
+        <div class="act-body">
+          <div class="act-title">Segment Refreshed — 200 New Contacts Added</div>
+          <div class="act-meta">Oracle CDP · Today at 9:14 AM · by Dana Park</div>
+        </div>
+      </li>
+      <li class="activity-item">
+        <div class="act-icon">✉️</div>
+        <div class="act-body">
+          <div class="act-title">Email Send Approved — "Product Innovation Q4" to 4,650 contacts</div>
+          <div class="act-meta">Eloqua · Nov 1 · Approved by: Marketing Ops</div>
+        </div>
+      </li>
+      <li class="activity-item">
+        <div class="act-icon">📊</div>
+        <div class="act-body">
+          <div class="act-title">A/B Test Results Reviewed — Subject line variant B outperformed by 14%</div>
+          <div class="act-meta">Eloqua A/B Engine · Oct 20 · Reviewed by: Dana Park</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<script>
+/* ── Tab Switching ─────────────────────────────────── */
+function switchMktTab(btn, panelId) {
+  document.querySelectorAll('.tab-bar button').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('visible'); });
+  btn.classList.add('active');
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('visible');
+}
+
+/* ── AI Simulation ─────────────────────────────────── */
+function runMktAI(type) {
+  var input = document.getElementById('mktAiInput');
+  var result = document.getElementById('mktAiResult');
+  var messages = {
+    optimize: '🤖 Oracle Marketing AI — Segment Optimization: Recommend splitting IT Directors into "Cloud-ready" (intent >70) and "Legacy" (intent 40–70) sub-segments. Prioritize Cloud-ready with ROI-focused content to lift MQL rate from 7 to 12. Estimated impact: +5 MQLs over 30 days.',
+    predict: '🤖 Oracle Marketing AI — Conversion Prediction: At current trajectory, Q4 campaign will generate 42 MQLs (vs. 45 goal). Gap of 3 MQLs can be closed by activating win-back sequence for 740 dormant contacts. Predicted SQL conversion: 14 of 42 (33%). ROI forecast: 3.2x on $84K budget.',
+    content: '🤖 Oracle Marketing AI — Content Recommendation: High-intent Utility CXO segment (620 contacts) is missing an ROI Calculator asset. Recommend publishing a "Utility CX ROI Estimator" landing page with 3 input fields (current CSAT, avg handle time, headcount). Projected CTR uplift: +8%. Generate asset? Click "Generate Content" to proceed.'
+  };
+  var text = input ? input.value.trim() : '';
+  result.textContent = messages[type] || '🤖 Processing your query against Oracle Marketing Cloud data...';
+  result.style.display = 'block';
+  if (typeof showToast === 'function') showToast('Oracle Marketing AI response ready');
+}
+
+/* ── Activity Feed ─────────────────────────────────── */
+var mktIconMap = { call: '📞', note: '📝', meeting: '📅', task: '✅' };
+function addMarketingActivity(type, text) {
+  var list = document.getElementById('mktActivityList');
+  if (!list) return;
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  var li = document.createElement('li');
+  li.className = 'activity-item';
+  li.innerHTML =
+    '<div class="act-icon">' + (mktIconMap[type] || '📌') + '</div>' +
+    '<div class="act-body">' +
+      '<div class="act-title">' + text + '</div>' +
+      '<div class="act-meta">Marketing Orchestration · Today at ' + timeStr + ' · by Dana Park</div>' +
+    '</div>';
+  list.insertBefore(li, list.firstChild);
+  if (typeof showToast === 'function') showToast('Activity logged: ' + text);
+}
+</script>
+
+</body>
+</html>

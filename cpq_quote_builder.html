@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CPQ Quote Builder</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    /* ── Hero ── */
+    .cpq-hero {
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid rgba(27,38,56,.1);
+      box-shadow: 0 28px 40px rgba(12,18,30,.14);
+      padding: 26px;
+      margin-bottom: 26px;
+    }
+    .cpq-hero h1 { margin: 0; font-size: 1.85rem; color: #0f172a; }
+    .cpq-hero .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .cpq-hero .hero-details {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      font-size: 13px; color: #5a6478; margin-top: 12px;
+      border-top: 1px solid #f1f5f9; padding-top: 12px;
+    }
+    .cpq-hero .hero-details span strong { color: #0f172a; }
+    .cpq-hero .hero-search { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    .cpq-hero input[type="search"] {
+      flex: 1; min-width: 260px;
+      border-radius: 10px; border: 1px solid rgba(27,38,56,.18);
+      padding: 11px 14px; font-size: 15px;
+    }
+
+    /* ── KPI Grid ── */
+    .cpq-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .cpq-kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 14px 16px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .cpq-kpi-card .label {
+      text-transform: uppercase; letter-spacing: .1em;
+      font-size: 11px; color: #6c7894; font-weight: 700;
+    }
+    .cpq-kpi-card .value { font-size: 1.65rem; font-weight: 800; margin: 4px 0; color: #0f172a; }
+    .cpq-kpi-card .meta { margin: 0; font-size: 12px; color: #64748b; }
+
+    /* ── Analytics Deck ── */
+    .analytics-deck {
+      background: linear-gradient(135deg,#0d1b2e,#0f2438 58%,#12324d);
+      color: #e8eef7;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 20px 38px rgba(6,16,36,.28);
+      margin-bottom: 26px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .analytics-deck .deck-eyebrow {
+      text-transform: uppercase; letter-spacing: .1em;
+      font-size: 11px; color: #c6d4eb; font-weight: 700; margin-bottom: 4px;
+    }
+    .analytics-deck h2 { margin: 0 0 6px; font-size: 1.55rem; }
+    .analytics-deck .deck-desc { margin: 0; color: #c6d4eb; font-size: 14px; max-width: 640px; }
+    .analytics-deck .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .analytics-tile {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 14px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.16);
+    }
+    .analytics-tile .label { color: #9fb8d8; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; }
+    .analytics-tile .value { font-size: 1.55rem; font-weight: 700; margin: 6px 0; }
+    .analytics-tile .meta { margin: 0; color: #dfe7f4; font-size: 12px; }
+
+    /* story anchors */
+    .story-anchors {
+      margin-top: 16px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 14px;
+    }
+    .story-anchors .anchor-head { margin-bottom: 10px; }
+    .story-anchors .anchor-label { color: #9fb8d8; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .story-anchors .anchor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 10px;
+    }
+    .anchor-card {
+      background: #0a182b;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 12px;
+      box-shadow: 0 12px 18px rgba(0,0,0,.22);
+    }
+    .anchor-card .label { color: #9fb8d8; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .anchor-card .name { margin: 4px 0 2px; font-size: .95rem; font-weight: 700; color: #fff; }
+    .anchor-card .detail { margin: 0; color: #dce6f3; font-size: 12px; }
+
+    /* ── Tab Bar ── */
+    .cpq-tab-bar {
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 14px 28px rgba(15,23,42,.08);
+      margin-bottom: 26px;
+    }
+    .cpq-tab-nav {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--rw-border,#e2e8f0);
+      padding: 0 20px;
+      overflow-x: auto;
+    }
+    .cpq-tab {
+      padding: 14px 18px;
+      border: none; background: none;
+      font-size: 13px; font-weight: 600;
+      color: #64748b;
+      border-bottom: 2px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      transition: color .15s, border-color .15s;
+    }
+    .cpq-tab.active-tab { color: #ff7a18; border-bottom-color: #ff7a18; }
+    .cpq-tab-panel { padding: 24px; }
+
+    /* ── Config Table ── */
+    .config-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .config-table th {
+      padding: 9px 12px; color: #64748b; font-weight: 600;
+      border-bottom: 2px solid var(--rw-border,#e2e8f0);
+      text-align: left; white-space: nowrap;
+    }
+    .config-table td { padding: 11px 12px; border-bottom: 1px solid var(--rw-border,#e2e8f0); }
+    .config-table tfoot td {
+      padding: 11px 12px;
+      border-top: 2px solid var(--rw-border,#e2e8f0);
+      border-bottom: none;
+    }
+
+    /* ── Approval Chain ── */
+    .approval-step {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px; border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px; background: #fff; margin-bottom: 12px;
+    }
+    .approval-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+
+    /* ── Document Preview ── */
+    .doc-preview {
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px; background: #fff;
+      padding: 28px; margin-bottom: 18px;
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,.04);
+    }
+    .doc-preview .doc-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; flex-wrap: wrap; gap: 12px;
+      border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 16px;
+    }
+    .doc-preview .doc-title { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
+    .doc-preview .doc-meta { font-size: 12px; color: #64748b; }
+    .doc-preview table { width: 100%; font-size: 12px; border-collapse: collapse; margin: 14px 0; }
+    .doc-preview th { background: #0f172a; color: #fff; padding: 8px 10px; text-align: left; }
+    .doc-preview td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
+    .doc-preview .doc-terms { font-size: 12px; color: #475569; margin-top: 16px; display: flex; gap: 20px; flex-wrap: wrap; }
+    .doc-preview .sig-line {
+      border-top: 1px solid #0f172a; margin-top: 28px; padding-top: 10px;
+      font-size: 12px; color: #64748b; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+
+    /* ── Activity Feed ── */
+    .cpq-activity-feed { display: flex; flex-direction: column; gap: 10px; }
+    .cpq-activity-entry {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 12px 14px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px; background: #fff;
+    }
+
+    /* ── Timeline (delivery) ── */
+    .delivery-timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 28px; }
+    .delivery-timeline::before {
+      content: '';
+      position: absolute; left: 11px; top: 12px; bottom: 12px;
+      width: 2px; background: var(--rw-border,#e2e8f0);
+    }
+    .tl-event {
+      position: relative; padding: 0 0 20px 20px;
+    }
+    .tl-event::before {
+      content: '';
+      position: absolute; left: -18px; top: 5px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #ff7a18; border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #ff7a18;
+    }
+    .tl-event.pending::before { background: #cbd5e1; box-shadow: 0 0 0 2px #cbd5e1; }
+    .tl-event .tl-date { font-size: 11px; color: #94a3b8; font-weight: 600; margin-bottom: 2px; }
+    .tl-event .tl-text { font-size: 13px; color: #0f172a; font-weight: 600; }
+    .tl-event .tl-sub { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+    /* ── Waterfall table ── */
+    .waterfall-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .waterfall-table th {
+      padding: 9px 12px; color: #64748b; font-weight: 600;
+      border-bottom: 2px solid var(--rw-border,#e2e8f0); text-align: left;
+    }
+    .waterfall-table td { padding: 10px 12px; border-bottom: 1px solid var(--rw-border,#e2e8f0); }
+    .waterfall-table tr.total-row td {
+      font-weight: 800; font-size: 1rem; color: #0f172a;
+      border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a;
+    }
+    .waterfall-table .discount-val { color: #dc2626; font-weight: 600; }
+    .waterfall-table .net-price { color: #ff7a18; font-size: 1.05rem; font-weight: 800; }
+
+    /* engagement signals */
+    .signal-grid {
+      display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+      gap: 12px; margin-top: 16px;
+    }
+    .signal-card {
+      background: #fff; border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px; padding: 14px 16px;
+      box-shadow: 0 8px 18px rgba(15,23,42,.06);
+      text-align: center;
+    }
+    .signal-card .s-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #6c7894; font-weight: 700; }
+    .signal-card .s-value { font-size: 1.5rem; font-weight: 800; margin: 6px 0 2px; color: #0f172a; }
+    .signal-card .s-meta { font-size: 11px; color: #64748b; }
+
+    /* general helpers */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-header h3 { font-size: 1rem; margin: 0; }
+    .section-eyebrow {
+      text-transform: uppercase; letter-spacing: .1em; font-size: 11px;
+      color: #ff7a18; font-weight: 700; margin-bottom: 4px;
+    }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .pair-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 14px; margin-top: 16px; }
+    .info-card {
+      background: #f8fafc; border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px; padding: 16px;
+    }
+    .info-card .ic-title { font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 4px; }
+    .info-card .ic-body { font-size: 13px; color: #475569; }
+
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+  </style>
+</head>
+<body class="cpq-landing">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="cpq_quote_builder.html" class="active">CPQ Quote</a>
+      <a href="subscription_lifecycle.html">Subscriptions</a>
+      <a href="cx_service_case.html">Service Case</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations &amp; Finance</div>
+    <div class="nav-items">
+      <a href="icm_compensation.html">Compensation (ICM)</a>
+      <a href="marketing_orchestration.html">Marketing</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="account_360.html">Account 360</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main style="max-width:980px;margin:0 auto;padding:24px;">
+
+  <!-- ── HERO ── -->
+  <section class="cpq-hero">
+    <p class="section-eyebrow" style="margin:0 0 6px;">Configure &middot; Price &middot; Quote</p>
+    <h1>Skyline Renewables &mdash; Microgrid Q-2024-0892</h1>
+
+    <div class="meta-row">
+      <span class="badge" style="background:#fff3e0;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;border:1px solid #fed7aa;">Pending Approval</span>
+      <span class="pill">Q-2024-0892</span>
+      <span class="pill">Owner Chandra Kasarabada</span>
+      <span class="pill">Valid 30 days</span>
+    </div>
+
+    <div class="hero-details">
+      <span>Opportunity: <strong>Skyline Renewables Microgrid Expansion &middot; $1,250,000</strong></span>
+      <span>Account: <strong>Skyline Renewables Inc.</strong></span>
+      <span>Primary Contact: <strong>Lena Ortiz (VP Operations)</strong></span>
+      <span>Currency: <strong>USD &middot; Expiry: Nov 15 2024</strong></span>
+      <span>Discount Auth: <strong>Tier 2 &mdash; requires manager approval above 18%</strong></span>
+    </div>
+
+    <div class="hero-search">
+      <input type="search" id="cpqAiInput" placeholder="Ask Oracle CPQ AI to validate configuration or pricing..."/>
+      <button class="btn primary" onclick="return runCPQAI();">Validate Quote</button>
+      <button class="ghost-btn" onclick="return runCPQAIPricing();">AI Pricing Check</button>
+    </div>
+    <div id="cpqAiResult" style="display:none;margin-top:12px;padding:12px 16px;background:#f0fdf4;border:1px solid #86efac;border-radius:10px;font-size:13px;color:#15803d;"></div>
+
+    <!-- KPI Summary Grid -->
+    <div class="cpq-kpi-grid">
+      <div class="cpq-kpi-card">
+        <div class="label">Quote Total</div>
+        <div class="value" style="color:#ff7a18;">$1,204,000</div>
+        <p class="meta">Net customer price</p>
+      </div>
+      <div class="cpq-kpi-card">
+        <div class="label">Line Items</div>
+        <div class="value">4</div>
+        <p class="meta">Products + services</p>
+      </div>
+      <div class="cpq-kpi-card">
+        <div class="label">Discount</div>
+        <div class="value" style="color:#dc2626;">8.2%</div>
+        <p class="meta">Blended across lines</p>
+      </div>
+      <div class="cpq-kpi-card">
+        <div class="label">Approval Status</div>
+        <div class="value" style="font-size:1.1rem;color:#b45309;">Pending</div>
+        <p class="meta">Awaiting Sarah Whitmore</p>
+      </div>
+      <div class="cpq-kpi-card">
+        <div class="label">Days to Expiry</div>
+        <div class="value">28</div>
+        <p class="meta">Expires Nov 15 2024</p>
+      </div>
+      <div class="cpq-kpi-card">
+        <div class="label">Margin</div>
+        <div class="value" style="color:#16a34a;">42%</div>
+        <p class="meta">After cost of delivery</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DARK ANALYTICS DECK ── -->
+  <section class="analytics-deck">
+    <p class="deck-eyebrow">Oracle CPQ Cloud</p>
+    <h2>Pricing Intelligence</h2>
+    <p class="deck-desc">AI-powered pricing recommendations based on deal history and competitive benchmarks across similar enterprise renewables engagements.</p>
+
+    <div class="deck-grid">
+      <div class="analytics-tile">
+        <div class="label">Win Rate at This Price Level</div>
+        <div class="value">67%</div>
+        <p class="meta">Above average for mid-market energy sector deals.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Avg Discount for Similar Deals</div>
+        <div class="value">9.1%</div>
+        <p class="meta">Current 8.2% is within healthy band.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Competitive Pressure</div>
+        <div class="value" style="color:#fbbf24;">Medium</div>
+        <p class="meta">Salesforce CPQ flagged as alternate. No price-match required yet.</p>
+      </div>
+      <div class="analytics-tile">
+        <div class="label">Recommended Floor Price</div>
+        <div class="value">$1,118,000</div>
+        <p class="meta">Below this margin drops under threshold. Do not discount further.</p>
+      </div>
+    </div>
+
+    <div class="story-anchors">
+      <div class="anchor-head">
+        <p class="anchor-label">Comparable Won Deals</p>
+      </div>
+      <div class="anchor-grid">
+        <div class="anchor-card">
+          <div class="label">Deal</div>
+          <div class="name">Nexus Energy Solutions</div>
+          <p class="detail">$1,180,000 &middot; 7.4% discount &middot; Closed Q3 2024</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Deal</div>
+          <div class="name">GreenPath Infrastructure</div>
+          <p class="detail">$1,320,000 &middot; 9.0% discount &middot; Closed Q2 2024</p>
+        </div>
+        <div class="anchor-card">
+          <div class="label">Deal</div>
+          <div class="name">SolarBridge Utilities</div>
+          <p class="detail">$980,000 &middot; 11.2% discount &middot; Closed Q1 2024</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TAB BAR ── -->
+  <div class="cpq-tab-bar">
+    <!-- Tab Navigation -->
+    <div class="cpq-tab-nav">
+      <button class="cpq-tab active-tab" onclick="switchCPQTab(this,'cpq-tab-config')">Configuration</button>
+      <button class="cpq-tab" onclick="switchCPQTab(this,'cpq-tab-waterfall')">Pricing Waterfall</button>
+      <button class="cpq-tab" onclick="switchCPQTab(this,'cpq-tab-approvals')">Approvals</button>
+      <button class="cpq-tab" onclick="switchCPQTab(this,'cpq-tab-document')">Quote Document</button>
+      <button class="cpq-tab" onclick="switchCPQTab(this,'cpq-tab-delivery')">Delivery Tracking</button>
+    </div>
+
+    <!-- ═══════ TAB: CONFIGURATION ═══════ -->
+    <div id="cpq-tab-config" class="cpq-tab-panel">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow" style="margin:0 0 2px;">Product Configuration</p>
+          <h3>Line Items &mdash; Skyline Renewables Microgrid Expansion</h3>
+        </div>
+        <span class="badge" style="background:#dcfce7;color:#15803d;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;">All Rules Passed ✓</span>
+      </div>
+
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th style="width:32px;">#</th>
+            <th>Product</th>
+            <th>SKU</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th>Config Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#94a3b8;font-weight:600;">1</td>
+            <td><div style="font-weight:700;color:#0f172a;">Oracle Sales Cloud &mdash; Enterprise</div><div style="font-size:11px;color:#64748b;">Annual subscription, 250 named users</div></td>
+            <td style="font-family:monospace;color:#475569;font-size:12px;">OCS-ENT-250</td>
+            <td>250 seats</td>
+            <td>$2,400/yr</td>
+            <td style="font-weight:700;color:#0f172a;">$600,000</td>
+            <td><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Configured ✓</span></td>
+          </tr>
+          <tr>
+            <td style="color:#94a3b8;font-weight:600;">2</td>
+            <td><div style="font-weight:700;color:#0f172a;">Oracle CPQ Cloud</div><div style="font-size:11px;color:#64748b;">Configure-Price-Quote, 250 named users</div></td>
+            <td style="font-family:monospace;color:#475569;font-size:12px;">CPQ-STD-250</td>
+            <td>250 seats</td>
+            <td>$960/yr</td>
+            <td style="font-weight:700;color:#0f172a;">$240,000</td>
+            <td><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Configured ✓</span></td>
+          </tr>
+          <tr>
+            <td style="color:#94a3b8;font-weight:600;">3</td>
+            <td><div style="font-weight:700;color:#0f172a;">Oracle Service Cloud</div><div style="font-size:11px;color:#64748b;">Professional edition, 100 agent seats</div></td>
+            <td style="font-family:monospace;color:#475569;font-size:12px;">SVC-PRO-100</td>
+            <td>100 seats</td>
+            <td>$2,040/yr</td>
+            <td style="font-weight:700;color:#0f172a;">$204,000</td>
+            <td><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Configured ✓</span></td>
+          </tr>
+          <tr>
+            <td style="color:#94a3b8;font-weight:600;">4</td>
+            <td><div style="font-weight:700;color:#0f172a;">Implementation Services</div><div style="font-size:11px;color:#64748b;">Fixed-bid implementation, 6-month project</div></td>
+            <td style="font-family:monospace;color:#475569;font-size:12px;">IMPL-PROJ</td>
+            <td>1 project</td>
+            <td>$160,000</td>
+            <td style="font-weight:700;color:#0f172a;">$160,000</td>
+            <td><span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Fixed Bid</span></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" style="text-align:right;font-weight:700;color:#64748b;">Quote Total</td>
+            <td style="font-size:1.15rem;font-weight:800;color:#ff7a18;">$1,204,000</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="pair-grid">
+        <div class="info-card" style="border-left:4px solid #16a34a;">
+          <div class="ic-title">Bundle Discount Applied: 5%</div>
+          <p class="ic-body" style="margin:0;">Oracle CX Suite bundle discount applied across license lines. <strong style="color:#16a34a;">$63,368 saved</strong> vs. individual list pricing. Auto-applied based on product mix rules.</p>
+        </div>
+        <div class="info-card" style="border-left:4px solid #ff7a18;">
+          <div class="ic-title">Constraint Check: All Rules Passed ✓</div>
+          <p class="ic-body" style="margin:0;">CPQ configuration engine validated all 14 product compatibility rules. No conflicts detected. Quote is ready for pricing review and approval routing.</p>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" onclick="if(typeof showToast==='function')showToast('Add Product dialog (demo)')">+ Add Product</button>
+        <button class="btn" onclick="if(typeof showToast==='function')showToast('Bundle discount re-applied: 5% confirmed across 3 license lines')">Apply Bundle</button>
+        <button class="btn" onclick="if(typeof showToast==='function')showToast('Constraint check complete: 14/14 rules passed')">Check Constraints</button>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: PRICING WATERFALL ═══════ -->
+    <div id="cpq-tab-waterfall" class="cpq-tab-panel" style="display:none;">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow" style="margin:0 0 2px;">Pricing Waterfall</p>
+          <h3>Pricing Waterfall Analysis</h3>
+        </div>
+        <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="if(typeof showToast==='function')showToast('Waterfall exported to PDF')">Export PDF</button>
+      </div>
+
+      <table class="waterfall-table">
+        <thead>
+          <tr>
+            <th>Price Component</th>
+            <th>Amount</th>
+            <th>%</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">List Price</td>
+            <td style="font-weight:700;color:#0f172a;">$1,312,000</td>
+            <td style="color:#64748b;">100%</td>
+            <td style="font-size:12px;color:#64748b;">Published list pricing, all line items</td>
+          </tr>
+          <tr>
+            <td>Volume Discount (250 seats)</td>
+            <td class="discount-val">&minus;$65,600</td>
+            <td class="discount-val">&minus;5%</td>
+            <td style="font-size:12px;color:#64748b;">Auto-applied at 250+ seat threshold</td>
+          </tr>
+          <tr>
+            <td>Bundle Discount</td>
+            <td class="discount-val">&minus;$63,368</td>
+            <td class="discount-val">&minus;4.8%</td>
+            <td style="font-size:12px;color:#64748b;">Sales Cloud + CPQ + Service bundle</td>
+          </tr>
+          <tr>
+            <td>Promotional Discount (Q4)</td>
+            <td class="discount-val">&minus;$13,120</td>
+            <td class="discount-val">&minus;1%</td>
+            <td style="font-size:12px;color:#64748b;">Q4 FY24 closing incentive</td>
+          </tr>
+          <tr>
+            <td>Partner Margin</td>
+            <td class="discount-val">&minus;$26,240</td>
+            <td class="discount-val">&minus;2%</td>
+            <td style="font-size:12px;color:#64748b;">Argano reseller margin retained</td>
+          </tr>
+          <tr class="total-row">
+            <td>Net Quote Price</td>
+            <td class="net-price">$1,143,672</td>
+            <td style="color:#ff7a18;font-weight:700;">87.2%</td>
+            <td style="font-size:12px;color:#64748b;">Before rounding/approval</td>
+          </tr>
+          <tr>
+            <td>Rounding / Approval Adjustment</td>
+            <td style="color:#64748b;">&minus;$0</td>
+            <td style="color:#64748b;">&mdash;</td>
+            <td style="font-size:12px;color:#64748b;">No rounding applied</td>
+          </tr>
+          <tr class="total-row">
+            <td>Customer Price</td>
+            <td class="net-price">$1,143,672</td>
+            <td style="color:#ff7a18;font-weight:700;">&mdash;</td>
+            <td style="font-size:12px;color:#64748b;">Final price presented to customer</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pair-grid" style="margin-top:18px;">
+        <div class="info-card" style="border-left:4px solid #16a34a;">
+          <div class="ic-title" style="margin-bottom:10px;">Margin Analysis</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;font-weight:700;">List Price</div>
+              <div style="font-size:1.1rem;font-weight:800;color:#0f172a;margin-top:4px;">$1,312,000</div>
+            </div>
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;font-weight:700;">Cost of Delivery</div>
+              <div style="font-size:1.1rem;font-weight:800;color:#dc2626;margin-top:4px;">$660,000</div>
+            </div>
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#64748b;font-weight:700;">Gross Margin</div>
+              <div style="font-size:1.1rem;font-weight:800;color:#16a34a;margin-top:4px;">$483,672</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;text-align:center;font-size:12px;color:#64748b;">Margin rate: <strong style="color:#16a34a;">42.3%</strong> &mdash; within healthy deal parameters</div>
+        </div>
+        <div class="info-card" style="border-left:4px solid #ff7a18;">
+          <div class="ic-title" style="margin-bottom:6px;">Discount Authorization</div>
+          <p class="ic-body" style="margin:0 0 8px;">Current blended discount: <strong style="color:#ff7a18;">12.8%</strong></p>
+          <p class="ic-body" style="margin:0 0 8px;">Authorization required: Tier 1 (up to 15%) &mdash; <strong style="color:#16a34a;">Within Authority ✓</strong></p>
+          <p class="ic-body" style="margin:0;font-size:12px;color:#64748b;">Manager approval triggered above 8% per policy. Sarah Whitmore currently reviewing.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: APPROVALS ═══════ -->
+    <div id="cpq-tab-approvals" class="cpq-tab-panel" style="display:none;">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow" style="margin:0 0 2px;">Approval Workflow</p>
+          <h3>3-Step Approval Chain &mdash; Q-2024-0892</h3>
+        </div>
+        <span class="badge" style="background:#fef3c7;color:#b45309;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;">Step 2 of 3 Pending</span>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="approval-step" style="border-left:4px solid #16a34a;">
+        <div class="approval-icon" style="background:#dcfce7;">
+          <span style="font-size:20px;">✅</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:14px;color:#0f172a;">Step 1 &mdash; Sales Rep Self-Approve</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">Approver: <strong>Chandra Kasarabada</strong> &middot; Authority: Discounts &lt;15%</div>
+          <div style="font-size:12px;color:#16a34a;font-weight:600;margin-top:4px;">Approved &mdash; Oct 20, 2024 at 10:42 AM</div>
+          <div style="font-size:12px;color:#64748b;margin-top:4px;">Discount of 8.2% is within self-approve limit. No further action required at this level.</div>
+        </div>
+        <span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 12px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Approved</span>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="approval-step" style="border-left:4px solid #f59e0b;">
+        <div class="approval-icon" style="background:#fef3c7;">
+          <span style="font-size:20px;">&#9203;</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:14px;color:#0f172a;">Step 2 &mdash; Sales Manager Review</div>
+          <div style="font-size:12px;color:#64748b;margin-top:3px;">Trigger: discount &gt;8% requires manager sign-off &middot; Assignee: <strong>Sarah Whitmore</strong></div>
+          <div style="font-size:12px;color:#b45309;font-weight:600;margin-top:4px;">Pending since Oct 21, 2024 &mdash; 2 days in queue</div>
+          <div style="font-size:12px;color:#64748b;margin-top:4px;">Sarah has been notified via email and Oracle Approvals Workflow. Reminder sent Oct 22.</div>
+        </div>
+        <span style="background:#fef3c7;color:#b45309;border-radius:999px;padding:3px 12px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Pending</span>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="approval-step" style="border-left:4px solid #e2e8f0;opacity:.7;">
+        <div class="approval-icon" style="background:#f1f5f9;">
+          <span style="font-size:20px;">&#9744;</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:14px;color:#475569;">Step 3 &mdash; Deal Desk Review</div>
+          <div style="font-size:12px;color:#94a3b8;margin-top:3px;">Trigger: Required for deals &gt;$1,000,000 total value &middot; Deal Desk: <em>Unassigned</em></div>
+          <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Waiting for Step 2 completion before this step is activated. Estimated queue time: 24 hours.</div>
+        </div>
+        <span style="background:#f1f5f9;color:#94a3b8;border-radius:999px;padding:3px 12px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Waiting</span>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid var(--rw-border,#e2e8f0);border-radius:12px;padding:14px;margin-top:4px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:20px;">&#128336;</span>
+        <p style="margin:0;font-size:13px;color:#475569;">Estimated approval time: <strong>1&ndash;2 business days</strong> based on current queue and Sarah Whitmore's typical response time of 18 hours.</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="if(typeof showToast==='function')showToast('Reminder sent to Sarah Whitmore via Oracle Approvals Workflow')">Send Reminder to Approver</button>
+        <button class="ghost-btn" onclick="if(typeof showToast==='function')showToast('Approval chain PDF generated')">View Audit Trail</button>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: QUOTE DOCUMENT ═══════ -->
+    <div id="cpq-tab-document" class="cpq-tab-panel" style="display:none;">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow" style="margin:0 0 2px;">Quote Document</p>
+          <h3>Oracle CX Solution Proposal &mdash; Skyline Renewables</h3>
+        </div>
+        <span class="badge" style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;">Draft v1.2</span>
+      </div>
+
+      <div class="doc-preview">
+        <!-- Document Header -->
+        <div class="doc-header">
+          <div>
+            <div class="doc-title">Oracle CX Solution Proposal</div>
+            <div style="font-size:1rem;font-weight:700;color:#ff7a18;margin-top:2px;">Skyline Renewables Inc.</div>
+            <div class="doc-meta" style="margin-top:4px;">Prepared by: Argano Connected Cloud &mdash; Solutions Architecture</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="doc-meta">Date: Oct 22, 2024</div>
+            <div class="doc-meta">Quote #: <strong>Q-2024-0892</strong></div>
+            <div class="doc-meta">Valid: 30 days (until Nov 15, 2024)</div>
+            <div style="margin-top:8px;">
+              <span style="background:#fff3e0;color:#b45309;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:700;">Pending Approval</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div style="font-size:12px;color:#475569;margin-bottom:14px;line-height:1.6;">
+          Argano is pleased to present this Oracle CX Solution Proposal for Skyline Renewables Inc. This quote covers the Oracle Sales Cloud, CPQ, and Service Cloud platforms along with a fixed-bid implementation engagement to support your Microgrid Expansion initiative. Pricing reflects Q4 2024 promotional terms and is valid for 30 days from the date above.
+        </div>
+
+        <!-- Product Table -->
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product / Service</th>
+              <th>SKU</th>
+              <th>Qty</th>
+              <th>Unit Price</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td><td>Oracle Sales Cloud &mdash; Enterprise</td><td style="font-family:monospace;">OCS-ENT-250</td><td>250</td><td>$2,400/yr</td><td style="font-weight:700;">$600,000</td>
+            </tr>
+            <tr>
+              <td>2</td><td>Oracle CPQ Cloud</td><td style="font-family:monospace;">CPQ-STD-250</td><td>250</td><td>$960/yr</td><td style="font-weight:700;">$240,000</td>
+            </tr>
+            <tr>
+              <td>3</td><td>Oracle Service Cloud &mdash; Professional</td><td style="font-family:monospace;">SVC-PRO-100</td><td>100</td><td>$2,040/yr</td><td style="font-weight:700;">$204,000</td>
+            </tr>
+            <tr>
+              <td>4</td><td>Implementation Services (Fixed Bid)</td><td style="font-family:monospace;">IMPL-PROJ</td><td>1</td><td>$160,000</td><td style="font-weight:700;">$160,000</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr style="background:#f8fafc;">
+              <td colspan="5" style="font-weight:700;text-align:right;color:#0f172a;">Total Quote Value</td>
+              <td style="font-weight:800;color:#ff7a18;font-size:1rem;">$1,204,000</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Terms -->
+        <div class="doc-terms">
+          <span>Payment Terms: <strong>Net 30</strong></span>
+          <span>Delivery: <strong>Oracle Cloud SaaS</strong></span>
+          <span>Start Date: <strong>Jan 1, 2025</strong></span>
+          <span>Contract Term: <strong>3 Years</strong></span>
+          <span>Discount Auth: <strong>Tier 2</strong></span>
+        </div>
+
+        <!-- Signature Line -->
+        <div class="sig-line">
+          <div style="flex:1;min-width:200px;border-top:1px solid #0f172a;padding-top:8px;">
+            <div>Customer Signature</div>
+            <div style="margin-top:4px;color:#94a3b8;">Lena Ortiz, VP Operations &mdash; Skyline Renewables Inc.</div>
+          </div>
+          <div style="flex:1;min-width:200px;border-top:1px solid #0f172a;padding-top:8px;">
+            <div>Argano Signature</div>
+            <div style="margin-top:4px;color:#94a3b8;">Chandra Kasarabada &mdash; Principal Solutions Architect, Argano</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="if(typeof showToast==='function')showToast('Generating PDF quote document...')">Download PDF</button>
+        <button class="btn" onclick="if(typeof showToast==='function')showToast('DocuSign envelope created — sent to lortiz@skylinerenewables.com')">Send to DocuSign</button>
+        <button class="btn" onclick="if(typeof showToast==='function')showToast('Email queued to Lena Ortiz (lortiz@skylinerenewables.com) with quote PDF attached')">Email to Lena Ortiz</button>
+        <button class="ghost-btn" onclick="if(typeof showToast==='function')showToast('Full quote document preview (demo)')">Preview Full</button>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: DELIVERY TRACKING ═══════ -->
+    <div id="cpq-tab-delivery" class="cpq-tab-panel" style="display:none;">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow" style="margin:0 0 2px;">Delivery Tracking</p>
+          <h3>Quote Delivery &amp; Engagement</h3>
+        </div>
+        <span class="badge" style="background:#fef3c7;color:#b45309;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;">DocuSign Pending</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;">
+        <!-- Timeline -->
+        <div>
+          <p style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin:0 0 14px;">Quote Lifecycle</p>
+          <div class="delivery-timeline">
+            <div class="tl-event">
+              <div class="tl-date">Oct 20, 2024</div>
+              <div class="tl-text">Quote created</div>
+              <div class="tl-sub">Created by Chandra Kasarabada in Oracle CPQ Cloud</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-date">Oct 21, 2024</div>
+              <div class="tl-text">Submitted for approval</div>
+              <div class="tl-sub">Approval workflow triggered &mdash; Step 1 (self-approve) completed immediately</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-date">Oct 22, 2024 &middot; 9:14 AM</div>
+              <div class="tl-text">Email sent to Lena Ortiz</div>
+              <div class="tl-sub">lortiz@skylinerenewables.com &mdash; Quote PDF + cover note attached</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-date">Oct 22, 2024 &middot; 11:40 AM</div>
+              <div class="tl-text">Quote opened 3&times; by Lena Ortiz</div>
+              <div class="tl-sub">14 min total read time across 3 sessions on desktop and mobile</div>
+            </div>
+            <div class="tl-event">
+              <div class="tl-date">Oct 23, 2024</div>
+              <div class="tl-text">Marcus Reid forwarded internally</div>
+              <div class="tl-sub">Forwarded to IT and Finance teams for technical review</div>
+            </div>
+            <div class="tl-event pending">
+              <div class="tl-date">Pending</div>
+              <div class="tl-text" style="color:#94a3b8;">Manager Approval (Step 2)</div>
+              <div class="tl-sub" style="color:#94a3b8;">Awaiting Sarah Whitmore &mdash; 2 days in queue</div>
+            </div>
+            <div class="tl-event pending">
+              <div class="tl-date">Pending</div>
+              <div class="tl-text" style="color:#94a3b8;">DocuSign Signature</div>
+              <div class="tl-sub" style="color:#94a3b8;">Envelope not yet sent &mdash; will trigger after approval</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Engagement Signals -->
+        <div>
+          <p style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin:0 0 14px;">Engagement Signals</p>
+          <div class="signal-grid">
+            <div class="signal-card">
+              <div class="s-label">Opens</div>
+              <div class="s-value" style="color:#ff7a18;">3</div>
+              <div class="s-meta">Quote viewed 3 times by Lena Ortiz</div>
+            </div>
+            <div class="signal-card">
+              <div class="s-label">Time on Quote</div>
+              <div class="s-value" style="color:#2563eb;">14 min</div>
+              <div class="s-meta">Total read time across all sessions</div>
+            </div>
+            <div class="signal-card">
+              <div class="s-label">Internal Forwards</div>
+              <div class="s-value">1</div>
+              <div class="s-meta">Marcus Reid forwarded to IT &amp; Finance</div>
+            </div>
+            <div class="signal-card">
+              <div class="s-label">DocuSign Status</div>
+              <div class="s-value" style="font-size:1rem;color:#b45309;">Pending</div>
+              <div class="s-meta">Envelope queued &mdash; awaiting approval step</div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:14px;">
+            <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#15803d;">AI Engagement Insight</p>
+            <p style="margin:0;font-size:12px;color:#166534;">Lena Ortiz spent 8 of 14 minutes on the Implementation Services tab and the pricing waterfall. Strong buying signal. Recommend a follow-up call to walk through the fixed-bid SOW and confirm Phase 1 scope.</p>
+          </div>
+
+          <div style="margin-top:14px;">
+            <button class="btn primary" style="width:100%;" onclick="if(typeof showToast==='function')showToast('Follow-up call scheduled with Lena Ortiz for Oct 25 at 10:00 AM')">Schedule Follow-Up Call</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end .cpq-tab-bar -->
+
+  <!-- ═══════════ ACTIVITY FEED ═══════════ -->
+  <section style="background:#fff;border-radius:18px;border:1px solid var(--rw-border,#e2e8f0);padding:22px;box-shadow:0 14px 26px rgba(15,23,42,.08);margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <p class="section-eyebrow" style="margin:0 0 2px;">Quote Activity</p>
+        <h3 style="margin:0;font-size:1rem;">Activity Timeline</h3>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addCPQActivity('Call','Pricing discussion with Lena Ortiz — reviewed waterfall and confirmed bundle discount value')">+ Log Call</button>
+        <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addCPQActivity('Email','Quote email sent to Lena Ortiz with PDF attachment and cover note')">+ Email</button>
+        <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addCPQActivity('Meeting','Quote review meeting with Skyline Renewables team — Oct 28 at 2:00 PM')">+ Meeting</button>
+        <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addCPQActivity('Task','Follow up on approval from Sarah Whitmore — escalate if no response by Oct 25')">+ Task</button>
+      </div>
+    </div>
+
+    <div class="cpq-activity-feed" id="cpq-activity-feed">
+      <!-- Seeded Entry 1: Call -->
+      <div class="cpq-activity-entry">
+        <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">&#128222;</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;color:#0f172a;">Call: Pricing Discussion with Lena Ortiz &middot; 25 min</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px;">Walked through the pricing waterfall and bundle discount. Lena asked about the fixed-bid implementation scope. Agreed to share detailed SOW prior to DocuSign.</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 22 &middot; Chandra Kasarabada</div>
+        </div>
+        <span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Call</span>
+      </div>
+      <!-- Seeded Entry 2: Email -->
+      <div class="cpq-activity-entry">
+        <div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">&#9993;&#65039;</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;color:#0f172a;">Email: Quote Q-2024-0892 Sent to Customer</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px;">Quote PDF emailed to lortiz@skylinerenewables.com with executive cover letter. Quote opened 3&times; and read for 14 minutes. Engagement score: High.</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 22 &middot; Chandra Kasarabada</div>
+        </div>
+        <span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Email</span>
+      </div>
+      <!-- Seeded Entry 3: Task -->
+      <div class="cpq-activity-entry">
+        <div style="width:36px;height:36px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">&#9989;</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;color:#0f172a;">Task: Follow Up on Manager Approval &mdash; Sarah Whitmore</div>
+          <div style="font-size:12px;color:#64748b;margin-top:2px;">Approval has been pending since Oct 21. Send reminder to Sarah Whitmore. Escalate to VP of Sales if no response by Oct 25 EOD.</div>
+          <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 23 &middot; Due Oct 25 &middot; Chandra Kasarabada</div>
+        </div>
+        <span style="background:#fff3e0;color:#b45309;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">Task</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer">Copyright Demo &mdash; Redwood-inspired mockup</div>
+
+<script>
+/* ─── Tab Switching ─── */
+function switchCPQTab(btn, panelId) {
+  document.querySelectorAll('.cpq-tab').forEach(function(t) {
+    t.classList.remove('active-tab');
+    t.style.color = '#64748b';
+    t.style.borderBottomColor = 'transparent';
+  });
+  btn.classList.add('active-tab');
+  btn.style.color = '#ff7a18';
+  btn.style.borderBottomColor = '#ff7a18';
+  document.querySelectorAll('.cpq-tab-panel').forEach(function(p) {
+    p.style.display = 'none';
+  });
+  var panel = document.getElementById(panelId);
+  if (panel) panel.style.display = 'block';
+}
+
+/* ─── Activity Feed ─── */
+function addCPQActivity(type, text) {
+  var icons   = { Call: '&#128222;', Email: '&#9993;&#65039;', Meeting: '&#128197;', Task: '&#9989;' };
+  var bgCol   = { Call: '#dcfce7', Email: '#eff6ff', Meeting: '#fdf4ff', Task: '#fff3e0' };
+  var txtCol  = { Call: '#15803d', Email: '#1d4ed8', Meeting: '#7c3aed', Task: '#b45309'  };
+  var feed = document.getElementById('cpq-activity-feed');
+  if (!feed) return;
+  var now = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  var div = document.createElement('div');
+  div.className = 'cpq-activity-entry';
+  div.style.cssText = 'display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff5f0;animation:fadeIn .3s ease;';
+  div.innerHTML =
+    '<div style="width:36px;height:36px;border-radius:50%;background:' + bgCol[type] + ';display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">' + (icons[type] || '&#128204;') + '</div>' +
+    '<div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">' + type + ' Logged</div>' +
+    '<div style="font-size:12px;color:#64748b;margin-top:2px;">' + text + '</div>' +
+    '<div style="font-size:11px;color:#94a3b8;margin-top:6px;">' + now + ' &middot; Chandra Kasarabada</div></div>' +
+    '<span style="background:' + bgCol[type] + ';color:' + txtCol[type] + ';border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;align-self:flex-start;">' + type + '</span>';
+  feed.insertBefore(div, feed.firstChild);
+  if (typeof showToast === 'function') showToast(type + ' logged to quote activity timeline');
+}
+
+/* ─── AI Quote Validation ─── */
+function runCPQAI() {
+  var result = document.getElementById('cpqAiResult');
+  if (!result) return false;
+  result.style.display = 'block';
+  result.innerHTML = '<strong>CPQ AI Validation Complete &#10003;</strong> &mdash; All 4 line items are correctly configured. Bundle constraints satisfied. Pricing waterfall is within Tier 2 discount authority. No compatibility conflicts detected. Quote is ready for approval routing.';
+  if (typeof showToast === 'function') showToast('AI configuration validation complete');
+  return false;
+}
+
+function runCPQAIPricing() {
+  var result = document.getElementById('cpqAiResult');
+  if (!result) return false;
+  result.style.display = 'block';
+  result.style.background = '#fefce8';
+  result.style.borderColor = '#fde047';
+  result.style.color = '#92400e';
+  result.innerHTML = '<strong>AI Pricing Check &#9888;</strong> &mdash; Current discount of 8.2% is within authority. Recommended floor: $1,118,000. Win rate at current price level: 67%. Competitive pressure rated Medium — Salesforce CPQ flagged as alternate. Recommend holding price and emphasizing Argano implementation certainty as differentiation.';
+  if (typeof showToast === 'function') showToast('AI pricing check complete');
+  return false;
+}
+</script>
+</body>
+</html>

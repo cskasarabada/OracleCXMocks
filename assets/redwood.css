@@ -26,7 +26,7 @@ body {
 }
 
 body.lead-landing {
-  background: #edf1f8;
+  background: #f7f7f7;
 }
 
 .header {
@@ -1704,17 +1704,17 @@ textarea {
 
 /* Opportunity landing visuals */
 body.oppty-landing {
-  background: #f5efe7;
+  background: #f7f7f7;
 }
 
 .miconnex-bar {
-  background: #201b2f;
+  background: linear-gradient(90deg, #c74634, #9c2b20);
   color: #fff;
   padding: 14px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 4px solid #f8d5a5;
+  border-bottom: none;
 }
 
 .logo-mark {
@@ -1725,7 +1725,7 @@ body.oppty-landing {
 
 .logo-mark .logo-strong {
   font-weight: 900;
-  color: #f8d5a5;
+  color: rgba(255, 255, 255, .85);
 }
 
 .bar-actions {
@@ -1736,11 +1736,12 @@ body.oppty-landing {
 }
 
 .avatar-chip {
-  background: #6d4cc5;
+  background: rgba(255, 255, 255, .2);
   color: #fff;
   border-radius: 999px;
   font-weight: 700;
   padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, .3);
 }
 
 .oppty-shell {
@@ -1770,13 +1771,17 @@ body.oppty-landing {
 }
 
 .ghost-btn {
-  border: 1px dashed var(--rw-border);
-  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .1);
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 13px;
   cursor: pointer;
-  color: var(--rw-ink);
+  color: #fff;
+}
+
+.ghost-btn:hover {
+  background: rgba(255, 255, 255, .2);
 }
 
 .ghost-btn.small {
@@ -3516,8 +3521,8 @@ body.oracle-fusion-skin .smart-banner p {
 }
 
 .miconnex-bar {
-  background: linear-gradient(90deg, #0f172a 0%, #111b2e 45%, #1f2b44 100%);
-  border-bottom: 5px solid #ff7a18;
+  background: linear-gradient(90deg, #c74634, #9c2b20);
+  border-bottom: none;
 }
 
 .logo-mark {
@@ -3529,32 +3534,32 @@ body.oracle-fusion-skin .smart-banner p {
 }
 
 .logo-mark .logo-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 2px solid #ff7a18;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ff7a18;
-  font-size: 26px;
-  font-weight: 800;
-  background: rgba(255, 122, 24, .1);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, .2);
 }
 
 .logo-mark .logo-text {
-  font-size: 20px;
+  font-size: 18px;
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
 }
 
 .logo-mark .logo-sub {
-  font-size: 12px;
-  color: #ffd7bd;
+  font-size: 11px;
+  color: rgba(255, 255, 255, .75);
   text-transform: uppercase;
-  letter-spacing: .25em;
+  letter-spacing: .18em;
 }
 
 /* Fusion-inspired adjustments */

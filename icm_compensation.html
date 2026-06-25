@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ICM Compensation Dashboard</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    /* ── Hero ── */
+    .icm-hero {
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      box-shadow: 0 28px 40px rgba(15,23,42,.1);
+      padding: 26px;
+      margin-bottom: 26px;
+    }
+    .icm-hero h1 { margin: 6px 0 0; font-size: 1.85rem; color: #0f172a; }
+    .icm-hero .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: #ff7a18;
+      font-weight: 700;
+    }
+    .icm-hero .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+    .icm-hero .hero-details {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--rw-muted, #5a6478);
+      margin-top: 14px;
+      border-top: 1px solid var(--rw-border, #e2e8f0);
+      padding-top: 14px;
+    }
+    .icm-hero .hero-details span strong { color: #0f172a; }
+    .hero-ai-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .hero-ai-row input[type="text"] {
+      flex: 1;
+      min-width: 280px;
+      border-radius: 10px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 11px 14px;
+      font-size: 14px;
+      color: #0f172a;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .hero-ai-row input[type="text"]:focus { border-color: #ff7a18; }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 18px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .kpi-card .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: var(--rw-muted, #6c7894);
+      font-weight: 600;
+    }
+    .kpi-card .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 6px 0 4px;
+      color: #0f172a;
+    }
+    .kpi-card .kpi-sub { font-size: 12px; color: var(--rw-muted, #6c7894); margin: 0; }
+    .kpi-card.highlight .kpi-value { color: #ff7a18; }
+    .kpi-card.green .kpi-value { color: #16a34a; }
+
+    /* ── Dark Analytics Deck ── */
+    .analytics-deck {
+      background: linear-gradient(135deg, #0d1b2e, #0f2438 55%, #112e4a);
+      color: #e8eef7;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(6,16,36,.3);
+      margin-bottom: 28px;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .analytics-deck .deck-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: #ff7a18;
+      font-weight: 700;
+    }
+    .analytics-deck h2 { margin: 4px 0 6px; font-size: 1.55rem; }
+    .analytics-deck .deck-desc { margin: 0 0 16px; color: #c6d4eb; font-size: 14px; }
+    .deck-tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .deck-tile {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .deck-tile .label { color: #9fb8d8; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .deck-tile .value { font-size: 1.5rem; font-weight: 700; margin: 6px 0 4px; }
+    .deck-tile .meta { margin: 0; color: #dde6f5; font-size: 13px; }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .scenario-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .scenario-card .sc-label {
+      font-size: 12px;
+      color: #9fb8d8;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 700;
+    }
+    .scenario-card .sc-title { font-size: 1rem; font-weight: 700; margin: 6px 0 4px; }
+    .scenario-card .sc-value { font-size: 1.35rem; font-weight: 700; color: #ff7a18; }
+    .scenario-card .sc-detail { margin: 4px 0 0; font-size: 13px; color: #c8d8ec; }
+
+    /* ── Tab Bar ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 6px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(15,23,42,.06);
+    }
+    .tab-btn {
+      padding: 9px 18px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--rw-muted, #64748b);
+      cursor: pointer;
+      transition: background .18s, color .18s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { background: #f1f5f9; color: #0f172a; }
+    .tab-btn.active {
+      background: #ff7a18;
+      color: #fff;
+    }
+
+    /* ── Tab Panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Section heading ── */
+    .section-head { margin: 0 0 16px; }
+    .section-head .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: #ff7a18;
+      font-weight: 700;
+    }
+    .section-head h2 { margin: 4px 0 4px; font-size: 1.4rem; color: #0f172a; }
+    .section-head p { margin: 0; font-size: 13px; color: var(--rw-muted, #64748b); }
+
+    /* ── Data Tables ── */
+    .data-table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table thead tr { background: #f8fafc; }
+    .data-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--rw-muted, #64748b);
+      font-weight: 700;
+      border-bottom: 1px solid var(--rw-border, #e2e8f0);
+    }
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr.total-row td { background: #f8fafc; font-weight: 700; color: #0f172a; }
+    .data-table tr:hover td { background: #fafcff; }
+
+    /* ── Progress Bars ── */
+    .progress-wrap { margin-bottom: 22px; }
+    .progress-row { margin-bottom: 14px; }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--rw-muted, #64748b);
+      margin-bottom: 5px;
+    }
+    .progress-meta .prog-name { font-weight: 600; color: #1e293b; }
+    .progress-track {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff7a18, #ffaa55);
+      border-radius: 999px;
+      transition: width .6s ease;
+    }
+
+    /* ── Quota Bar ── */
+    .quota-bar-section {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-bottom: 22px;
+    }
+    .quota-bar-section h3 { margin: 0 0 14px; font-size: 1rem; color: #0f172a; }
+    .quota-bar-outer {
+      position: relative;
+      height: 28px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: visible;
+      margin-bottom: 8px;
+    }
+    .quota-bar-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 67%;
+      background: linear-gradient(90deg, #ff7a18, #ffaa55);
+      border-radius: 999px;
+    }
+    .quota-marker {
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      width: 2px;
+      background: #0f172a;
+    }
+    .quota-marker-label {
+      position: absolute;
+      top: -22px;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+    .quota-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--rw-muted, #64748b);
+      margin-top: 10px;
+    }
+
+    /* ── Commission Rate Table ── */
+    .rate-table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-bottom: 22px;
+    }
+    .rate-table-wrap h3 { margin: 0 0 14px; font-size: 1rem; color: #0f172a; }
+    .rate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .rate-tile {
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 14px;
+      text-align: center;
+    }
+    .rate-tile .rt-range { font-size: 12px; font-weight: 700; color: var(--rw-muted, #64748b); text-transform: uppercase; letter-spacing: .06em; }
+    .rate-tile .rt-pct { font-size: 1.6rem; font-weight: 800; color: #ff7a18; margin: 6px 0 4px; }
+    .rate-tile .rt-label { font-size: 11px; color: var(--rw-muted, #64748b); }
+    .rate-tile.active-tier { background: #fff5ec; border-color: #ff7a18; }
+    .rate-tile.active-tier .rt-pct { color: #e86200; }
+
+    /* ── Plan Design ── */
+    .plan-summary-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 18px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-bottom: 20px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .plan-summary-card .psc-field { font-size: 13px; }
+    .plan-summary-card .psc-field .psc-key { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--rw-muted, #64748b); font-weight: 600; }
+    .plan-summary-card .psc-field .psc-val { font-weight: 700; color: #0f172a; margin-top: 2px; }
+
+    .plan-components-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .plan-comp-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 18px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .plan-comp-card .pc-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 10px;
+      color: #ff7a18;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .plan-comp-card .pc-title { font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 6px; }
+    .plan-comp-card .pc-desc { font-size: 13px; color: var(--rw-muted, #5a6478); margin: 0; }
+
+    .rules-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-bottom: 20px;
+    }
+    .rules-card h3 { margin: 0 0 12px; font-size: 1rem; color: #0f172a; }
+    .rules-list { list-style: none; margin: 0; padding: 0; }
+    .rules-list li {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+      color: #1e293b;
+    }
+    .rules-list li:last-child { border-bottom: none; }
+    .rules-list li .rl-key { font-weight: 700; color: #0f172a; min-width: 160px; }
+
+    .dispute-info-card {
+      background: #fffbf5;
+      border: 1px solid #ffd5a0;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 13px;
+      color: #7a4400;
+    }
+    .dispute-info-card strong { color: #c45c00; }
+
+    /* ── Status badges ── */
+    .status { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; }
+    .status.approved { background: #dcfce7; color: #166534; }
+    .status.pending { background: #fef9c3; color: #854d0e; }
+    .status.in-review { background: #dbeafe; color: #1d4ed8; }
+    .status.processing { background: #f3e8ff; color: #7e22ce; }
+
+    /* ── Activity Feed ── */
+    .activity-section {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border, #e2e8f0);
+      padding: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-top: 28px;
+    }
+    .activity-section h3 { margin: 0 0 14px; font-size: 1rem; color: #0f172a; }
+    .activity-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .activity-feed { list-style: none; margin: 0; padding: 0; }
+    .activity-feed li {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      align-items: flex-start;
+    }
+    .activity-feed li:last-child { border-bottom: none; }
+    .activity-icon {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #fff5ec;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .activity-body { flex: 1; }
+    .activity-body .ab-title { font-weight: 600; font-size: 13px; color: #0f172a; }
+    .activity-body .ab-meta { font-size: 12px; color: var(--rw-muted, #64748b); margin-top: 2px; }
+
+    /* ── Footnote ── */
+    .footer { text-align: center; padding: 28px 0 18px; font-size: 12px; color: var(--rw-muted, #8898aa); }
+
+    /* ── Badge overrides ── */
+    .badge { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; }
+    .badge.orange { background: #ff7a18; color: #fff; }
+    .badge.green { background: #dcfce7; color: #166534; }
+    .pill { display: inline-block; border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 600; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .tab-btn { padding: 8px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body class="icm-landing">
+
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="cpq_quote_builder.html">CPQ Quote</a>
+      <a href="subscription_lifecycle.html">Subscriptions</a>
+      <a href="cx_service_case.html">Service Case</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations &amp; Finance</div>
+    <div class="nav-items">
+      <a href="icm_compensation.html" class="active">Compensation (ICM)</a>
+      <a href="marketing_orchestration.html">Marketing</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="account_360.html">Account 360</a>
+    </div>
+  </div>
+</nav>
+
+<main style="max-width:980px;margin:0 auto;padding:24px;">
+
+  <!-- ── HERO ── -->
+  <div class="icm-hero">
+    <div class="eyebrow">Incentive Compensation Management</div>
+    <h1>Chandra Kasarabada — Compensation Dashboard</h1>
+    <div class="meta-row">
+      <span class="badge orange">Q4 FY2024</span>
+      <span class="pill">Enterprise Sales — Southwest</span>
+      <span class="pill">Plan: Oracle CX Specialist</span>
+      <span class="badge green">Active</span>
+    </div>
+    <div class="hero-details">
+      <span><strong>Plan Period:</strong> Oct 1 – Dec 31 2024</span>
+      <span><strong>Base Salary:</strong> $145,000</span>
+      <span><strong>Target Variable:</strong> $72,500 (50%)</span>
+      <span><strong>Total Target Cash:</strong> $217,500</span>
+      <span><strong>Accelerator:</strong> 100% quota · 2.5× multiplier above 120%</span>
+    </div>
+    <div class="hero-ai-row">
+      <input type="text" placeholder="Ask Oracle ICM AI about your earnings, plan rules, or disputes…" style="font-size:14px;"/>
+      <button class="btn primary" onclick="showToast('Projecting your Q4 earnings based on current pipeline and plan rules…')">Project My Earnings</button>
+      <button class="btn" onclick="showToast('Opening Plan Document — Oracle CX Specialist FY2024 v2.1')">View Plan Document</button>
+    </div>
+  </div>
+
+  <!-- ── KPI SUMMARY GRID ── -->
+  <div class="kpi-grid">
+    <div class="kpi-card highlight">
+      <div class="kpi-label">YTD Earnings</div>
+      <div class="kpi-value">$48,230</div>
+      <p class="kpi-sub">Variable earned Q4 to date</p>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Quota Attainment</div>
+      <div class="kpi-value">67%</div>
+      <p class="kpi-sub">$166K of $248K target</p>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Deals Closed</div>
+      <div class="kpi-value">8</div>
+      <p class="kpi-sub">Q4 closed-won deals</p>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Pipeline to Go</div>
+      <div class="kpi-value">$380K</div>
+      <p class="kpi-sub">Qualified pipeline remaining</p>
+    </div>
+    <div class="kpi-card highlight">
+      <div class="kpi-label">Projected Q4 Payout</div>
+      <div class="kpi-value">$18,720</div>
+      <p class="kpi-sub">Based on current forecast</p>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Rank on Team</div>
+      <div class="kpi-value">3 / 12</div>
+      <p class="kpi-sub">Southwest region standings</p>
+    </div>
+  </div>
+
+  <!-- ── DARK ANALYTICS DECK ── -->
+  <div class="analytics-deck">
+    <div class="deck-eyebrow">Oracle ICM AI</div>
+    <h2>Earnings Intelligence</h2>
+    <p class="deck-desc">AI-powered projections based on pipeline, deal velocity, and plan rules</p>
+
+    <div class="deck-tile-grid">
+      <div class="deck-tile">
+        <div class="label">Projected Full-Year Earnings</div>
+        <div class="value">$82,400</div>
+        <p class="meta">Variable comp if pace holds</p>
+      </div>
+      <div class="deck-tile">
+        <div class="label">Gap to 100% Quota</div>
+        <div class="value">$186,000</div>
+        <p class="meta">Revenue needed to hit plan</p>
+      </div>
+      <div class="deck-tile">
+        <div class="label">Deals Needed (avg size)</div>
+        <div class="value">2.3</div>
+        <p class="meta">At avg deal size of $180K</p>
+      </div>
+      <div class="deck-tile">
+        <div class="label">Accelerator Unlocks At</div>
+        <div class="value">$248,000</div>
+        <p class="meta">100% quota · 9% rate kicks in</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:10px;font-size:12px;color:#9fb8d8;text-transform:uppercase;letter-spacing:.08em;font-weight:700;">Scenario Analysis</div>
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <div class="sc-label">Conservative</div>
+        <div class="sc-title">Close 1 more deal</div>
+        <div class="sc-value">+$8,200 payout</div>
+        <p class="sc-detail">Assumes $180K average deal, base rate 5.5%</p>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-label">Target</div>
+        <div class="sc-title">Close 2 deals</div>
+        <div class="sc-value">+$18,720 payout</div>
+        <p class="sc-detail">Hits 80% attainment, improved rate tier</p>
+      </div>
+      <div class="scenario-card">
+        <div class="sc-label">Stretch</div>
+        <div class="sc-title">Close 3 deals + accelerator</div>
+        <div class="sc-value">+$38,400 payout</div>
+        <p class="sc-detail">Crosses 100% quota, 9% accelerator rate applies</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB BAR ── -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchICMTab(this,'tab-earnings')">My Earnings</button>
+    <button class="tab-btn" onclick="switchICMTab(this,'tab-plan')">Plan Design</button>
+    <button class="tab-btn" onclick="switchICMTab(this,'tab-transactions')">Transactions</button>
+    <button class="tab-btn" onclick="switchICMTab(this,'tab-team')">Team View</button>
+    <button class="tab-btn" onclick="switchICMTab(this,'tab-history')">Payout History</button>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB: MY EARNINGS
+  ════════════════════════════════ -->
+  <div id="tab-earnings" class="tab-panel active">
+    <div class="section-head">
+      <div class="eyebrow">Q4 FY2024 Earnings</div>
+      <h2>Earnings Breakdown</h2>
+      <p>Component-level attainment vs. target variable compensation</p>
+    </div>
+
+    <!-- Earnings Breakdown Table -->
+    <div class="data-table-wrap" style="margin-bottom:22px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Target</th>
+            <th>YTD Earned</th>
+            <th>% Attained</th>
+            <th>Progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Base Commission (0–100% quota)</td>
+            <td>$36,250</td>
+            <td>$24,288</td>
+            <td>67%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:67%;"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Accelerator Bonus (100–120%)</td>
+            <td>$18,125</td>
+            <td>$0</td>
+            <td>—</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:0%;"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>SPIFs &amp; Kickers</td>
+            <td>$9,000</td>
+            <td>$8,200</td>
+            <td>91%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:91%;"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Management Override (2%)</td>
+            <td>$9,125</td>
+            <td>$5,742</td>
+            <td>63%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:63%;"></div>
+              </div>
+            </td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>Total Variable</strong></td>
+            <td><strong>$72,500</strong></td>
+            <td><strong>$38,230</strong></td>
+            <td><strong>53%</strong></td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:53%;background:linear-gradient(90deg,#e86200,#ff7a18);"></div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Quota Progress Bar -->
+    <div class="quota-bar-section">
+      <h3>Quota Progress — Q4 FY2024</h3>
+      <div style="padding-top:28px;padding-bottom:10px;">
+        <div class="quota-bar-outer">
+          <div class="quota-bar-fill"></div>
+          <!-- 80% marker -->
+          <div class="quota-marker" style="left:80%;">
+            <div class="quota-marker-label">80%</div>
+          </div>
+          <!-- 100% marker -->
+          <div class="quota-marker" style="left:100%;">
+            <div class="quota-marker-label">100%</div>
+          </div>
+          <!-- 120% marker — note: bar clips at 100%, label shown at edge -->
+          <div style="position:absolute;top:-22px;right:0;transform:translateX(0);font-size:10px;font-weight:700;color:#16a34a;">120%+</div>
+        </div>
+        <div class="quota-bar-labels">
+          <span>$0</span>
+          <span style="color:#ff7a18;font-weight:700;">You are here: $166K (67%)</span>
+          <span>$248K quota</span>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#64748b;margin:8px 0 0;">Reach $248,000 to unlock 9% accelerator rate. Gap: <strong style="color:#ff7a18;">$82,000</strong></p>
+    </div>
+
+    <!-- Commission Rate Table -->
+    <div class="rate-table-wrap">
+      <h3>Commission Rate Schedule</h3>
+      <div class="rate-grid">
+        <div class="rate-tile">
+          <div class="rt-range">0–80% Quota</div>
+          <div class="rt-pct">4.5%</div>
+          <div class="rt-label">Base rate, entry tier</div>
+        </div>
+        <div class="rate-tile active-tier">
+          <div class="rt-range">80–100% Quota</div>
+          <div class="rt-pct">5.5%</div>
+          <div class="rt-label">Current active tier</div>
+        </div>
+        <div class="rate-tile">
+          <div class="rt-range">100–120% Quota</div>
+          <div class="rt-pct">9.0%</div>
+          <div class="rt-label">Accelerator tier</div>
+        </div>
+        <div class="rate-tile">
+          <div class="rt-range">120%+ Quota</div>
+          <div class="rt-pct">13.5%</div>
+          <div class="rt-label">Maximum accelerator</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB: PLAN DESIGN
+  ════════════════════════════════ -->
+  <div id="tab-plan" class="tab-panel">
+    <div class="section-head">
+      <div class="eyebrow">Compensation Plan</div>
+      <h2>Oracle CX Specialist FY2024</h2>
+      <p>Approved plan document — current period compensation structure and rules</p>
+    </div>
+
+    <div class="plan-summary-card">
+      <div class="psc-field">
+        <div class="psc-key">Effective Date</div>
+        <div class="psc-val">Oct 1, 2024</div>
+      </div>
+      <div class="psc-field">
+        <div class="psc-key">Approved By</div>
+        <div class="psc-val">Sarah Whitmore</div>
+      </div>
+      <div class="psc-field">
+        <div class="psc-key">Version</div>
+        <div class="psc-val">v2.1</div>
+      </div>
+      <div class="psc-field">
+        <div class="psc-key">Plan Name</div>
+        <div class="psc-val">Oracle CX Specialist</div>
+      </div>
+      <div class="psc-field">
+        <div class="psc-key">Plan Period</div>
+        <div class="psc-val">Q4 FY2024 (Oct–Dec)</div>
+      </div>
+      <div class="psc-field">
+        <div class="psc-key">Status</div>
+        <div class="psc-val"><span class="badge green">Active</span></div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px;font-size:13px;font-weight:700;color:#0f172a;">Plan Components</div>
+    <div class="plan-components-grid">
+      <div class="plan-comp-card">
+        <div class="pc-eyebrow">Component 1</div>
+        <div class="pc-title">Base Commission</div>
+        <p class="pc-desc">5% of revenue on all closed-won deals within assigned territory. Applies from $0 to 100% of quota attainment at progressive rates (4.5% below 80%, 5.5% at 80–100%).</p>
+      </div>
+      <div class="plan-comp-card">
+        <div class="pc-eyebrow">Component 2</div>
+        <div class="pc-title">Accelerator Bonus</div>
+        <p class="pc-desc">9% commission rate applies for revenue credited between 100% and 120% of quota. Above 120% quota, rate escalates to 13.5% — a 2.5× multiplier on the base rate.</p>
+      </div>
+      <div class="plan-comp-card">
+        <div class="pc-eyebrow">Component 3</div>
+        <div class="pc-title">Product SPIFs &amp; Kickers</div>
+        <p class="pc-desc">+$500 per ICM module sold. +$750 per CPQ deal closed. Kickers are paid in the same pay cycle as the associated transaction and do not count against quota revenue.</p>
+      </div>
+      <div class="plan-comp-card">
+        <div class="pc-eyebrow">Component 4</div>
+        <div class="pc-title">Management Override</div>
+        <p class="pc-desc">2% override on all direct reports' credited revenue. Applied quarterly after individual rep payouts are finalized. Eligible for up to 3 direct reports in Q4.</p>
+      </div>
+      <div class="plan-comp-card">
+        <div class="pc-eyebrow">Component 5</div>
+        <div class="pc-title">Retention Bonus</div>
+        <p class="pc-desc">$15,000 year-end retention bonus payable if 110%+ of annual quota is achieved by December 31, 2024, and employment remains active at date of payment (Jan 15, 2025).</p>
+      </div>
+    </div>
+
+    <div class="rules-card">
+      <h3>Territory &amp; Eligibility Rules</h3>
+      <ul class="rules-list">
+        <li><span class="rl-key">Territory</span><span>Southwest — Arizona (AZ), California (CA), Nevada (NV), New Mexico (NM), Utah (UT)</span></li>
+        <li><span class="rl-key">Product Lines</span><span>Oracle CX Suite (Sales Cloud, CPQ, ICM, Service Cloud, Commerce)</span></li>
+        <li><span class="rl-key">Eligible Products</span><span>Oracle Sales Cloud, Oracle CPQ, Oracle ICM, Oracle Service Cloud</span></li>
+        <li><span class="rl-key">Deal Ownership</span><span>Primary rep on opportunity at close. Split credits permitted with manager approval.</span></li>
+        <li><span class="rl-key">Credit Timing</span><span>Revenue credited upon contract execution and Oracle order entry confirmation.</span></li>
+        <li><span class="rl-key">Clawback Policy</span><span>100% clawback within 60 days if deal cancels. 50% clawback at 61–120 days.</span></li>
+        <li><span class="rl-key">Pay Cycle</span><span>Monthly payout — 15th of the month following credit date. Q4 final true-up Jan 15, 2025.</span></li>
+      </ul>
+    </div>
+
+    <div class="dispute-info-card">
+      <strong>Dispute Process:</strong> To dispute a transaction, click the <strong>Dispute</strong> button on the Transactions tab. Include the deal name, amount, and reason for dispute. Disputes are reviewed by your compensation manager and resolved within <strong>5 business days</strong>. You will receive an email notification upon resolution.
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB: TRANSACTIONS
+  ════════════════════════════════ -->
+  <div id="tab-transactions" class="tab-panel">
+    <div class="section-head">
+      <div class="eyebrow">Transaction Register</div>
+      <h2>Revenue-Eligible Transactions</h2>
+      <p>All revenue-eligible transactions for Q4 FY2024 — reviewed and pending approval</p>
+    </div>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Deal / Account</th>
+            <th>Product</th>
+            <th>Revenue</th>
+            <th>Commission</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Oct 8</td>
+            <td><strong>Skyline Renewables</strong></td>
+            <td>Sales Cloud</td>
+            <td>$600,000</td>
+            <td>$33,000</td>
+            <td><span class="status approved">Approved</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for Skyline Renewables — Sales Cloud. Case ID #DSP-2401 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Oct 8</td>
+            <td><strong>Skyline Renewables</strong></td>
+            <td>CPQ</td>
+            <td>$240,000</td>
+            <td>$13,200 + $750 SPIF</td>
+            <td><span class="status approved">Approved</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for Skyline Renewables — CPQ. Case ID #DSP-2402 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Oct 12</td>
+            <td><strong>NovaTech Industries</strong></td>
+            <td>Service Cloud</td>
+            <td>$84,000</td>
+            <td>$4,620</td>
+            <td><span class="status pending">Pending</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for NovaTech Industries. Case ID #DSP-2403 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Oct 15</td>
+            <td><strong>GreenPath Energy</strong></td>
+            <td>Sales Cloud</td>
+            <td>$144,000</td>
+            <td>$7,920</td>
+            <td><span class="status approved">Approved</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for GreenPath Energy. Case ID #DSP-2404 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Oct 18</td>
+            <td><strong>Apex Logistics</strong></td>
+            <td>ICM</td>
+            <td>$96,000</td>
+            <td>$5,280 + $500 SPIF</td>
+            <td><span class="status in-review">In Review</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for Apex Logistics — ICM. Case ID #DSP-2405 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Nov 2</td>
+            <td><strong>Canyon Materials</strong></td>
+            <td>CPQ</td>
+            <td>$60,000</td>
+            <td>$3,300 + $750 SPIF</td>
+            <td><span class="status processing">Processing</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for Canyon Materials. Case ID #DSP-2406 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Nov 9</td>
+            <td><strong>Solaris Group</strong></td>
+            <td>Sales Cloud</td>
+            <td>$180,000</td>
+            <td>$9,900</td>
+            <td><span class="status approved">Approved</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for Solaris Group. Case ID #DSP-2407 created.')">Dispute</button></td>
+          </tr>
+          <tr>
+            <td>Nov 14</td>
+            <td><strong>TrueNorth Corp</strong></td>
+            <td>Service Cloud</td>
+            <td>$54,000</td>
+            <td>$2,970</td>
+            <td><span class="status pending">Pending</span></td>
+            <td><button class="btn" style="padding:4px 12px;font-size:12px;" onclick="showToast('Dispute filed for TrueNorth Corp. Case ID #DSP-2408 created.')">Dispute</button></td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3"><strong>Q4 FY2024 Total</strong></td>
+            <td><strong>$1,458,000</strong></td>
+            <td><strong>$80,440</strong></td>
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:12px;color:#64748b;margin:0;">Commission amounts reflect rates at the time of deal credit. SPIFs are itemized separately. Pending and In Review transactions are not yet included in YTD earnings. For questions, use the Dispute button or contact your Compensation Manager.</p>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB: TEAM VIEW
+  ════════════════════════════════ -->
+  <div id="tab-team" class="tab-panel">
+    <div class="section-head">
+      <div class="eyebrow">Team Performance</div>
+      <h2>Southwest Region Team — Q4 FY2024</h2>
+      <p>Manager: Sarah Whitmore &nbsp;|&nbsp; Team of 12 &nbsp;|&nbsp; Oracle CX Specialist Plan</p>
+    </div>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Rep</th>
+            <th>Territory</th>
+            <th>Quota</th>
+            <th>Attainment</th>
+            <th>Progress</th>
+            <th>Projected Payout</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fffbf5;">
+            <td><strong style="color:#ff7a18;">Chandra Kasarabada</strong> <span class="pill" style="font-size:10px;">You</span></td>
+            <td>AZ / NM / UT</td>
+            <td>$248,000</td>
+            <td>67%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:67%;"></div>
+              </div>
+            </td>
+            <td><strong>$18,720</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Jordan Ellis</strong></td>
+            <td>CA-North</td>
+            <td>$310,000</td>
+            <td>84%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:84%;"></div>
+              </div>
+            </td>
+            <td>$27,840</td>
+          </tr>
+          <tr>
+            <td><strong>Maya Torres</strong> <span class="badge green" style="font-size:10px;">Accelerator</span></td>
+            <td>CA-South</td>
+            <td>$280,000</td>
+            <td>112%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:100%;background:linear-gradient(90deg,#16a34a,#4ade80);"></div>
+              </div>
+            </td>
+            <td>$42,000</td>
+          </tr>
+          <tr>
+            <td><strong>Derek Huang</strong></td>
+            <td>NV</td>
+            <td>$195,000</td>
+            <td>54%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:54%;"></div>
+              </div>
+            </td>
+            <td>$9,450</td>
+          </tr>
+          <tr>
+            <td><strong>Priya Mehta</strong></td>
+            <td>CO / WY</td>
+            <td>$220,000</td>
+            <td>91%</td>
+            <td>
+              <div class="progress-track" style="min-width:100px;">
+                <div class="progress-fill" style="width:91%;"></div>
+              </div>
+            </td>
+            <td>$21,600</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:16px;font-size:13px;color:#0f172a;box-shadow:0 8px 20px rgba(15,23,42,.07);">
+      <strong>Team Summary:</strong> &nbsp; Team total attainment: <strong style="color:#ff7a18;">81%</strong> &nbsp;&middot;&nbsp; Team projected payout: <strong>$248,340</strong> &nbsp;&middot;&nbsp; 2 reps in accelerator tier (Maya Torres, Jordan Ellis approaching)
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB: PAYOUT HISTORY
+  ════════════════════════════════ -->
+  <div id="tab-history" class="tab-panel">
+    <div class="section-head">
+      <div class="eyebrow">Compensation History</div>
+      <h2>Historical Payouts</h2>
+      <p>Quarterly payout history — verified and paid amounts</p>
+    </div>
+
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Revenue Credited</th>
+            <th>Commission Paid</th>
+            <th>Attainment</th>
+            <th>Pay Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Q3 FY2024</strong></td>
+            <td>$312,000</td>
+            <td>$17,160</td>
+            <td><span class="badge" style="background:#fef9c3;color:#854d0e;">88%</span></td>
+            <td>Oct 5, 2024</td>
+          </tr>
+          <tr>
+            <td><strong>Q2 FY2024</strong></td>
+            <td>$284,000</td>
+            <td>$14,420</td>
+            <td><span class="badge" style="background:#fef9c3;color:#854d0e;">79%</span></td>
+            <td>Jul 5, 2024</td>
+          </tr>
+          <tr>
+            <td><strong>Q1 FY2024</strong></td>
+            <td>$198,000</td>
+            <td>$8,900</td>
+            <td><span class="badge" style="background:#fee2e2;color:#991b1b;">55%</span></td>
+            <td>Apr 5, 2024</td>
+          </tr>
+          <tr>
+            <td><strong>Q4 FY2023</strong></td>
+            <td>$426,000</td>
+            <td>$31,200</td>
+            <td><span class="badge green">118%</span></td>
+            <td>Jan 5, 2024</td>
+          </tr>
+          <tr class="total-row">
+            <td><strong>YTD Total (FY2024)</strong></td>
+            <td><strong>$794,000</strong></td>
+            <td><strong>$40,480</strong></td>
+            <td><strong>74% avg</strong></td>
+            <td></td>
+          </tr>
+          <tr class="total-row" style="background:#f0fdf4;">
+            <td><strong>3-Year Total</strong></td>
+            <td><strong>—</strong></td>
+            <td><strong style="color:#16a34a;">$248,900</strong></td>
+            <td><strong>—</strong></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:#fff;border-radius:14px;border:1px solid var(--rw-border,#e2e8f0);padding:16px;font-size:13px;color:#0f172a;box-shadow:0 8px 20px rgba(15,23,42,.07);">
+      <strong>YTD Paid (FY2024):</strong> <strong style="color:#ff7a18;">$71,680</strong> &nbsp;&middot;&nbsp;
+      <strong>3-Year Total:</strong> <strong style="color:#16a34a;">$248,900</strong> &nbsp;&middot;&nbsp;
+      Best quarter: Q4 FY2023 at 118% attainment ($31,200 paid)
+    </div>
+  </div>
+
+  <!-- ── ACTIVITY FEED ── -->
+  <div class="activity-section">
+    <h3>Activity &amp; Notes</h3>
+    <div class="activity-actions">
+      <button class="btn" onclick="addICMActivity('call','Logged outbound call')">+ Log Call</button>
+      <button class="btn" onclick="addICMActivity('note','Note added to compensation record')">+ Note</button>
+      <button class="btn" onclick="addICMActivity('meeting','Meeting logged with compensation manager')">+ Meeting</button>
+      <button class="btn" onclick="addICMActivity('task','Task created for follow-up')">+ Task</button>
+    </div>
+    <ul class="activity-feed" id="icm-activity-feed">
+      <li>
+        <div class="activity-icon">⚠️</div>
+        <div class="activity-body">
+          <div class="ab-title">Dispute filed — NovaTech Industries (Service Cloud, $84K)</div>
+          <div class="ab-meta">Nov 12, 2024 &middot; Case #DSP-2403 &middot; Pending manager review &middot; Expected resolution: Nov 19</div>
+        </div>
+      </li>
+      <li>
+        <div class="activity-icon">📄</div>
+        <div class="activity-body">
+          <div class="ab-title">Plan document reviewed — Oracle CX Specialist v2.1</div>
+          <div class="ab-meta">Oct 3, 2024 &middot; Acknowledged by Chandra Kasarabada &middot; E-signature recorded</div>
+        </div>
+      </li>
+      <li>
+        <div class="activity-icon">📅</div>
+        <div class="activity-body">
+          <div class="ab-title">Q4 Kickoff meeting — Southwest Region compensation review</div>
+          <div class="ab-meta">Oct 1, 2024 &middot; Attendees: Sarah Whitmore, Chandra Kasarabada, Jordan Ellis &middot; Goals &amp; quota targets confirmed</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</main>
+
+<div class="footer">Copyright &copy; 2024 Demo — Redwood-inspired Oracle ICM Mockup · Argano Connected Cloud</div>
+
+<script>
+  // ── Tab switching ──
+  function switchICMTab(btn, panelId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    var panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  // ── Activity feed ──
+  var icmIcons = { call: '📞', note: '📝', meeting: '🤝', task: '✅' };
+  function addICMActivity(type, text) {
+    var feed = document.getElementById('icm-activity-feed');
+    if (!feed) return;
+    var li = document.createElement('li');
+    var now = new Date();
+    var timeStr = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    li.innerHTML =
+      '<div class="activity-icon">' + (icmIcons[type] || '📌') + '</div>' +
+      '<div class="activity-body">' +
+        '<div class="ab-title">' + text + '</div>' +
+        '<div class="ab-meta">' + timeStr + ' &middot; Added by Chandra Kasarabada</div>' +
+      '</div>';
+    feed.insertBefore(li, feed.firstChild);
+    if (typeof showToast === 'function') showToast(text);
+  }
+
+  // ── Fallback showToast if app.js not loaded ──
+  if (typeof showToast === 'undefined') {
+    window.showToast = function(msg) {
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:360px;';
+      document.body.appendChild(t);
+      setTimeout(function() { t.style.opacity = '0'; t.style.transition = 'opacity .4s'; setTimeout(function() { t.remove(); }, 400); }, 3200);
+    };
+  }
+</script>
+
+</body>
+</html>

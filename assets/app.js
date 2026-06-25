@@ -26,11 +26,13 @@
     { href: 'field_mobile_snapshot.html', label: 'Field Mobile', group: 'toolkit' },
     { href: 'sales_ppm_sync.html', label: 'Sales-PPM', group: 'toolkit' },
     { href: 'quote_to_docusign.html', label: 'Quote to DocuSign', group: 'toolkit' },
-    { href: 'pursuit_project.html', label: 'Pursuit Project', group: 'toolkit' }
+    { href: 'pursuit_project.html', label: 'Pursuit Project', group: 'toolkit' },
+    { href: 'bollinger_command_center.html', label: 'Bollinger Shipyards', accent: true, group: 'prospects' }
   ];
   const NAV_GROUP_LABELS = {
     persona: 'Persona Views',
     journey: 'Sales & Delivery Journey',
+    prospects: 'Prospective Customers',
     toolkit: 'Insights & Toolkit'
   };
   const PERSONA_FILTERS = {
@@ -55,7 +57,25 @@
       'sales_cloud.html',
       'sources.html',
       'my_team.html'
+    ],
+    bollinger: [
+      'bollinger_command_center.html',
+      'cx_lead.html',
+      'cx_opportunity.html',
+      'ppm_pursuit.html',
+      'pursuit_project.html',
+      'sales_ppm_sync.html',
+      'ppm_construction.html',
+      'analytics.html',
+      'forecasting_pipeline.html',
+      'account_360.html'
     ]
+  };
+  var PERSONA_LABELS = {
+    all: 'All Persona',
+    rep: 'Sales Rep',
+    manager: 'Sales Manager',
+    bollinger: 'Bollinger Shipyards'
   };
   function injectAssistantChrome() {
     if (document.getElementById('ai-assist-launch')) return;
@@ -720,9 +740,9 @@
     var bar = document.createElement('div');
     bar.id = 'persona-ribbon';
     bar.className = 'persona-ribbon';
-    ['all', 'rep', 'manager'].forEach(function (key) {
+    ['all', 'rep', 'manager', 'bollinger'].forEach(function (key) {
       var btn = document.createElement('button');
-      btn.textContent = key === 'all' ? 'All Persona' : (key === 'rep' ? 'Sales Rep' : 'Sales Manager');
+      btn.textContent = PERSONA_LABELS[key] || key;
       btn.dataset.personaToggle = key;
       btn.addEventListener('click', function () { applyPersonaSelection(key); bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === key); }); });
       bar.appendChild(btn);
@@ -774,6 +794,7 @@
     }
     var storedPersona = 'all';
     try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { storedPersona = 'all'; }
+    if (current === 'bollinger_command_center.html') storedPersona = 'bollinger';
     applyPersonaSelection(storedPersona);
     injectAssistantChrome();
     injectPersonaRibbon();

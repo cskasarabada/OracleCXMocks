@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Day in the Life — Oracle CX</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<style>
+/* ─── Reset & Base ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Century Gothic','Segoe UI',Arial,sans-serif; background: #f7f7f7; color: #1f2937; overflow-x: hidden; }
+
+/* ─── PICKER SCREEN ─────────────────────────────────────────────────────── */
+#picker {
+  min-height: 100vh;
+  background: #f7f7f7;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 0 48px;
+  transition: opacity .4s ease;
+}
+
+/* Redwood-style top banner */
+.picker-banner {
+  width: 100%;
+  background: linear-gradient(90deg, #c74634, #9c2b20);
+  padding: 18px 40px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 0;
+}
+.picker-banner .a-mark {
+  width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: #fff;
+}
+.picker-banner .a-label { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -.3px; }
+.picker-banner .a-sub   { font-size: 12px; color: rgba(255,255,255,.75); }
+
+/* Hero strip below banner */
+.picker-hero {
+  width: 100%; background: linear-gradient(90deg, #f3efe9, #ffffff);
+  border-bottom: 1px solid #e5e7eb;
+  padding: 32px 40px 28px; text-align: center;
+  margin-bottom: 36px;
+}
+.picker-logo { display: none; }  /* replaced by picker-banner */
+
+.picker-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .18em; color: #c74634; text-transform: uppercase; margin-bottom: 10px; }
+.picker-title   { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: #1f2937; text-align: center; line-height: 1.1; margin-bottom: 8px; }
+.picker-sub     { font-size: 15px; color: #6b7280; text-align: center; max-width: 560px; margin: 0 auto; line-height: 1.6; }
+
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px; max-width: 1100px; width: 100%; padding: 0 24px;
+}
+.persona-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px; padding: 28px 22px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(15,23,42,.06);
+}
+.persona-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 16px;
+  opacity: 0; transition: opacity .2s ease;
+}
+.persona-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,23,42,.12); }
+.persona-card:hover::before { opacity: 1; }
+
+/* per-persona hover tint */
+.persona-card[data-p="rep"]::before  { background: linear-gradient(135deg, rgba(255,122,24,.06), transparent); }
+.persona-card[data-p="mgr"]::before  { background: linear-gradient(135deg, rgba(29,78,216,.06), transparent); }
+.persona-card[data-p="ops"]::before  { background: linear-gradient(135deg, rgba(124,58,237,.06), transparent); }
+.persona-card[data-p="mkt"]::before  { background: linear-gradient(135deg, rgba(162,28,175,.06), transparent); }
+.persona-card[data-p="fin"]::before  { background: linear-gradient(135deg, rgba(21,128,61,.06), transparent); }
+
+.persona-card[data-p="rep"]:hover  { border-color: rgba(255,122,24,.35); }
+.persona-card[data-p="mgr"]:hover  { border-color: rgba(29,78,216,.35); }
+.persona-card[data-p="ops"]:hover  { border-color: rgba(124,58,237,.35); }
+.persona-card[data-p="mkt"]:hover  { border-color: rgba(162,28,175,.35); }
+.persona-card[data-p="fin"]:hover  { border-color: rgba(21,128,61,.35); }
+
+.pc-emoji  { font-size: 36px; line-height: 1; }
+.pc-name   { font-size: 17px; font-weight: 800; color: #1f2937; line-height: 1.2; }
+.pc-role   { font-size: 12px; color: #6b7280; line-height: 1.4; }
+.pc-scenes { font-size: 11px; font-weight: 700; letter-spacing: .05em; margin-top: 4px; }
+.pc-start  {
+  margin-top: 10px; padding: 10px 0; border-radius: 10px; font-size: 13px; font-weight: 700;
+  color: #fff; border: none; cursor: pointer; width: 100%;
+  transition: opacity .15s;
+}
+.pc-start:hover { opacity: .85; }
+.persona-card[data-p="rep"] .pc-scenes, .persona-card[data-p="rep"] .pc-start { color: #ff7a18; }
+.persona-card[data-p="rep"] .pc-start  { background: #ff7a18; color: #fff; }
+.persona-card[data-p="mgr"] .pc-scenes { color: #60a5fa; }
+.persona-card[data-p="mgr"] .pc-start  { background: #1d4ed8; }
+.persona-card[data-p="ops"] .pc-scenes { color: #a78bfa; }
+.persona-card[data-p="ops"] .pc-start  { background: #7c3aed; }
+.persona-card[data-p="mkt"] .pc-scenes { color: #e879f9; }
+.persona-card[data-p="mkt"] .pc-start  { background: #a21caf; }
+.persona-card[data-p="fin"] .pc-scenes { color: #4ade80; }
+.persona-card[data-p="fin"] .pc-start  { background: #15803d; }
+
+/* ─── PLAYER SCREEN ─────────────────────────────────────────────────────── */
+#player {
+  display: none; min-height: 100vh;
+  flex-direction: column;
+}
+#player.visible { display: flex; }
+
+/* Top bar */
+.player-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px; border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  position: sticky; top: 0; z-index: 100;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(15,23,42,.06);
+}
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.topbar-persona-badge {
+  padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 700;
+  border: 1px solid #e5e7eb; color: #1f2937;
+}
+.back-btn {
+  background: #f3f4f6; border: 1px solid #e5e7eb;
+  color: #374151; padding: 8px 16px; border-radius: 10px; font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: background .15s;
+}
+.back-btn:hover { background: #e5e7eb; }
+
+/* Timeline progress bar */
+.timeline-bar {
+  padding: 18px 28px 0;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+.timeline-track {
+  display: flex; align-items: center; gap: 0; max-width: 900px; margin: 0 auto;
+}
+.tl-step {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: relative; flex: 1;
+}
+.tl-step:not(:last-child)::after {
+  content: ''; position: absolute; top: 14px; left: 50%; right: -50%;
+  height: 2px; background: #e5e7eb; z-index: 0;
+  transition: background .4s ease;
+}
+.tl-step.done:not(:last-child)::after  { background: var(--accent); }
+.tl-step.active:not(:last-child)::after { background: #e5e7eb; }
+.tl-dot {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid #d1d5db;
+  background: #f9fafb; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #9ca3af;
+  z-index: 1; position: relative; cursor: pointer;
+  transition: all .3s ease;
+}
+.tl-step.done   .tl-dot { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tl-step.active .tl-dot { background: #fff; border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px rgba(0,0,0,.05); }
+.tl-time { font-size: 10px; color: #9ca3af; font-weight: 600; transition: color .3s; white-space: nowrap; }
+.tl-step.done   .tl-time  { color: var(--accent); }
+.tl-step.active .tl-time  { color: #1f2937; }
+
+/* Scene area */
+.scene-area {
+  flex: 1; display: flex; flex-direction: column;
+  padding: 0 28px 20px;
+  background: #f7f7f7;
+}
+
+.scene-wrap {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  padding-top: 28px;
+}
+@media(max-width: 860px) { .scene-wrap { grid-template-columns: 1fr; } }
+
+/* LEFT: narrative */
+.scene-narrative {
+  display: flex; flex-direction: column; gap: 20px;
+  background: #fff; border-radius: 16px; padding: 28px 24px;
+  border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(15,23,42,.06);
+  align-self: start;
+}
+.scene-time-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 18px; border-radius: 999px; font-size: 22px; font-weight: 900;
+  border: 1px solid #e5e7eb; background: #fff;
+  width: fit-content; color: #1f2937;
+  box-shadow: 0 1px 4px rgba(15,23,42,.06);
+}
+.scene-headline {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem); font-weight: 900; color: #1f2937; line-height: 1.15;
+}
+.scene-screen-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700;
+  border: 1px solid #e5e7eb; color: #374151; text-decoration: none;
+  background: #fff; width: fit-content;
+  transition: background .15s, border-color .15s;
+  box-shadow: 0 1px 3px rgba(15,23,42,.06);
+}
+.scene-screen-link:hover { background: #f9fafb; border-color: #d1d5db; }
+
+.narrative-block { display: flex; flex-direction: column; gap: 8px; }
+.nb-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.do-list   { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; }
+.do-list li { display: flex; gap: 10px; font-size: 13.5px; color: #374151; line-height: 1.5; }
+.do-list li .step-num {
+  width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+}
+.say-list  { list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0; }
+.say-list li {
+  font-size: 13px; color: #6b7280; font-style: italic; line-height: 1.6;
+  padding: 10px 14px; border-left: 3px solid; border-radius: 0 10px 10px 0;
+  background: #fff;
+}
+.tip-list  { list-style: none; display: flex; flex-direction: column; gap: 6px; padding: 0; }
+.tip-list li { display: flex; gap: 8px; font-size: 12.5px; color: #d97706; line-height: 1.5; }
+.tip-list li::before { content: '★'; flex-shrink: 0; }
+
+/* RIGHT: screen preview */
+.scene-preview {
+  display: flex; flex-direction: column;
+}
+.preview-chrome {
+  background: #1e293b; border-radius: 14px 14px 0 0;
+  padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(255,255,255,.08); border-bottom: none;
+}
+.chrome-dots { display: flex; gap: 6px; }
+.chrome-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.chrome-dots span:nth-child(1) { background: #ef4444; }
+.chrome-dots span:nth-child(2) { background: #f59e0b; }
+.chrome-dots span:nth-child(3) { background: #22c55e; }
+.chrome-url  {
+  flex: 1; background: rgba(255,255,255,.06); border-radius: 6px;
+  padding: 4px 12px; font-size: 11px; color: #64748b; font-family: monospace;
+}
+.preview-body {
+  background: #f8fafc; border-radius: 0 0 14px 14px;
+  border: 1px solid rgba(255,255,255,.08); border-top: none;
+  overflow: hidden; flex: 1;
+  font-family: Arial, sans-serif;
+}
+
+/* mini mockup components inside preview */
+.mini-header {
+  background: #0f172a; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between;
+}
+.mini-logo { display: flex; align-items: center; gap: 7px; }
+.mini-logo .a { background: #ff7a18; color: #fff; width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; }
+.mini-logo span { color: #e8f2ff; font-size: 12px; font-weight: 700; }
+.mini-avatar { background: #ff7a18; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+
+.mini-content { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+
+.mini-hero {
+  background: #fff; border-radius: 10px; padding: 12px 14px;
+  border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(15,23,42,.06);
+}
+.mini-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #ff7a18; margin-bottom: 3px; }
+.mini-h1      { font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 6px; line-height: 1.2; }
+.mini-tags    { display: flex; gap: 5px; flex-wrap: wrap; }
+.mini-tag     { padding: 2px 8px; border-radius: 999px; font-size: 9px; font-weight: 700; }
+.mini-fields  { display: flex; flex-direction: column; gap: 3px; margin-top: 8px; }
+.mini-field   { display: flex; gap: 6px; font-size: 10px; }
+.mini-field-label { color: #94a3b8; min-width: 70px; }
+.mini-field-val   { color: #0f172a; font-weight: 600; }
+
+.mini-kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.mini-kpi     { background: #fff; border-radius: 8px; padding: 8px 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mini-kpi-label { font-size: 8px; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
+.mini-kpi-val   { font-size: 16px; font-weight: 800; color: #0f172a; margin-top: 1px; }
+.mini-kpi-sub   { font-size: 8px; color: #64748b; margin-top: 1px; }
+
+.mini-dark {
+  background: linear-gradient(135deg, #0d1b2e, #0f2438 60%, #12324d);
+  border-radius: 10px; padding: 12px 14px; color: #e8eef7;
+}
+.mini-dark-title { font-size: 11px; font-weight: 700; color: #e8eef7; margin-bottom: 8px; }
+.mini-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.mini-tile  { background: rgba(255,255,255,.06); border-radius: 7px; padding: 7px 9px; border: 1px solid rgba(255,255,255,.07); }
+.mini-tile-label { font-size: 8px; color: #9fb8d8; text-transform: uppercase; letter-spacing: .05em; }
+.mini-tile-val   { font-size: 14px; font-weight: 800; color: #e8eef7; margin-top: 1px; }
+.mini-tile-sub   { font-size: 8px; color: #dfe7f4; margin-top: 1px; }
+
+.mini-table {
+  background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden;
+}
+.mini-table table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.mini-table th { background: #0f172a; color: #fff; padding: 5px 8px; text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: .05em; }
+.mini-table td { padding: 5px 8px; color: #0f172a; border-bottom: 1px solid #f1f5f9; }
+.mini-table tr:last-child td { border-bottom: none; }
+.mini-table .total td { background: #f8fafc; font-weight: 800; color: #ff7a18; }
+
+.mini-activity { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px 12px; }
+.mini-activity-title { font-size: 10px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.mini-act-entry { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+.mini-act-icon  { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.mini-act-body  { flex: 1; }
+.mini-act-title { font-size: 10px; font-weight: 700; color: #0f172a; }
+.mini-act-sub   { font-size: 9px; color: #64748b; }
+
+.mini-nba {
+  background: linear-gradient(135deg, #fff7f0, #fff);
+  border: 1px solid #fed7aa; border-radius: 10px; padding: 10px 12px;
+}
+.mini-nba-label { font-size: 8px; font-weight: 700; color: #ff7a18; text-transform: uppercase; letter-spacing: .1em; }
+.mini-nba-text  { font-size: 11px; font-weight: 700; color: #0f172a; margin-top: 3px; line-height: 1.3; }
+.mini-nba-btn   { margin-top: 7px; padding: 4px 10px; background: #ff7a18; color: #fff; border-radius: 6px; font-size: 9px; font-weight: 700; display: inline-block; }
+
+.mini-approval { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px 12px; }
+.mini-approval-title { font-size: 10px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.mini-appr-step { display: flex; gap: 8px; align-items: center; margin-bottom: 7px; }
+.mini-appr-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.mini-appr-body { flex: 1; }
+.mini-appr-label{ font-size: 10px; font-weight: 700; color: #0f172a; }
+.mini-appr-sub  { font-size: 9px; color: #64748b; }
+
+/* waterfall */
+.mini-waterfall { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; }
+.mini-waterfall table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.mini-waterfall th { background: #0f172a; color: #fff; padding: 5px 8px; text-align: left; font-size: 9px; }
+.mini-waterfall td { padding: 4px 8px; color: #0f172a; border-bottom: 1px solid #f1f5f9; }
+.mini-waterfall .wf-total td { font-weight: 800; background: #dcfce7; color: #15803d; }
+.mini-waterfall .wf-neg  td:last-child { color: #dc2626; }
+
+/* score bar */
+.mini-score-bar { background: #f1f5f9; border-radius: 6px; height: 8px; margin-top: 4px; overflow: hidden; }
+.mini-score-fill { height: 100%; border-radius: 6px; }
+
+/* Bottom nav */
+.player-nav {
+  padding: 16px 28px; border-top: 1px solid #e5e7eb;
+  background: #fff; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; position: sticky; bottom: 0;
+  box-shadow: 0 -2px 8px rgba(15,23,42,.06);
+}
+.nav-btn {
+  padding: 12px 28px; border-radius: 12px; font-size: 14px; font-weight: 700;
+  cursor: pointer; border: 1px solid #e5e7eb;
+  background: #f3f4f6; color: #374151;
+  transition: all .15s;
+}
+.nav-btn:hover { background: #e5e7eb; }
+.nav-btn.primary { color: #fff; border: none; }
+.nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+.nav-counter { font-size: 13px; color: #6b7280; font-weight: 600; }
+
+/* transition */
+.scene-wrap.fade-out { opacity: 0; transform: translateX(-20px); transition: opacity .2s ease, transform .2s ease; }
+.scene-wrap.fade-in  { opacity: 1; transform: translateX(0);   transition: opacity .25s ease .05s, transform .25s ease .05s; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PERSONA PICKER
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="picker">
+  <!-- Redwood top banner -->
+  <div class="picker-banner">
+    <div class="a-mark">A</div>
+    <div>
+      <div class="a-label">Argano — Oracle CX Practice</div>
+      <div class="a-sub">Interactive Demo Suite</div>
+    </div>
+  </div>
+  <!-- Hero strip -->
+  <div class="picker-hero">
+    <p class="picker-eyebrow">Oracle CX · Interactive Demo</p>
+    <h1 class="picker-title">A Day in the Life</h1>
+    <p class="picker-sub">Step into the shoes of an Oracle CX user. Pick a persona to begin their day — from first login to last task — with the actual screens they use.</p>
+  </div>
+
+  <div class="persona-grid">
+
+    <div class="persona-card" data-p="rep" onclick="startDay('rep')">
+      <div class="pc-emoji">🎯</div>
+      <div class="pc-name">Jordan Ellis</div>
+      <div class="pc-role">Account Executive<br>Southwest · $310K Q4 Quota · 84% Attainment</div>
+      <div class="pc-scenes">5 scenes · 8 AM → 3:30 PM</div>
+      <button class="pc-start">Start Jordan's Day →</button>
+    </div>
+
+    <div class="persona-card" data-p="mgr" onclick="startDay('mgr')">
+      <div class="pc-emoji">📋</div>
+      <div class="pc-name">Sarah Whitmore</div>
+      <div class="pc-role">Regional Sales Manager<br>8 Direct Reports · Team at 76% Attainment</div>
+      <div class="pc-scenes">4 scenes · 8:30 AM → 2 PM</div>
+      <button class="pc-start">Start Sarah's Day →</button>
+    </div>
+
+    <div class="persona-card" data-p="ops" onclick="startDay('ops')">
+      <div class="pc-emoji">⚙️</div>
+      <div class="pc-name">Alex Kim</div>
+      <div class="pc-role">Director of Sales Operations<br>Territory · Quota · Disputes · Reporting</div>
+      <div class="pc-scenes">3 scenes · 8 AM → 1:30 PM</div>
+      <button class="pc-start">Start Alex's Day →</button>
+    </div>
+
+    <div class="persona-card" data-p="mkt" onclick="startDay('mkt')">
+      <div class="pc-emoji">📣</div>
+      <div class="pc-name">Dana Park</div>
+      <div class="pc-role">Director of Demand Generation<br>Q4 Utility Campaign · 18 of 45 MQL Goal</div>
+      <div class="pc-scenes">3 scenes · 8:30 AM → 11 AM</div>
+      <button class="pc-start">Start Dana's Day →</button>
+    </div>
+
+    <div class="persona-card" data-p="fin" onclick="startDay('fin')">
+      <div class="pc-emoji">💰</div>
+      <div class="pc-name">Dana Marsh</div>
+      <div class="pc-role">CFO · Skyline Renewables (Prospect)<br>ASC 606 · Comp Governance · Pricing Controls</div>
+      <div class="pc-scenes">3 scenes · 9 AM → 1 PM</div>
+      <button class="pc-start">Start Dana's Day →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PLAYER
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="player">
+
+  <!-- Top bar -->
+  <div class="player-topbar">
+    <div class="topbar-left">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:10px;background:#c74634;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;">A</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#1f2937;">Argano</div>
+          <div style="font-size:11px;color:#6b7280;">Oracle CX</div>
+        </div>
+      </div>
+      <div class="topbar-persona-badge" id="topbar-badge"></div>
+    </div>
+    <button class="back-btn" onclick="backToPicker()">← Choose Persona</button>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-bar">
+    <div class="timeline-track" id="timeline-track"></div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- Scene area -->
+  <div class="scene-area" style="flex:1;">
+    <div class="scene-wrap fade-in" id="scene-wrap">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="player-nav">
+    <button class="nav-btn" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
+    <span class="nav-counter" id="nav-counter"></span>
+    <button class="nav-btn primary" id="btn-next" onclick="navigate(1)" style="background:#ff7a18;">Next Scene →</button>
+  </div>
+
+</div>
+
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+var ACCENT = { rep:'#ff7a18', mgr:'#1d4ed8', ops:'#7c3aed', mkt:'#a21caf', fin:'#15803d' };
+
+var DAYS = {
+
+/* ════════════════ SALES REP ════════════════ */
+rep: {
+  name:'Jordan Ellis', role:'Account Executive', emoji:'🎯',
+  scenes:[
+  {
+    time:'8:00 AM', headline:'Morning Lead Review', screen:'cx_lead.html',
+    url:'localhost:8000/cx_lead.html',
+    does:['Open cx_lead.html — Jordan\'s AI-ranked lead queue loads.',
+          'Point to the AI Lead Score badge: 78 / 100 — High Intent.',
+          'Click "Summarize Lead" → GenAI brief appears.',
+          'Show the Activity Timeline — calls, emails, workshops.',
+          'Click "+ Log Call" — live entry appears in the feed.',
+          'Point to Territory: Southwest — Utilities & Energy, and Quota card.'],
+    says:['"Every morning Jordan opens her lead dashboard — not her email. Oracle AI ranked every lead overnight by conversion probability."',
+          '"This scores 78 — High Intent, Strong Fit, Active Engagement. Auto-routed from Eloqua the moment it hit the MQL threshold. Zero manual assignment."',
+          '"Smart Actions is already telling Jordan what to do first — before she even opens her calendar."'],
+    tips:['Pause after showing the AI score. Ask: "How does your team prioritize leads every morning?"',
+          'Click "Overview" in the GenAI panel — it reads like a pre-call briefing note.'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Sales Cloud</span></div><div class="mini-avatar">JE</div></div>
+<div class="mini-content">
+  <div class="mini-hero">
+    <div class="mini-eyebrow">My Open Leads</div>
+    <div class="mini-h1">Skyline Renewables — Microgrid Expansion</div>
+    <div class="mini-tags">
+      <span class="mini-tag" style="background:#dcfce7;color:#15803d;">Qualified</span>
+      <span class="mini-tag" style="background:#fff7f0;color:#ff7a18;border:1px solid #fed7aa;">AI Score 78</span>
+      <span class="mini-tag" style="background:#f1f5f9;color:#475569;">Owner: J. Ellis</span>
+    </div>
+    <div class="mini-fields">
+      <div class="mini-field"><span class="mini-field-label">Territory</span><span class="mini-field-val">Southwest — Utilities &amp; Energy</span></div>
+      <div class="mini-field"><span class="mini-field-label">Contact</span><span class="mini-field-val">Ava Nguyen (CIO)</span></div>
+      <div class="mini-field"><span class="mini-field-label">Value</span><span class="mini-field-val" style="color:#ff7a18;">$1,250,000</span></div>
+      <div class="mini-field"><span class="mini-field-label">Quota YTD</span><span class="mini-field-val">$310,000 · 84% Attained</span></div>
+    </div>
+    <div style="margin-top:8px;"><div style="font-size:9px;color:#94a3b8;margin-bottom:3px;">AI LEAD SCORE</div>
+    <div class="mini-score-bar"><div class="mini-score-fill" style="width:78%;background:#ff7a18;"></div></div>
+    <div style="font-size:9px;color:#ff7a18;margin-top:2px;font-weight:700;">78 / 100 · High Intent</div></div>
+  </div>
+  <div class="mini-kpi-row">
+    <div class="mini-kpi"><div class="mini-kpi-label">Activities Due</div><div class="mini-kpi-val" style="color:#ff7a18;">2</div><div class="mini-kpi-sub">Discovery + pricing</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Last Touch</div><div class="mini-kpi-val" style="font-size:13px;">Oct 18</div><div class="mini-kpi-sub">Email sent</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Source</div><div class="mini-kpi-val" style="font-size:11px;">Eloqua</div><div class="mini-kpi-sub">Q4 Utility Summit</div></div>
+  </div>
+  <div class="mini-activity">
+    <div class="mini-activity-title">Activity Timeline</div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#dcfce7;">📞</div><div class="mini-act-body"><div class="mini-act-title">Qualification Call · 45 min</div><div class="mini-act-sub">May 12 · Chandra Kasarabada</div></div></div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#eff6ff;">✉️</div><div class="mini-act-body"><div class="mini-act-title">Email: CX Overview Sent to Lena Ortiz</div><div class="mini-act-sub">May 10 · Opened 4×</div></div></div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#fdf4ff;">📅</div><div class="mini-act-body"><div class="mini-act-title">Discovery Workshop — 2 hrs</div><div class="mini-act-sub">May 7 · 3 attendees</div></div></div>
+  </div>
+</div>`
+  },
+  {
+    time:'9:15 AM', headline:'Opportunity: Next Best Action', screen:'cx_opportunity.html',
+    url:'localhost:8000/cx_opportunity.html',
+    does:['Open cx_opportunity.html — Skyline Renewables $1.25M deal.',
+          'Point to the NBA widget: "Schedule exec alignment call."',
+          'Click Account Hierarchy tab — parent + 3 child sites.',
+          'Click Revenue Lines tab — 4 products, $1,204,000 total.',
+          'Click Contacts tab — Decision Maker, Influencer, Economic Buyer.'],
+    says:['"The first thing Jordan sees is Oracle\'s Next Best Action. Not a status field — an AI coaching recommendation. The deal has been in Proposal stage 9 days with no decision-maker contact."',
+          '"Account Hierarchy shows why this deal is complex. Skyline is the parent, three sites underneath — each site is a separate buying center. Jordan sees the full picture without opening three records."',
+          '"Three stakeholders, three roles, one screen. Jordan knows who to call and why before she picks up the phone."'],
+    tips:['Click the NBA widget. Ask: "When a deal stalls, how does your team know — and who tells them what to do next?"',
+          'Point to the BVC badge on Account Hierarchy site cards.'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Opportunity</span></div><div class="mini-avatar">JE</div></div>
+<div class="mini-content">
+  <div class="mini-nba"><div class="mini-nba-label">⚡ Next Best Action</div><div class="mini-nba-text">Schedule executive alignment call with Lena Ortiz — no decision-maker contact in 9 days</div><div class="mini-nba-btn">Take Action →</div></div>
+  <div class="mini-hero">
+    <div class="mini-eyebrow">Opportunity</div>
+    <div class="mini-h1">Skyline Renewables — Microgrid Expansion</div>
+    <div class="mini-tags">
+      <span class="mini-tag" style="background:#fff3cd;color:#856404;">Proposal</span>
+      <span class="mini-tag" style="background:#f1f5f9;color:#475569;">Close: Nov 30</span>
+      <span class="mini-tag" style="background:#dcfce7;color:#15803d;">Stage 4 of 6</span>
+    </div>
+    <div class="mini-fields">
+      <div class="mini-field"><span class="mini-field-label">Amount</span><span class="mini-field-val" style="color:#ff7a18;font-size:13px;">$1,250,000</span></div>
+      <div class="mini-field"><span class="mini-field-label">Account</span><span class="mini-field-val">Skyline Renewables Inc.</span></div>
+      <div class="mini-field"><span class="mini-field-label">Territory</span><span class="mini-field-val">Southwest · Quota: $310K</span></div>
+    </div>
+  </div>
+  <div class="mini-kpi-row">
+    <div class="mini-kpi"><div class="mini-kpi-label">Revenue Lines</div><div class="mini-kpi-val">4</div><div class="mini-kpi-sub">$1,204,000</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Contacts</div><div class="mini-kpi-val">3</div><div class="mini-kpi-sub">1 unmapped</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Days in Stage</div><div class="mini-kpi-val" style="color:#dc2626;">9</div><div class="mini-kpi-sub">AT RISK</div></div>
+  </div>
+  <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#0f172a;margin-bottom:6px;">Account Hierarchy</div>
+    <div style="background:#fff7f0;border:1px solid #fed7aa;border-radius:7px;padding:6px 8px;margin-bottom:5px;font-size:10px;font-weight:700;color:#0f172a;">🏢 Skyline Renewables Inc. (Parent)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px;font-size:9px;color:#0f172a;font-weight:600;">Austin Main Campus</div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px;font-size:9px;color:#0f172a;font-weight:600;">San Antonio Facility</div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px;font-size:9px;color:#0f172a;font-weight:600;">Dallas Distribution</div>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    time:'10:30 AM', headline:'CPQ: Quote in Minutes', screen:'cpq_quote_builder.html',
+    url:'localhost:8000/cpq_quote_builder.html',
+    does:['Open cpq_quote_builder.html — quote Q-2024-0892.',
+          'Show Configuration tab — 4 line items, $1,204,000 total.',
+          'Click Pricing Waterfall — list → discounts → net price.',
+          'Click Approvals tab — 3-tier chain, currently Pending.',
+          'Click Delivery Tracking — opened 3× by Lena, 14 min read time.'],
+    says:['"Lena asked for a revised quote this morning. Old world: 2 hours in a spreadsheet, email to sales ops, wait a day. Oracle CPQ: products auto-populate, pricing applies, quote ready in minutes."',
+          '"The Pricing Waterfall shows Lena\'s CFO exactly how the price was built. No black box. That transparency accelerates deals — procurement can\'t dispute what they can see."',
+          '"Lena has already opened the quote 3 times and spent 14 minutes reading it. Jordan knows Lena is engaged before she even follows up. That\'s seller intelligence."'],
+    tips:['Click "AI Pricing Check" — shows 67% win-rate tile. Ask: "How long does it take your reps to get a quote to a customer today?"',
+          'Point to the approval chain — 8.2% discount, within manager authority. One-click approval.'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · CPQ</span></div><div class="mini-avatar">JE</div></div>
+<div class="mini-content">
+  <div class="mini-hero">
+    <div class="mini-eyebrow">Configure · Price · Quote</div>
+    <div class="mini-h1">Skyline Renewables — Q-2024-0892</div>
+    <div class="mini-tags">
+      <span class="mini-tag" style="background:#fff3cd;color:#856404;">Pending Approval</span>
+      <span class="mini-tag" style="background:#f1f5f9;color:#475569;">Valid 30 days</span>
+    </div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Product</th><th>Qty</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td>Oracle Sales Cloud</td><td>250</td><td>$600,000</td></tr>
+      <tr><td>Oracle CPQ Cloud</td><td>250</td><td>$240,000</td></tr>
+      <tr><td>Oracle Service Cloud</td><td>100</td><td>$204,000</td></tr>
+      <tr><td>Implementation</td><td>1</td><td>$160,000</td></tr>
+    </tbody>
+    <tfoot class="total"><tr><td colspan="2"><strong>Total</strong></td><td><strong>$1,204,000</strong></td></tr></tfoot>
+    </table>
+  </div>
+  <div class="mini-waterfall">
+    <table><thead><tr><th>Price Component</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>List Price</td><td>$1,312,000</td></tr>
+      <tr class="wf-neg"><td>Volume Discount (5%)</td><td>−$65,600</td></tr>
+      <tr class="wf-neg"><td>Bundle Discount (4.8%)</td><td>−$63,368</td></tr>
+      <tr class="wf-total"><td><strong>Customer Price</strong></td><td><strong>$1,143,672</strong></td></tr>
+    </tbody></table>
+  </div>
+  <div class="mini-approval">
+    <div class="mini-approval-title">Approval Chain</div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#dcfce7;">✅</div><div class="mini-appr-body"><div class="mini-appr-label">Rep Self-Approve</div><div class="mini-appr-sub">Chandra · Approved Oct 20</div></div></div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#fff3cd;">⏳</div><div class="mini-appr-body"><div class="mini-appr-label">Manager Review</div><div class="mini-appr-sub" style="color:#dc2626;">Sarah Whitmore · Pending since Oct 21</div></div></div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#f1f5f9;">⬜</div><div class="mini-appr-body"><div class="mini-appr-label">Deal Desk</div><div class="mini-appr-sub">Waiting for manager step</div></div></div>
+  </div>
+</div>`
+  },
+  {
+    time:'1:00 PM', headline:'Post-Discovery: Smart Actions', screen:'cx_lead.html',
+    url:'localhost:8000/cx_lead.html',
+    does:['Return to cx_lead.html — Smart Actions panel.',
+          'Click "Risks & Signals" in the GenAI panel.',
+          'Point to AI flag: open service case + $62K overdue invoice.',
+          'Click "+ Log Call" — notes captured in 30 seconds.',
+          'Show the Activity Feed updating live.'],
+    says:['"Jordan just finished a 45-minute discovery call. She logs it right here — 30 seconds, no screen switching."',
+          '"The AI Risks & Signals panel flags something automatically: NovaTech has an open service case and a $62K overdue invoice. Jordan sees that before she sends her next email. That flag just saved a very awkward sales conversation."',
+          '"Oracle surfaces the full customer relationship — service, billing, and sales — in one place."'],
+    tips:['Click "Risks & Signals" — pause on the flag. Ask: "Does your team know about service or billing issues before they show up in a sales meeting?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Smart Actions</span></div><div class="mini-avatar">JE</div></div>
+<div class="mini-content">
+  <div style="background:linear-gradient(135deg,#fff7f0,#fff);border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:9px;font-weight:700;color:#ff7a18;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">Smart Actions</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+      <span style="background:#ff7a18;color:#fff;padding:4px 10px;border-radius:7px;font-size:10px;font-weight:700;">Log Call</span>
+      <span style="background:#0f172a;color:#fff;padding:4px 10px;border-radius:7px;font-size:10px;font-weight:700;">Send Email</span>
+      <span style="background:#1d4ed8;color:#fff;padding:4px 10px;border-radius:7px;font-size:10px;font-weight:700;">Create Quote</span>
+      <span style="background:#7c3aed;color:#fff;padding:4px 10px;border-radius:7px;font-size:10px;font-weight:700;">Schedule Meeting</span>
+    </div>
+  </div>
+  <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:9px;font-weight:700;color:#dc2626;text-transform:uppercase;margin-bottom:5px;">⚠️ Risks &amp; Signals</div>
+    <div style="font-size:11px;color:#0f172a;font-weight:600;margin-bottom:4px;">NovaTech Industries — 2 risk flags</div>
+    <div style="font-size:10px;color:#dc2626;margin-bottom:3px;">• Open service case (P2 — unresolved 8 days)</div>
+    <div style="font-size:10px;color:#dc2626;">• Invoice $62,000 overdue · 22 days past due</div>
+    <div style="font-size:10px;color:#64748b;margin-top:5px;font-style:italic;">Recommend: involve Customer Success before advancing deal</div>
+  </div>
+  <div class="mini-activity">
+    <div class="mini-activity-title">Activity Feed — Just Logged</div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#fff5f0;">📞</div><div class="mini-act-body"><div class="mini-act-title" style="color:#ff7a18;">Call — Just Now ★ New</div><div class="mini-act-sub">Discovery call logged — NovaTech Industries</div></div></div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#dcfce7;">📞</div><div class="mini-act-body"><div class="mini-act-title">Qualification Call · 45 min</div><div class="mini-act-sub">May 12</div></div></div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#eff6ff;">✉️</div><div class="mini-act-body"><div class="mini-act-title">Email: CX Overview Sent</div><div class="mini-act-sub">May 10 · Opened 4×</div></div></div>
+  </div>
+</div>`
+  },
+  {
+    time:'3:30 PM', headline:'Forecast Update & Day\'s End', screen:'forecasting_pipeline.html',
+    url:'localhost:8000/forecasting_pipeline.html',
+    does:['Open forecasting_pipeline.html.',
+          'Show Jordan\'s deals by category: Commit / Best Case / Pipeline.',
+          'Point to deal risk flag — Skyline, 9 days no activity.',
+          'Show quota progress bar — 84% attainment, $49,600 gap.',
+          'Point to AI Commit vs Rep Commit gap.'],
+    says:['"End of day — Jordan updates her forecast. She tags deals: Commit, Best Case, or Pipeline. Her manager sees it in real time. No Monday morning meeting just to get numbers."',
+          '"Oracle shows Jordan her gap to quota: $49,600. It shows what pipeline she needs to close it — and flags which deals are at risk. Jordan ends her day knowing exactly what tomorrow looks like."',
+          '"The AI Commit vs Rep Commit comparison is where sandbagging gets exposed — and where real coaching conversations start."'],
+    tips:['Point to AI vs Rep commit difference. Ask: "How much time do your reps spend on forecast reporting vs. actually selling?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Forecasting</span></div><div class="mini-avatar">JE</div></div>
+<div class="mini-content">
+  <div class="mini-dark">
+    <div class="mini-dark-title">Jordan Ellis · Q4 Forecast</div>
+    <div class="mini-tiles">
+      <div class="mini-tile"><div class="mini-tile-label">Rep Commit</div><div class="mini-tile-val">$262,800</div><div class="mini-tile-sub">84% of quota</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">AI Forecast</div><div class="mini-tile-val" style="color:#ff7a18;">$238,400</div><div class="mini-tile-sub">Conservative</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Pipeline</div><div class="mini-tile-val">$412,000</div><div class="mini-tile-sub">1.33× coverage</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Gap to Quota</div><div class="mini-tile-val" style="color:#f87171;">$49,600</div><div class="mini-tile-sub">2 deals needed</div></div>
+    </div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Deal</th><th>Stage</th><th>Amount</th><th>Category</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td>Skyline Renewables</td><td>Proposal</td><td>$1,250,000</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Commit</span></td><td style="color:#dc2626;font-size:9px;">⚠ 9 days</td></tr>
+      <tr><td>GreenPath Energy</td><td>Discovery</td><td>$144,000</td><td><span style="background:#eff6ff;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Best Case</span></td><td style="color:#15803d;font-size:9px;">✓</td></tr>
+      <tr><td>Apex Logistics</td><td>Qualify</td><td>$96,000</td><td><span style="background:#f1f5f9;color:#475569;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Pipeline</span></td><td style="color:#15803d;font-size:9px;">✓</td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#0f172a;margin-bottom:6px;">Quota Progress</div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#64748b;margin-bottom:4px;"><span>$0</span><span style="color:#ff7a18;">▼ 84%</span><span>$310,000</span></div>
+    <div style="background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden;"><div style="width:84%;height:100%;background:#ff7a18;border-radius:6px;"></div></div>
+    <div style="display:flex;gap:8px;margin-top:6px;font-size:9px;">
+      <span style="color:#15803d;font-weight:700;">✓ Attained: $260,400</span>
+      <span style="color:#dc2626;font-weight:700;">Gap: $49,600</span>
+    </div>
+  </div>
+</div>`
+  }
+  ]
+},
+
+/* ════════════════ SALES MANAGER ════════════════ */
+mgr: {
+  name:'Sarah Whitmore', role:'Regional Sales Manager', emoji:'📋',
+  scenes:[
+  {
+    time:'8:30 AM', headline:'Team Pipeline at a Glance', screen:'forecasting_pipeline.html',
+    url:'localhost:8000/forecasting_pipeline.html',
+    does:['Open forecasting_pipeline.html — team view, all 8 reps.',
+          'Show Commit vs Best Case vs Pipeline by rep.',
+          'Point to 3 deals with no activity in 14+ days.',
+          'Show AI Forecast ($1.72M) vs Rep Commit ($1.84M) gap.'],
+    says:['"Sarah starts every day here — not her inbox. The pipeline dashboard shows her entire team\'s position in under 60 seconds."',
+          '"Oracle\'s AI forecast projects $1.72M. Her team commits $1.84M. That $120K gap is a conversation she needs to have this morning — and she already knows which three deals are at risk."',
+          '"She doesn\'t need to ask her reps \'what\'s the status?\' The 1-on-1 is now a coaching conversation, not a status update."'],
+    tips:['Point out the AI vs Rep commit difference. Ask: "How much of your 1-on-1 time today is status reporting vs actual coaching?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Team Pipeline</span></div><div class="mini-avatar">SW</div></div>
+<div class="mini-content">
+  <div class="mini-dark">
+    <div class="mini-dark-title">Southwest Region · Q4 Week 8</div>
+    <div class="mini-tiles">
+      <div class="mini-tile"><div class="mini-tile-label">Team Commit</div><div class="mini-tile-val">$1.84M</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">AI Forecast</div><div class="mini-tile-val" style="color:#f87171;">$1.72M</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Attainment</div><div class="mini-tile-val">76%</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Deals at Risk</div><div class="mini-tile-val" style="color:#f87171;">3</div></div>
+    </div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Rep</th><th>Quota</th><th>Attain.</th><th>Risk Flags</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700;color:#ff7a18;">Jordan Ellis</td><td>$310K</td><td>84%</td><td style="color:#f59e0b;font-size:9px;">⚠ Skyline stalling</td></tr>
+      <tr><td>Maya Torres</td><td>$280K</td><td style="color:#15803d;font-weight:700;">112%</td><td style="color:#15803d;font-size:9px;">✓ Accelerator</td></tr>
+      <tr><td>Derek Huang</td><td>$195K</td><td style="color:#dc2626;font-weight:700;">54%</td><td style="color:#dc2626;font-size:9px;">⚠ No activity 18d</td></tr>
+      <tr><td>Priya Mehta</td><td>$220K</td><td>91%</td><td style="color:#15803d;font-size:9px;">✓</td></tr>
+    </tbody></table>
+  </div>
+</div>`
+  },
+  {
+    time:'9:30 AM', headline:'Deal Coaching: Skyline Review', screen:'cx_opportunity.html',
+    url:'localhost:8000/cx_opportunity.html',
+    does:['Open cx_opportunity.html — Skyline Renewables.',
+          'Point to NBA: "Executive alignment needed."',
+          'Click Contacts tab — Economic Buyer not yet engaged.',
+          'Click Activities tab — last touch 9 days ago.',
+          'Show Opportunity Team tab — territory and quota.'],
+    says:['"Sarah doesn\'t need Jordan to tell her about Skyline. The system already surfaced it: $1.25M, Proposal stage, 9 days no activity, Economic Buyer not contacted."',
+          '"The coaching question becomes: \'What\'s blocking you from getting to Sara Chen?\' — not \'tell me about Skyline.\' That\'s the shift Oracle delivers: managers coach, they don\'t extract information."'],
+    tips:['Ask: "How do your managers prepare for deal reviews today — and how long does that prep take?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Deal Review</span></div><div class="mini-avatar">SW</div></div>
+<div class="mini-content">
+  <div class="mini-nba"><div class="mini-nba-label">⚡ Next Best Action</div><div class="mini-nba-text">Schedule executive alignment — Economic Buyer (Sara Chen / CFO) not yet contacted</div><div class="mini-nba-btn">Coach Jordan →</div></div>
+  <div class="mini-table">
+    <table><thead><tr><th>Contact</th><th>Role</th><th>Last Touch</th></tr></thead>
+    <tbody>
+      <tr><td>Lena Ortiz</td><td>Decision Maker</td><td>Oct 18</td></tr>
+      <tr><td>Marcus Reid</td><td>Influencer</td><td>Oct 15</td></tr>
+      <tr><td style="color:#dc2626;font-weight:700;">Sara Chen</td><td style="color:#dc2626;">Economic Buyer</td><td style="color:#dc2626;font-weight:700;">Never contacted ⚠</td></tr>
+    </tbody></table>
+  </div>
+  <div class="mini-activity">
+    <div class="mini-activity-title">Last Activity: 9 days ago</div>
+    <div class="mini-act-entry"><div class="mini-act-icon" style="background:#eff6ff;">✉️</div><div class="mini-act-body"><div class="mini-act-title">Email: Proposal Deck Sent</div><div class="mini-act-sub">Oct 15 · 3× opens by Lena</div></div></div>
+    <div style="background:#fee2e2;border-radius:7px;padding:6px 8px;font-size:10px;color:#dc2626;font-weight:600;">⚠ No activity in 9 days — deal risk escalating</div>
+  </div>
+</div>`
+  },
+  {
+    time:'11:00 AM', headline:'One-Click Quote Approval', screen:'cpq_quote_builder.html',
+    url:'localhost:8000/cpq_quote_builder.html',
+    does:['Open cpq_quote_builder.html → Approvals tab.',
+          'Show Jordan\'s pending approval — 8.2% discount.',
+          'Show pricing waterfall and margin analysis.',
+          'Simulate approval — showToast "Quote Approved."'],
+    says:['"Sarah gets a notification: Jordan\'s Skyline quote needs manager approval. She opens it directly — no hunting in email, no asking Jordan to resend."',
+          '"Everything is right there: pricing waterfall, margin 42.3%, deal context. Discount is 8.2% — within her authority, above minimum margin. One click. Done. Three minutes."',
+          '"Old process: Jordan emails for approval, Sarah replies with questions, customer waits two days. Oracle compresses that to under an hour."'],
+    tips:['Ask: "What\'s your current discount approval cycle time — and how often does it delay getting a quote to the customer?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · CPQ Approval</span></div><div class="mini-avatar">SW</div></div>
+<div class="mini-content">
+  <div class="mini-approval">
+    <div class="mini-approval-title">Approval Queue — 1 Pending</div>
+    <div style="background:#fff3cd;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+      <div style="font-size:11px;font-weight:700;color:#0f172a;">Skyline Renewables Q-2024-0892</div>
+      <div style="font-size:10px;color:#64748b;">Jordan Ellis · 8.2% discount · $1,143,672 net</div>
+      <div style="font-size:10px;color:#64748b;">Margin: 42.3% ✓ · Within Tier 1 authority ✓</div>
+      <div style="margin-top:6px;display:flex;gap:6px;">
+        <span style="background:#15803d;color:#fff;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;">✓ Approve</span>
+        <span style="background:#f1f5f9;color:#475569;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;">Review</span>
+      </div>
+    </div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#dcfce7;">✅</div><div class="mini-appr-body"><div class="mini-appr-label">Rep Self-Approve</div><div class="mini-appr-sub">Approved Oct 20</div></div></div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#fff3cd;">⏳</div><div class="mini-appr-body"><div class="mini-appr-label" style="color:#b45309;">Manager — YOUR ACTION</div><div class="mini-appr-sub">Sarah Whitmore · Pending</div></div></div>
+  </div>
+  <div class="mini-waterfall">
+    <table><thead><tr><th>Component</th><th>Amount</th></tr></thead>
+    <tbody>
+      <tr><td>List Price</td><td>$1,312,000</td></tr>
+      <tr class="wf-neg"><td>Discounts Applied</td><td>−$168,328</td></tr>
+      <tr class="wf-total"><td><strong>Customer Price</strong></td><td><strong>$1,143,672</strong></td></tr>
+    </tbody></table>
+  </div>
+</div>`
+  },
+  {
+    time:'2:00 PM', headline:'Team Compensation & Motivation', screen:'icm_compensation.html',
+    url:'localhost:8000/icm_compensation.html',
+    does:['Open icm_compensation.html → Team View tab.',
+          'Show attainment table — quota, %, projected payout per rep.',
+          'Point to Maya Torres at 112% — green accelerator badge.',
+          'Point to Derek Huang at 54% — coaching needed.'],
+    says:['"This isn\'t just a comp report — it\'s Sarah\'s retention and motivation dashboard. Maya Torres is at 112% and about to hit the 13.5% accelerator. Sarah will make sure Maya knows that today."',
+          '"Derek is at 54% with four weeks left. Sarah doesn\'t find out at month-end. She sees it now — while there\'s still time to coach, redirect, or help."'],
+    tips:['Ask: "Do your managers know their team\'s earnings trajectory in real time — or do they find out when someone hands in their notice?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · ICM Team View</span></div><div class="mini-avatar">SW</div></div>
+<div class="mini-content">
+  <div class="mini-table">
+    <table><thead><tr><th>Rep</th><th>Quota</th><th>Attainment</th><th>Proj. Payout</th></tr></thead>
+    <tbody>
+      <tr><td>Jordan Ellis</td><td>$310K</td><td>84%</td><td>$27,840</td></tr>
+      <tr style="background:#f0fdf4;"><td style="font-weight:700;color:#15803d;">Maya Torres ⚡</td><td>$280K</td><td style="color:#15803d;font-weight:800;">112%</td><td style="color:#15803d;font-weight:700;">$42,000</td></tr>
+      <tr style="background:#fef2f2;"><td style="color:#dc2626;font-weight:700;">Derek Huang</td><td>$195K</td><td style="color:#dc2626;font-weight:800;">54%</td><td style="color:#dc2626;">$9,450</td></tr>
+      <tr><td>Priya Mehta</td><td>$220K</td><td>91%</td><td>$21,600</td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#15803d;">⚡ Maya Torres — Accelerator Unlock</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:3px;">At 112% — above 100% threshold. Commission rate: <strong>9% → 13.5%</strong> on next deal.</div>
+    <div style="font-size:10px;color:#15803d;margin-top:3px;font-style:italic;">Action: Notify Maya today — motivate to close one more before quarter end.</div>
+  </div>
+  <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#dc2626;">⚠ Derek Huang — Performance Alert</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:3px;">54% with 4 weeks remaining. Gap: $89,700 to 100% quota.</div>
+    <div style="font-size:10px;color:#dc2626;margin-top:3px;font-style:italic;">Action: Pipeline review + coaching session this week.</div>
+  </div>
+</div>`
+  }
+  ]
+},
+
+/* ════════════════ SALES OPS ════════════════ */
+ops: {
+  name:'Alex Kim', role:'Director of Sales Operations', emoji:'⚙️',
+  scenes:[
+  {
+    time:'8:00 AM', headline:'Territory & Quota Upload', screen:'icm_compensation.html',
+    url:'localhost:8000/icm_compensation.html',
+    does:['Open icm_compensation.html → Plan Design tab.',
+          'Show plan components: rates, territory rules, quota structure.',
+          'Describe the CSV quota upload flow: export → update → import.',
+          'Show territory routing rules — auto-assignment on account creation.'],
+    says:['"Alex starts Q4 with a territory realignment. Two reps moved regions. In Oracle ICM: export the quota CSV, update two rows, re-import. Oracle validates and activates immediately — 15 minutes."',
+          '"Territory routing updates in sync. Any new account in the reassigned geography auto-routes to the correct rep. No admin ticket, no routing errors."',
+          '"Compare that to the alternative: a week of back-and-forth emails and a Salesforce admin request with three rounds of corrections."'],
+    tips:['Ask: "How do territory changes get processed today — and who owns that workflow end to end?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · ICM Plan Design</span></div><div class="mini-avatar">AK</div></div>
+<div class="mini-content">
+  <div class="mini-hero">
+    <div class="mini-eyebrow">Compensation Plan · Q4 FY2024</div>
+    <div class="mini-h1">Oracle CX Specialist · Version 2.1</div>
+    <div class="mini-tags"><span class="mini-tag" style="background:#dcfce7;color:#15803d;">Active</span><span class="mini-tag" style="background:#f1f5f9;color:#475569;">Effective Oct 1</span></div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Component</th><th>Rate</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td>Base Commission</td><td>5%</td><td>All closed revenue</td></tr>
+      <tr><td>Accelerator 100–120%</td><td style="color:#ff7a18;font-weight:700;">9%</td><td>Above quota</td></tr>
+      <tr><td>Accelerator 120%+</td><td style="color:#15803d;font-weight:700;">13.5%</td><td>Stretch target</td></tr>
+      <tr><td>Product SPIF – ICM</td><td>+$500</td><td>Per ICM deal</td></tr>
+      <tr><td>Product SPIF – CPQ</td><td>+$750</td><td>Per CPQ deal</td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#1d4ed8;">Territory Rules</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:4px;">Southwest (AZ, CA, NV, NM, UT) — 8 reps assigned</div>
+    <div style="font-size:10px;color:#0f172a;">Auto-route: accounts by state → rep by territory → quota credited</div>
+    <div style="margin-top:6px;background:#fff;border-radius:6px;padding:5px 8px;font-size:9px;color:#15803d;font-weight:700;">✓ Quota upload ready: CSV → Validate → Import</div>
+  </div>
+</div>`
+  },
+  {
+    time:'10:00 AM', headline:'Comp Dispute Resolution', screen:'icm_compensation.html',
+    url:'localhost:8000/icm_compensation.html',
+    does:['Navigate to Transactions tab.',
+          'Point to NovaTech row — status "In Review."',
+          'Show the Dispute button and workflow.',
+          'Walk through calculation detail: rule, quota, discount tier applied.'],
+    says:['"Alex has two open comp disputes. Old world: hunt spreadsheets, email the rep, check with finance, reply 3 days later. Oracle: the dispute arrives in his queue with all the data pre-loaded."',
+          '"He audits the calculation in 60 seconds: which rule applied, which quota was used, which discount tier. If the rep is right — correct it. If not — show them the math. Full audit trail preserved."',
+          '"Average resolution drops from 4 days to under 4 hours."'],
+    tips:['Ask: "How many comp disputes do you handle per quarter — and what\'s your exposure if one goes wrong?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · ICM Transactions</span></div><div class="mini-avatar">AK</div></div>
+<div class="mini-content">
+  <div class="mini-table">
+    <table><thead><tr><th>Account</th><th>Product</th><th>Revenue</th><th>Commission</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Skyline</td><td>Sales Cloud</td><td>$600K</td><td>$33,000</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Approved</span></td></tr>
+      <tr style="background:#fff3cd;"><td style="color:#b45309;font-weight:700;">NovaTech</td><td>Service Cloud</td><td>$84K</td><td>$4,620</td><td><span style="background:#fde68a;color:#b45309;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">⚠ In Review</span></td></tr>
+      <tr><td>GreenPath</td><td>Sales Cloud</td><td>$144K</td><td>$7,920</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Approved</span></td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#fff3cd;border:1px solid #fde68a;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#b45309;">Dispute — NovaTech Industries</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:4px;">Rep claims $84,000 should be split 60/40 between two deal contributors.</div>
+    <div style="font-size:10px;color:#64748b;margin-top:3px;">Rule applied: Standard 100% credit to primary owner (per Plan v2.1 §3.2)</div>
+    <div style="font-size:10px;color:#64748b;">Calculation: $84,000 × 5.5% = $4,620 · Within quota band</div>
+    <div style="margin-top:6px;display:flex;gap:6px;">
+      <span style="background:#15803d;color:#fff;padding:3px 8px;border-radius:5px;font-size:9px;font-weight:700;">Approve as Calculated</span>
+      <span style="background:#dc2626;color:#fff;padding:3px 8px;border-radius:5px;font-size:9px;font-weight:700;">Adjust &amp; Recalculate</span>
+    </div>
+  </div>
+</div>`
+  },
+  {
+    time:'1:30 PM', headline:'Board Pipeline Report — Done in Minutes', screen:'analytics.html',
+    url:'localhost:8000/analytics.html',
+    does:['Open analytics.html — pipeline waterfall dashboard.',
+          'Show pipeline by stage and coverage ratio.',
+          'Point to data completeness score: 91%.',
+          'Show win/loss by product.',
+          'Describe scheduled delivery — "Set and forget."'],
+    says:['"Board wants a pipeline report by 5 PM. In Oracle, Alex doesn\'t build a report — he opens a dashboard."',
+          '"Data completeness: 91% of opportunities have all required fields. That\'s a number Alex can show the board. Something most sales ops teams can\'t do."',
+          '"He schedules the report for automated email delivery every Monday at 8 AM. Next week\'s board prep just got eliminated."'],
+    tips:['Ask: "How long does it take your team to produce the weekly pipeline report today?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Analytics</span></div><div class="mini-avatar">AK</div></div>
+<div class="mini-content">
+  <div class="mini-dark">
+    <div class="mini-dark-title">Southwest Pipeline · Q4 Snapshot</div>
+    <div class="mini-tiles">
+      <div class="mini-tile"><div class="mini-tile-label">Total Pipeline</div><div class="mini-tile-val">$4.1M</div><div class="mini-tile-sub">1.7× coverage</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Team Commit</div><div class="mini-tile-val">$1.84M</div><div class="mini-tile-sub">76% attained</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Data Quality</div><div class="mini-tile-val" style="color:#4ade80;">91%</div><div class="mini-tile-sub">Fields complete</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Win Rate</div><div class="mini-tile-val">38%</div><div class="mini-tile-sub">vs 33% Q3</div></div>
+    </div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Stage</th><th>Deals</th><th>Value</th><th>Avg Age</th></tr></thead>
+    <tbody>
+      <tr><td>Qualify</td><td>12</td><td>$820K</td><td>8 days</td></tr>
+      <tr><td>Discovery</td><td>8</td><td>$960K</td><td>14 days</td></tr>
+      <tr><td>Proposal</td><td>5</td><td>$1.4M</td><td>22 days</td></tr>
+      <tr><td>Negotiate</td><td>3</td><td>$920K</td><td>31 days</td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#0f172a;margin-bottom:4px;">Scheduled Report</div>
+    <div style="font-size:10px;color:#64748b;">📧 Every Monday 8:00 AM → VP Sales, CFO, CRO</div>
+    <div style="font-size:10px;color:#15803d;font-weight:700;margin-top:4px;">✓ Active — Next delivery: Monday 8:00 AM</div>
+  </div>
+</div>`
+  }
+  ]
+},
+
+/* ════════════════ MARKETING OPS ════════════════ */
+mkt: {
+  name:'Dana Park', role:'Director of Demand Generation', emoji:'📣',
+  scenes:[
+  {
+    time:'8:30 AM', headline:'Campaign Performance Check', screen:'marketing_orchestration.html',
+    url:'localhost:8000/marketing_orchestration.html',
+    does:['Open marketing_orchestration.html — Campaign Overview tab.',
+          'Show 6 KPIs: 4,820 contacts, 38% open rate, 18 MQLs.',
+          'Point to 5-stage campaign flow visual.',
+          'Show channel table — LinkedIn: $14,800 spent, 0 MQLs.'],
+    says:['"Dana opens her campaign dashboard every morning — her equivalent of the sales rep\'s lead queue. Oracle Eloqua shows the full picture."',
+          '"LinkedIn ads are spending $14,800 with zero MQL conversions. Dana pauses that channel and reallocates to email — from the dashboard, not a 2-hour agency call."',
+          '"Real-time data means Dana can optimize mid-campaign — not post-mortem when it\'s too late."'],
+    tips:['Point to LinkedIn row — zero MQLs, highest cost. Ask: "How quickly can your team see that a channel is underperforming?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Eloqua Campaign</span></div><div class="mini-avatar">DP</div></div>
+<div class="mini-content">
+  <div class="mini-kpi-row">
+    <div class="mini-kpi"><div class="mini-kpi-label">Contacts</div><div class="mini-kpi-val">4,820</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Open Rate</div><div class="mini-kpi-val" style="color:#15803d;">38%</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">MQLs</div><div class="mini-kpi-val" style="color:#a21caf;">18</div></div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Channel</th><th>Sends</th><th>Open</th><th>MQLs</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700;">Email</td><td>14,460</td><td>38%</td><td style="color:#15803d;font-weight:700;">14</td><td>$8,400</td></tr>
+      <tr><td>SMS</td><td>4,820</td><td>61%</td><td style="color:#15803d;">3</td><td>$6,200</td></tr>
+      <tr><td>Push</td><td>3,100</td><td>22%</td><td>1</td><td>$1,800</td></tr>
+      <tr style="background:#fee2e2;"><td style="color:#dc2626;font-weight:700;">LinkedIn ⚠</td><td>—</td><td>4.2%</td><td style="color:#dc2626;font-weight:700;">0</td><td style="color:#dc2626;font-weight:700;">$14,800</td></tr>
+    </tbody></table>
+  </div>
+  <div style="background:#fdf4ff;border:1px solid #f0abfc;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#a21caf;">AI Optimization</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:3px;">Pause LinkedIn. Reallocate $14,800 → Email (predicted +6 MQLs). Optimal send time: Tuesday 10 AM.</div>
+  </div>
+</div>`
+  },
+  {
+    time:'9:30 AM', headline:'Segment Refresh & MQL Export', screen:'marketing_orchestration.html',
+    url:'localhost:8000/marketing_orchestration.html',
+    does:['Click Audience Segments tab.',
+          'Show 4 sub-segments — Hot (620), Warm, Cold, Re-Engagement.',
+          'Point to Hot Segment: "Ready for direct sales outreach."',
+          'Click "Export to Sales Cloud" — show toast notification.'],
+    says:['"Dana exports the Hot segment — 620 contacts — to Oracle Sales Cloud. They become leads, routed to the correct territory reps instantly. No spreadsheet, no email to sales ops."',
+          '"In 30 minutes Dana has restructured her audience strategy for the back half of Q4. That used to take a week of coordination with the database team."'],
+    tips:['Click "Export to Sales Cloud" — reinforce the live Eloqua↔Sales Cloud handoff. Ask: "How do you currently hand off MQLs to sales?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Audience Segments</span></div><div class="mini-avatar">DP</div></div>
+<div class="mini-content">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+    <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:700;color:#15803d;">🔥 HOT</div><div style="font-size:16px;font-weight:800;color:#0f172a;">620</div><div style="font-size:9px;color:#15803d;">Ready for sales · Intent &gt;80</div></div>
+    <div style="background:#fff3cd;border:1px solid #fde68a;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:700;color:#b45309;">🌡 WARM</div><div style="font-size:16px;font-weight:800;color:#0f172a;">1,840</div><div style="font-size:9px;color:#b45309;">2 more touches needed</div></div>
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:700;color:#1d4ed8;">❄ COLD</div><div style="font-size:16px;font-weight:800;color:#0f172a;">1,620</div><div style="font-size:9px;color:#1d4ed8;">Awareness only</div></div>
+    <div style="background:#fdf4ff;border:1px solid #f0abfc;border-radius:8px;padding:8px;"><div style="font-size:9px;font-weight:700;color:#a21caf;">↩ RE-ENGAGE</div><div style="font-size:16px;font-weight:800;color:#0f172a;">740</div><div style="font-size:9px;color:#a21caf;">60+ days dormant</div></div>
+  </div>
+  <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#15803d;">→ Export to Sales Cloud</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:3px;">620 Hot contacts → 620 Leads created in Oracle Sales Cloud · Routed to territory reps instantly</div>
+    <div style="font-size:10px;color:#15803d;margin-top:3px;font-weight:600;">✓ Exported · 620 leads routed · Rep notifications sent</div>
+  </div>
+</div>`
+  },
+  {
+    time:'11:00 AM', headline:'Lead Scoring & MQL Handoff', screen:'marketing_orchestration.html',
+    url:'localhost:8000/marketing_orchestration.html',
+    does:['Click Lead Scoring tab.',
+          'Walk through profile (40 pts) + behavioral (60 pts) scoring model.',
+          'Show top contacts: Lena Ortiz 94, Ravi Patel 88 — handed off.',
+          'Point to James Wu (82) — MQL auto-handoff in progress.',
+          'Show the Auto-Handoff process card.'],
+    says:['"When a contact hits score 75, Eloqua automatically creates a Lead in Oracle Sales Cloud, assigns it to the territory rep, and fires an AI-recommended first action. Zero manual handoff."',
+          '"And six weeks later, Dana can see if James Wu became an opportunity. That\'s the attribution loop that most marketing teams never close."'],
+    tips:['Point to the MQL handoff card. Ask: "How do you define a qualified lead today — and does sales agree with that definition?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Lead Scoring</span></div><div class="mini-avatar">DP</div></div>
+<div class="mini-content">
+  <div class="mini-dark">
+    <div class="mini-dark-title">Scoring Model — Max 100 pts</div>
+    <div class="mini-tiles">
+      <div class="mini-tile"><div class="mini-tile-label">Profile Fit</div><div class="mini-tile-val">40 pts</div><div class="mini-tile-sub">Title, Industry, Size, Geo</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">Behavioral</div><div class="mini-tile-val">60 pts</div><div class="mini-tile-sub">Opens, Clicks, Webinar, Demo</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">MQL Threshold</div><div class="mini-tile-val" style="color:#fbbf24;">75</div><div class="mini-tile-sub">Auto-handoff to Sales</div></div>
+      <div class="mini-tile"><div class="mini-tile-label">MQLs This Month</div><div class="mini-tile-val">18</div><div class="mini-tile-sub">of 45 goal</div></div>
+    </div>
+  </div>
+  <div class="mini-table">
+    <table><thead><tr><th>Contact</th><th>Score</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:700;">Lena Ortiz</td><td style="font-weight:800;color:#15803d;">94</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Handed to Sales ✓</span></td></tr>
+      <tr><td style="font-weight:700;">Ravi Patel</td><td style="font-weight:800;color:#15803d;">88</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">Handed to Sales ✓</span></td></tr>
+      <tr style="background:#eff6ff;"><td style="font-weight:700;color:#1d4ed8;">James Wu</td><td style="font-weight:800;color:#1d4ed8;">82</td><td><span style="background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">MQL · Routing now</span></td></tr>
+      <tr><td>Sara Mendez</td><td style="font-weight:700;">77</td><td><span style="background:#fef9c3;color:#b45309;padding:1px 6px;border-radius:4px;font-size:8px;font-weight:700;">MQL · Under review</span></td></tr>
+    </tbody></table>
+  </div>
+</div>`
+  }
+  ]
+},
+
+/* ════════════════ CFO / FINANCE ════════════════ */
+fin: {
+  name:'Dana Marsh', role:'CFO · Skyline Renewables (Prospect)', emoji:'💰',
+  scenes:[
+  {
+    time:'9:00 AM', headline:'Subscription & Revenue Recognition', screen:'subscription_lifecycle.html',
+    url:'localhost:8000/subscription_lifecycle.html',
+    does:['Open subscription_lifecycle.html — Skyline\'s subscription.',
+          'Show the 6-step lifecycle stepper — currently Active/Billing.',
+          'Click Billing Schedule tab — single invoice Jan 1, $1,044,000.',
+          'Click Revenue Recognition tab — ASC 606 monthly schedule.',
+          'Point to deferred revenue waterfall — $87K recognized per month.'],
+    says:['"Dana opens the subscription and sees the lifecycle stage immediately. Billing schedule: one invoice, January 1, $1,044,000, Net 30. No surprises."',
+          '"Revenue Recognition shows the ASC 606 schedule: $87,000 recognized each month, $957,000 deferred on day one. Calculated by Oracle RMCS — not a spreadsheet. Audit-ready from day one."',
+          '"If Skyline adds 50 seats in March, Oracle recalculates proration and recognition automatically. Every action, every timestamp, every change — full audit trail built in."'],
+    tips:['Point to the deferred revenue waterfall. Ask: "How do you currently produce the deferred revenue schedule for your auditors — and how long does that take?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · Subscription Cloud</span></div><div class="mini-avatar">DM</div></div>
+<div class="mini-content">
+  <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#0f172a;margin-bottom:8px;">Lifecycle Stage</div>
+    <div style="display:flex;align-items:center;gap:0;font-size:9px;">
+      <div style="text-align:center;flex:1;"><div style="background:#15803d;color:#fff;border-radius:50%;width:18px;height:18px;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:8px;">✓</div><div style="color:#15803d;font-weight:700;">Quote</div></div>
+      <div style="flex:1;height:2px;background:#15803d;"></div>
+      <div style="text-align:center;flex:1;"><div style="background:#15803d;color:#fff;border-radius:50%;width:18px;height:18px;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:8px;">✓</div><div style="color:#15803d;font-weight:700;">Order</div></div>
+      <div style="flex:1;height:2px;background:#15803d;"></div>
+      <div style="text-align:center;flex:1;"><div style="background:#ff7a18;color:#fff;border-radius:50%;width:18px;height:18px;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:8px;">★</div><div style="color:#ff7a18;font-weight:700;">Active</div></div>
+      <div style="flex:1;height:2px;background:#e2e8f0;"></div>
+      <div style="text-align:center;flex:1;"><div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:50%;width:18px;height:18px;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94a3b8;">○</div><div style="color:#94a3b8;">Amend</div></div>
+      <div style="flex:1;height:2px;background:#e2e8f0;"></div>
+      <div style="text-align:center;flex:1;"><div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:50%;width:18px;height:18px;margin:0 auto 3px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#94a3b8;">○</div><div style="color:#94a3b8;">Renew</div></div>
+    </div>
+  </div>
+  <div class="mini-kpi-row">
+    <div class="mini-kpi"><div class="mini-kpi-label">Annual Value</div><div class="mini-kpi-val" style="font-size:14px;color:#ff7a18;">$1,044,000</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Monthly Rev</div><div class="mini-kpi-val" style="font-size:14px;">$87,000</div></div>
+    <div class="mini-kpi"><div class="mini-kpi-label">Auto-Renew</div><div class="mini-kpi-val" style="font-size:14px;color:#15803d;">ON</div></div>
+  </div>
+  <div class="mini-waterfall">
+    <table><thead><tr><th>Month</th><th>Deferred</th><th>Recognized</th></tr></thead>
+    <tbody>
+      <tr><td>Jan 2025</td><td>$957,000</td><td style="color:#15803d;font-weight:700;">$87,000</td></tr>
+      <tr><td>Feb 2025</td><td>$870,000</td><td style="color:#15803d;font-weight:700;">$87,000</td></tr>
+      <tr><td>Mar 2025</td><td>$783,000</td><td style="color:#15803d;font-weight:700;">$87,000</td></tr>
+      <tr class="wf-total"><td>Dec 2025</td><td>$0</td><td style="font-weight:800;">$87,000</td></tr>
+    </tbody></table>
+  </div>
+</div>`
+  },
+  {
+    time:'10:30 AM', headline:'Compensation Governance', screen:'icm_compensation.html',
+    url:'localhost:8000/icm_compensation.html',
+    does:['Open icm_compensation.html → Plan Design tab.',
+          'Show every rule: rate, quota, territory, effective dates.',
+          'Click Transactions tab — show the register.',
+          'Point to "Approved" vs "In Review" statuses.',
+          'Show totals: $1,458,000 revenue, $80,440 commission.'],
+    says:['"Oracle ICM shows every plan rule documented — commission rate, quota, territory, effective dates. Nothing is in someone\'s head or a spreadsheet."',
+          '"The transaction register is the financial record of every commission dollar — auditable down to the penny. \'Approved\' means finance reviewed it. \'In Review\' means it routes to a queue before any payout."',
+          '"Comp disputes go to zero when reps can see their own calculation in real time. They know what they\'ll be paid before the pay cycle runs."'],
+    tips:['Point to the $80,440 total commission. Ask: "Can you produce that number today — and how long does it take?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · ICM Governance</span></div><div class="mini-avatar">DM</div></div>
+<div class="mini-content">
+  <div class="mini-table">
+    <table><thead><tr><th>Account</th><th>Revenue</th><th>Commission</th><th>Rule</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Skyline</td><td>$840,000</td><td>$46,200</td><td>5.5%</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 5px;border-radius:4px;font-size:8px;font-weight:700;">Approved</span></td></tr>
+      <tr style="background:#fff3cd;"><td>NovaTech</td><td>$84,000</td><td>$4,620</td><td>5.5%</td><td><span style="background:#fde68a;color:#b45309;padding:1px 5px;border-radius:4px;font-size:8px;font-weight:700;">In Review</span></td></tr>
+      <tr><td>GreenPath</td><td>$534,000</td><td>$29,370</td><td>5.5%</td><td><span style="background:#dcfce7;color:#15803d;padding:1px 5px;border-radius:4px;font-size:8px;font-weight:700;">Approved</span></td></tr>
+    </tbody>
+    <tfoot class="total"><tr><td><strong>Total</strong></td><td><strong>$1,458,000</strong></td><td><strong>$80,440</strong></td><td></td><td></td></tr></tfoot>
+    </table>
+  </div>
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;">
+    <div style="font-size:10px;font-weight:700;color:#15803d;">Audit Trail — Every Transaction</div>
+    <div style="font-size:10px;color:#0f172a;margin-top:3px;">Rule applied: Plan v2.1 §3.1 · Effective Oct 1 · Quota period Q4 FY2024</div>
+    <div style="font-size:10px;color:#64748b;">Calculation: Revenue × Rate = Commission · No manual overrides · Immutable log</div>
+  </div>
+</div>`
+  },
+  {
+    time:'1:00 PM', headline:'Pricing Governance & Discount Controls', screen:'cpq_quote_builder.html',
+    url:'localhost:8000/cpq_quote_builder.html',
+    does:['Open cpq_quote_builder.html → Pricing Waterfall tab.',
+          'Walk through: List $1,312,000 → discounts → Net $1,143,672.',
+          'Click Approvals tab — show 3-tier authority chain.',
+          'Point to Discount Authorization card: 12.8%, Tier 1 authority.',
+          'Show margin analysis: 42.3% margin.'],
+    says:['"The Pricing Waterfall is the finance team\'s view of every deal. Every discount: itemized, named, quantified. No hidden discounts, no off-invoice adjustments."',
+          '"The approval chain enforces governance: rep approves up to 10%, manager up to 18%, deal desk above that. The system enforces it — a rep cannot send a 25% discount quote without going through the chain."',
+          '"And the margin is right there: 42.3%. For Skyline\'s own sales team — Dana never has to worry about a rep unilaterally destroying margin on a deal."'],
+    tips:['Emphasize "discount authority tier" as a financial control. Ask: "How do you control discount authority today — and can you audit compliance?"'],
+    preview:`<div class="mini-header"><div class="mini-logo"><div class="a">A</div><span>Argano · CPQ Pricing</span></div><div class="mini-avatar">DM</div></div>
+<div class="mini-content">
+  <div class="mini-waterfall">
+    <table><thead><tr><th>Component</th><th>Amount</th><th>%</th></tr></thead>
+    <tbody>
+      <tr><td>List Price</td><td>$1,312,000</td><td>100%</td></tr>
+      <tr class="wf-neg"><td>Volume Discount</td><td>−$65,600</td><td>−5%</td></tr>
+      <tr class="wf-neg"><td>Bundle Discount</td><td>−$63,368</td><td>−4.8%</td></tr>
+      <tr class="wf-neg"><td>Promotional</td><td>−$13,120</td><td>−1%</td></tr>
+      <tr class="wf-total"><td><strong>Customer Price</strong></td><td><strong>$1,143,672</strong></td><td><strong>87.2%</strong></td></tr>
+    </tbody></table>
+  </div>
+  <div class="mini-approval">
+    <div class="mini-approval-title">Discount Authority Chain</div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#dcfce7;">✅</div><div class="mini-appr-body"><div class="mini-appr-label">Rep — up to 10%</div><div class="mini-appr-sub">Self-approved · System enforced</div></div></div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#dcfce7;">✅</div><div class="mini-appr-body"><div class="mini-appr-label">Manager — up to 18%</div><div class="mini-appr-sub">Sarah Whitmore · Approved</div></div></div>
+    <div class="mini-appr-step"><div class="mini-appr-icon" style="background:#f1f5f9;">⬜</div><div class="mini-appr-body"><div class="mini-appr-label">Deal Desk — above 18%</div><div class="mini-appr-sub">Not required (12.8% discount)</div></div></div>
+  </div>
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:8px 10px;display:flex;gap:10px;">
+    <div style="flex:1;"><div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;">List Price</div><div style="font-size:13px;font-weight:700;color:#0f172a;">$1,312,000</div></div>
+    <div style="flex:1;"><div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;">Cost</div><div style="font-size:13px;font-weight:700;color:#0f172a;">$660,000</div></div>
+    <div style="flex:1;"><div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;">Margin</div><div style="font-size:13px;font-weight:800;color:#15803d;">42.3%</div></div>
+  </div>
+</div>`
+  }
+  ]
+}
+
+}; // end DAYS
+
+// ─── PLAYER STATE ──────────────────────────────────────────────────────────────
+var currentPersona = null;
+var currentScene   = 0;
+
+function startDay(key) {
+  currentPersona = key;
+  currentScene   = 0;
+  document.getElementById('picker').style.opacity = '0';
+  document.getElementById('picker').style.pointerEvents = 'none';
+  setTimeout(function() {
+    document.getElementById('picker').style.display = 'none';
+    var player = document.getElementById('player');
+    player.classList.add('visible');
+    renderPlayer();
+  }, 300);
+}
+
+function backToPicker() {
+  document.getElementById('player').classList.remove('visible');
+  var picker = document.getElementById('picker');
+  picker.style.display = 'flex';
+  picker.style.opacity = '0';
+  picker.style.pointerEvents = 'auto';
+  setTimeout(function() { picker.style.opacity = '1'; }, 50);
+}
+
+function renderPlayer() {
+  var d = DAYS[currentPersona];
+  var acc = ACCENT[currentPersona];
+
+  // CSS accent variable
+  document.getElementById('player').style.setProperty('--accent', acc);
+
+  // Badge
+  var badge = document.getElementById('topbar-badge');
+  badge.textContent = d.emoji + ' ' + d.name + ' — ' + d.role;
+  badge.style.background = acc + '22';
+  badge.style.color = acc;
+  badge.style.borderColor = acc + '44';
+
+  // Next button colour
+  document.getElementById('btn-next').style.background = acc;
+
+  // Timeline
+  renderTimeline();
+  renderScene();
+}
+
+function renderTimeline() {
+  var d = DAYS[currentPersona];
+  var track = document.getElementById('timeline-track');
+  track.innerHTML = '';
+  d.scenes.forEach(function(s, i) {
+    var step = document.createElement('div');
+    step.className = 'tl-step' + (i < currentScene ? ' done' : i === currentScene ? ' active' : '');
+    step.innerHTML = '<div class="tl-dot">' + (i < currentScene ? '✓' : (i+1)) + '</div><div class="tl-time">' + s.time + '</div>';
+    step.onclick = (function(idx){ return function(){ goToScene(idx); }; })(i);
+    track.appendChild(step);
+  });
+}
+
+function renderScene() {
+  var d = DAYS[currentPersona];
+  var s = d.scenes[currentScene];
+  var acc = ACCENT[currentPersona];
+  var wrap = document.getElementById('scene-wrap');
+
+  // fade out
+  wrap.classList.remove('fade-in');
+  wrap.classList.add('fade-out');
+
+  setTimeout(function() {
+    wrap.innerHTML =
+      '<div class="scene-narrative">' +
+        '<div class="scene-time-badge" style="background:' + acc + '22;color:' + acc + ';border-color:' + acc + '44;">' +
+          '<span>⏰</span><span>' + s.time + '</span>' +
+        '</div>' +
+        '<div class="scene-headline">' + s.headline + '</div>' +
+        '<a class="scene-screen-link" href="' + s.screen + '" target="_blank">' +
+          '🖥 Open: ' + s.screen + ' <span style="opacity:.5;font-size:10px;margin-left:4px;">' + s.url + '</span>' +
+        '</a>' +
+        '<div class="narrative-block">' +
+          '<div class="nb-label" style="color:' + acc + ';">What You Do</div>' +
+          '<ul class="do-list">' +
+            s.does.map(function(item, i) {
+              return '<li><span class="step-num" style="background:' + acc + '22;color:' + acc + ';">' + (i+1) + '</span><span>' + item + '</span></li>';
+            }).join('') +
+          '</ul>' +
+        '</div>' +
+        '<div class="narrative-block">' +
+          '<div class="nb-label" style="color:#60a5fa;">What You Say</div>' +
+          '<ul class="say-list">' +
+            s.says.map(function(item) {
+              return '<li style="border-left-color:' + acc + ';">' + item + '</li>';
+            }).join('') +
+          '</ul>' +
+        '</div>' +
+        '<div class="narrative-block">' +
+          '<div class="nb-label" style="color:#fbbf24;">★ Demo Tips</div>' +
+          '<ul class="tip-list">' +
+            s.tips.map(function(item) { return '<li>' + item + '</li>'; }).join('') +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+      '<div class="scene-preview">' +
+        '<div class="preview-chrome">' +
+          '<div class="chrome-dots"><span></span><span></span><span></span></div>' +
+          '<div class="chrome-url">localhost:8000/' + s.screen + '</div>' +
+        '</div>' +
+        '<div class="preview-body">' + s.preview + '</div>' +
+      '</div>';
+
+    // update nav
+    var total = d.scenes.length;
+    document.getElementById('nav-counter').textContent = 'Scene ' + (currentScene+1) + ' of ' + total;
+    document.getElementById('btn-prev').disabled = currentScene === 0;
+    var nextBtn = document.getElementById('btn-next');
+    if (currentScene === total - 1) {
+      nextBtn.textContent = '↩ Choose Another Persona';
+      nextBtn.onclick = backToPicker;
+    } else {
+      nextBtn.textContent = 'Next Scene →';
+      nextBtn.onclick = function(){ navigate(1); };
+    }
+
+    wrap.classList.remove('fade-out');
+    wrap.classList.add('fade-in');
+    renderTimeline();
+  }, 200);
+}
+
+function navigate(dir) {
+  var d = DAYS[currentPersona];
+  var next = currentScene + dir;
+  if (next < 0 || next >= d.scenes.length) return;
+  currentScene = next;
+  renderScene();
+}
+
+function goToScene(idx) {
+  currentScene = idx;
+  renderScene();
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('player').classList.contains('visible')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+  if (e.key === 'Escape') backToPicker();
+});
+</script>
+</body>
+</html>

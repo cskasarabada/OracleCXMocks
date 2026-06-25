@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bollinger Shipyards · Customer Journey</title>
+<link rel="stylesheet" href="assets/redwood.css"/>
+<script defer src="assets/app.js"></script>
+<style>
+.bx-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 26px 42px rgba(12,18,32,.12);padding:26px 28px;margin-bottom:20px;}
+.bx-eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:#6b7280;}
+.bx-hero h1{margin:5px 0 4px;font-size:2.1rem;}
+.bx-hero .sub{color:#41485a;font-size:14px;max-width:680px;line-height:1.55;}
+.bx-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.bx-chip{font-size:12px;padding:5px 12px;border-radius:999px;background:#eef3f9;color:#2E5E8C;border:1px solid rgba(46,94,140,.16);}
+.bx-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:18px;}
+.bx-stat{background:#f7f9fc;border:1px solid rgba(27,38,56,.07);border-radius:14px;padding:12px 14px;}
+.bx-stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6c7894;}
+.bx-stat .v{font-size:1.45rem;font-weight:700;margin-top:3px;}
+
+.bx-pillbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 22px;}
+.bx-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:999px;background:#fff;color:#1b2638;border:1px solid rgba(27,38,56,.14);box-shadow:0 6px 12px rgba(15,23,42,.05);transition:.15s;}
+.bx-pill:hover{border-color:#2E5E8C;color:#2E5E8C;transform:translateY(-1px);}
+.bx-pill .num{width:20px;height:20px;border-radius:50%;background:#12233B;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;}
+.bx-pill.pre .num{background:#0f6e56;}
+.bx-pill.insight{background:#f4f6f9;color:#5c6378;box-shadow:none;}
+.bx-pill-div{width:1px;height:22px;background:rgba(27,38,56,.14);margin:0 4px;}
+
+.bx-sec-h{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;}
+.bx-sec-h h2{font-size:1.2rem;margin:0;}
+.bx-sec-h .note{font-size:12px;color:#6b7280;}
+
+.bx-journey{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:26px;}
+.bx-step{display:grid;grid-template-columns:54px 1fr auto;gap:16px;align-items:center;background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:16px;box-shadow:0 12px 22px rgba(15,23,42,.06);padding:16px 18px;}
+.bx-step.pre{border-color:#0f6e56;box-shadow:0 14px 26px rgba(15,110,86,.14);}
+.bx-num{width:46px;height:46px;border-radius:14px;background:#12233B;color:#fff;font-size:1.2rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.bx-step.pre .bx-num{background:#0f6e56;}
+.bx-step .scr{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#94a0b8;}
+.bx-step .ti2{font-size:1.05rem;font-weight:700;margin:1px 0 4px;}
+.bx-step .act{font-size:13px;color:#41485a;line-height:1.5;}
+.bx-step .act b{color:#12233B;}
+.bx-prebadge{display:inline-block;font-size:11px;font-weight:700;color:#0f6e56;background:#e1f5ee;padding:2px 9px;border-radius:999px;margin-left:8px;vertical-align:middle;}
+.bx-open{display:flex;flex-direction:column;gap:6px;align-items:stretch;min-width:150px;}
+.bx-go{text-decoration:none;text-align:center;font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;background:#12233B;color:#fff;}
+.bx-go:hover{background:#1d3550;}
+.bx-go.alt{background:#eef2f7;color:#2E5E8C;}
+.bx-go.alt:hover{background:#e2e8f1;}
+@media(max-width:760px){.bx-step{grid-template-columns:46px 1fr;}.bx-open{grid-column:1 / -1;flex-direction:row;}}
+
+.bx-insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
+.bx-ins{display:block;text-decoration:none;background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:16px;box-shadow:0 10px 18px rgba(15,23,42,.06);padding:16px 18px;transition:.15s;}
+.bx-ins:hover{border-color:#2E5E8C;transform:translateY(-2px);}
+.bx-ins .h{font-size:1rem;font-weight:700;color:#12233B;}
+.bx-ins .d{font-size:12px;color:#5c6378;margin-top:4px;line-height:1.5;}
+.bx-ins .arrow{font-size:12px;color:#2E5E8C;font-weight:600;margin-top:10px;display:inline-block;}
+
+.bx-aibanner{background:#1d1540;color:#fff;border-radius:16px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;border-left:5px solid #7c6cf0;}
+.bx-aibanner .spark{color:#c9c0ff;font-weight:700;}
+.bx-aibanner b{color:#fff;}
+.bx-aibanner .rels{display:flex;gap:6px;margin-left:auto;}
+.bx-aibanner .rels span{font-size:10px;font-weight:700;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:5px;padding:2px 7px;}
+.bx-ai{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.bx-ai-l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#534ab7;margin-right:2px;}
+.bx-aichip{font-size:11px;padding:3px 9px;border-radius:999px;background:#eeedfe;color:#3c3489;border:1px solid rgba(83,74,183,.2);display:inline-flex;align-items:center;gap:5px;}
+.bx-aichip .sp{color:#7c6cf0;}
+.bx-rel{font-size:9px;font-weight:700;color:#5b21b6;background:#f1e9ff;border-radius:4px;padding:1px 5px;}
+.bx-aifoot{font-size:12px;color:#5c6378;line-height:1.55;margin-top:18px;padding:12px 16px;background:#f3f1fb;border-radius:12px;border-left:3px solid #534ab7;}
+
+.bx-aitoggle{display:flex;align-items:center;gap:10px;justify-content:flex-end;margin:-4px 0 16px;font-size:13px;color:#41485a;font-weight:600;}
+.ai-sw{width:48px;height:26px;border-radius:999px;background:#534ab7;border:0;position:relative;cursor:pointer;transition:.2s;padding:0;flex:none;}
+.ai-sw .knob{position:absolute;top:3px;left:25px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.ai-sw.off{background:#c2c7d0;}
+.ai-sw.off .knob{left:3px;}
+.bx-aitoggle .state{font-size:11px;font-weight:700;color:#534ab7;min-width:24px;}
+.bx-aitoggle.is-off .state{color:#94a0b8;}
+.lead-shell.ai-hidden .bx-ai,
+.lead-shell.ai-hidden .bx-aibanner,
+.lead-shell.ai-hidden .bx-aifoot{display:none !important;}
+</style>
+</head>
+<body class="lead-landing">
+<header class="miconnex-bar"></header>
+<nav class="quick-nav auto-nav"></nav>
+
+<main class="lead-shell">
+
+  <section class="bx-hero">
+    <div class="bx-eyebrow">Prospective Customer</div>
+    <h1>Bollinger Shipyards</h1>
+    <div class="sub">From a Coast Guard RFP to a delivered cutter &mdash; Bollinger&#39;s connected journey across lead, opportunity, the cost-only pursuit pre-project, award, build, and delivery. Every step below opens the live screen.</div>
+    <div class="bx-chips">
+      <span class="bx-chip">Polar Security Cutter &middot; 3 vessels</span>
+      <span class="bx-chip">Arctic Security Cutter &middot; 4 vessels</span>
+      <span class="bx-chip">FPIF &middot; US Coast Guard</span>
+      <span class="bx-chip">Largest privately-owned Gulf shipbuilder</span>
+    </div>
+    <div class="bx-stats">
+      <div class="bx-stat"><div class="l">Active pursuits</div><div class="v">7</div></div>
+      <div class="bx-stat"><div class="l">Weighted backlog</div><div class="v">$3.8B</div></div>
+      <div class="bx-stat"><div class="l">Win rate</div><div class="v">58%</div></div>
+      <div class="bx-stat"><div class="l">Cost / pursuit</div><div class="v">$112k</div></div>
+    </div>
+  </section>
+
+  <div class="bx-aitoggle" id="ai-toggle-wrap">
+    <span>Oracle &#39;26 AI layer</span>
+    <button class="ai-sw" id="ai-switch" role="switch" aria-checked="true" aria-label="Toggle Oracle 26 AI layer"><span class="knob"></span></button>
+    <span class="state" id="ai-state">On</span>
+  </div>
+
+  <div class="bx-aibanner">
+    <span class="spark">&#10022;</span>
+    <span>This flow is <b>retro-integrated with Oracle &#39;26 AI</b> &mdash; Fusion Agentic Applications, AI Agent Studio &amp; Generative Planning assist every step, with human-in-the-loop guardrails.</span>
+    <span class="rels"><span>26A</span><span>26B</span></span>
+  </div>
+
+  <div class="bx-pillbar">
+    <a class="bx-pill" href="cx_lead.html"><span class="num">1</span>Lead</a>
+    <a class="bx-pill" href="cx_opportunity.html"><span class="num">2</span>Opportunity</a>
+    <a class="bx-pill pre" href="ppm_pursuit.html"><span class="num">3</span>PPM Pursuit</a>
+    <a class="bx-pill" href="pursuit_project.html"><span class="num">4</span>Pursuit Project</a>
+    <a class="bx-pill" href="sales_ppm_sync.html"><span class="num">4</span>Sales-PPM</a>
+    <a class="bx-pill" href="ppm_construction.html"><span class="num">5</span>PPM Construction</a>
+    <span class="bx-pill-div"></span>
+    <a class="bx-pill insight" href="analytics.html">Analytics</a>
+    <a class="bx-pill insight" href="forecasting_pipeline.html">Forecasting</a>
+    <a class="bx-pill insight" href="sales_ppm_sync.html">Sales-PPM</a>
+    <a class="bx-pill insight" href="account_360.html">Account 360</a>
+  </div>
+
+  <div class="bx-sec-h"><h2>Connected journey</h2><span class="note">RFP &rarr; pre-project &rarr; award &rarr; delivered cutter</span></div>
+  <div class="bx-journey">
+
+    <div class="bx-step">
+      <div class="bx-num">1</div>
+      <div>
+        <div class="scr">cx_lead.html</div>
+        <div class="ti2">Lead</div>
+        <div class="act">Capture the Coast Guard opportunity. Fill the form, then <b>Qualify &rarr; Create Opportunity</b>.</div>
+        <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant<span class="bx-rel">26B</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Account description from 10-K</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>AI compose outreach</span>
+        </div>
+      </div>
+      <div class="bx-open"><a class="bx-go" href="cx_lead.html">Open Lead</a></div>
+    </div>
+
+    <div class="bx-step">
+      <div class="bx-num">2</div>
+      <div>
+        <div class="scr">cx_opportunity.html</div>
+        <div class="ti2">Opportunity</div>
+        <div class="act">Set the amount and stage, then <b>Create Pursuit in PPM (via OIC)</b> to kick off the pre-project.</div>
+        <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Command Center agent<span class="bx-rel">26B</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Show Opportunity Summary</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Guidance Steps Generator<span class="bx-rel">26A</span></span>
+        </div>
+      </div>
+      <div class="bx-open"><a class="bx-go" href="cx_opportunity.html">Open Opportunity</a></div>
+    </div>
+
+    <div class="bx-step pre">
+      <div class="bx-num">3</div>
+      <div>
+        <div class="scr">ppm_pursuit.html</div>
+        <div class="ti2">PPM Pursuit <span class="bx-prebadge">The pre-project</span></div>
+        <div class="act">Confirm the estimate carried over from the opportunity. This cost-only project captures bid &amp; proposal effort <b>before award</b>.</div>
+        <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Generative Planning: RFP &rarr; WBS</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Project Planning with AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>AI Agent Studio B&amp;P cost agent</span>
+        </div>
+      </div>
+      <div class="bx-open"><a class="bx-go" href="ppm_pursuit.html">Open PPM Pursuit</a></div>
+    </div>
+
+    <div class="bx-step">
+      <div class="bx-num">4</div>
+      <div>
+        <div class="scr">pursuit_project.html &nbsp;&middot;&nbsp; sales_ppm_sync.html</div>
+        <div class="ti2">Pursuit Project &amp; Sales-PPM Sync</div>
+        <div class="act">See the cost-only pursuit workspace and the <b>auto-convert-to-Construction</b> flow that carries WBS into delivery under one program.</div>
+        <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent<span class="bx-rel">PPM</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Bidirectional CX &harr; PPM AI sync</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Win Story on award</span>
+        </div>
+      </div>
+      <div class="bx-open">
+        <a class="bx-go" href="pursuit_project.html">Pursuit Project</a>
+        <a class="bx-go alt" href="sales_ppm_sync.html">Sales-PPM Sync</a>
+      </div>
+    </div>
+
+    <div class="bx-step">
+      <div class="bx-num">5</div>
+      <div>
+        <div class="scr">ppm_construction.html</div>
+        <div class="ti2">PPM Construction</div>
+        <div class="act">On award, <b>Create Construction Project</b>, run the build, and <b>Mark Substantial Completion</b> to close the loop.</div>
+        <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent: schedule-risk &amp; anomalies</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>AI process summarization</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Predictive completion</span>
+        </div>
+      </div>
+      <div class="bx-open"><a class="bx-go" href="ppm_construction.html">Open Construction</a></div>
+    </div>
+
+  </div>
+
+  <div class="bx-sec-h"><h2>Insights</h2><span class="note">Visibility across the Bollinger account</span></div>
+  <div class="bx-insights">
+    <a class="bx-ins" href="analytics.html"><div class="h">Analytics</div><div class="d">Win/loss, cost-per-pursuit, and pipeline health across pursuits.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>AI win/loss insights</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="forecasting_pipeline.html"><div class="h">Forecasting</div><div class="d">Weighted bookings and backlog over the program horizon.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent forecast</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="sales_ppm_sync.html"><div class="h">Sales-PPM</div><div class="d">Bidirectional status between CX Sales and PPM delivery.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Agentic status sync</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="account_360.html"><div class="h">Account 360</div><div class="d">A single view of the Bollinger relationship and programs.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant</span></div><span class="arrow">Open &rarr;</span></a>
+  </div>
+
+  <div class="bx-aifoot"><b>How the AI is wired:</b> capabilities reflect Oracle&#39;s &#39;26 releases &mdash; Fusion Agentic Applications for CX (26B: Sales Command Center, Contract Compliance Workspace), AI-driven Sales Guidance (26A), the Customer Intelligence Assistant, and PPM Generative Planning / Planning Agent. All agents act inside Oracle&#39;s security &amp; approval guardrails and escalate judgment calls to the team.</div>
+
+</main>
+
+<nav class="app-nav-rail"><div class="app-nav-items"></div></nav>
+<script>
+(function(){
+  var sw=document.getElementById('ai-switch');
+  var shell=document.querySelector('.lead-shell');
+  var stateEl=document.getElementById('ai-state');
+  var wrap=document.getElementById('ai-toggle-wrap');
+  if(!sw||!shell) return;
+  sw.addEventListener('click',function(){
+    var hidden=shell.classList.toggle('ai-hidden');
+    var on=!hidden;
+    sw.classList.toggle('off',!on);
+    sw.setAttribute('aria-checked',on?'true':'false');
+    wrap.classList.toggle('is-off',!on);
+    stateEl.textContent=on?'On':'Off';
+  });
+})();
+</script>
+</body>
+</html>

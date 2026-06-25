@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Service Case Management</title>
+  <link rel="stylesheet" href="assets/redwood.css"/>
+  <script defer src="assets/app.js"></script>
+  <style>
+    /* ── Hero ── */
+    .svc-hero {
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid rgba(27,38,56,.1);
+      box-shadow: 0 26px 42px rgba(12,18,32,.12);
+      padding: 26px;
+      margin-bottom: 20px;
+    }
+    .svc-hero h1 {
+      margin: 6px 0 0;
+      font-size: 1.6rem;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+    .svc-hero .meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      align-items: center;
+    }
+    .svc-hero .hero-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px 24px;
+      font-size: 13px;
+      color: #5c6378;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--rw-border,#e2e8f0);
+    }
+    .svc-hero .hero-details div strong {
+      color: #0f172a;
+      display: block;
+      font-weight: 600;
+    }
+    .svc-hero .hero-search {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .svc-hero .hero-search input[type="text"] {
+      flex: 1;
+      min-width: 240px;
+      border-radius: 10px;
+      border: 1px solid rgba(27,38,56,.2);
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #374151;
+    }
+    .svc-hero .hero-search input[type="text"]::placeholder {
+      color: #9ca3af;
+    }
+
+    /* ── Badges / Pills ── */
+    .badge-sev-high {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-status-inv {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1px solid #fdba74;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .pill-sla-risk {
+      background: #fff;
+      color: #dc2626;
+      border: 1px solid #dc2626;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pill {
+      background: #f1f5f9;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      color: #334155;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ── SLA Card ── */
+    .sla-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #fca5a5;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .sla-card .sla-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sla-card .sla-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #dc2626;
+    }
+    .sla-card .sla-timer {
+      font-size: 22px;
+      font-weight: 800;
+      color: #dc2626;
+    }
+    .sla-progress-track {
+      background: #f1f5f9;
+      border-radius: 999px;
+      height: 10px;
+      margin: 8px 0;
+      overflow: hidden;
+    }
+    .sla-progress-fill {
+      background: linear-gradient(90deg,#ff7a18,#dc2626);
+      height: 100%;
+      border-radius: 999px;
+      width: 50%;
+    }
+    .sla-meta {
+      font-size: 12px;
+      color: var(--rw-muted,#64748b);
+    }
+
+    /* ── KPI Grid ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 14px 16px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+    }
+    .kpi-card .kpi-label {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: var(--rw-muted,#64748b);
+      font-weight: 700;
+    }
+    .kpi-card .kpi-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 4px 0 2px;
+      color: #0f172a;
+    }
+    .kpi-card .kpi-sub {
+      font-size: 12px;
+      color: var(--rw-muted,#64748b);
+    }
+
+    /* ── Dark Analytics Deck ── */
+    .analytics-deck {
+      background: #0f172a;
+      border-radius: 20px;
+      padding: 22px 24px;
+      margin-bottom: 22px;
+      color: #fff;
+    }
+    .analytics-deck .deck-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: #ff7a18;
+      font-weight: 700;
+    }
+    .analytics-deck h2 {
+      margin: 4px 0 16px;
+      font-size: 1.2rem;
+      color: #f1f5f9;
+    }
+    .analytics-tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .analytics-tile {
+      background: rgba(255,255,255,.07);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .analytics-tile .at-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+    .analytics-tile .at-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .analytics-tile .at-sub {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+    .ai-rec-card {
+      background: rgba(255,122,24,.12);
+      border: 1px solid rgba(255,122,24,.35);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .ai-rec-card .ai-rec-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #ff7a18;
+      margin-bottom: 6px;
+    }
+    .ai-rec-card p {
+      font-size: 13.5px;
+      color: #e2e8f0;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* ── Tab Bar ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      border-bottom: 2px solid var(--rw-border,#e2e8f0);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--rw-muted,#64748b);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      border-radius: 6px 6px 0 0;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn:hover { color: #0f172a; }
+    .tab-btn.active {
+      color: #ff7a18;
+      border-bottom-color: #ff7a18;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Section Card ── */
+    .section-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 18px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-bottom: 18px;
+    }
+    .section-card h3 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: 11px;
+      color: #ff7a18;
+      font-weight: 700;
+    }
+
+    /* ── Detail Grid ── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+    }
+    .detail-grid .dg-item label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--rw-muted,#64748b);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .detail-grid .dg-item .dg-val {
+      font-size: 13.5px;
+      color: #0f172a;
+      font-weight: 500;
+    }
+
+    /* ── Description card ── */
+    .desc-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 14px 16px;
+      font-size: 13.5px;
+      color: #374151;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    /* ── File Chips ── */
+    .file-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .file-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 12.5px;
+      color: #334155;
+      cursor: pointer;
+    }
+    .file-chip .fc-icon {
+      font-size: 16px;
+    }
+    .file-chip:hover { background: #e2e8f0; }
+
+    /* ── Investigation Timeline ── */
+    .inv-timeline {
+      position: relative;
+      padding-left: 24px;
+      border-left: 2px solid var(--rw-border,#e2e8f0);
+    }
+    .inv-step {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .inv-step::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff7a18;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #ff7a18;
+    }
+    .inv-step.pending::before { background: #e2e8f0; box-shadow: 0 0 0 2px #94a3b8; }
+    .inv-step .inv-time {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--rw-muted,#64748b);
+      margin-bottom: 2px;
+    }
+    .inv-step .inv-text {
+      font-size: 13.5px;
+      color: #0f172a;
+    }
+    .inv-step .inv-by {
+      font-size: 12px;
+      color: var(--rw-muted,#64748b);
+    }
+    .res-steps-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+      color: #166534;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .res-steps-card .res-label {
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #16a34a;
+      margin-bottom: 4px;
+    }
+
+    /* ── KB Articles ── */
+    .kb-search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .kb-search-row input {
+      flex: 1;
+      border-radius: 10px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 9px 14px;
+      font-size: 14px;
+    }
+    .kb-article {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(15,23,42,.05);
+    }
+    .kb-article .kb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .kb-article .kb-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+    }
+    .kb-article .kb-id {
+      font-size: 11px;
+      color: var(--rw-muted,#64748b);
+    }
+    .kb-match {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+    }
+    .kb-article p {
+      font-size: 13px;
+      color: #475467;
+      margin: 0 0 10px;
+    }
+    .kb-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Escalation Matrix ── */
+    .esc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin-bottom: 16px;
+    }
+    .esc-table th {
+      text-align: left;
+      padding: 9px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 700;
+      color: var(--rw-muted,#64748b);
+      border-bottom: 2px solid var(--rw-border,#e2e8f0);
+      background: #f8fafc;
+    }
+    .esc-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--rw-border,#e2e8f0);
+      color: #1e293b;
+      vertical-align: top;
+    }
+    .esc-table tr:hover td { background: #f8fafc; }
+    .esc-status-card {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13.5px;
+      color: #92400e;
+      margin-bottom: 14px;
+    }
+    .esc-action-card {
+      background: #fff;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .esc-action-card label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--rw-muted,#64748b);
+      margin-bottom: 6px;
+    }
+    .esc-action-card textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 10px 12px;
+      font-size: 13.5px;
+      resize: vertical;
+      min-height: 72px;
+      box-sizing: border-box;
+    }
+    .esc-action-card .esc-btn-row {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ── Communications ── */
+    .email-thread {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .email-msg {
+      background: #f8fafc;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .email-msg.outbound { background: #eff6ff; border-color: #bfdbfe; }
+    .email-msg .em-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .email-msg .em-from {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #0f172a;
+    }
+    .email-msg .em-to {
+      font-size: 12px;
+      color: var(--rw-muted,#64748b);
+    }
+    .email-msg .em-time {
+      font-size: 11.5px;
+      color: var(--rw-muted,#64748b);
+    }
+    .email-msg p {
+      font-size: 13.5px;
+      color: #374151;
+      margin: 0;
+      line-height: 1.55;
+    }
+    .compose-card {
+      background: #fff;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .compose-card h4 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--rw-muted,#64748b);
+    }
+    .compose-card textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 10px 12px;
+      font-size: 13.5px;
+      resize: vertical;
+      min-height: 80px;
+      box-sizing: border-box;
+    }
+    .compose-card .compose-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* ── Activity Feed ── */
+    .activity-feed-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--rw-border,#e2e8f0);
+      padding: 18px;
+      box-shadow: 0 14px 26px rgba(15,23,42,.08);
+      margin-top: 22px;
+    }
+    .activity-feed-card h3 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+      color: #0f172a;
+    }
+    .activity-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--rw-border,#e2e8f0);
+    }
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--rw-border,#e2e8f0);
+      align-items: flex-start;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item .act-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .activity-item .act-body .act-text {
+      font-size: 13.5px;
+      color: #0f172a;
+      font-weight: 500;
+    }
+    .activity-item .act-body .act-meta {
+      font-size: 12px;
+      color: var(--rw-muted,#64748b);
+      margin-top: 1px;
+    }
+    .btn-ghost-red {
+      background: #fff;
+      border: 1px solid #dc2626;
+      color: #dc2626;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-ghost-red:hover { background: #fee2e2; }
+  </style>
+</head>
+<body class="service-landing">
+
+<header class="miconnex-bar">
+  <div class="logo-mark">
+    <span class="logo-icon argano">A</span>
+    <div>
+      <div class="logo-text">Argano</div>
+      <div class="logo-sub">Connected Cloud</div>
+    </div>
+  </div>
+  <div class="bar-actions">
+    <button class="ghost-btn small">Help</button>
+    <button class="ghost-btn small">Support</button>
+    <div class="avatar-chip">CK</div>
+  </div>
+</header>
+
+<nav class="quick-nav auto-nav">
+  <div class="nav-group">
+    <div class="nav-label">Sales &amp; Delivery Journey</div>
+    <div class="nav-items">
+      <a href="index.html">Overview</a>
+      <a href="cx_lead.html">Lead</a>
+      <a href="cx_opportunity.html">Opportunity</a>
+      <a href="cpq_quote_builder.html">CPQ Quote</a>
+      <a href="subscription_lifecycle.html">Subscriptions</a>
+      <a href="cx_service_case.html" class="active">Service Case</a>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operations &amp; Finance</div>
+    <div class="nav-items">
+      <a href="icm_compensation.html">Compensation (ICM)</a>
+      <a href="marketing_orchestration.html">Marketing</a>
+      <a href="analytics.html">Analytics</a>
+      <a href="forecasting_pipeline.html">Forecasting</a>
+      <a href="account_360.html">Account 360</a>
+    </div>
+  </div>
+</nav>
+
+<main style="max-width:980px;margin:0 auto;padding:24px;">
+
+  <!-- ═══════════════════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════════════════ -->
+  <section class="svc-hero">
+    <p class="eyebrow">Oracle Service Cloud · Case Management</p>
+    <h1>CASE-2024-04421 &mdash; Microgrid Integration Sync Failure</h1>
+    <div class="meta-row">
+      <span class="badge-sev-high">&#9679; High Severity</span>
+      <span class="badge-status-inv">In Investigation</span>
+      <span class="pill">Skyline Renewables</span>
+      <span class="pill">Assigned: Maya Torres</span>
+      <span class="pill-sla-risk">&#9888; SLA: 4 hrs remaining</span>
+    </div>
+    <div class="hero-details">
+      <div><label>Account</label><strong>Skyline Renewables Inc.</strong></div>
+      <div><label>Contact</label><strong>Ravi Patel (IT Director) &middot; +1 (415) 555-3388</strong></div>
+      <div><label>Product</label><strong>Oracle Sales Cloud Integration API</strong></div>
+      <div><label>Case Type</label><strong>Technical &middot; Integration</strong></div>
+      <div><label>Priority</label><strong>High</strong></div>
+      <div><label>Created</label><strong>Nov 14 2024 &middot; 09:14 AM</strong></div>
+      <div><label>SLA Target</label><strong>8 hours &middot; Breach at 5:14 PM</strong></div>
+    </div>
+    <div class="hero-search">
+      <input type="text" id="svcAiInput" placeholder="Ask Oracle AI to suggest resolution steps, find similar cases, or draft a response..." />
+      <button class="btn primary" onclick="showToast('Oracle AI: Root cause identified — expired OAuth token. Rotating API key resolves the issue. Similar Case-2024-03881 resolved in 45 min.')">AI Suggest Resolution</button>
+      <button class="btn" onclick="showToast('Found 2 similar cases: Case-2024-03881 (OAuth expiry, Oct 12) and Case-2024-01044 (Token scope mismatch, Aug 3).')">Find Similar Cases</button>
+      <button class="btn-ghost-red" onclick="showToast('Escalation workflow initiated. Alex Kim (Sr. Engineer) has been notified.')">Escalate</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SLA COUNTDOWN
+  ═══════════════════════════════════════════════════════ -->
+  <div class="sla-card">
+    <div class="sla-header">
+      <span class="sla-title">&#9888; SLA Status: AT RISK</span>
+      <span class="sla-timer">4 hrs 12 min remaining</span>
+    </div>
+    <div class="sla-progress-track">
+      <div class="sla-progress-fill"></div>
+    </div>
+    <div class="sla-meta">
+      50% of 8-hour SLA elapsed &nbsp;&bull;&nbsp; Breach at: <strong>5:14 PM today</strong> &nbsp;&bull;&nbsp; Case opened 4 hrs ago
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       KPI GRID
+  ═══════════════════════════════════════════════════════ -->
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-left:3px solid #dc2626;">
+      <div class="kpi-label">SLA Status</div>
+      <div class="kpi-value" style="color:#dc2626;font-size:1.1rem;padding-top:4px;">AT RISK</div>
+      <div class="kpi-sub">4 hrs 12 min left</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Time Open</div>
+      <div class="kpi-value">4:02</div>
+      <div class="kpi-sub">hours elapsed</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Customer Contacts</div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-sub">calls &amp; emails</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Similar Cases Found</div>
+      <div class="kpi-value" style="color:#ff7a18;">2</div>
+      <div class="kpi-sub">AI-matched</div>
+    </div>
+    <div class="kpi-card" style="border-left:3px solid #10b981;">
+      <div class="kpi-label">CSAT (Account Avg)</div>
+      <div class="kpi-value" style="color:#059669;">4.2/5</div>
+      <div class="kpi-sub">Skyline Renewables</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Escalations</div>
+      <div class="kpi-value">0</div>
+      <div class="kpi-sub">none triggered</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       DARK ANALYTICS DECK
+  ═══════════════════════════════════════════════════════ -->
+  <div class="analytics-deck">
+    <div class="deck-eyebrow">Service Intelligence</div>
+    <h2>AI-Powered Case Insights</h2>
+    <div class="analytics-tiles">
+      <div class="analytics-tile">
+        <div class="at-label">Similar Case Resolution Avg</div>
+        <div class="at-value">2.4 hrs</div>
+        <div class="at-sub">Based on 2 matched cases</div>
+      </div>
+      <div class="analytics-tile">
+        <div class="at-label">Predicted Resolution Time</div>
+        <div class="at-value">6.5 hrs</div>
+        <div class="at-sub">Including ERP admin coordination</div>
+      </div>
+      <div class="analytics-tile">
+        <div class="at-label">Recommended Action</div>
+        <div class="at-value" style="font-size:1rem;margin-top:2px;">API Token Refresh</div>
+        <div class="at-sub">Confidence: 94%</div>
+      </div>
+      <div class="analytics-tile">
+        <div class="at-label">Customer Sentiment</div>
+        <div class="at-value" style="color:#f87171;">Frustrated</div>
+        <div class="at-sub">2 / 5 &mdash; Escalation risk elevated</div>
+      </div>
+    </div>
+    <div class="ai-rec-card">
+      <div class="ai-rec-label">&#10024; Oracle AI Recommendation</div>
+      <p>This matches <strong>Case-2024-03881</strong> (resolved Oct 12). Root cause was expired OAuth token in the CRM integration middleware. <strong>Steps:</strong> 1) Verify token expiry in Admin Console. 2) Rotate API key under Integration Admin &rarr; API Keys &rarr; ERP Sync Token. 3) Update token in ERP middleware configuration (requires ERP admin). 4) Test POST /api/v3/sync endpoint. 5) Monitor sync queue for 30 minutes. <strong>Estimated resolution time: ~45 min</strong> pending ERP admin availability.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TAB BAR
+  ═══════════════════════════════════════════════════════ -->
+  <div class="tab-bar" id="svcTabBar">
+    <button class="tab-btn active" onclick="switchServiceTab(this,'svc-tab-details')">Case Details</button>
+    <button class="tab-btn" onclick="switchServiceTab(this,'svc-tab-investigation')">Investigation</button>
+    <button class="tab-btn" onclick="switchServiceTab(this,'svc-tab-knowledge')">Knowledge</button>
+    <button class="tab-btn" onclick="switchServiceTab(this,'svc-tab-escalation')">Escalation</button>
+    <button class="tab-btn" onclick="switchServiceTab(this,'svc-tab-communications')">Communications</button>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       TAB: Case Details
+  ───────────────────────────────────────────────────── -->
+  <div class="tab-panel active" id="svc-tab-details">
+    <div class="section-card">
+      <p class="eyebrow" style="margin:0 0 12px;">Case Information</p>
+      <div class="detail-grid">
+        <div class="dg-item"><label>Category</label><div class="dg-val">Technical</div></div>
+        <div class="dg-item"><label>Sub-Category</label><div class="dg-val">API / Integration</div></div>
+        <div class="dg-item"><label>Severity</label><div class="dg-val" style="color:#dc2626;font-weight:700;">High</div></div>
+        <div class="dg-item"><label>Impact</label><div class="dg-val">Production system affected</div></div>
+        <div class="dg-item"><label>Environment</label><div class="dg-val">Production</div></div>
+        <div class="dg-item"><label>Region</label><div class="dg-val">US-West</div></div>
+        <div class="dg-item"><label>Version</label><div class="dg-val">Oracle Sales Cloud 24.4</div></div>
+        <div class="dg-item"><label>Integration</label><div class="dg-val">REST API v3</div></div>
+        <div class="dg-item"><label>Workaround Available</label><div class="dg-val">No</div></div>
+        <div class="dg-item"><label>Customer Impact</label><div class="dg-val">Sales team unable to sync deals from ERP</div></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <p class="eyebrow" style="margin:0 0 10px;">Case Description</p>
+      <div class="desc-card">
+        Sales team reports that all CRM-ERP deal sync has stopped since 8:45 AM. Error message: <strong>'Authentication failed &mdash; token expired (401)'</strong>. Affecting <strong>47 sales reps</strong>. Manual data entry in progress as workaround. Business impact: <strong>$3.2M pipeline at risk</strong> of stale data.
+      </div>
+    </div>
+
+    <div class="section-card">
+      <p class="eyebrow" style="margin:0 0 12px;">Attachments (3)</p>
+      <div class="file-chips">
+        <div class="file-chip" onclick="showToast('Opening error_log_Nov14.txt...')">
+          <span class="fc-icon">&#128196;</span>
+          error_log_Nov14.txt
+        </div>
+        <div class="file-chip" onclick="showToast('Opening screenshot_401_error.png...')">
+          <span class="fc-icon">&#128247;</span>
+          screenshot_401_error.png
+        </div>
+        <div class="file-chip" onclick="showToast('Opening api_config_export.json...')">
+          <span class="fc-icon">&#9881;</span>
+          api_config_export.json
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       TAB: Investigation
+  ───────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="svc-tab-investigation">
+    <div class="section-card">
+      <h3>Investigation Worklog</h3>
+      <div class="inv-timeline">
+        <div class="inv-step">
+          <div class="inv-time">09:14 AM</div>
+          <div class="inv-text">Case created via phone call with Ravi Patel (IT Director). Customer reported complete sync failure since 8:45 AM.</div>
+          <div class="inv-by">Maya Torres &mdash; Case Owner</div>
+        </div>
+        <div class="inv-step">
+          <div class="inv-time">09:22 AM</div>
+          <div class="inv-text">Initial triage completed. Classified as High severity. 8-hour SLA applied automatically (breach at 5:14 PM).</div>
+          <div class="inv-by">Maya Torres &mdash; System Auto-triage</div>
+        </div>
+        <div class="inv-step">
+          <div class="inv-time">09:35 AM</div>
+          <div class="inv-text">Remote session initiated with Ravi. Confirmed 401 Unauthorized error on /api/v3/sync endpoint. Error response captured in logs.</div>
+          <div class="inv-by">Maya Torres &mdash; Remote Session</div>
+        </div>
+        <div class="inv-step">
+          <div class="inv-time">10:02 AM</div>
+          <div class="inv-text">Checked Admin Console: OAuth token for ERP integration last rotated October 1 (45-day expiry). Token expired today, November 14.</div>
+          <div class="inv-by">Maya Torres &mdash; Admin Console Review</div>
+        </div>
+        <div class="inv-step">
+          <div class="inv-time">10:18 AM</div>
+          <div class="inv-text">Root cause identified: Expired OAuth token. Preparing resolution steps for customer. ERP admin coordination required.</div>
+          <div class="inv-by">Maya Torres &mdash; Root Cause Analysis</div>
+        </div>
+        <div class="inv-step pending">
+          <div class="inv-time">Pending</div>
+          <div class="inv-text" style="color:#64748b;">Token rotation + sync endpoint test + customer confirmation of restored sync.</div>
+          <div class="inv-by">Awaiting ERP admin availability (11:00 AM scheduled)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <p class="eyebrow" style="margin:0 0 10px;">Resolution Steps</p>
+      <div class="res-steps-card">
+        <div class="res-label">Recommended Resolution Procedure</div>
+        1) Navigate to <strong>Integration Admin &rarr; API Keys &rarr; ERP Sync Token</strong>.<br/>
+        2) Click <strong>Rotate Token</strong> and copy the new token value.<br/>
+        3) Update the new token in ERP middleware configuration (contact ERP admin).<br/>
+        4) Test <strong>POST /api/v3/sync</strong> to confirm successful authentication (expect HTTP 200).<br/>
+        5) Monitor sync queue for 30 minutes to confirm all 47 sales reps regain access.<br/><br/>
+        <strong>Estimated time: 45&ndash;90 min</strong> pending ERP admin availability.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn primary" onclick="addServiceActivity('step','Investigation step logged: Token rotation procedure initiated.')">Log Investigation Step</button>
+        <button class="btn" onclick="showToast('Root cause marked as found: Expired OAuth token (Nov 14 expiry). Notifying team.')">Mark Root Cause Found</button>
+        <button class="btn" onclick="showToast('Request sent to Oracle Engineering specialist. Expected response within 1 hour.')">Request Internal Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       TAB: Knowledge
+  ───────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="svc-tab-knowledge">
+    <div class="section-card">
+      <h3>Knowledge Base &mdash; Suggested Articles</h3>
+      <div class="kb-search-row">
+        <input type="text" id="kbSearchInput" placeholder="Search knowledge base..." />
+        <button class="btn primary" onclick="showToast('Searching knowledge base for: ' + document.getElementById('kbSearchInput').value)">Search</button>
+      </div>
+
+      <div class="kb-article">
+        <div class="kb-header">
+          <div>
+            <span class="kb-match">Match 94%</span>
+            <div class="kb-title" style="margin-top:6px;">OAuth Token Rotation for CRM-ERP Integrations</div>
+            <div class="kb-id">Article KB-2204 &mdash; Last updated Oct 28 2024</div>
+          </div>
+        </div>
+        <p>Step-by-step guide to rotating API tokens for Oracle Sales Cloud REST integrations. Covers token expiry policies, rotation procedures via Admin Console, and middleware reconfiguration steps for common ERP platforms.</p>
+        <div class="kb-actions">
+          <button class="btn primary" onclick="showToast('Opening KB-2204: OAuth Token Rotation guide...')">View Article</button>
+          <button class="btn" onclick="showToast('KB-2204 attached to CASE-2024-04421.')">Attach to Case</button>
+          <button class="btn" onclick="showToast('KB-2204 emailed to Ravi Patel at ravi.patel@skylinerenewables.com.')">Share with Customer</button>
+        </div>
+      </div>
+
+      <div class="kb-article">
+        <div class="kb-header">
+          <div>
+            <span class="kb-match" style="background:#fef9c3;color:#713f12;border-color:#fde047;">Match 87%</span>
+            <div class="kb-title" style="margin-top:6px;">Troubleshooting 401 Authentication Errors in Sales Cloud API</div>
+            <div class="kb-id">Article KB-1892 &mdash; Last updated Sep 15 2024</div>
+          </div>
+        </div>
+        <p>Common causes of 401 Unauthorized errors in Oracle Sales Cloud API calls: expired tokens, incorrect OAuth scopes, IP allowlist restrictions, and client credential mismatches. Includes diagnostic flowchart and log interpretation guide.</p>
+        <div class="kb-actions">
+          <button class="btn primary" onclick="showToast('Opening KB-1892: 401 Troubleshooting guide...')">View Article</button>
+          <button class="btn" onclick="showToast('KB-1892 attached to CASE-2024-04421.')">Attach to Case</button>
+          <button class="btn" onclick="showToast('KB-1892 emailed to Ravi Patel at ravi.patel@skylinerenewables.com.')">Share with Customer</button>
+        </div>
+      </div>
+
+      <div class="kb-article">
+        <div class="kb-header">
+          <div>
+            <span class="kb-match" style="background:#f1f5f9;color:#475569;border-color:#cbd5e1;">Match 71%</span>
+            <div class="kb-title" style="margin-top:6px;">ERP Integration Middleware Configuration Guide</div>
+            <div class="kb-id">Article KB-3341 &mdash; Last updated Nov 1 2024</div>
+          </div>
+        </div>
+        <p>How to configure middleware sync settings for Oracle Fusion ERP integrations. Covers connection parameters, retry policies, token storage, and monitoring sync queue health for high-volume environments.</p>
+        <div class="kb-actions">
+          <button class="btn primary" onclick="showToast('Opening KB-3341: ERP Middleware Configuration guide...')">View Article</button>
+          <button class="btn" onclick="showToast('KB-3341 attached to CASE-2024-04421.')">Attach to Case</button>
+          <button class="btn" onclick="showToast('KB-3341 emailed to Ravi Patel at ravi.patel@skylinerenewables.com.')">Share with Customer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       TAB: Escalation
+  ───────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="svc-tab-escalation">
+    <div class="section-card">
+      <h3>Escalation Management</h3>
+      <table class="esc-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Trigger</th>
+            <th>Owner</th>
+            <th>SLA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fff7ed;">
+            <td><strong>L1 &mdash; Agent</strong></td>
+            <td>Default</td>
+            <td>Maya Torres</td>
+            <td>8 hrs</td>
+          </tr>
+          <tr>
+            <td><strong>L2 &mdash; Senior Tech</strong></td>
+            <td>SLA breach or customer request</td>
+            <td>Alex Kim (Sr. Engineer)</td>
+            <td>4 hrs additional</td>
+          </tr>
+          <tr>
+            <td><strong>L3 &mdash; Engineering</strong></td>
+            <td>Cannot resolve at L2</td>
+            <td>Oracle Engineering (ticket)</td>
+            <td>24 hrs</td>
+          </tr>
+          <tr>
+            <td><strong>Executive</strong></td>
+            <td>Revenue impact &gt;$500K</td>
+            <td>VP Customer Success</td>
+            <td>2 hrs</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="esc-status-card">
+        <strong>&#9888; Current Status:</strong> Case is at <strong>L1</strong>. SLA breach in <strong>4 hrs 12 min</strong>. If unresolved, auto-escalate to L2 (Alex Kim, Sr. Engineer) will trigger at SLA breach time 5:14 PM.
+      </div>
+
+      <div class="esc-action-card">
+        <label>Escalation Reason</label>
+        <textarea id="escReasonInput" placeholder="Describe the reason for escalation (e.g., customer urgency, revenue impact, technical complexity beyond L1 scope)..."></textarea>
+        <div class="esc-btn-row">
+          <button class="btn primary" onclick="handleEscalate()">Escalate Now</button>
+          <button class="btn" onclick="showToast('Escalation preview sent to Alex Kim for review.')">Preview Escalation</button>
+        </div>
+      </div>
+
+      <div class="section-card" style="background:#f8fafc;box-shadow:none;margin-bottom:0;">
+        <p class="eyebrow" style="margin:0 0 8px;">Past Escalations &mdash; Skyline Renewables (Last 90 Days)</p>
+        <p style="font-size:13.5px;color:#64748b;margin:0;">No escalations recorded for this account in the last 90 days. Escalation history is clean.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────────────────
+       TAB: Communications
+  ───────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="svc-tab-communications">
+    <div class="section-card">
+      <h3>Customer Communications</h3>
+      <div class="email-thread">
+
+        <div class="email-msg outbound">
+          <div class="em-header">
+            <div>
+              <span class="em-from">Maya Torres</span>
+              <span class="em-to">&rarr; Ravi Patel (ravi.patel@skylinerenewables.com)</span>
+            </div>
+            <span class="em-time">Nov 14 &middot; 09:30 AM</span>
+          </div>
+          <p>Hi Ravi, I've taken ownership of <strong>CASE-2024-04421</strong>. I've confirmed the 401 error on your integration endpoint. I'm investigating the root cause now. I'll update you within 2 hours with findings. We're treating this as High priority.</p>
+        </div>
+
+        <div class="email-msg">
+          <div class="em-header">
+            <div>
+              <span class="em-from">Ravi Patel</span>
+              <span class="em-to">&rarr; Maya Torres (maya.torres@oracle-service.com)</span>
+            </div>
+            <span class="em-time">Nov 14 &middot; 09:45 AM</span>
+          </div>
+          <p>Thanks Maya. This is urgent &mdash; our sales team is manually entering data into two systems. 47 reps are affected and we have $3.2M in pipeline deals that could have stale data by EOD. Please prioritize.</p>
+        </div>
+
+        <div class="email-msg outbound">
+          <div class="em-header">
+            <div>
+              <span class="em-from">Maya Torres</span>
+              <span class="em-to">&rarr; Ravi Patel (ravi.patel@skylinerenewables.com)</span>
+            </div>
+            <span class="em-time">Nov 14 &middot; 10:20 AM</span>
+          </div>
+          <p>Update: Root cause identified &mdash; <strong>expired OAuth token</strong> (45-day expiry, expired today Nov 14). I'm preparing a step-by-step rotation guide now. Please have your <strong>ERP admin available at 11 AM</strong> &mdash; we'll need them to update the token in middleware after we rotate it on the Oracle side. Estimated resolution time: 45&ndash;90 minutes once we begin.</p>
+        </div>
+
+      </div>
+
+      <div class="compose-card">
+        <h4>Compose Reply to Ravi Patel</h4>
+        <textarea id="composeTextarea" placeholder="Type reply to Ravi Patel..."></textarea>
+        <div class="compose-actions">
+          <button class="btn primary" onclick="handleSendEmail()">Send Email</button>
+          <button class="btn" onclick="showToast('Reply added to case notes for CASE-2024-04421.')">Add to Case</button>
+          <button class="btn" onclick="showToast('SMS notification sent to Ravi Patel at +1 (415) 555-3388.')">SMS Notification</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       ACTIVITY FEED
+  ═══════════════════════════════════════════════════════ -->
+  <div class="activity-feed-card">
+    <h3>Activity Feed</h3>
+    <div class="activity-actions">
+      <button class="btn primary" onclick="addServiceActivity('call','Inbound call logged with Ravi Patel. Sync issue confirmed ongoing.')">+ Log Call</button>
+      <button class="btn" onclick="addServiceActivity('note','Internal note: ERP admin confirmed for 11 AM coordination call.')">+ Note</button>
+      <button class="btn" onclick="addServiceActivity('update','Customer update sent: Root cause found, resolution in progress.')">+ Update Customer</button>
+      <button class="btn" onclick="addServiceActivity('task','Task created: Monitor sync queue for 30 min post-rotation.')">+ Task</button>
+    </div>
+    <div class="activity-list" id="svcActivityList">
+      <div class="activity-item">
+        <div class="act-icon" style="background:#fee2e2;color:#dc2626;">&#128222;</div>
+        <div class="act-body">
+          <div class="act-text">Initial triage call with Ravi Patel — 401 error confirmed on /api/v3/sync endpoint. Case opened and High severity assigned.</div>
+          <div class="act-meta">Maya Torres &middot; Nov 14 09:14 AM</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="act-icon" style="background:#fff7ed;color:#ea580c;">&#128187;</div>
+        <div class="act-body">
+          <div class="act-text">Remote session started with Ravi. Captured error logs and confirmed authentication failure on REST API v3 sync endpoint.</div>
+          <div class="act-meta">Maya Torres &middot; Nov 14 09:35 AM</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="act-icon" style="background:#ecfdf5;color:#059669;">&#10003;</div>
+        <div class="act-body">
+          <div class="act-text">Root cause identified: OAuth token expired today (Nov 14). Token last rotated Oct 1, 45-day expiry policy. Resolution procedure prepared and shared with ERP admin team.</div>
+          <div class="act-meta">Maya Torres &middot; Nov 14 10:18 AM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">Copyright Demo &mdash; Redwood-inspired mockup</div>
+
+<script>
+  /* ── Tab switching ── */
+  function switchServiceTab(btn, panelId) {
+    document.querySelectorAll('#svcTabBar .tab-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function(p) {
+      p.classList.remove('active');
+    });
+    btn.classList.add('active');
+    var panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  /* ── Activity Feed ── */
+  var actIcons = {
+    call:   { bg:'#fee2e2', color:'#dc2626', icon:'&#128222;' },
+    note:   { bg:'#eff6ff', color:'#2563eb', icon:'&#128203;' },
+    update: { bg:'#ecfdf5', color:'#059669', icon:'&#128257;' },
+    task:   { bg:'#f5f3ff', color:'#7c3aed', icon:'&#10003;' },
+    step:   { bg:'#fff7ed', color:'#ea580c', icon:'&#9881;' }
+  };
+
+  function addServiceActivity(type, text) {
+    var cfg = actIcons[type] || actIcons['note'];
+    var now = new Date();
+    var timeStr = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+    var item = document.createElement('div');
+    item.className = 'activity-item';
+    item.style.animation = 'none';
+    item.innerHTML = '<div class="act-icon" style="background:' + cfg.bg + ';color:' + cfg.color + ';">' + cfg.icon + '</div>' +
+      '<div class="act-body">' +
+        '<div class="act-text">' + text + '</div>' +
+        '<div class="act-meta">Maya Torres &middot; Just now &middot; ' + timeStr + '</div>' +
+      '</div>';
+    var list = document.getElementById('svcActivityList');
+    list.insertBefore(item, list.firstChild);
+    if (typeof showToast === 'function') {
+      showToast('Activity logged: ' + text.substring(0, 60) + (text.length > 60 ? '...' : ''));
+    }
+  }
+
+  /* ── Escalation handler ── */
+  function handleEscalate() {
+    var reason = document.getElementById('escReasonInput').value.trim();
+    if (!reason) {
+      if (typeof showToast === 'function') showToast('Please enter an escalation reason before proceeding.');
+      return;
+    }
+    addServiceActivity('note', 'Escalation initiated to L2 — Alex Kim (Sr. Engineer). Reason: ' + reason);
+    if (typeof showToast === 'function') {
+      showToast('Case escalated to L2. Alex Kim (Sr. Engineer) has been notified with your reason.');
+    }
+    document.getElementById('escReasonInput').value = '';
+  }
+
+  /* ── Send email handler ── */
+  function handleSendEmail() {
+    var msg = document.getElementById('composeTextarea').value.trim();
+    if (!msg) {
+      if (typeof showToast === 'function') showToast('Please type a message before sending.');
+      return;
+    }
+    addServiceActivity('update', 'Email sent to Ravi Patel: ' + msg.substring(0, 80) + (msg.length > 80 ? '...' : ''));
+    if (typeof showToast === 'function') {
+      showToast('Email sent to Ravi Patel (ravi.patel@skylinerenewables.com).');
+    }
+    document.getElementById('composeTextarea').value = '';
+  }
+</script>
+
+</body>
+</html>
