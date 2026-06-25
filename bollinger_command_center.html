@@ -7,16 +7,24 @@
 <link rel="stylesheet" href="assets/redwood.css"/>
 <script defer src="assets/app.js"></script>
 <style>
-.bx-hero{background:#fff;border-radius:22px;border:1px solid rgba(27,38,56,.1);box-shadow:0 26px 42px rgba(12,18,32,.12);padding:26px 28px;margin-bottom:20px;}
-.bx-eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:11px;color:#6b7280;}
-.bx-hero h1{margin:5px 0 4px;font-size:2.1rem;}
-.bx-hero .sub{color:#41485a;font-size:14px;max-width:680px;line-height:1.55;}
-.bx-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
-.bx-chip{font-size:12px;padding:5px 12px;border-radius:999px;background:#eef3f9;color:#2E5E8C;border:1px solid rgba(46,94,140,.16);}
-.bx-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:18px;}
-.bx-stat{background:#f7f9fc;border:1px solid rgba(27,38,56,.07);border-radius:14px;padding:12px 14px;}
-.bx-stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#6c7894;}
-.bx-stat .v{font-size:1.45rem;font-weight:700;margin-top:3px;}
+.bx-hero{position:relative;overflow:hidden;border-radius:24px;margin-bottom:18px;padding:32px 34px 38px;color:#fff;background:linear-gradient(135deg,#081428 0%,#12233B 46%,#1d4067 100%);box-shadow:0 32px 64px rgba(8,16,30,.34);}
+.bx-hero .waves{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:92px;pointer-events:none;}
+.bx-hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.45fr 1fr;gap:28px;align-items:center;}
+@media(max-width:860px){.bx-hero-inner{grid-template-columns:1fr;}}
+.bx-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#9fc6f0;font-weight:700;}
+.bx-kicker .dot{width:7px;height:7px;border-radius:50%;background:#37d39b;box-shadow:0 0 0 4px rgba(55,211,155,.18);}
+.bx-hero h1{font-size:2.8rem;line-height:1.03;margin:14px 0 10px;letter-spacing:-.015em;color:#fff;}
+.bx-tag{font-size:14.5px;line-height:1.62;color:#c9d6e7;max-width:540px;margin:0 0 20px;}
+.bx-programs{display:flex;gap:10px;flex-wrap:wrap;}
+.bx-prog{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:11px 15px;min-width:118px;}
+.bx-prog .pv{font-size:1.45rem;font-weight:800;color:#fff;line-height:1;}
+.bx-prog .pl{font-size:11px;color:#a9bdd4;margin-top:5px;}
+.bx-hero-right{position:relative;}
+.bx-aiflag{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#ddd4ff;background:rgba(124,108,240,.22);border:1px solid rgba(124,108,240,.42);padding:6px 13px;border-radius:999px;margin-bottom:13px;}
+.bx-kpis2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bx-kpi2{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 16px;}
+.bx-kpi2 .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:#9db2cc;}
+.bx-kpi2 .v{font-size:1.6rem;font-weight:800;margin-top:4px;color:#fff;}
 
 .bx-pillbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 22px;}
 .bx-pill{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:999px;background:#fff;color:#1b2638;border:1px solid rgba(27,38,56,.14);box-shadow:0 6px 12px rgba(15,23,42,.05);transition:.15s;}
@@ -76,6 +84,34 @@
 .lead-shell.ai-hidden .bx-ai,
 .lead-shell.ai-hidden .bx-aibanner,
 .lead-shell.ai-hidden .bx-aifoot{display:none !important;}
+
+.bx-pathwrap{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:18px;box-shadow:0 14px 26px rgba(15,23,42,.07);padding:16px 18px;margin-bottom:18px;}
+.bx-path-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;font-weight:700;margin-bottom:12px;}
+.bx-path{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;}
+.bx-node{display:flex;align-items:center;gap:9px;text-decoration:none;background:#f7f9fc;border:1px solid rgba(27,38,56,.12);border-radius:12px;padding:9px 13px;color:#12233B;transition:.15s;}
+.bx-node:hover{border-color:#2E5E8C;background:#fff;transform:translateY(-1px);}
+.bx-node .n{width:23px;height:23px;border-radius:50%;background:#12233B;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+.bx-node .lbl{font-size:13px;font-weight:600;display:flex;flex-direction:column;line-height:1.15;}
+.bx-node .lbl small{font-size:9.5px;font-weight:700;color:#0f6e56;text-transform:uppercase;letter-spacing:.05em;}
+.bx-node.pre{border-color:#0f6e56;background:#f0faf6;}
+.bx-node.pre .n{background:#0f6e56;}
+.bx-arrow{display:flex;align-items:center;color:#b4bcca;font-weight:700;font-size:15px;}
+@media(max-width:680px){.bx-arrow{display:none;}}
+.bx-node.active{border-color:#12233B;background:#12233B;}
+.bx-node.active .lbl{color:#fff;}
+.bx-node.active .lbl small{color:#7fe3c0;}
+.bx-node.active .n{background:#fff;color:#12233B;}
+.bx-node.pre.active{border-color:#0f6e56;background:#0f6e56;}
+.bx-node.pre.active .n{background:#fff;color:#0f6e56;}
+
+.bx-screen{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:18px;box-shadow:0 16px 32px rgba(15,23,42,.09);overflow:hidden;margin-bottom:18px;}
+.bx-screen-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;background:#12233B;color:#fff;}
+.bx-screen-bar .left{display:flex;align-items:center;gap:9px;}
+.bx-screen-bar .step{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9fc6f0;background:rgba(159,198,240,.16);padding:2px 8px;border-radius:999px;}
+.bx-screen-title{font-size:14px;font-weight:700;}
+.bx-screen-full{color:#9fc6f0;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;}
+.bx-screen-full:hover{color:#fff;}
+#bx-frame{width:100%;height:720px;border:0;display:block;background:#f6f8fb;}
 </style>
 </head>
 <body class="lead-landing">
@@ -85,22 +121,55 @@
 <main class="lead-shell">
 
   <section class="bx-hero">
-    <div class="bx-eyebrow">Prospective Customer</div>
-    <h1>Bollinger Shipyards</h1>
-    <div class="sub">From a Coast Guard RFP to a delivered cutter &mdash; Bollinger&#39;s connected journey across lead, opportunity, the cost-only pursuit pre-project, award, build, and delivery. Every step below opens the live screen.</div>
-    <div class="bx-chips">
-      <span class="bx-chip">Polar Security Cutter &middot; 3 vessels</span>
-      <span class="bx-chip">Arctic Security Cutter &middot; 4 vessels</span>
-      <span class="bx-chip">FPIF &middot; US Coast Guard</span>
-      <span class="bx-chip">Largest privately-owned Gulf shipbuilder</span>
-    </div>
-    <div class="bx-stats">
-      <div class="bx-stat"><div class="l">Active pursuits</div><div class="v">7</div></div>
-      <div class="bx-stat"><div class="l">Weighted backlog</div><div class="v">$3.8B</div></div>
-      <div class="bx-stat"><div class="l">Win rate</div><div class="v">58%</div></div>
-      <div class="bx-stat"><div class="l">Cost / pursuit</div><div class="v">$112k</div></div>
+    <svg class="waves" viewBox="0 0 1440 92" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,46 C240,86 480,8 720,34 C960,60 1200,14 1440,44 L1440,92 L0,92 Z" fill="#1d4067" opacity="0.55"/>
+      <path d="M0,60 C240,92 480,26 720,50 C960,74 1200,30 1440,58 L1440,92 L0,92 Z" fill="#2E5E8C" opacity="0.45"/>
+    </svg>
+    <div class="bx-hero-inner">
+      <div class="bx-hero-left">
+        <div class="bx-kicker"><span class="dot"></span>Prospective Customer &middot; Oracle CX &rarr; Projects</div>
+        <h1>Bollinger Shipyards</h1>
+        <p class="bx-tag">From a Coast Guard RFP to a delivered cutter &mdash; one connected, AI-guided flow across sales, the cost-only pursuit pre-project, award, and build. Every step opens the live screen.</p>
+        <div class="bx-programs">
+          <div class="bx-prog"><div class="pv">3</div><div class="pl">Polar Security Cutters</div></div>
+          <div class="bx-prog"><div class="pv">4</div><div class="pl">Arctic Security Cutters</div></div>
+          <div class="bx-prog"><div class="pv">FPIF</div><div class="pl">US Coast Guard</div></div>
+        </div>
+      </div>
+      <div class="bx-hero-right">
+        <div class="bx-aiflag">&#10022; Powered by Oracle &#39;26 AI</div>
+        <div class="bx-kpis2">
+          <div class="bx-kpi2"><div class="l">Active pursuits</div><div class="v">7</div></div>
+          <div class="bx-kpi2"><div class="l">Weighted backlog</div><div class="v">$3.8B</div></div>
+          <div class="bx-kpi2"><div class="l">Win rate</div><div class="v">58%</div></div>
+          <div class="bx-kpi2"><div class="l">Cost / pursuit</div><div class="v">$112k</div></div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <div class="bx-pathwrap">
+    <div class="bx-path-h">Bollinger delivery path &middot; RFP to delivered cutter</div>
+    <div class="bx-path">
+      <a class="bx-node" href="cx_lead.html" data-embed data-step="1" data-title="Lead"><span class="n">1</span><span class="lbl">Lead</span></a>
+      <span class="bx-arrow">&rarr;</span>
+      <a class="bx-node" href="cx_opportunity.html" data-embed data-step="2" data-title="Opportunity"><span class="n">2</span><span class="lbl">Opportunity</span></a>
+      <span class="bx-arrow">&rarr;</span>
+      <a class="bx-node pre" href="ppm_pursuit.html" data-embed data-step="3" data-title="PPM Pursuit &mdash; pre-project"><span class="n">3</span><span class="lbl">PPM Pursuit<small>pre-project</small></span></a>
+      <span class="bx-arrow">&rarr;</span>
+      <a class="bx-node" href="pursuit_project.html" data-embed data-step="4" data-title="Pursuit Project"><span class="n">4</span><span class="lbl">Pursuit &amp; Sync</span></a>
+      <span class="bx-arrow">&rarr;</span>
+      <a class="bx-node" href="ppm_construction.html" data-embed data-step="5" data-title="PPM Construction"><span class="n">5</span><span class="lbl">PPM Construction</span></a>
+    </div>
+  </div>
+
+  <div class="bx-screen" id="bx-screen">
+    <div class="bx-screen-bar">
+      <div class="left"><span class="step" id="bx-screen-step">Step 1</span><span class="bx-screen-title" id="bx-screen-title">Lead</span></div>
+      <a class="bx-screen-full" id="bx-screen-full" href="cx_lead.html" target="_blank" rel="noopener">Open full screen &#8599;</a>
+    </div>
+    <iframe id="bx-frame" title="Bollinger step screen" src="cx_lead.html?embed=1" loading="lazy"></iframe>
+  </div>
 
   <div class="bx-aitoggle" id="ai-toggle-wrap">
     <span>Oracle &#39;26 AI layer</span>
@@ -112,20 +181,6 @@
     <span class="spark">&#10022;</span>
     <span>This flow is <b>retro-integrated with Oracle &#39;26 AI</b> &mdash; Fusion Agentic Applications, AI Agent Studio &amp; Generative Planning assist every step, with human-in-the-loop guardrails.</span>
     <span class="rels"><span>26A</span><span>26B</span></span>
-  </div>
-
-  <div class="bx-pillbar">
-    <a class="bx-pill" href="cx_lead.html"><span class="num">1</span>Lead</a>
-    <a class="bx-pill" href="cx_opportunity.html"><span class="num">2</span>Opportunity</a>
-    <a class="bx-pill pre" href="ppm_pursuit.html"><span class="num">3</span>PPM Pursuit</a>
-    <a class="bx-pill" href="pursuit_project.html"><span class="num">4</span>Pursuit Project</a>
-    <a class="bx-pill" href="sales_ppm_sync.html"><span class="num">4</span>Sales-PPM</a>
-    <a class="bx-pill" href="ppm_construction.html"><span class="num">5</span>PPM Construction</a>
-    <span class="bx-pill-div"></span>
-    <a class="bx-pill insight" href="analytics.html">Analytics</a>
-    <a class="bx-pill insight" href="forecasting_pipeline.html">Forecasting</a>
-    <a class="bx-pill insight" href="sales_ppm_sync.html">Sales-PPM</a>
-    <a class="bx-pill insight" href="account_360.html">Account 360</a>
   </div>
 
   <div class="bx-sec-h"><h2>Connected journey</h2><span class="note">RFP &rarr; pre-project &rarr; award &rarr; delivered cutter</span></div>
@@ -143,7 +198,7 @@
           <span class="bx-aichip"><span class="sp">&#10022;</span>AI compose outreach</span>
         </div>
       </div>
-      <div class="bx-open"><a class="bx-go" href="cx_lead.html">Open Lead</a></div>
+      <div class="bx-open"><a class="bx-go" href="cx_lead.html" data-embed data-step="1" data-title="Lead">Open Lead</a></div>
     </div>
 
     <div class="bx-step">
@@ -158,7 +213,7 @@
           <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Guidance Steps Generator<span class="bx-rel">26A</span></span>
         </div>
       </div>
-      <div class="bx-open"><a class="bx-go" href="cx_opportunity.html">Open Opportunity</a></div>
+      <div class="bx-open"><a class="bx-go" href="cx_opportunity.html" data-embed data-step="2" data-title="Opportunity">Open Opportunity</a></div>
     </div>
 
     <div class="bx-step pre">
@@ -173,7 +228,7 @@
           <span class="bx-aichip"><span class="sp">&#10022;</span>AI Agent Studio B&amp;P cost agent</span>
         </div>
       </div>
-      <div class="bx-open"><a class="bx-go" href="ppm_pursuit.html">Open PPM Pursuit</a></div>
+      <div class="bx-open"><a class="bx-go" href="ppm_pursuit.html" data-embed data-step="3" data-title="PPM Pursuit &mdash; pre-project">Open PPM Pursuit</a></div>
     </div>
 
     <div class="bx-step">
@@ -189,8 +244,8 @@
         </div>
       </div>
       <div class="bx-open">
-        <a class="bx-go" href="pursuit_project.html">Pursuit Project</a>
-        <a class="bx-go alt" href="sales_ppm_sync.html">Sales-PPM Sync</a>
+        <a class="bx-go" href="pursuit_project.html" data-embed data-step="4" data-title="Pursuit Project">Pursuit Project</a>
+        <a class="bx-go alt" href="sales_ppm_sync.html" data-embed data-step="4" data-title="Sales-PPM Sync">Sales-PPM Sync</a>
       </div>
     </div>
 
@@ -206,17 +261,16 @@
           <span class="bx-aichip"><span class="sp">&#10022;</span>Predictive completion</span>
         </div>
       </div>
-      <div class="bx-open"><a class="bx-go" href="ppm_construction.html">Open Construction</a></div>
+      <div class="bx-open"><a class="bx-go" href="ppm_construction.html" data-embed data-step="5" data-title="PPM Construction">Open Construction</a></div>
     </div>
 
   </div>
 
   <div class="bx-sec-h"><h2>Insights</h2><span class="note">Visibility across the Bollinger account</span></div>
   <div class="bx-insights">
-    <a class="bx-ins" href="analytics.html"><div class="h">Analytics</div><div class="d">Win/loss, cost-per-pursuit, and pipeline health across pursuits.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>AI win/loss insights</span></div><span class="arrow">Open &rarr;</span></a>
-    <a class="bx-ins" href="forecasting_pipeline.html"><div class="h">Forecasting</div><div class="d">Weighted bookings and backlog over the program horizon.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent forecast</span></div><span class="arrow">Open &rarr;</span></a>
-    <a class="bx-ins" href="sales_ppm_sync.html"><div class="h">Sales-PPM</div><div class="d">Bidirectional status between CX Sales and PPM delivery.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Agentic status sync</span></div><span class="arrow">Open &rarr;</span></a>
-    <a class="bx-ins" href="account_360.html"><div class="h">Account 360</div><div class="d">A single view of the Bollinger relationship and programs.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="analytics.html" data-embed data-title="Analytics"><div class="h">Analytics</div><div class="d">Win/loss, cost-per-pursuit, and pipeline health across pursuits.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>AI win/loss insights</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="forecasting_pipeline.html" data-embed data-title="Forecasting"><div class="h">Forecasting</div><div class="d">Weighted bookings and backlog over the program horizon.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent forecast</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="account_360.html" data-embed data-title="Account 360"><div class="h">Account 360</div><div class="d">A single view of the Bollinger relationship and programs.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant</span></div><span class="arrow">Open &rarr;</span></a>
   </div>
 
   <div class="bx-aifoot"><b>How the AI is wired:</b> capabilities reflect Oracle&#39;s &#39;26 releases &mdash; Fusion Agentic Applications for CX (26B: Sales Command Center, Contract Compliance Workspace), AI-driven Sales Guidance (26A), the Customer Intelligence Assistant, and PPM Generative Planning / Planning Agent. All agents act inside Oracle&#39;s security &amp; approval guardrails and escalate judgment calls to the team.</div>
@@ -239,6 +293,35 @@
     wrap.classList.toggle('is-off',!on);
     stateEl.textContent=on?'On':'Off';
   });
+})();
+</script>
+<script>
+(function(){
+  var frame=document.getElementById('bx-frame');
+  var titleEl=document.getElementById('bx-screen-title');
+  var stepEl=document.getElementById('bx-screen-step');
+  var fullEl=document.getElementById('bx-screen-full');
+  var panel=document.getElementById('bx-screen');
+  if(!frame) return;
+  function load(url,title,step){
+    var base=url.split('#')[0];
+    frame.src=base+(base.indexOf('?')>-1?'&':'?')+'embed=1';
+    fullEl.href=base;
+    titleEl.innerHTML=title||base;
+    if(step){stepEl.textContent='Step '+step;stepEl.style.display='';}else{stepEl.style.display='none';}
+    document.querySelectorAll('.bx-node').forEach(function(n){
+      n.classList.toggle('active', n.getAttribute('href').split('#')[0]===base);
+    });
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[data-embed]');
+    if(!a) return;
+    e.preventDefault();
+    load(a.getAttribute('href'), a.getAttribute('data-title'), a.getAttribute('data-step'));
+  });
+  var first=document.querySelector('.bx-node[data-step="1"]');
+  if(first) first.classList.add('active');
 })();
 </script>
 </body>

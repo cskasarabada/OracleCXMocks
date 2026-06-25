@@ -58,24 +58,19 @@
       'sources.html',
       'my_team.html'
     ],
-    bollinger: [
-      'bollinger_command_center.html',
-      'cx_lead.html',
-      'cx_opportunity.html',
-      'ppm_pursuit.html',
-      'pursuit_project.html',
-      'sales_ppm_sync.html',
-      'ppm_construction.html',
-      'analytics.html',
-      'forecasting_pipeline.html',
-      'account_360.html'
-    ]
+  };
+  // Tier 1 of the hierarchy: prospective-customer contexts
+  var CONTEXT_LABELS = { all: 'General', bollinger: 'Bollinger Shipyards' };
+  // Tier 2: within a customer context, refine what each persona is offered
+  var BOLLINGER_VIEWS = {
+    all: ['bollinger_command_center.html', 'cx_lead.html', 'cx_opportunity.html', 'ppm_pursuit.html', 'pursuit_project.html', 'sales_ppm_sync.html', 'ppm_construction.html', 'analytics.html', 'forecasting_pipeline.html', 'account_360.html'],
+    rep: ['bollinger_command_center.html', 'cx_lead.html', 'cx_opportunity.html', 'ppm_pursuit.html', 'pursuit_project.html', 'sales_ppm_sync.html'],
+    manager: ['bollinger_command_center.html', 'cx_opportunity.html', 'ppm_construction.html', 'analytics.html', 'forecasting_pipeline.html', 'account_360.html']
   };
   var PERSONA_LABELS = {
-    all: 'All Persona',
+    all: 'All',
     rep: 'Sales Rep',
-    manager: 'Sales Manager',
-    bollinger: 'Bollinger Shipyards'
+    manager: 'Sales Manager'
   };
   function injectAssistantChrome() {
     if (document.getElementById('ai-assist-launch')) return;
@@ -722,35 +717,78 @@
       group.style.display = visibleLinks.length ? '' : 'none';
     });
   };
-  function applyPersonaSelection(key) {
-    var personaKey = key || 'all';
-    window.filterNavLinks(personaKey, PERSONA_FILTERS[personaKey]);
-    var toggles = document.querySelectorAll('nav.quick-nav a[data-persona-toggle]');
-    toggles.forEach(function (a) {
-      a.classList.toggle('active', a.dataset.personaToggle === personaKey);
-    });
-    try { sessionStorage.setItem('rw_persona', personaKey); } catch (e) { }
+  function computeAllowed(ctx, persona) {
+    if (ctx === 'bollinger') { return BOLLINGER_VIEWS[persona] || BOLLINGER_VIEWS.all; }
+    return PERSONA_FILTERS[persona];
   }
+  function currentCtx() { try { return sessionStorage.getItem('rw_context') || 'all'; } catch (e) { return 'all'; } }
+  function currentPersona() { try { return sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { return 'all'; } }
+  function updateFilterActives(ctx, persona) {
+    var ribbon = document.getElementById('persona-ribbon');
+    if (ribbon) {
+      ribbon.querySelectorAll('[data-context]').forEach(function (b) { b.classList.toggle('active', b.dataset.context === ctx); });
+      ribbon.querySelectorAll('[data-persona-toggle]').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === persona); });
+    }
+    document.querySelectorAll('nav.quick-nav a[data-persona-toggle]').forEach(function (a) {
+      a.classList.toggle('active', a.dataset.personaToggle === persona);
+    });
+  }
+  function applyView(ctx, persona) {
+    ctx = ctx || 'all'; persona = persona || 'all';
+    window.filterNavLinks(persona, computeAllowed(ctx, persona));
+    try { sessionStorage.setItem('rw_context', ctx); sessionStorage.setItem('rw_persona', persona); } catch (e) { }
+    updateFilterActives(ctx, persona);
+  }
+  window.applyView = applyView;
+  function applyPersonaSelection(key) { applyView(currentCtx(), key || 'all'); }
+  function applyContextSelection(ctx) { applyView(ctx || 'all', currentPersona()); }
   window.applyPersonaSelection = applyPersonaSelection;
+  window.applyContextSelection = applyContextSelection;
   function injectPersonaRibbon() {
     if (document.getElementById('persona-ribbon')) return;
     var style = document.createElement('style');
-    style.textContent = "\n      .persona-ribbon {\n        position: fixed;\n        bottom: 20px;\n        left: 50%;\n        transform: translateX(-50%);\n        background: #2a0f46;\n        color: #fff;\n        border-radius: 999px;\n        padding: 12px 18px;\n        box-shadow: 0 32px 60px rgba(32,10,64,.35);\n        z-index: 4000;\n        display: inline-flex;\n        gap: 12px;\n        align-items: center;\n        justify-content: center;\n        min-width: 280px;\n        max-width: 90vw;\n        pointer-events: auto;\n      }\n      .persona-ribbon button {\n        background: rgba(255,255,255,.12);\n        border: 1px solid rgba(255,255,255,.25);\n        color: #fff;\n        border-radius: 18px;\n        padding: 12px 16px;\n        font-weight: 800;\n        font-size: 15px;\n        cursor: pointer;\n        white-space: nowrap;\n      }\n      .persona-ribbon button.active {\n        background: #f97316;\n        border-color: #fcbf9b;\n        color: #0b1324;\n        box-shadow: 0 10px 20px rgba(249,115,22,.25);\n      }\n      @media (max-width: 720px) {\n        .persona-ribbon { bottom: 12px; padding: 10px 14px; gap: 10px; }\n        .persona-ribbon button { padding: 10px 14px; font-size: 13px; }\n      }\n    ";
+    style.textContent = "\n      .persona-ribbon{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#2a0f46;color:#fff;border-radius:16px;padding:11px 15px;box-shadow:0 32px 60px rgba(32,10,64,.35);z-index:4000;display:flex;flex-direction:column;gap:8px;max-width:94vw;pointer-events:auto;}\n      .persona-ribbon .pr-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}\n      .persona-ribbon .pr-row.top{border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:9px;}\n      .persona-ribbon .pr-label{font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#c9b6e8;min-width:124px;display:flex;align-items:center;gap:6px;}\n      .persona-ribbon .pr-label .step{opacity:.7;}\n      .persona-ribbon button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:11px;padding:7px 13px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;}\n      .persona-ribbon button:hover{background:rgba(255,255,255,.2);}\n      .persona-ribbon button.active{background:#f97316;border-color:#fcbf9b;color:#0b1324;box-shadow:0 8px 18px rgba(249,115,22,.25);}\n      .persona-ribbon .pr-ctx[data-context='bollinger'].active{background:#37d39b;border-color:#9bead0;}\n      .persona-ribbon .pr-row.refine{opacity:.55;transition:opacity .2s;}\n      .persona-ribbon.has-ctx .pr-row.refine{opacity:1;}\n      @media (max-width:720px){.persona-ribbon{bottom:12px;}.persona-ribbon .pr-label{min-width:0;width:100%;}}\n    ";
     document.head.appendChild(style);
     var bar = document.createElement('div');
     bar.id = 'persona-ribbon';
     bar.className = 'persona-ribbon';
-    ['all', 'rep', 'manager', 'bollinger'].forEach(function (key) {
-      var btn = document.createElement('button');
-      btn.textContent = PERSONA_LABELS[key] || key;
-      btn.dataset.personaToggle = key;
-      btn.addEventListener('click', function () { applyPersonaSelection(key); bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === key); }); });
-      bar.appendChild(btn);
+
+    var row1 = document.createElement('div');
+    row1.className = 'pr-row top';
+    var l1 = document.createElement('span');
+    l1.className = 'pr-label';
+    l1.innerHTML = '<span class="step">1 ·</span> Prospective customer';
+    row1.appendChild(l1);
+    ['all', 'bollinger'].forEach(function (ctx) {
+      var b = document.createElement('button');
+      b.className = 'pr-ctx';
+      b.dataset.context = ctx;
+      b.textContent = CONTEXT_LABELS[ctx];
+      b.addEventListener('click', function () { applyContextSelection(ctx); refreshHasCtx(); });
+      row1.appendChild(b);
     });
+
+    var row2 = document.createElement('div');
+    row2.className = 'pr-row refine';
+    var l2 = document.createElement('span');
+    l2.className = 'pr-label';
+    l2.innerHTML = '<span class="step">2 ·</span> Refine &mdash; view as';
+    row2.appendChild(l2);
+    ['all', 'rep', 'manager'].forEach(function (p) {
+      var b = document.createElement('button');
+      b.dataset.personaToggle = p;
+      b.textContent = PERSONA_LABELS[p];
+      b.addEventListener('click', function () { applyPersonaSelection(p); });
+      row2.appendChild(b);
+    });
+
+    bar.appendChild(row1);
+    bar.appendChild(row2);
     document.body.appendChild(bar);
-    var storedPersona = 'all';
-    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { }
-    bar.querySelectorAll('button').forEach(function (b) { b.classList.toggle('active', b.dataset.personaToggle === storedPersona); });
+
+    function refreshHasCtx() { bar.classList.toggle('has-ctx', currentCtx() !== 'all'); }
+    refreshHasCtx();
+    updateFilterActives(currentCtx(), currentPersona());
   }
   function ensureGlobalChrome() {
     var body = document.body;
@@ -758,6 +796,13 @@
     body.dataset.chromeReady = '1';
     body.classList.add('miconnex-theme');
     body.classList.add('oracle-fusion-skin');
+    if (/[?&]embed=1(?:&|$)/.test(location.search)) {
+      body.classList.add('embed-mode');
+      var es = document.createElement('style');
+      es.textContent = '.miconnex-bar,nav.quick-nav,.app-nav-rail,#persona-ribbon,.persona-ribbon,#ai-assist-launch,#ai-assist-panel,.header,.tabs{display:none !important;}body.embed-mode .lead-shell,body.embed-mode main{margin:0 auto !important;padding-top:10px !important;}';
+      document.head.appendChild(es);
+      return;
+    }
     var header = document.querySelector('.miconnex-bar');
     var headerMarkup = '<div class="logo-mark"><span class="logo-icon argano">A</span><div><div class="logo-text">Argano</div><div class="logo-sub">Connected Cloud</div></div></div><div class="bar-actions"><button class="ghost-btn small">Help</button><button class="ghost-btn small">Support</button><div class="avatar-chip">CK</div></div>';
     if (!header) {
@@ -792,10 +837,10 @@
         applyPersonaSelection(target.dataset.personaToggle || 'all');
       });
     }
-    var storedPersona = 'all';
-    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; } catch (e) { storedPersona = 'all'; }
-    if (current === 'bollinger_command_center.html') storedPersona = 'bollinger';
-    applyPersonaSelection(storedPersona);
+    var storedPersona = 'all', storedContext = 'all';
+    try { storedPersona = sessionStorage.getItem('rw_persona') || 'all'; storedContext = sessionStorage.getItem('rw_context') || 'all'; } catch (e) { }
+    if (current === 'bollinger_command_center.html') storedContext = 'bollinger';
+    applyView(storedContext, storedPersona);
     injectAssistantChrome();
     injectPersonaRibbon();
     window.addEventListener('scroll', function () {
