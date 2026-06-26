@@ -85,6 +85,11 @@
 .lead-shell.ai-hidden .bx-aibanner,
 .lead-shell.ai-hidden .bx-aifoot{display:none !important;}
 
+.bx-progsw{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.bx-progsw .lbl{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#6b7280;margin-right:2px;}
+.bx-progsw button{background:#fff;border:1px solid rgba(27,38,56,.16);color:#1b2638;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
+.bx-progsw button:hover{border-color:#2E5E8C;}
+.bx-progsw button.active{background:#12233B;border-color:#12233B;color:#fff;}
 .bx-pathwrap{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:18px;box-shadow:0 14px 26px rgba(15,23,42,.07);padding:16px 18px;margin-bottom:18px;}
 .bx-path-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;font-weight:700;margin-bottom:12px;}
 .bx-path{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;}
@@ -112,6 +117,36 @@
 .bx-screen-full{color:#9fc6f0;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;}
 .bx-screen-full:hover{color:#fff;}
 #bx-frame{width:100%;height:720px;border:0;display:block;background:#f6f8fb;}
+
+.bx-stage{display:flex;gap:14px;align-items:stretch;margin-bottom:18px;}
+@media(max-width:960px){.bx-stage{flex-direction:column;}}
+.bx-stage .bx-screen{flex:1;margin-bottom:0;min-width:0;}
+.bx-agentrail{width:330px;flex:none;}
+@media(max-width:960px){.bx-agentrail{width:auto;}}
+.lead-shell.ai-hidden .bx-agentrail{display:none !important;}
+.bx-agent{background:#fff;border:1px solid rgba(83,74,183,.28);border-radius:16px;box-shadow:0 14px 26px rgba(15,23,42,.08);overflow:hidden;height:100%;display:flex;flex-direction:column;}
+.bx-agent-head{display:flex;align-items:center;gap:10px;padding:13px 15px;background:#1d1540;color:#fff;}
+.bx-agent-head .ava{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex:none;}
+.bx-agent-head .nm{font-size:13px;font-weight:700;line-height:1.15;}
+.bx-agent-head .rl{font-size:10px;color:#c9c0ff;}
+.bx-agent-head .status{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#c9c0ff;white-space:nowrap;}
+.bx-agent-body{padding:14px 15px;font-size:13px;color:#41485a;line-height:1.55;flex:1;}
+.bx-agent-does{font-size:11.5px;color:#6b7280;font-style:italic;line-height:1.5;padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid rgba(27,38,56,.08);}
+.bx-agent-find-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a0b8;font-weight:700;margin-bottom:3px;}
+.bx-agent-body .nba-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#7c6cf0;font-weight:700;margin-top:13px;}
+.bx-agent-body .nba{color:#1b2638;margin-top:2px;}
+.bx-agent-acts{display:flex;gap:8px;margin-top:13px;}
+.bx-agent-acts button{border:0;cursor:pointer;font-size:12px;font-weight:700;padding:7px 13px;border-radius:9px;}
+.bx-agent-acts .go{background:#534ab7;color:#fff;}
+.bx-agent-acts .go:hover{background:#443c9c;}
+.bx-agent-acts .no{background:#eef0f6;color:#5c6378;}
+.bx-reveal{opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s;}
+.bx-reveal.in{opacity:1;transform:none;}
+.bx-dots{display:inline-flex;gap:3px;vertical-align:middle;}
+.bx-dots i{width:5px;height:5px;border-radius:50%;background:#c9c0ff;display:inline-block;animation:bxpulse 1s infinite;}
+.bx-dots i:nth-child(2){animation-delay:.15s;}
+.bx-dots i:nth-child(3){animation-delay:.3s;}
+@keyframes bxpulse{0%,100%{opacity:.3;}50%{opacity:1;}}
 </style>
 </head>
 <body class="lead-landing">
@@ -148,6 +183,12 @@
     </div>
   </section>
 
+  <div class="bx-progsw" id="bx-progsw">
+    <span class="lbl">Demo program</span>
+    <button data-prog="bollinger" class="active">Polar Security Cutter</button>
+    <button data-prog="bollinger_asc">Arctic Security Cutter</button>
+  </div>
+
   <div class="bx-pathwrap">
     <div class="bx-path-h">Bollinger delivery path &middot; RFP to delivered cutter</div>
     <div class="bx-path">
@@ -163,12 +204,15 @@
     </div>
   </div>
 
-  <div class="bx-screen" id="bx-screen">
-    <div class="bx-screen-bar">
-      <div class="left"><span class="step" id="bx-screen-step">Step 1</span><span class="bx-screen-title" id="bx-screen-title">Lead</span></div>
-      <a class="bx-screen-full" id="bx-screen-full" href="cx_lead.html" target="_blank" rel="noopener">Open full screen &#8599;</a>
+  <div class="bx-stage">
+    <div class="bx-screen" id="bx-screen">
+      <div class="bx-screen-bar">
+        <div class="left"><span class="step" id="bx-screen-step">Step 1</span><span class="bx-screen-title" id="bx-screen-title">Lead</span></div>
+        <a class="bx-screen-full" id="bx-screen-full" href="cx_lead.html" target="_blank" rel="noopener">Open full screen &#8599;</a>
+      </div>
+      <iframe id="bx-frame" title="Bollinger step screen" src="about:blank" loading="lazy"></iframe>
     </div>
-    <iframe id="bx-frame" title="Bollinger step screen" src="cx_lead.html?embed=1" loading="lazy"></iframe>
+    <aside class="bx-agentrail" id="bx-agentrail"></aside>
   </div>
 
   <div class="bx-aitoggle" id="ai-toggle-wrap">
@@ -179,7 +223,7 @@
 
   <div class="bx-aibanner">
     <span class="spark">&#10022;</span>
-    <span>This flow is <b>retro-integrated with Oracle &#39;26 AI</b> &mdash; Fusion Agentic Applications, AI Agent Studio &amp; Generative Planning assist every step, with human-in-the-loop guardrails.</span>
+    <span>This flow is <b>retro-integrated with Oracle &#39;26 AI</b> &mdash; Fusion Agentic Applications, AI Agent Studio &amp; Project Planning with AI assist every step, with human-in-the-loop guardrails.</span>
     <span class="rels"><span>26A</span><span>26B</span></span>
   </div>
 
@@ -193,8 +237,8 @@
         <div class="ti2">Lead</div>
         <div class="act">Capture the Coast Guard opportunity. Fill the form, then <b>Qualify &rarr; Create Opportunity</b>.</div>
         <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant<span class="bx-rel">26B</span></span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Account description from 10-K</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Lead Advisor agent<span class="bx-rel">26B</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Account Advisor</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>AI compose outreach</span>
         </div>
       </div>
@@ -208,7 +252,7 @@
         <div class="ti2">Opportunity</div>
         <div class="act">Set the amount and stage, then <b>Create Pursuit in PPM (via OIC)</b> to kick off the pre-project.</div>
         <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Command Center agent<span class="bx-rel">26B</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Command Center<span class="bx-rel">26B</span></span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>Show Opportunity Summary</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>Sales Guidance Steps Generator<span class="bx-rel">26A</span></span>
         </div>
@@ -223,8 +267,8 @@
         <div class="ti2">PPM Pursuit <span class="bx-prebadge">The pre-project</span></div>
         <div class="act">Confirm the estimate carried over from the opportunity. This cost-only project captures bid &amp; proposal effort <b>before award</b>.</div>
         <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Generative Planning: RFP &rarr; WBS</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Project Planning with AI</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Project Planning with AI: RFP &rarr; WBS</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>AI Agent Studio (custom B&amp;P agent)</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>AI Agent Studio B&amp;P cost agent</span>
         </div>
       </div>
@@ -238,7 +282,7 @@
         <div class="ti2">Pursuit Project &amp; Sales-PPM Sync</div>
         <div class="act">See the cost-only pursuit workspace and the <b>auto-convert-to-Construction</b> flow that carries WBS into delivery under one program.</div>
         <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent<span class="bx-rel">PPM</span></span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Contract Compliance Workspace<span class="bx-rel">26B</span></span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>Bidirectional CX &harr; PPM AI sync</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>Win Story on award</span>
         </div>
@@ -256,7 +300,7 @@
         <div class="ti2">PPM Construction</div>
         <div class="act">On award, <b>Create Construction Project</b>, run the build, and <b>Mark Substantial Completion</b> to close the loop.</div>
         <div class="bx-ai"><span class="bx-ai-l">Oracle &#39;26 AI</span>
-          <span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent: schedule-risk &amp; anomalies</span>
+          <span class="bx-aichip"><span class="sp">&#10022;</span>Project Program Analysis &amp; Action Plan</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>AI process summarization</span>
           <span class="bx-aichip"><span class="sp">&#10022;</span>Predictive completion</span>
         </div>
@@ -268,12 +312,12 @@
 
   <div class="bx-sec-h"><h2>Insights</h2><span class="note">Visibility across the Bollinger account</span></div>
   <div class="bx-insights">
-    <a class="bx-ins" href="analytics.html" data-embed data-title="Analytics"><div class="h">Analytics</div><div class="d">Win/loss, cost-per-pursuit, and pipeline health across pursuits.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>AI win/loss insights</span></div><span class="arrow">Open &rarr;</span></a>
-    <a class="bx-ins" href="forecasting_pipeline.html" data-embed data-title="Forecasting"><div class="h">Forecasting</div><div class="d">Weighted bookings and backlog over the program horizon.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Planning Agent forecast</span></div><span class="arrow">Open &rarr;</span></a>
-    <a class="bx-ins" href="account_360.html" data-embed data-title="Account 360"><div class="h">Account 360</div><div class="d">A single view of the Bollinger relationship and programs.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Customer Intelligence Assistant</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="analytics.html" data-embed data-title="Analytics"><div class="h">Analytics</div><div class="d">Win/loss, cost-per-pursuit, and pipeline health across pursuits.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Insight Agent</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="forecasting_pipeline.html" data-embed data-title="Forecasting"><div class="h">Forecasting</div><div class="d">Weighted bookings and backlog over the program horizon.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Sales Command Center forecast</span></div><span class="arrow">Open &rarr;</span></a>
+    <a class="bx-ins" href="account_360.html" data-embed data-title="Account 360"><div class="h">Account 360</div><div class="d">A single view of the Bollinger relationship and programs.</div><div class="bx-ai"><span class="bx-aichip"><span class="sp">&#10022;</span>Account Advisor</span></div><span class="arrow">Open &rarr;</span></a>
   </div>
 
-  <div class="bx-aifoot"><b>How the AI is wired:</b> capabilities reflect Oracle&#39;s &#39;26 releases &mdash; Fusion Agentic Applications for CX (26B: Sales Command Center, Contract Compliance Workspace), AI-driven Sales Guidance (26A), the Customer Intelligence Assistant, and PPM Generative Planning / Planning Agent. All agents act inside Oracle&#39;s security &amp; approval guardrails and escalate judgment calls to the team.</div>
+  <div class="bx-aifoot"><b>How the AI is wired:</b> capabilities reflect Oracle&#39;s &#39;26 releases &mdash; Fusion Agentic Applications for CX (26B: Sales Command Center, Contract Compliance Workspace, Cross-Sell) and the new Sales Orchestration agentic seller experience; real Sales agents (Lead Advisor, Account Advisor, Insight Agent); and Oracle Project Management generative AI (Project Proposal Generation, Program Analysis &amp; Action Plan, Change Order Generation). Project Management AI ships as generative features rather than named agents. All agents act inside Oracle&#39;s security &amp; approval guardrails and escalate judgment calls to the team.</div>
 
 </main>
 
@@ -297,31 +341,124 @@
 </script>
 <script>
 (function(){
-  var frame=document.getElementById('bx-frame');
-  var titleEl=document.getElementById('bx-screen-title');
-  var stepEl=document.getElementById('bx-screen-step');
-  var fullEl=document.getElementById('bx-screen-full');
-  var panel=document.getElementById('bx-screen');
-  if(!frame) return;
-  function load(url,title,step){
-    var base=url.split('#')[0];
-    frame.src=base+(base.indexOf('?')>-1?'&':'?')+'embed=1';
-    fullEl.href=base;
-    titleEl.innerHTML=title||base;
-    if(step){stepEl.textContent='Step '+step;stepEl.style.display='';}else{stepEl.style.display='none';}
-    document.querySelectorAll('.bx-node').forEach(function(n){
-      n.classList.toggle('active', n.getAttribute('href').split('#')[0]===base);
+  function start(){
+    var frame=document.getElementById('bx-frame');
+    var titleEl=document.getElementById('bx-screen-title');
+    var stepEl=document.getElementById('bx-screen-step');
+    var fullEl=document.getElementById('bx-screen-full');
+    var panel=document.getElementById('bx-screen');
+    if(!frame) return;
+    var railEl=document.getElementById('bx-agentrail');
+    var progLabel='Polar Security Cutter';
+    var curAgent=null, typeTimer=null;
+    var AGENT_COLORS={LA:'#185fa5',SC:'#12233B',PP:'#0f6e56',CC:'#bf6a16',PA:'#534ab7',PG:'#854f0b',IA:'#3b6d11',AA:'#185fa5'};
+    // Real Oracle Fusion AI agents (26B). Agentic apps marked in the area label.
+    var AGENTS={
+      'cx_lead.html':{id:'LA',name:'Lead Advisor agent',area:'Oracle Sales · 26B',act:'lead',does:'Per Oracle: highlights missed interactions, summarizes lead behavior, and recommends next-best actions through a conversational interface.',finding:'Reviewed the {prog} lead — flagged 2 missed interactions with the program office and summarized recent engagement.',nba:'Take the next-best action: draft tailored outreach to the program office.'},
+      'cx_opportunity.html':{id:'SC',name:'Sales Command Center',area:'Oracle Sales · agentic app · 26B',act:'oppty',does:'Per Oracle: continuously monitors what’s happening across accounts, highlights key changes or risks, and recommends practical next steps per opportunity.',finding:'Monitoring {prog}: detected a win-probability change and an FPIF target-cost risk on this opportunity.',nba:'Recommended next step — schedule a capture touchpoint and refresh win themes.'},
+      'ppm_pursuit.html':{id:'PP',name:'Project Proposal Generation',area:'Oracle Project Management · generative AI',act:'oppty',does:'Per Oracle: generates a full project proposal during planning — company background, executive summary, implementation plan (milestones, timeline, budget) and resource plan. One click, fully editable, exportable to PDF/Word; built for starting projects from advanced sales opportunities.',finding:'Generated a {prog} bid proposal from the opportunity — implementation plan, budget estimate and resource plan for the pursuit.',nba:'Stand up the pursuit pre-project and request 2 estimators in PPM.'},
+      'pursuit_project.html':{id:'CC',name:'Contract Compliance Workspace',area:'Oracle Sales · agentic app · 26B',act:'oppty',does:'Per Oracle: end-to-end oversight of the contract portfolio — semantically analyzes agreements and contracts under negotiation to identify, prioritize and address risk.',finding:'Analyzed the {prog} agreement — flagged an FPIF policy deviation and prioritized the risk.',nba:'Address the flagged clause and sync contract status back to CX Sales.'},
+      'sales_ppm_sync.html':{id:'CC',name:'Contract Compliance Workspace',area:'Oracle Sales · agentic app · 26B',act:'oppty',does:'Per Oracle: end-to-end oversight of the contract portfolio — detects deviations from policy and proposes next steps.',finding:'Oversight of the {prog} contract portfolio is healthy; one item under negotiation needs review.',nba:'Confirm the award hand-off mapping — scope, value and project template.'},
+      'ppm_construction.html':{id:'PG',name:'Project Program Analysis & Action Plan Generation',area:'Oracle Project Management · generative AI',act:'oppty',does:'Per Oracle: analyzes project/program status and generates an action plan; related generative AI creates change orders directly from project issues.',finding:'Analyzed the {prog} build — flagged a long-lead material risk and drafted an action plan.',nba:'Generate a change order from the issue and escalate to the PMO.'},
+      'analytics.html':{id:'IA',name:'Insight Agent',area:'Oracle Sales · 26B',act:null,does:'Per Oracle: provides descriptive explanations for graphical analytics, suggests follow-up questions, and answers user questions.',finding:'Explained win/loss and cost-per-pursuit trends and suggested follow-ups across the portfolio.',nba:'Review the two pursuits with rising capture cost.'},
+      'forecasting_pipeline.html':{id:'SC',name:'Sales Command Center',area:'Oracle Sales · agentic app · 26B',act:null,does:'Per Oracle: monitors accounts and opportunities and recommends practical next steps (sales guidance and forecasting).',finding:'Forecast view: weighted bookings and backlog over the program horizon, with risks highlighted.',nba:'Publish the forecast and route variances for approval.'},
+      'account_360.html':{id:'AA',name:'Account Advisor',area:'Oracle Sales · 26B',act:null,does:'Per Oracle: summarizes account data, key contacts, subscriptions, invoices, and attached research or financial-disclosure documents.',finding:'Summarized the U.S. Coast Guard account across programs — contacts, contracts, invoices and attached research.',nba:'Prep the executive relationship summary for the next QBR.'}
+    };
+    function typeText(el,text){
+      if(typeTimer){clearInterval(typeTimer);typeTimer=null;}
+      el.textContent=''; var i=0;
+      typeTimer=setInterval(function(){
+        el.textContent=text.slice(0,++i);
+        if(i>=text.length){clearInterval(typeTimer);typeTimer=null;}
+      },12);
+    }
+    function renderAgent(url){
+      if(!railEl) return;
+      var a=AGENTS[url];
+      curAgent=a||null;
+      if(!a){ railEl.style.display='none'; return; }
+      railEl.style.display='';
+      var finding=a.finding.replace('{prog}',progLabel);
+      railEl.innerHTML='<div class="bx-agent"><div class="bx-agent-head"><span class="ava" style="background:'+(AGENT_COLORS[a.id]||'#534ab7')+'">'+a.id+'</span><div><div class="nm">'+a.name+'</div><div class="rl">'+a.area+'</div></div><span class="status" id="bx-agent-status"><span class="bx-dots"><i></i><i></i><i></i></span></span></div><div class="bx-agent-body"><div class="bx-agent-does">'+a.does+'</div><div class="bx-agent-find-l">On this account</div><div class="finding" id="bx-agent-find"></div><div class="bx-reveal" id="bx-agent-nba" style="display:none"><div class="nba-l">Next best action</div><div class="nba">'+a.nba+'</div><div class="bx-agent-acts"><button class="go" data-agent-act="go">Approve</button><button class="no" data-agent-act="no">Dismiss</button></div></div></div></div>';
+      var statusEl=document.getElementById('bx-agent-status');
+      var findEl=document.getElementById('bx-agent-find');
+      var nbaEl=document.getElementById('bx-agent-nba');
+      setTimeout(function(){ if(statusEl) statusEl.textContent='Analyzing'; },60);
+      setTimeout(function(){
+        if(findEl) typeText(findEl,finding);
+        if(statusEl) statusEl.textContent='Recommendation';
+        if(nbaEl){ nbaEl.style.display=''; requestAnimationFrame(function(){ nbaEl.classList.add('in'); }); }
+      },850);
+    }
+    if(railEl){
+      railEl.addEventListener('click',function(e){
+        var bt=e.target.closest('button[data-agent-act]'); if(!bt) return;
+        var statusEl=document.getElementById('bx-agent-status');
+        var nbaWrap=document.getElementById('bx-agent-nba');
+        if(bt.getAttribute('data-agent-act')==='go'){
+          if(curAgent && window.RWD){
+            try{
+              if(curAgent.act==='lead' && RWD.actLead) RWD.actLead(curAgent.name);
+              else if(curAgent.act==='oppty' && RWD.actOppty) RWD.actOppty(curAgent.name);
+            }catch(err){}
+          }
+          if(statusEl) statusEl.textContent='Done ✓';
+          if(nbaWrap) nbaWrap.innerHTML='<div class="nba-l">Executed</div><div class="nba">Action run inside guardrails · logged to the activity timeline.</div>';
+        } else {
+          if(statusEl) statusEl.textContent='Dismissed';
+          if(nbaWrap) nbaWrap.style.opacity='.4';
+        }
+      });
+    }
+    try{ if(window.RWD && RWD.loadScenario) RWD.loadScenario('bollinger'); }catch(e){}
+    var pendingY=null;
+    frame.addEventListener('load',function(){
+      if(pendingY==null) return;
+      var y=pendingY; pendingY=null;
+      var r=function(){window.scrollTo(0,y);};
+      r(); requestAnimationFrame(r); setTimeout(r,60); setTimeout(r,150);
     });
-    panel.scrollIntoView({behavior:'smooth',block:'start'});
+    var cur={url:'cx_lead.html',title:'Lead',step:'1'};
+    function load(url,title,step,fromNode,force){
+      var base=url.split('#')[0];
+      cur={url:base,title:title,step:step};
+      var newsrc=base+'?embed=1'+(force?('&r='+Date.now()):'');
+      var changed=force || frame.getAttribute('src')!==newsrc;
+      pendingY=((fromNode||force)&&changed)?window.scrollY:null;
+      if(changed) frame.setAttribute('src',newsrc);
+      fullEl.href=base;
+      titleEl.innerHTML=title||base;
+      if(step){stepEl.textContent='Step '+step;stepEl.style.display='';}else{stepEl.style.display='none';}
+      document.querySelectorAll('.bx-node').forEach(function(n){
+        n.classList.toggle('active', n.getAttribute('href').split('#')[0]===base);
+      });
+      renderAgent(base);
+      if(!fromNode && !force){
+        var rect=panel.getBoundingClientRect();
+        var visible=rect.top>=0 && rect.top < window.innerHeight*0.6;
+        if(!visible) panel.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    }
+    document.addEventListener('click',function(e){
+      var a=e.target.closest('a[data-embed]');
+      if(!a) return;
+      e.preventDefault();
+      load(a.getAttribute('href'), a.getAttribute('data-title'), a.getAttribute('data-step'), a.classList.contains('bx-node'));
+    });
+    var sw=document.getElementById('bx-progsw');
+    if(sw){
+      sw.addEventListener('click',function(e){
+        var btn=e.target.closest('button[data-prog]');
+        if(!btn) return;
+        sw.querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===btn);});
+        progLabel=btn.textContent.trim();
+        try{ if(window.RWD && RWD.loadScenario) RWD.loadScenario(btn.getAttribute('data-prog')); }catch(err){}
+        load(cur.url, cur.title, cur.step, true, true);
+      });
+    }
+    load('cx_lead.html','Lead','1', true);
   }
-  document.addEventListener('click',function(e){
-    var a=e.target.closest('a[data-embed]');
-    if(!a) return;
-    e.preventDefault();
-    load(a.getAttribute('href'), a.getAttribute('data-title'), a.getAttribute('data-step'));
-  });
-  var first=document.querySelector('.bx-node[data-step="1"]');
-  if(first) first.classList.add('active');
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
 </body>

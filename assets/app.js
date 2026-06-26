@@ -1,4 +1,12 @@
 (function () {
+  if (/[?&]embed=1(?:&|$)/.test(location.search)) {
+    try {
+      var _origFocus = HTMLElement.prototype.focus;
+      HTMLElement.prototype.focus = function (opts) {
+        return _origFocus.call(this, Object.assign({ preventScroll: true }, opts || {}));
+      };
+    } catch (e) { }
+  }
   const NAV_LINKS = [
     { href: '#', label: 'All Persona', group: 'persona', personaKey: 'all' },
     { href: '#', label: 'Sales Rep', group: 'persona', personaKey: 'rep' },
@@ -178,6 +186,30 @@
         { stage: 'Lead', event: 'Trade Show', detail: 'Met at Logistics World conference.' },
         { stage: 'Opportunity', event: 'Demo', detail: 'On-site demo of automation software.' },
         { stage: 'Pursuit', event: 'Contracting', detail: 'Finalizing MSA and SOW.' }
+      ]
+    },
+    bollinger: {
+      label: 'Bollinger — USCG Polar Security Cutter',
+      lead: { company: 'U.S. Coast Guard', contact: 'PSC Program Office', score: 86, status: 'Qualified', product: 'Polar Security Cutter (FPIF)', owner: 'Bollinger Capture Team' },
+      oppty: { name: 'USCG Polar Security Cutter — Vessels 2 & 3', amount: 1500000000, stage: 'Proposal' },
+      pursuit: { name: 'PSC Vessels 2 & 3 — Pursuit (Bid & Proposal)', estimate: 1500000000, status: 'Costing' },
+      project: { name: 'PSC Lead Vessel — Detail Design & Construction', budget: 951600000, status: 'Execution' },
+      storyline: [
+        { stage: 'Lead', event: 'RFP / Tender', detail: 'USCG solicitation for Polar Security Cutter follow-on vessels.' },
+        { stage: 'Opportunity', event: 'Capture', detail: 'Capture team shaping FPIF target-cost position with the program office.' },
+        { stage: 'Pursuit', event: 'B&P Costing', detail: 'PPM estimators loading icebreaker-class build estimate; pWin 0.71.' }
+      ]
+    },
+    bollinger_asc: {
+      label: 'Bollinger — USCG Arctic Security Cutter',
+      lead: { company: 'U.S. Coast Guard', contact: 'ASC Program Office', score: 82, status: 'Qualified', product: 'Arctic Security Cutter (medium icebreaker)', owner: 'Bollinger Capture Team' },
+      oppty: { name: 'USCG Arctic Security Cutter — 4 vessels', amount: 2000000000, stage: 'Capture' },
+      pursuit: { name: 'ASC Program — Pursuit (Bid & Proposal)', estimate: 2000000000, status: 'Draft' },
+      project: { name: 'ASC Vessel 1 — Detail Design & Construction', budget: 500000000, status: 'Planning' },
+      storyline: [
+        { stage: 'Lead', event: 'Contract Signed', detail: 'USCG contract for four Arctic Security Cutters (medium icebreakers).' },
+        { stage: 'Opportunity', event: 'Capture', detail: 'Follow-on options and long-lead material being positioned.' },
+        { stage: 'Pursuit', event: 'B&P Costing', detail: 'Estimators baselining the medium-icebreaker build.' }
       ]
     }
   };
