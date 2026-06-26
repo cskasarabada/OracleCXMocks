@@ -95,9 +95,9 @@
 <main class="oppty-shell">
   <section class="oppty-oracle-hero">
     <p class="eyebrow">Opportunity</p>
-    <h1 id="opptyHeroTitle">TT1 eea</h1>
+    <h1 id="opptyHeroTitle">USCG Polar Security Cutter — Vessels 2 &amp; 3</h1>
     <div class="meta-row">
-      <span class="pill">Account Warner Design Associates</span>
+      <span class="pill">Account U.S. Coast Guard</span>
       <span class="pill">Owner Chandra Kasarabada</span>
       <span class="pill">Stage Qualification</span>
       <span class="pill">ARR Target $1.2M</span>
@@ -197,23 +197,23 @@
       <div class="anchor-grid">
         <div class="anchor-card">
           <div class="label">Lead</div>
-          <div class="name">Skyline Renewables</div>
-          <p class="detail">Score 78 · GenAI nudges ready</p>
+          <div class="name">U.S. Coast Guard</div>
+          <p class="detail">Score 86 · GenAI nudges ready</p>
         </div>
         <div class="anchor-card">
           <div class="label">Opportunity</div>
-          <div class="name">Skyline Microgrid Modernization</div>
-          <p class="detail">$1,250,000 · DocuSign next</p>
+          <div class="name">USCG Polar Security Cutter</div>
+          <p class="detail">$1,500,000,000 · FPIF bid in progress</p>
         </div>
         <div class="anchor-card">
           <div class="label">Pursuit</div>
-          <div class="name">Skyline Microgrid Modernization - Pursuit</div>
+          <div class="name">USCG Polar Security Cutter - Pursuit</div>
           <p class="detail">Draft · OIC handoff in-flight</p>
         </div>
         <div class="anchor-card">
           <div class="label">Project</div>
-          <div class="name">Skyline Microgrid Modernization - Construction</div>
-          <p class="detail">$1,287,500 · Tracking burn vs. plan</p>
+          <div class="name">USCG Polar Security Cutter - Construction</div>
+          <p class="detail">$951,600,000 · Tracking burn vs. plan</p>
         </div>
       </div>
     </div>
@@ -269,7 +269,7 @@
   <section class="oppty-hero-slim">
     <div class="oppty-header-row">
       <div>
-        <h1 id="opptyHeroTitle">TT1 eea</h1>
+        <h1 id="opptyHeroTitle">USCG Polar Security Cutter — Vessels 2 &amp; 3</h1>
         <div class="hero-sub" id="opptyHeroSub">Account &bull; Primary Contact</div>
       </div>
       <div class="hero-actions">
@@ -290,8 +290,8 @@
     </div>
     <div class="oppty-info-strip">
       <span>Status Open</span>
-      <span>Win Probability 40%</span>
-      <span>Account Warner Design Associates Inc.</span>
+      <span>Win Probability 71%</span>
+      <span>Account U.S. Coast Guard</span>
       <span>Owner Chandra Kasarabada</span>
       <span>Opportunity #42048</span>
     </div>
@@ -458,7 +458,7 @@
     <h2 id="addOpptyTitle">Create Opportunity</h2>
     <form id="addOpptyForm" class="oppty-create-grid">
       <label>Opportunity Name
-        <input name="name" placeholder="Skyline Expansion" required>
+        <input name="name" placeholder="Polar Security Cutter" required>
       </label>
       <label>Account
         <input name="account" placeholder="Customer name">
@@ -850,12 +850,12 @@ function runOpptyAISummary(mode){
   var input=document.getElementById('opptyAiInput');
   var query=(input && input.value.trim())||'';
   var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
-  var opp=state.oppty || {name:'Sample Opportunity', account:'Warner Design', stage:'Qualification', amount:1200000};
+  var opp=state.oppty || {name:'USCG Polar Security Cutter — Vessels 2 & 3', account:'U.S. Coast Guard', stage:'Proposal', amount:1500000000};
   var msg='';
   if(mode==='risk'){
-    msg='Risks: approval pending for '+(opp.name||'deal')+', DocuSign stalled, and invoice aged 30 days. Recommend escalating pricing + partner review.';
+    msg='Risks: '+(opp.name||'this pursuit')+' faces FPIF target-cost pressure and long-lead material risk. Recommend early supplier commitments and a capture touchpoint with the program office.';
   }else if(mode==='action'){
-    msg='Smart Actions: Launch DocuSign for proposal, request executive approval, and push pursuit handoff to PPM.';
+    msg='Smart Actions: stand up the pursuit pre-project for B&P tracking, request estimators, and push the award handoff to PPM.';
   }else{
     msg='Summary: '+(opp.name||'Opportunity')+' with '+(opp.account||'customer')+' at '+(opp.stage||'Qualification')+' worth $'+Number(opp.amount||0).toLocaleString()+'. Next milestone is DocuSign + partner validation.';
   }
@@ -945,30 +945,30 @@ function escalateOppty(form){
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fafafa;">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
             <div style="width:40px;height:40px;border-radius:50%;background:#ff7a18;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">LO</div>
-            <div><div style="font-weight:700;font-size:14px;">Lena Ortiz</div><div style="font-size:12px;color:#64748b;">VP Operations · Primary</div></div>
+            <div><div style="font-weight:700;font-size:14px;">Capt. M. Halsey</div><div style="font-size:12px;color:#64748b;">PSC Program Manager · Primary</div></div>
           </div>
           <div style="font-size:12px;color:#475569;display:flex;flex-direction:column;gap:4px;">
-            <span>📧 lena.ortiz@skyline.com</span><span>📞 +1 (512) 440-2211</span>
+            <span>📧 m.halsey@uscg.mil</span><span>📞 +1 (512) 440-2211</span>
             <span style="margin-top:6px;"><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Decision Maker</span></span>
           </div>
         </div>
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fafafa;">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
             <div style="width:40px;height:40px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">MR</div>
-            <div><div style="font-weight:700;font-size:14px;">Marcus Reid</div><div style="font-size:12px;color:#64748b;">CTO · Technical Evaluator</div></div>
+            <div><div style="font-weight:700;font-size:14px;">Cmdr. T. Alvarez</div><div style="font-size:12px;color:#64748b;">Naval Engineering Lead · Evaluator</div></div>
           </div>
           <div style="font-size:12px;color:#475569;display:flex;flex-direction:column;gap:4px;">
-            <span>📧 m.reid@skyline.com</span><span>📞 +1 (512) 440-2298</span>
+            <span>📧 t.alvarez@uscg.mil</span><span>📞 +1 (512) 440-2298</span>
             <span style="margin-top:6px;"><span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Influencer</span></span>
           </div>
         </div>
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fafafa;">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
             <div style="width:40px;height:40px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">SC</div>
-            <div><div style="font-weight:700;font-size:14px;">Sara Chen</div><div style="font-size:12px;color:#64748b;">CFO · Budget Authority</div></div>
+            <div><div style="font-weight:700;font-size:14px;">K. Doyle</div><div style="font-size:12px;color:#64748b;">Contracting Officer · Budget Authority</div></div>
           </div>
           <div style="font-size:12px;color:#475569;display:flex;flex-direction:column;gap:4px;">
-            <span>📧 s.chen@skyline.com</span><span>📞 +1 (512) 440-2305</span>
+            <span>📧 k.doyle@uscg.mil</span><span>📞 +1 (512) 440-2305</span>
             <span style="margin-top:6px;"><span style="background:#fdf4ff;color:#7c3aed;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Economic Buyer</span></span>
           </div>
         </div>
@@ -991,16 +991,16 @@ function escalateOppty(form){
         </tr></thead>
         <tbody>
           <tr style="border-bottom:1px solid var(--rw-border,#e2e8f0);">
-            <td style="padding:10px 12px;font-weight:700;">Chandra Kasarabada</td><td style="padding:10px 12px;color:#64748b;">Primary Owner · SA</td><td style="padding:10px 12px;">Central Region</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$2.4M</td><td style="padding:10px 12px;"><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Full</span></td>
+            <td style="padding:10px 12px;font-weight:700;">Chandra Kasarabada</td><td style="padding:10px 12px;color:#64748b;">Primary Owner · SA</td><td style="padding:10px 12px;">Government — Maritime</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$2.4M</td><td style="padding:10px 12px;"><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Full</span></td>
           </tr>
           <tr style="border-bottom:1px solid var(--rw-border,#e2e8f0);">
-            <td style="padding:10px 12px;font-weight:700;">Priya Nair</td><td style="padding:10px 12px;color:#64748b;">BDR</td><td style="padding:10px 12px;">Central Region</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$800K</td><td style="padding:10px 12px;"><span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Edit</span></td>
+            <td style="padding:10px 12px;font-weight:700;">Priya Nair</td><td style="padding:10px 12px;color:#64748b;">BDR</td><td style="padding:10px 12px;">Government — Maritime</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$800K</td><td style="padding:10px 12px;"><span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Edit</span></td>
           </tr>
           <tr style="border-bottom:1px solid var(--rw-border,#e2e8f0);">
             <td style="padding:10px 12px;font-weight:700;">James Whitfield</td><td style="padding:10px 12px;color:#64748b;">Overlay · CPQ</td><td style="padding:10px 12px;">National</td><td style="padding:10px 12px;color:#64748b;">—</td><td style="padding:10px 12px;"><span style="background:#f5f5f5;color:#64748b;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Read</span></td>
           </tr>
           <tr>
-            <td style="padding:10px 12px;font-weight:700;">Dana Park</td><td style="padding:10px 12px;color:#64748b;">Sales Manager</td><td style="padding:10px 12px;">Central Region</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$12M</td><td style="padding:10px 12px;"><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Full</span></td>
+            <td style="padding:10px 12px;font-weight:700;">Dana Park</td><td style="padding:10px 12px;color:#64748b;">Sales Manager</td><td style="padding:10px 12px;">Government — Maritime</td><td style="padding:10px 12px;color:#16a34a;font-weight:700;">$12M</td><td style="padding:10px 12px;"><span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;">Full</span></td>
           </tr>
         </tbody>
       </table>
@@ -1024,8 +1024,8 @@ function escalateOppty(form){
           <div style="width:48px;height:48px;border-radius:12px;background:#ff7a18;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;">SR</div>
           <div style="flex:1;">
             <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#ff7a18;margin-bottom:2px;">CX Account: Company (Parent)</div>
-            <div style="font-size:1.1rem;font-weight:800;color:#0f172a;" id="hierParentName">Skyline Renewables Inc.</div>
-            <div style="font-size:12px;color:#64748b;margin-top:2px;">HQ: 245 Renewable Way, Austin TX · Industry: Clean Energy · <strong style="color:#16a34a;">Strategic Account</strong></div>
+            <div style="font-size:1.1rem;font-weight:800;color:#0f172a;" id="hierParentName">U.S. Coast Guard</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">HQ: 2703 Martin Luther King Jr Ave SE, Washington DC · Sector: Government / Defense · <strong style="color:#16a34a;">Strategic Account</strong></div>
           </div>
           <div style="display:flex;gap:16px;text-align:center;">
             <div><div style="font-size:1.4rem;font-weight:800;color:#ff7a18;">3</div><div style="font-size:11px;color:#64748b;">Sites</div></div>
@@ -1045,8 +1045,8 @@ function escalateOppty(form){
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fff;position:relative;box-shadow:0 6px 16px rgba(15,23,42,.06);">
           <div style="position:absolute;top:12px;right:12px;background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 10px;font-size:10px;font-weight:700;">This Opportunity</div>
           <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:6px;">CX Account: Site</div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">Skyline — Austin Main Campus</div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">925 Solar Blvd, Austin TX 78701</div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">USCG — Surface Forces Logistics Center</div>
+          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">2401 Hawkins Point Rd, Baltimore MD</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#ff7a18;">2</div><div style="font-size:10px;color:#64748b;">Leads</div></div>
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#ff7a18;">1</div><div style="font-size:10px;color:#64748b;">Opportunity</div></div>
@@ -1055,15 +1055,15 @@ function escalateOppty(form){
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#0f172a;">3</div><div style="font-size:10px;color:#64748b;">Contacts</div></div>
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#0f172a;">8</div><div style="font-size:10px;color:#64748b;">Activities</div></div>
-            <div style="background:#fff3e0;border-radius:10px;padding:8px;text-align:center;cursor:pointer;" onclick="if(typeof showToast==='function')showToast('Site Profile: Austin Main Campus')"><div style="font-size:10px;font-weight:700;color:#ff7a18;">Site</div><div style="font-size:10px;color:#ff7a18;">Profile</div></div>
+            <div style="background:#fff3e0;border-radius:10px;padding:8px;text-align:center;cursor:pointer;" onclick="if(typeof showToast==='function')showToast('Site Profile: Surface Forces Logistics Center')"><div style="font-size:10px;font-weight:700;color:#ff7a18;">Site</div><div style="font-size:10px;color:#ff7a18;">Profile</div></div>
           </div>
         </div>
 
         <!-- Site 2 -->
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fff;box-shadow:0 6px 16px rgba(15,23,42,.06);">
           <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:6px;">CX Account: Site</div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">Skyline — San Antonio Facility</div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">2998 Energy Park Dr, San Antonio TX</div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">USCG — Base Seattle (PSC homeport)</div>
+          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">1519 Alaskan Way S, Seattle WA</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#64748b;">1</div><div style="font-size:10px;color:#64748b;">Leads</div></div>
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#64748b;">0</div><div style="font-size:10px;color:#64748b;">Opportunity</div></div>
@@ -1079,8 +1079,8 @@ function escalateOppty(form){
         <!-- Site 3 -->
         <div style="border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;padding:16px;background:#fff;box-shadow:0 6px 16px rgba(15,23,42,.06);">
           <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64748b;margin-bottom:6px;">CX Account: Site</div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">Skyline — Dallas Distribution</div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">1100 Commerce Pkwy, Dallas TX 75201</div>
+          <div style="font-weight:700;font-size:14px;margin-bottom:2px;">USCG — Coast Guard Yard</div>
+          <div style="font-size:12px;color:#64748b;margin-bottom:14px;">Curtis Bay, Baltimore MD</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#64748b;">0</div><div style="font-size:10px;color:#64748b;">Leads</div></div>
             <div style="background:#f8fafc;border-radius:10px;padding:8px;text-align:center;"><div style="font-size:1.1rem;font-weight:800;color:#64748b;">1</div><div style="font-size:10px;color:#64748b;">Opportunity</div></div>
@@ -1104,32 +1104,32 @@ function escalateOppty(form){
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <h3 style="font-size:1rem;margin:0;">Activity Timeline</h3>
         <div style="display:flex;gap:8px;">
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Call','Discovery call logged — pricing discussion with Marcus Reid')">+ Log Call</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Email','Follow-up email sent with revised SOW and timeline')">+ Email</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Meeting','Stakeholder alignment meeting scheduled for Nov 1')">+ Meeting</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Task','Task: Prepare TCO analysis · Due Nov 5')">+ Task</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Call','Capture call logged — FPIF target-cost discussion with the program office')">+ Log Call</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Email','Capture brief sent with past-performance and program schedule')">+ Email</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Meeting','Bid/no-bid review scheduled with capture and estimating')">+ Meeting</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addOpptyActivity('Task','Task: Stand up pursuit pre-project (B&P) · Due Jun 27')">+ Task</button>
         </div>
       </div>
       <div id="oppty-activity-feed" style="display:flex;flex-direction:column;gap:10px;">
         <!-- Seeded activities -->
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📞</div>
-          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Discovery Call · 30 min</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Discussed scope and pricing with Lena Ortiz. Confirmed budget authority. Next: send revised proposal deck.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 18 · Chandra Kasarabada</div></div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Capture Call · 30 min</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Discussed FPIF scope and target cost with the PSC program office. Confirmed evaluation criteria. Next: refresh win themes.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 18 · Chandra Kasarabada</div></div>
           <span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Call</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✉️</div>
-          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Email: Proposal Deck Sent</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Sent 42-slide Oracle CX proposal with TCO model and implementation timeline. Opened 3x by Lena and Marcus.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 15 · Chandra Kasarabada</div></div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Email: Capture Brief Sent</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Sent past-performance summary and program schedule to the program office. Forwarded internally.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 15 · Chandra Kasarabada</div></div>
           <span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Email</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#fdf4ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📅</div>
-          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Stakeholder Alignment Meeting</div><div style="font-size:12px;color:#64748b;margin-top:2px;">2-hour workshop with Lena, Marcus, and Sara Chen. Agreed on phased rollout — Sales Cloud first, CPQ in Phase 2.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 12 · Chandra Kasarabada · 3 attendees</div></div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Bid / No-Bid Review</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Bid/no-bid review with capture, estimating and the PMO. Assessed pWin and FPIF risk — decision: pursue PSC vessels 2 & 3.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 12 · Chandra Kasarabada · 3 attendees</div></div>
           <span style="background:#fdf4ff;color:#7c3aed;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Meeting</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✅</div>
-          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Task: Prepare TCO Analysis</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Build 3-year TCO model comparing Oracle CX vs. current state. Include license, implementation, and support costs.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 10 · Due: Oct 20 · Chandra Kasarabada</div></div>
+          <div style="flex:1;"><div style="font-weight:600;font-size:13px;color:#0f172a;">Task: Stand up Pursuit Pre-Project (B&P)</div><div style="font-size:12px;color:#64748b;margin-top:2px;">Create the cost-only pursuit project to capture bid & proposal and estimating effort; request two estimators and baseline the build estimate.</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;">Oct 10 · Due: Oct 20 · Chandra Kasarabada</div></div>
           <span style="background:#fff3e0;color:#b45309;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Task</span>
         </div>
       </div>

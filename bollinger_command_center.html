@@ -87,9 +87,8 @@
 
 .bx-progsw{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
 .bx-progsw .lbl{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#6b7280;margin-right:2px;}
-.bx-progsw button{background:#fff;border:1px solid rgba(27,38,56,.16);color:#1b2638;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
-.bx-progsw button:hover{border-color:#2E5E8C;}
-.bx-progsw button.active{background:#12233B;border-color:#12233B;color:#fff;}
+.bx-progsw select{background:#fff;border:1px solid rgba(27,38,56,.18);color:#12233B;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer;min-width:280px;}
+.bx-progsw select:hover{border-color:#2E5E8C;}
 .bx-pathwrap{background:#fff;border:1px solid rgba(27,38,56,.1);border-radius:18px;box-shadow:0 14px 26px rgba(15,23,42,.07);padding:16px 18px;margin-bottom:18px;}
 .bx-path-h{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;font-weight:700;margin-bottom:12px;}
 .bx-path{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;}
@@ -184,9 +183,22 @@
   </section>
 
   <div class="bx-progsw" id="bx-progsw">
-    <span class="lbl">Demo program</span>
-    <button data-prog="bollinger" class="active">Polar Security Cutter</button>
-    <button data-prog="bollinger_asc">Arctic Security Cutter</button>
+    <span class="lbl">Scenario · flows Lead &rarr; Construction</span>
+    <select id="bx-scenario" aria-label="Bollinger program scenario">
+      <optgroup label="U.S. Coast Guard">
+        <option value="bollinger">Polar Security Cutter (FPIF)</option>
+        <option value="bollinger_asc">Arctic Security Cutter</option>
+        <option value="bollinger_frc">Fast Response Cutter — follow-on</option>
+      </optgroup>
+      <optgroup label="U.S. Navy">
+        <option value="bollinger_tats">Towing, Salvage &amp; Rescue Ship (T-ATS)</option>
+        <option value="bollinger_tags">Oceanographic Survey Ship (T-AGS 67)</option>
+      </optgroup>
+      <optgroup label="NSF / Commercial">
+        <option value="bollinger_rcrv">Regional Class Research Vessel (NSF)</option>
+        <option value="bollinger_commercial">Commercial Gulf OSV + Repair</option>
+      </optgroup>
+    </select>
   </div>
 
   <div class="bx-pathwrap">
@@ -426,7 +438,7 @@
       var changed=force || frame.getAttribute('src')!==newsrc;
       pendingY=((fromNode||force)&&changed)?window.scrollY:null;
       if(changed) frame.setAttribute('src',newsrc);
-      fullEl.href=base;
+      fullEl.href=base+'?embed=1';
       titleEl.innerHTML=title||base;
       if(step){stepEl.textContent='Step '+step;stepEl.style.display='';}else{stepEl.style.display='none';}
       document.querySelectorAll('.bx-node').forEach(function(n){
@@ -445,14 +457,13 @@
       e.preventDefault();
       load(a.getAttribute('href'), a.getAttribute('data-title'), a.getAttribute('data-step'), a.classList.contains('bx-node'));
     });
-    var sw=document.getElementById('bx-progsw');
-    if(sw){
-      sw.addEventListener('click',function(e){
-        var btn=e.target.closest('button[data-prog]');
-        if(!btn) return;
-        sw.querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===btn);});
-        progLabel=btn.textContent.trim();
-        try{ if(window.RWD && RWD.loadScenario) RWD.loadScenario(btn.getAttribute('data-prog')); }catch(err){}
+    var PROG_NAMES={bollinger:'Polar Security Cutter',bollinger_asc:'Arctic Security Cutter',bollinger_frc:'Fast Response Cutter',bollinger_tats:'T-ATS Salvage Ship',bollinger_tags:'T-AGS Survey Ship',bollinger_rcrv:'Regional Class Research Vessel',bollinger_commercial:'Commercial Gulf OSV'};
+    var sel=document.getElementById('bx-scenario');
+    if(sel){
+      sel.addEventListener('change',function(){
+        var key=sel.value;
+        progLabel=PROG_NAMES[key]||(sel.options[sel.selectedIndex]||{}).text||'this program';
+        try{ if(window.RWD && RWD.loadScenario) RWD.loadScenario(key); }catch(err){}
         load(cur.url, cur.title, cur.step, true, true);
       });
     }

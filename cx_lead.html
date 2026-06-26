@@ -200,45 +200,53 @@
       <aside class="lead-sidebar">
         <h3>Select Scenario</h3>
         <ul class="lead-selector-list">
-          <li class="lead-selector-item" onclick="RWD.loadScenario('skyline'); window.location.reload()">
-            <span class="company">Skyline Renewables</span>
-            <span class="detail">Microgrid Expansion</span>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger'); window.location.reload()">
+            <span class="company">U.S. Coast Guard</span>
+            <span class="detail">Polar Security Cutter (FPIF)</span>
           </li>
-          <li class="lead-selector-item" onclick="RWD.loadScenario('apex'); window.location.reload()">
-            <span class="company">Apex Healthcare</span>
-            <span class="detail">Hospital Wing</span>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_asc'); window.location.reload()">
+            <span class="company">U.S. Coast Guard</span>
+            <span class="detail">Arctic Security Cutter</span>
           </li>
-          <li class="lead-selector-item" onclick="RWD.loadScenario('metro'); window.location.reload()">
-            <span class="company">Metro City Rail</span>
-            <span class="detail">Signaling Upgrade</span>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_frc'); window.location.reload()">
+            <span class="company">U.S. Coast Guard</span>
+            <span class="detail">Fast Response Cutter — follow-on</span>
           </li>
-          <li class="lead-selector-item" onclick="RWD.loadScenario('global'); window.location.reload()">
-            <span class="company">Global Data Systems</span>
-            <span class="detail">HQ Cooling</span>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_tats'); window.location.reload()">
+            <span class="company">U.S. Navy</span>
+            <span class="detail">Towing, Salvage &amp; Rescue Ship (T-ATS)</span>
           </li>
-          <li class="lead-selector-item" onclick="RWD.loadScenario('oceanic'); window.location.reload()">
-            <span class="company">Oceanic Logistics</span>
-            <span class="detail">Port Automation</span>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_tags'); window.location.reload()">
+            <span class="company">U.S. Navy</span>
+            <span class="detail">Oceanographic Survey Ship (T-AGS 67)</span>
+          </li>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_rcrv'); window.location.reload()">
+            <span class="company">National Science Foundation</span>
+            <span class="detail">Regional Class Research Vessel</span>
+          </li>
+          <li class="lead-selector-item" onclick="RWD.loadScenario('bollinger_commercial'); window.location.reload()">
+            <span class="company">Gulf Marine Operator</span>
+            <span class="detail">Commercial OSV + Repair</span>
           </li>
         </ul>
       </aside>
       <div class="lead-content">
         <section class="lead-oracle-hero">
           <p class="eyebrow">My Open Leads</p>
-            <h1 id="leadHeroTitle">Skyline Renewables - Microgrid Expansion</h1>
+            <h1 id="leadHeroTitle">U.S. Coast Guard - Polar Security Cutter</h1>
           <div class="meta-row">
             <span class="badge status">Qualified</span>
-              <span class="pill" id="leadHeroAccount">Account Skyline Renewables</span>
+              <span class="pill" id="leadHeroAccount">Account U.S. Coast Guard</span>
             <span class="pill">Owner Chandra Kasarabada</span>
-            <span class="badge score">AI Score 78</span>
+            <span class="badge score">AI Qualified</span>
           </div>
           <div class="hero-details">
-            <div>Primary Contact <strong id="leadHeroContact">Ava Nguyen (CIO) &middot; +1 (415) 555-2244</strong></div>
-            <div>Product Interest <strong id="leadHeroProduct">Microgrid Modernization</strong></div>
-            <div>Territory <strong id="leadHeroTerritory">Southwest Region — Utilities &amp; Energy</strong></div>
-            <div>Quota Assignment <strong id="leadHeroQuota">$2,400,000 Annual · 41% Attainment YTD</strong></div>
-            <div>Lead Source <strong id="leadHeroSource">Marketing Campaign — Q1 Utility Summit</strong></div>
-            <div>Industry &amp; Rating <strong id="leadHeroIndustry">Energy &amp; Utilities · <span style="color:#f59e0b;font-weight:700;">★ Hot</span></strong></div>
+            <div>Primary Contact <strong id="leadHeroContact">PSC Program Office &middot; +1 (202) 372-4411</strong></div>
+            <div>Product Interest <strong id="leadHeroProduct">Polar Security Cutter (FPIF)</strong></div>
+            <div>Territory <strong id="leadHeroTerritory">Government — U.S. Coast Guard</strong></div>
+            <div>Contract Vehicle <strong id="leadHeroQuota">Fixed-Price-Incentive (FPIF) · Detail Design &amp; Construction</strong></div>
+            <div>Lead Source <strong id="leadHeroSource">Federal solicitation — SAM.gov RFP</strong></div>
+            <div>Sector &amp; Priority <strong id="leadHeroIndustry">Government / Defense Shipbuilding · <span style="color:#f59e0b;font-weight:700;">★ Strategic</span></strong></div>
           </div>
           <div class="hero-search">
             <input type="search" placeholder="Ask Oracle GenAI to summarize this lead" id="leadAiInput" />
@@ -248,33 +256,33 @@
           <div class="lead-search-results" id="leadSearchResults" aria-live="polite" aria-atomic="true" hidden></div>
           <div class="lead-summary-grid">
             <div class="lead-summary-card">
-              <div class="label">Opportunity Value</div>
-              <div class="value" id="leadHeroValue">$1,250,000</div>
-              <p>Includes grid upgrade and resiliency package.</p>
+              <div class="label">Program Value</div>
+              <div class="value" id="leadHeroValue">$1,500,000,000</div>
+              <p>Total multi-year program value (FPIF).</p>
             </div>
             <div class="lead-summary-card">
-              <div class="label">Activities Due</div><div class="value" id="leadHeroActivities">2</div>
-              <p>Discovery workshop and pricing review.</p>
+              <div class="label">Capture Activities Due</div><div class="value" id="leadHeroActivities">2</div>
+              <p>Program-office sync and bid/no-bid review.</p>
             </div>
             <div class="lead-summary-card">
               <div class="label">Last Touch</div>
-              <div class="value" id="leadHeroTouch">Oct 18</div>
-              <p>Email follow-up sent; waiting on scope signoff.</p>
+              <div class="value" id="leadHeroTouch">Jun 22</div>
+              <p>Program-office sync; awaiting RFP amendment.</p>
             </div>
             <div class="lead-summary-card" style="border-left:3px solid #ff7a18;">
               <div class="label">AI Lead Score</div>
-              <div class="value" style="color:#ff7a18;" id="leadHeroScore">78 / 100</div>
-              <p>High intent · Fit: Strong · Engagement: Active</p>
+              <div class="value" style="color:#ff7a18;" id="leadHeroScore">86 / 100</div>
+              <p>High intent · Fit: Strong · Capture: Active</p>
             </div>
             <div class="lead-summary-card" style="border-left:3px solid #0ea5e9;">
-              <div class="label">Territory</div>
-              <div class="value" style="font-size:1rem;" id="leadHeroTerritoryCard">Southwest</div>
-              <p>Quota: $2.4M · Attainment: 41% YTD</p>
+              <div class="label">Customer</div>
+              <div class="value" style="font-size:1rem;" id="leadHeroTerritoryCard">U.S. Coast Guard</div>
+              <p>Multi-year program · milestone-billed</p>
             </div>
             <div class="lead-summary-card" style="border-left:3px solid #10b981;">
-              <div class="label">Campaign Source</div>
-              <div class="value" style="font-size:0.9rem;">Q1 Utility Summit</div>
-              <p>Marketing qualified · Routed May 3</p>
+              <div class="label">Source</div>
+              <div class="value" style="font-size:0.9rem;">SAM.gov RFP</div>
+              <p>Capture-qualified · Routed via BD</p>
             </div>
           </div>
         </section>
@@ -557,7 +565,7 @@
           <label>Owner<input name="owner" placeholder="Chandra Kasarabada"></label>
           <label>Due Date<input type="date" name="dueDate"></label>
           <label>Notes<textarea name="taskNotes" rows="3"
-              placeholder="Include sustainability benchmarks"></textarea></label>
+              placeholder="Include past-performance and program context"></textarea></label>
           <div class="dialog-actions">
             <button type="button" class="ghost-btn" onclick="closeLeadAction()">Cancel</button>
             <button type="submit" class="btn primary">Create Task</button>
@@ -607,7 +615,7 @@
         <form class="lead-action-form" data-action-form="Create Pursuit" onsubmit="return submitLeadAction(event)"
           style="display:none">
           <p class="muted">Send the qualified lead to PPM Pursuit via OIC.</p>
-          <label>Pursuit Name<input name="pursuitName" placeholder="Skyline Renewables Pursuit" required></label>
+          <label>Pursuit Name<input name="pursuitName" placeholder="U.S. Coast Guard Pursuit" required></label>
           <label>Est. Budget<input name="pursuitBudget" type="number" step="1000" placeholder="750000"></label>
           <label>Notes<textarea name="pursuitNotes" rows="3"
               placeholder="Kickoff with pre-sales estimate + attach SOW draft."></textarea></label>
@@ -672,15 +680,17 @@
     function getLeadState() {
         var fallback = {
           lead: {
-            company: 'Skyline Renewables',
-            name: 'Skyline Renewables - Microgrid Expansion',
-            contact: 'Ava Nguyen (CIO)',
-            contactPhone: '+1 (415) 555-2244',
-            product: 'Microgrid Modernization',
+            company: 'U.S. Coast Guard',
+            name: 'U.S. Coast Guard - Polar Security Cutter',
+            contact: 'PSC Program Office',
+            contactPhone: '+1 (202) 372-4411',
+            product: 'Polar Security Cutter (FPIF)',
             status: 'Qualified',
-            amount: 1250000,
+            score: 86,
+            territory: 'Government — U.S. Coast Guard',
+            amount: 1500000000,
             activities: [
-              { ts: new Date().toLocaleString(), type: 'Email', text: 'Sent scope recap and pricing guardrails', who: 'Sales' }
+              { ts: new Date().toLocaleString(), type: 'Email', text: 'Sent capture brief and past-performance summary to the program office', who: 'Capture' }
             ]
           },
           timeline: [],
@@ -878,10 +888,10 @@
 
     function sampleLeadData() {
       return [
-        { company: '1818 Investments', name: 'South Campus Refresh', contact: 'Ravi Patel', owner: 'Chandra Kasarabada', leadStatus: 'Working', opportunity: '1818 Campus Refresh', opportunityStage: 'Qualification', amount: 985000, pursuitStatus: 'Draft', project: '1818 Campus Delivery', projectStatus: 'Planning' },
-        { company: 'Village of Fox Crossing', name: 'Fox Crossing Expansion', contact: 'Maria Davis', owner: 'Subash Nagarajan', leadStatus: 'Qualified', opportunity: 'Fox Crossing Utility Upgrade', opportunityStage: 'Evaluation', amount: 1340000, pursuitStatus: 'Costing', project: 'Fox Crossing Delivery', projectStatus: 'Planning' },
-        { company: 'Warner Design Associates Inc.', name: 'Warner Mixed Use', contact: 'Priya Shah', owner: 'Chandra Kasarabada', leadStatus: 'Qualified', opportunity: 'Warner Mixed Use Redevelopment', opportunityStage: 'Proposal', amount: 980000, pursuitStatus: 'Submitted', project: 'Warner Redevelopment Build', projectStatus: 'Planning' },
-        { company: 'Excel Engineering Inc.', name: 'Excel Modernization', contact: 'Derrick Owens', owner: 'Subash Nagarajan', leadStatus: 'New', opportunity: 'Excel Modernization CX', opportunityStage: 'Qualification', amount: 720000, pursuitStatus: 'Draft', project: 'Excel CX Delivery', projectStatus: 'Planning' }
+        { company: 'U.S. Coast Guard', name: 'Polar Security Cutter — Vessels 2 & 3', contact: 'PSC Program Office', owner: 'Chandra Kasarabada', leadStatus: 'Qualified', opportunity: 'USCG Polar Security Cutter — Vessels 2 & 3', opportunityStage: 'Proposal', amount: 1500000000, pursuitStatus: 'Costing', project: 'PSC Lead Vessel — DD&C', projectStatus: 'Execution' },
+        { company: 'U.S. Coast Guard', name: 'Arctic Security Cutter — 4 vessels', contact: 'ASC Program Office', owner: 'Chandra Kasarabada', leadStatus: 'Qualified', opportunity: 'USCG Arctic Security Cutter — 4 vessels', opportunityStage: 'Qualification', amount: 2000000000, pursuitStatus: 'Draft', project: 'ASC Vessel 1 — DD&C', projectStatus: 'Planning' },
+        { company: 'U.S. Navy', name: 'Towing, Salvage & Rescue Ship (T-ATS)', contact: 'PEO Ships / SUPSHIP', owner: 'Subash Nagarajan', leadStatus: 'Qualified', opportunity: 'USN T-ATS — follow ships', opportunityStage: 'Proposal', amount: 600000000, pursuitStatus: 'Costing', project: 'T-ATS Hull — DD&C', projectStatus: 'Execution' },
+        { company: 'National Science Foundation', name: 'Regional Class Research Vessel', contact: 'RCRV Program Office', owner: 'Subash Nagarajan', leadStatus: 'New', opportunity: 'NSF Regional Class Research Vessels (3)', opportunityStage: 'Qualification', amount: 365000000, pursuitStatus: 'Draft', project: 'RCRV Vessel 3 — Construction', projectStatus: 'Planning' }
       ];
     }
 
@@ -1109,11 +1119,11 @@
       var lead = state.lead || { company: 'Sample Lead', contact: 'Bob Flanders' };
       var msg = '';
       if (mode === 'risk') {
-        msg = 'Risks: ' + lead.company + ' has a critical SR open and invoice $62K overdue. Recommend proactive outreach to ' + (lead.contact || 'decision maker') + ' and involve Customer Success.';
+        msg = 'Risks: ' + lead.company + ' program carries schedule and FPIF target-cost pressure, with long-lead material on the critical path. Recommend early alignment with ' + (lead.contact || 'the program office') + ' and securing supplier commitments.';
       } else if (mode === 'action') {
-        msg = 'Smart Actions: schedule executive intro, push Quick Quote for Solar upgrade, and trigger DocuSign once pricing approvals land.';
+        msg = 'Smart Actions: schedule a capture touchpoint with the program office, stand up the pursuit pre-project for B&P tracking, and refresh win themes ahead of the RFP amendment.';
       } else {
-        msg = 'Summary: ' + lead.company + ' is in ' + (lead.status || 'Qualified') + ' with potential $' + (lead.amount || '128,200') + '. Key contact ' + (lead.contact || 'Ravi Patel') + ' requested value proof and is ready for a discovery workshop.';
+        msg = 'Summary: ' + lead.company + ' — ' + (lead.product || 'program') + ' is ' + (lead.status || 'Qualified') + ' with an estimated $' + (lead.amount ? Number(lead.amount).toLocaleString() : '1,500,000,000') + ' program value. Primary contact ' + (lead.contact || 'the program office') + '; capture is active ahead of the formal solicitation.';
       }
       target.textContent = msg;
       var panel = document.getElementById('leadSearchResults');
@@ -1138,10 +1148,10 @@
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <h3 style="font-size:1rem;margin:0;color:#0f172a;">Activity Timeline</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Call','Qualification call with Ravi Patel — confirmed decision timeline and budget range')">+ Log Call</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Email','Follow-up email sent to Lena Ortiz with Oracle CX overview deck attached')">+ Email</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Meeting','Discovery workshop scheduled for two-hour deep dive with stakeholder team')">+ Meeting</button>
-          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Task','Task: Prepare Value Engineering document · Due in 5 days')">+ Task</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Call','Capture call with the PSC program office — confirmed RFP timeline and evaluation criteria')">+ Log Call</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Email','Sent capture brief and past-performance summary to the program office')">+ Email</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Meeting','Bid/no-bid review scheduled with capture and estimating leads')">+ Meeting</button>
+          <button class="btn" style="font-size:12px;padding:6px 14px;" onclick="addLeadActivity('Task','Task: Stand up pursuit pre-project for B&P cost tracking · Due in 5 days')">+ Task</button>
         </div>
       </div>
       <div id="lead-activity-feed" style="display:flex;flex-direction:column;gap:10px;">
@@ -1149,36 +1159,36 @@
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📞</div>
           <div style="flex:1;">
-            <div style="font-weight:600;font-size:13px;color:#0f172a;">Qualification Call · 45 min</div>
-            <div style="font-size:12px;color:#64748b;margin-top:2px;">Connected with Ravi Patel (IT Director). Confirmed active CRM evaluation, decision window Q1, and budget pre-approved at $180K+. Next: send tailored Oracle CX overview and schedule demo.</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">May 12 · Chandra Kasarabada</div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">Capture Call · 45 min</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">Connected with the USCG Polar Security Cutter program office. Confirmed the RFP amendment timeline, FPIF target-cost expectations, and evaluation criteria. Next: refresh win themes and align teaming partners.</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Jun 20 · Chandra Kasarabada</div>
           </div>
           <span style="background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Call</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✉️</div>
           <div style="flex:1;">
-            <div style="font-weight:600;font-size:13px;color:#0f172a;">Email: Oracle CX Overview Sent to Lena Ortiz</div>
-            <div style="font-size:12px;color:#64748b;margin-top:2px;">Sent 18-slide Oracle Sales Cloud + CPQ overview. Highlighted AI-driven Next Best Action, real-time forecasting, and seamless CPQ integration. Opened 4× by Lena and forwarded internally.</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">May 10 · Chandra Kasarabada</div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">Email: Capture Brief Sent to PSC Program Office</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">Sent past-performance summary (PSC lead vessel, Fast Response Cutter program) and an Oracle CX → Projects overview. Highlighted disciplined capture, B&P cost visibility, and program execution insight. Forwarded internally.</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Jun 18 · Chandra Kasarabada</div>
           </div>
           <span style="background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Email</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#fdf4ff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📅</div>
           <div style="flex:1;">
-            <div style="font-weight:600;font-size:13px;color:#0f172a;">Discovery Workshop — 2 hrs</div>
-            <div style="font-size:12px;color:#64748b;margin-top:2px;">Ran structured discovery with Lena Ortiz, Ravi Patel, and CFO Dana Marsh. Mapped current-state pain points: manual quoting, no forecasting visibility, fragmented customer data across three systems. Future-state whiteboard completed.</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">May 7 · Chandra Kasarabada · 3 attendees</div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">Bid / No-Bid Review — 2 hrs</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">Ran the bid/no-bid with capture, estimating, and the PMO. Assessed pWin, yard capacity across concurrent programs, and FPIF target-cost risk. Decision: pursue PSC vessels 2 &amp; 3.</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Jun 15 · Chandra Kasarabada · 3 attendees</div>
           </div>
           <span style="background:#fdf4ff;color:#7c3aed;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Meeting</span>
         </div>
         <div class="activity-entry" style="display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border:1px solid var(--rw-border,#e2e8f0);border-radius:14px;background:#fff;">
           <div style="width:36px;height:36px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✅</div>
           <div style="flex:1;">
-            <div style="font-weight:600;font-size:13px;color:#0f172a;">Task: Prepare Value Engineering Document</div>
-            <div style="font-size:12px;color:#64748b;margin-top:2px;">Build 3-year ROI model: quantify time savings from automated quoting, pipeline velocity improvement, and rep productivity gain. Include comparable customer win metrics from similar-sized manufacturing verticals.</div>
-            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">May 5 · Due: May 20 · Chandra Kasarabada</div>
+            <div style="font-weight:600;font-size:13px;color:#0f172a;">Task: Stand up Pursuit Pre-Project (B&amp;P)</div>
+            <div style="font-size:12px;color:#64748b;margin-top:2px;">Create the cost-only pursuit project to capture bid &amp; proposal and estimating effort before award; request two estimators and baseline the icebreaker-class build estimate.</div>
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px;">Jun 12 · Due: Jun 27 · Chandra Kasarabada</div>
           </div>
           <span style="background:#fff3e0;color:#b45309;border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Task</span>
         </div>

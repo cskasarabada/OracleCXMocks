@@ -190,7 +190,7 @@
     },
     bollinger: {
       label: 'Bollinger — USCG Polar Security Cutter',
-      lead: { company: 'U.S. Coast Guard', contact: 'PSC Program Office', score: 86, status: 'Qualified', product: 'Polar Security Cutter (FPIF)', owner: 'Bollinger Capture Team' },
+      lead: { company: 'U.S. Coast Guard', contact: 'PSC Program Office', score: 86, status: 'Qualified', product: 'Polar Security Cutter (FPIF)', owner: 'Bollinger Capture Team', amount: 1500000000, territory: 'Government — U.S. Coast Guard', contactPhone: '+1 (202) 372-4411' },
       oppty: { name: 'USCG Polar Security Cutter — Vessels 2 & 3', amount: 1500000000, stage: 'Proposal' },
       pursuit: { name: 'PSC Vessels 2 & 3 — Pursuit (Bid & Proposal)', estimate: 1500000000, status: 'Costing' },
       project: { name: 'PSC Lead Vessel — Detail Design & Construction', budget: 951600000, status: 'Execution' },
@@ -202,7 +202,7 @@
     },
     bollinger_asc: {
       label: 'Bollinger — USCG Arctic Security Cutter',
-      lead: { company: 'U.S. Coast Guard', contact: 'ASC Program Office', score: 82, status: 'Qualified', product: 'Arctic Security Cutter (medium icebreaker)', owner: 'Bollinger Capture Team' },
+      lead: { company: 'U.S. Coast Guard', contact: 'ASC Program Office', score: 82, status: 'Qualified', product: 'Arctic Security Cutter (medium icebreaker)', owner: 'Bollinger Capture Team', amount: 2000000000, territory: 'Government — U.S. Coast Guard', contactPhone: '+1 (202) 372-4411' },
       oppty: { name: 'USCG Arctic Security Cutter — 4 vessels', amount: 2000000000, stage: 'Capture' },
       pursuit: { name: 'ASC Program — Pursuit (Bid & Proposal)', estimate: 2000000000, status: 'Draft' },
       project: { name: 'ASC Vessel 1 — Detail Design & Construction', budget: 500000000, status: 'Planning' },
@@ -210,6 +210,66 @@
         { stage: 'Lead', event: 'Contract Signed', detail: 'USCG contract for four Arctic Security Cutters (medium icebreakers).' },
         { stage: 'Opportunity', event: 'Capture', detail: 'Follow-on options and long-lead material being positioned.' },
         { stage: 'Pursuit', event: 'B&P Costing', detail: 'Estimators baselining the medium-icebreaker build.' }
+      ]
+    },
+    bollinger_frc: {
+      label: 'Bollinger — USCG Fast Response Cutter (follow-on)',
+      lead: { company: 'U.S. Coast Guard', contact: 'FRC Program Office', score: 90, status: 'Qualified', product: 'Fast Response Cutter (follow-on)', owner: 'Bollinger Capture Team', amount: 1000000000, territory: 'Government — U.S. Coast Guard', contactPhone: '+1 (202) 372-1000' },
+      oppty: { name: 'USCG Fast Response Cutters — follow-on (10+)', amount: 1000000000, stage: 'Negotiation' },
+      pursuit: { name: 'FRC Follow-on — Pursuit (Bid & Proposal)', estimate: 1000000000, status: 'Submitted' },
+      project: { name: 'FRC Hull 68 — Construction', budget: 65000000, status: 'Planning' },
+      storyline: [
+        { stage: 'Lead', event: 'Sole-source Notice', detail: 'USCG signals intent for additional Fast Response Cutters beyond the 67 under contract.' },
+        { stage: 'Opportunity', event: 'Negotiation', detail: 'Contract negotiations underway for at least 10 new FRCs.' },
+        { stage: 'Pursuit', event: 'Proposal', detail: 'Production-line estimate reused; repeatable hull baseline applied.' }
+      ]
+    },
+    bollinger_tats: {
+      label: 'Bollinger — USN Towing, Salvage & Rescue Ship (T-ATS)',
+      lead: { company: 'U.S. Navy', contact: 'PEO Ships / SUPSHIP', score: 80, status: 'Qualified', product: 'Towing, Salvage & Rescue Ship (T-ATS)', owner: 'Bollinger Capture Team', amount: 600000000, territory: 'Government — U.S. Navy', contactPhone: '+1 (202) 781-0000' },
+      oppty: { name: 'USN T-ATS — follow ships', amount: 600000000, stage: 'Proposal' },
+      pursuit: { name: 'T-ATS Follow Ships — Pursuit (B&P)', estimate: 600000000, status: 'Costing' },
+      project: { name: 'T-ATS Hull — Detail Design & Construction', budget: 150000000, status: 'Execution' },
+      storyline: [
+        { stage: 'Lead', event: 'RFP / Tender', detail: 'Navy solicitation for additional Towing, Salvage and Rescue Ships.' },
+        { stage: 'Opportunity', event: 'Capture', detail: 'Capture team aligning with PEO Ships on follow-ship options.' },
+        { stage: 'Pursuit', event: 'B&P Costing', detail: 'Estimators pricing the auxiliary-ship build.' }
+      ]
+    },
+    bollinger_tags: {
+      label: 'Bollinger — USN Oceanographic Survey Ship (T-AGS 67)',
+      lead: { company: 'U.S. Navy', contact: 'Oceanographic Program Office', score: 78, status: 'Qualified', product: 'Oceanographic Survey Ship (T-AGS 67)', owner: 'Bollinger Capture Team', amount: 430000000, territory: 'Government — U.S. Navy', contactPhone: '+1 (202) 781-0000' },
+      oppty: { name: 'USN T-AGS 67 — survey ship', amount: 430000000, stage: 'Proposal' },
+      pursuit: { name: 'T-AGS 67 — Pursuit (B&P)', estimate: 430000000, status: 'Costing' },
+      project: { name: 'T-AGS 67 — Detail Design & Construction', budget: 430000000, status: 'Execution' },
+      storyline: [
+        { stage: 'Lead', event: 'RFP / Tender', detail: 'Navy requirement for the newest oceanographic survey ship.' },
+        { stage: 'Opportunity', event: 'Capture', detail: 'Positioning survey-ship design heritage and capacity.' },
+        { stage: 'Pursuit', event: 'B&P Costing', detail: 'Estimators loading the survey-ship build.' }
+      ]
+    },
+    bollinger_rcrv: {
+      label: 'Bollinger — NSF Regional Class Research Vessel (RCRV)',
+      lead: { company: 'National Science Foundation', contact: 'RCRV Program Office', score: 74, status: 'Qualified', product: 'Regional Class Research Vessel', owner: 'Bollinger Capture Team', amount: 365000000, territory: 'Government — NSF (Research)', contactPhone: '+1 (703) 292-5111' },
+      oppty: { name: 'NSF Regional Class Research Vessels (3)', amount: 365000000, stage: 'Qualification' },
+      pursuit: { name: 'RCRV — Pursuit (B&P)', estimate: 365000000, status: 'Draft' },
+      project: { name: 'RCRV Vessel 3 — Construction', budget: 130000000, status: 'Planning' },
+      storyline: [
+        { stage: 'Lead', event: 'Grant-funded Program', detail: 'NSF-funded program for three Regional Class Research Vessels.' },
+        { stage: 'Opportunity', event: 'Qualification', detail: 'Scope and academic-customer requirements being confirmed.' },
+        { stage: 'Pursuit', event: 'B&P', detail: 'Research-vessel estimate under development.' }
+      ]
+    },
+    bollinger_commercial: {
+      label: 'Bollinger — Commercial Gulf OSV + Repair',
+      lead: { company: 'Gulf Marine Operator', contact: 'VP Fleet Operations', score: 70, status: 'Working', product: 'Offshore Supply Vessel + repair/conversion', owner: 'Bollinger Commercial Team', amount: 120000000, territory: 'Commercial — Gulf of Mexico', contactPhone: '+1 (985) 532-2554' },
+      oppty: { name: 'Gulf OSV new-build + repair program', amount: 120000000, stage: 'Negotiation' },
+      pursuit: { name: 'Gulf OSV — Pursuit (Estimate)', estimate: 110000000, status: 'Costing' },
+      project: { name: 'Gulf OSV — Build & Conversion', budget: 120000000, status: 'Execution' },
+      storyline: [
+        { stage: 'Lead', event: 'Commercial Inquiry', detail: 'Gulf operator exploring new-build OSVs plus repair/conversion work.' },
+        { stage: 'Opportunity', event: 'Negotiation', detail: 'Commercial terms and yard slot under discussion.' },
+        { stage: 'Pursuit', event: 'Estimate', detail: 'Fixed-price commercial estimate being finalized.' }
       ]
     }
   };
@@ -831,7 +891,12 @@
     if (/[?&]embed=1(?:&|$)/.test(location.search)) {
       body.classList.add('embed-mode');
       var es = document.createElement('style');
-      es.textContent = '.miconnex-bar,nav.quick-nav,.app-nav-rail,#persona-ribbon,.persona-ribbon,#ai-assist-launch,#ai-assist-panel,.header,.tabs{display:none !important;}body.embed-mode .lead-shell,body.embed-mode main{margin:0 auto !important;padding-top:10px !important;}';
+      es.textContent = '.miconnex-bar,nav.quick-nav,.app-nav-rail,#persona-ribbon,.persona-ribbon,#ai-assist-launch,#ai-assist-panel,.header,.tabs{display:none !important;}'
+        + 'body.embed-mode{overflow-x:hidden !important;}'
+        + 'body.embed-mode .lead-sidebar,body.embed-mode .scenario-rail,body.embed-mode .scenario-panel{display:none !important;}'
+        + 'body.embed-mode .lead-layout,body.embed-mode .pursuit-layout{display:block !important;grid-template-columns:1fr !important;}'
+        + 'body.embed-mode .lead-shell,body.embed-mode main{max-width:100% !important;width:auto !important;margin:0 auto !important;padding:10px 16px !important;box-sizing:border-box;}'
+        + 'body.embed-mode section,body.embed-mode .card{max-width:100% !important;}';
       document.head.appendChild(es);
       return;
     }

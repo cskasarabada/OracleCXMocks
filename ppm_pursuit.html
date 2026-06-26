@@ -63,14 +63,14 @@
 
 <section class="pursuit-hero">
   <p class="eyebrow">PPM Pursuit</p>
-  <h1 id="purNameDisplay">Skyline Renewables Microgrid</h1>
+  <h1 id="purNameDisplay">USCG Polar Security Cutter</h1>
   <div class="meta-row">
     <span class="pill">Status <strong id="purStatusPill">Draft</strong></span>
     <span class="pill">Estimate <strong id="purEstimatePill">$0</strong></span>
     <span class="pill">Owner Pursuit Manager</span>
   </div>
   <div class="hero-details">
-    <div>Opportunity <strong>Skyline Renewables</strong></div>
+    <div>Opportunity <strong>U.S. Coast Guard</strong></div>
     <div>Last Update <strong id="purLastUpdate">Draft</strong></div>
   </div>
   <div class="hero-search">
@@ -96,7 +96,7 @@
       <div class="board-column">
         <header><h3>Guidance</h3><a href="#" class="panel-link">View All</a></header>
         <ul>
-          <li><strong>Research & Accept</strong><div>Kick off estimating workflow with Skyline team.</div></li>
+          <li><strong>Research & Accept</strong><div>Kick off estimating workflow with PSC capture team.</div></li>
           <li><strong>Stage Objectives</strong><div>Complete costing, align resources, prep Doc Review.</div></li>
           <li><strong>AI Suggestion</strong><div>Share pursuit state with Sales to keep forecast accurate.</div></li>
         </ul>
@@ -114,7 +114,7 @@
         <ul>
           <li><strong>Gurmeet Singh</strong><div>Executive Sponsor</div></li>
           <li><strong>Subash Nagarajan</strong><div>Pursuit Architect</div></li>
-          <li><strong>Bob Flanders</strong><div>Customer Contact</div></li>
+          <li><strong>PSC Program Office</strong><div>Customer Contact · USCG</div></li>
         </ul>
       </div>
     </section>
@@ -195,8 +195,8 @@
           <option value="Scheduler">Scheduler</option>
           <option value="Commercial Lead">Commercial Lead</option>
         </select></label>
-        <label>Resource<input name="resource" placeholder="Maria Lopez" required></label>
-        <label>Notes<textarea name="resourceNotes" rows="3" placeholder="Load rate cards, prep vendor outreach"></textarea></label>
+        <label>Resource<input name="resource" placeholder="e.g., Lead Estimator" required></label>
+        <label>Notes<textarea name="resourceNotes" rows="3" placeholder="Load labor rates, long-lead material, subcontractor scope"></textarea></label>
         <div class="dialog-actions">
           <button type="button" class="ghost-btn" onclick="closePursuitAction()">Cancel</button>
           <button type="submit" class="btn primary">Assign</button>
@@ -253,7 +253,7 @@
 
 <script>
 function getPursuitState(){
-  var fallback={pursuit:{name:'Demo Pursuit', estimate:0, status:'Draft'}};
+  var fallback={pursuit:{name:'PSC Pursuit (Bid & Proposal)', estimate:0, status:'Draft'}};
   if(window.RWD && typeof RWD.get==='function'){
      try{ return Object.assign(fallback, RWD.get()||{}); }catch(e){ console.warn('pursuit state fetch failed', e); }
    }
@@ -273,7 +273,7 @@ function formatCurrencyValue(val){
   var formattedEstimate=formatCurrencyValue(pursuit.estimate||0);
   var nameField=document.getElementById('purName'); if(nameField) nameField.value=pursuit.name||'';
   var estimateField=document.getElementById('purEstimate'); if(estimateField) estimateField.value=pursuit.estimate||0;
-  var heroName=document.getElementById('purNameDisplay'); if(heroName) heroName.textContent=pursuit.name||'Skyline Renewables Microgrid';
+  var heroName=document.getElementById('purNameDisplay'); if(heroName) heroName.textContent=pursuit.name||'USCG Polar Security Cutter';
   var statusPill=document.getElementById('purStatusPill'); if(statusPill) statusPill.textContent=pursuit.status||'Draft';
   var estimatePill=document.getElementById('purEstimatePill'); if(estimatePill) estimatePill.textContent=formattedEstimate;
   var lastUpdate=document.getElementById('purLastUpdate'); if(lastUpdate) lastUpdate.textContent=pursuit.status||'Draft';
@@ -411,7 +411,7 @@ function runPursuitAISummary(mode){
   var el=document.getElementById('pursuitAiSummaryText');
   if(!el) return false;
   var state=(window.RWD && typeof RWD.get==='function')?(function(){ try{return RWD.get();}catch(e){ return {}; } })():{};
-  var pursuit=state.pursuit || {name:'Demo Pursuit', estimate:0, status:'Draft'};
+  var pursuit=state.pursuit || {name:'PSC Pursuit (Bid & Proposal)', estimate:0, status:'Draft'};
   var message='';
   var estimate=formatCurrencyValue(pursuit.estimate||0);
   var status=pursuit.status||'Draft';

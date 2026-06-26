@@ -63,14 +63,14 @@
 
 <section class="project-hero">
   <p class="eyebrow">PPM Construction</p>
-  <h1 id="projectNameDisplay">Skyline Microgrid Delivery</h1>
+  <h1 id="projectNameDisplay">USCG PSC — Construction</h1>
   <div class="meta-row">
     <span class="pill">Status <strong id="projectStatusPill">Execution</strong></span>
     <span class="pill">Budget <strong id="projectBudgetPill">$0</strong></span>
     <span class="pill">Project Manager <strong>Maria Lopez</strong></span>
   </div>
   <div class="hero-details">
-    <div>Pursuit <strong>Skyline Renewables</strong></div>
+    <div>Pursuit <strong>U.S. Coast Guard</strong></div>
     <div>Last Update <strong id="projectLastUpdate">Today</strong></div>
   </div>
   <div class="hero-search">
@@ -351,7 +351,7 @@
    var project=data.const||{};
    projectSnapshot=project;
    var formattedBudget=formatCurrencyValue(project.budget||0);
-   var heroName=document.getElementById('projectNameDisplay'); if(heroName) heroName.textContent=project.name||'Skyline Microgrid Delivery';
+   var heroName=document.getElementById('projectNameDisplay'); if(heroName) heroName.textContent=project.name||'USCG PSC — Construction';
    var status=project.status || 'Execution';
    var lastUpdate=document.getElementById('projectLastUpdate'); if(lastUpdate) lastUpdate.textContent=project.lastUpdate || status;
    var statusPill=document.getElementById('projectStatusPill'); if(statusPill) statusPill.textContent=status;
